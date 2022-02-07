@@ -1,5 +1,4 @@
 import { defineConfig } from 'umi'
-import routes from './src/routes'
 
 export default defineConfig({
   nodeModulesTransform: {
@@ -10,5 +9,19 @@ export default defineConfig({
     immer: true,
     hmr: false,
   },
-  routes,
+  routes: [
+    {
+      exact: false,
+      path: '/',
+      component: '@/layouts',
+      routes: [
+        {
+          path: '/manage',
+          title: 'biaoqian',
+          icon: 'HomeOutlined',
+          component: 'manage',
+        },
+      ]
+    },
+  ],
 })
