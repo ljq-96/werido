@@ -1,4 +1,5 @@
 import { defineConfig } from 'umi'
+import routes from './src/routes'
 
 export default defineConfig({
   nodeModulesTransform: {
@@ -9,4 +10,5 @@ export default defineConfig({
     immer: true,
     hmr: false,
   },
+  routes,
 })
