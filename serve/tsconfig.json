@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+      "experimentalDecorators": true,
+      "outDir": "dist",
+      "moduleResolution": "node",
+      "module": "commonjs",
+      "target": "esnext"
+  },
+  "exclude": [
+      "node_modules/**",
+  ],
+  "include": [
+    "src/**/*.ts",
+    "**/*.d.ts",
+    "**/*.ts"
+  ]
+}
