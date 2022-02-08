@@ -1,4 +1,4 @@
-impot { Router } from 'express'
+import { Router } from 'express'
 import jwt from 'jsonwebtoken'
 import userModel from '../model/User'
 import { FetchResult } from '../../../interfaces'
