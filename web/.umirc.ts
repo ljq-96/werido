@@ -9,9 +9,19 @@ export default defineConfig({
     immer: true,
     hmr: false,
   },
+  proxy: {
+    '/api': {
+      target: 'http://localhost:4000',
+      pathRewrite: { '^/api': '/api' },
+      changeOrigin: true
+    }
+  },
   routes: [
     {
-      exact: false,
+      path: '/login',
+      component: 'login'
+    },
+    {
       path: '/',
       component: '@/layouts',
       routes: [
@@ -19,7 +29,7 @@ export default defineConfig({
           path: '/manage',
           title: 'biaoqian',
           icon: 'HomeOutlined',
-          component: 'manage',
+          component: 'Manage',
         },
       ]
     },
