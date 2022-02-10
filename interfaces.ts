@@ -1,4 +1,4 @@
-export interface FetchResult<T = any> {
+export interface IResponse<T = any> {
   // 0为成功
   code: number
   msg?: string

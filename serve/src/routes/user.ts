@@ -1,11 +1,11 @@
 import { Router } from 'express'
 import jwt from 'jsonwebtoken'
 import userModel from '../model/User'
-import { FetchResult } from '../../../interfaces'
+import { IResponse } from '../../../interfaces'
 
 const router = Router()
 
-router.post<any, FetchResult<any>>('/login', async(req, res) => {
+router.post<any, IResponse<any>>('/login', async(req, res) => {
   const { body } = req
   const { username, password } = body
   if (username && password) {
