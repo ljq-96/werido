@@ -1,26 +1,29 @@
 import * as express from 'express'
 import * as mongoose from 'mongoose'
 import * as bodyParser from 'body-parser'
+import * as cookieParser from 'cookie-parser'
 import userRouter from './routes/user'
+const config = require('../../config.json')
 
 const app = express()
+const { mongo, serve } = config
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use('/api/user', userRouter)
-
+app.use(cookieParser('werido'))
+app.use('/api', userRouter)
 
 mongoose.set('useFindAndModify', false)
 mongoose
-  .connect('mongodb://localhost:27017/record', {
+  .connect(`${mongo.url}/${mongo.dbname}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
   .then(
     () => {
-      console.log('MongoDB连接成功')
+      console.log(`MongoDB connect at：${mongo.url}/${mongo.dbname}`)
       app.listen(4000, function () {
-        console.log('running 4000...')
+        console.log(`service running at ${serve.url}`)
       })
     },
     reason => console.log(reason)

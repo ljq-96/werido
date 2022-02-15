@@ -9,9 +9,9 @@ interface IProps<T = any> {
   data?: T
 }
 
-export const Fetch = async <F = any, T = IResponse>({ url, method = 'GET', data, params }: IProps<F>): Promise<T> => {
+export const Fetch = async <F = any, T = any>({ url, method = 'GET', data, params }: IProps<F>): Promise<IResponse<T>> => {
   method = data ? 'POST' : method
-  return fetch(`${url}?${querystring.stringify(params)}`, {
+  return fetch(`${url}?${querystring.stringify(params || {})}`, {
     method,
     body: data && JSON.stringify(data),
     credentials: 'include',

@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose'
+import { User } from '../../../interfaces'
 
 const UserSchema = new Schema({
   username: {
@@ -9,35 +10,19 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  created_time: {
-    type: Date,
+  create_time: {
+    type: Number,
     default: Date.now()
   },
   last_modified_time: {
-    type: Date,
+    type: Number,
     default: Date.now()
   },
   status: {
     type: Number,
-    // [-1不能登录, 0默认, 1管理员]
-    enum: [-1, 0, 1],
-    default: 0
-  },
-  bookmarks: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'BookMark'
-    }
-  ],
-  catalog: [
-    {
-      blog: {
-        type: Schema.Types.ObjectId,
-        ref: 'Blog'
-      },
-      children: []
-    }
-  ]
+    enum: [0, 1, 100],
+    default: 1
+  }
 })
 
-export default model('User', UserSchema)
+export default model<User.Doc>('User', UserSchema)

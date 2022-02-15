@@ -1,15 +1,31 @@
-import React, { useState } from 'react'
-import { Layout, Menu, Breadcrumb } from 'antd'
-import { IRouteComponentProps } from 'umi'
+import { useState, useEffect } from 'react'
+import { Layout, Menu, Breadcrumb, message } from 'antd'
+import { IRouteComponentProps, history, ConnectProps, connect } from 'umi'
 import * as Icon from '@ant-design/icons'
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
+import { userApi } from '../api/index'
 
 const { Header, Content, Footer, Sider } = Layout
 const { SubMenu } = Menu
 
-export default function Layouts(props: IRouteComponentProps) {
-  const { children, location, route, history, match } = props
-  const [collapsed, setCollapsed] = useState(false)
+type IProps = IRouteComponentProps & ConnectProps
+
+function Layouts(props: IProps) {
+  const { children, location, route, dispatch } = props
+  const [collapsed, setCollapsed] = useState(true)
+  
+  useEffect(() => {
+    userApi.getLoginUser().then(res => {
+      if (res.code === 0) {
+        dispatch({
+          type: 'store/setLoginUser',
+          payload: res.data
+        })
+      } else {
+        history.push('/login')
+      }
+    })
+  }, [])
   
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -63,3 +79,5 @@ export default function Layouts(props: IRouteComponentProps) {
     </Layout>
   )
 }
+
+export default connect()(Layouts)
