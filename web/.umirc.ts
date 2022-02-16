@@ -1,8 +1,15 @@
 import { defineConfig } from 'umi'
+const config = require('../config.json')
 
 export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
+  },
+  publicPath: '/pubilc/',
+  outputPath: '../dist/public',
+  hash: true,
+  history: {
+    type: 'hash',
   },
   fastRefresh: {},
   dva: {
@@ -11,7 +18,7 @@ export default defineConfig({
   },
   proxy: {
     '/api': {
-      target: 'http://localhost:4000',
+      target: `${config.serve.url}:${config.serve.port}`,
       pathRewrite: { '^/api': '/api' },
       changeOrigin: true
     }

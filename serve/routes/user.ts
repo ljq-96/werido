@@ -1,7 +1,6 @@
 import { Router } from 'express'
-import * as jwt from 'jsonwebtoken'
 import userModel from '../model/User'
-import { IResponse, User } from '../../../interfaces'
+import { IResponse, User } from '../../interfaces'
 
 const router = Router()
 
@@ -14,18 +13,18 @@ router.post<never, IResponse, User.Login>('/login', async (req, res) => {
       res.cookie('token', user._id, { signed: true })
       res.json({
         code: 0,
-        msg: '登录成功',
+        msg: '登录成功'
       })
     } else {
       res.json({
         code: 100,
-        msg: '用户名或密码错误',
+        msg: '用户名或密码错误'
       })
     }
   } else {
     res.json({
       code: 101,
-      msg: '用户名或密码不能为空',
+      msg: '用户名或密码不能为空'
     })
   }
 })
@@ -38,7 +37,7 @@ router.post<never, IResponse, User.Login>('/register', async (req, res) => {
     if (user) {
       res.json({
         code: 100,
-        msg: '用户名已存在',
+        msg: '用户名已存在'
       })
     } else {
       await userModel.create({
@@ -48,13 +47,13 @@ router.post<never, IResponse, User.Login>('/register', async (req, res) => {
       })
       res.json({
         code: 0,
-        msg: '注册成功',
+        msg: '注册成功'
       })
     }
   } else {
     res.json({
       code: 101,
-      msg: '用户名或密码不能为空',
+      msg: '用户名或密码不能为空'
     })
   }
 })
@@ -74,7 +73,6 @@ router.get<never, IResponse<User.Result>, never>('/login/user', async (req, res)
       msg: '未登录'
     })
   }
-  
 })
 
 export default router
