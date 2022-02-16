@@ -3,6 +3,7 @@ npm-debug.log*
 yarn-error.log
 yarn.lock
 package-lock.json
+*.tar.gz
 
 # production
 dist
