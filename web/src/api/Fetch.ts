@@ -5,15 +5,15 @@ import { querystring } from '../utils/common'
 interface IProps<T = any> {
   url: string
   method?: 'GET' | 'POST' | 'DELETE' | 'PUT'
-  params?: T
-  data?: T
+  query?: T
+  body?: T
 }
 
-export const Fetch = async <F = any, T = any>({ url, method = 'GET', data, params }: IProps<F>): Promise<IResponse<T>> => {
-  method = data ? 'POST' : method
-  return fetch(`${url}?${querystring.stringify(params || {})}`, {
+export const Fetch = async <F = any, T = any>({ url, method = 'GET', body, query }: IProps<F>): Promise<IResponse<T>> => {
+  method = body ? 'POST' : method
+  return fetch(`${url}?${querystring.stringify(query || {})}`, {
     method,
-    body: data && JSON.stringify(data),
+    body: body && JSON.stringify(body),
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
