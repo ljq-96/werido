@@ -1,124 +1,86 @@
-import { useState, useEffect } from 'react'
-import { Layout, Menu, Breadcrumb, message, Dropdown, Button } from 'antd'
-import { IRouteComponentProps, history, ConnectProps, connect } from 'umi'
+import React, { useState, useEffect } from 'react'
+import { Button, Descriptions, Result, Avatar, Space, Layout } from 'antd'
+import { LikeOutlined, UserOutlined } from '@ant-design/icons'
 import * as Icon from '@ant-design/icons'
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons'
-import { userApi } from '../api/index'
-import Logo from '../components/Logo'
-import { IStore } from '../models'
+import { IRouteComponentProps, history, ConnectProps, connect, IStore } from 'umi'
+import ProLayout from '@ant-design/pro-layout'
 import { User } from '../../../interfaces'
-
-const { Header, Content, Footer, Sider } = Layout
-const { SubMenu } = Menu
+import { userApi } from '../api/index'
 
 type IProps = IRouteComponentProps &
   ConnectProps & {
     loginUser: User.Result
   }
 
-function Layouts(props: IProps) {
+const Layouts = (props: IProps) => {
   const { children, location, route, dispatch, loginUser } = props
+  const [pathname, setPathname] = useState('/home')
   const [collapsed, setCollapsed] = useState(true)
 
-  useEffect(() => {
-    userApi.getLoginUser().then((res) => {
-      if (res.code === 0) {
-        dispatch({
-          type: 'store/setLoginUser',
-          payload: res.data
-        })
-      } else {
-        history.push('/login')
-      }
-    })
-  }, [])
+  const loopMenuItem = (menus) =>
+    menus.map(({ icon, routes, title, ...item }) => ({
+      ...item,
+      icon: Icon[icon]?.render(),
+      name: title,
+      routes: routes ? loopMenuItem(routes) : []
+    }))
+
+    useEffect(() => {
+      userApi.getLoginUser().then((res) => {
+        if (res.code === 0) {
+          dispatch({
+            type: 'store/setLoginUser',
+            payload: res.data
+          })
+        } else {
+          history.push('/login')
+        }
+      })
+    }, [])
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider
-        collapsible
-        theme="light"
-        collapsedWidth={48}
-        trigger={null}
+    <div id="test-pro-layout" style={{ height: '100vh' }}>
+      <ProLayout
+        disableContentMargin
+        fixSiderbar={true}
+        navTheme="light"
+        layout="side"
+        headerHeight={48}
+        primaryColor="#1890ff"
+        fixedHeader={true}
+        splitMenus={false}
+        onCollapse={setCollapsed}
         collapsed={collapsed}
-        style={{ borderRight: '1px solid #f0f0f0', position: 'relative' }}
-      >
-        <div
-          style={{
-            position: 'relative',
-            display: 'flex',
-            height: 56,
-            alignItems: 'center',
-            paddingLeft: collapsed ? 8 : 16,
-            transition: '0.3s',
-            overflow: 'hidden'
-          }}
-        >
-          <Logo color={['#096dd9', '#91d5ff']} style={{ height: collapsed ? 30 : 48, transition: '0.3s' }} />
-          <span style={{ position: 'absolute', color: '#096dd9', left: 60, fontSize: 20, fontWeight: 'bold', marginLeft: 8 }}>werido</span>
-        </div>
-        <Menu mode="inline" defaultSelectedKeys={[location.pathname]}>
-          {route.routes.map((route) => (
-            <Menu.Item key={route.path} icon={Icon[route.icon].render()}>
-              {route.title}
-            </Menu.Item>
-          ))}
-        </Menu>
-        <div
-          onClick={() => setCollapsed(!collapsed)}
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            borderTop: '1px solid #f0f0f0',
-            height: 48,
-            display: 'flex',
-            alignItems: 'center',
-            cursor: 'pointer',
-            paddingLeft: collapsed ? 15 : 24,
-            transition: '0.3s'
-          }}
-        >
-          <span>{collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}</span>
-        </div>
-      </Sider>
-      <Layout className="site-layout">
-        <Header
-          style={{
-            display: 'flex',
-            flexDirection: 'row-reverse',
-            alignItems: 'center',
-            height: 48,
-            padding: '0 16px',
-            backgroundColor: '#fff',
-            borderBottom: '1px solid #f0f0f0'
-          }}
-        >
-          <Dropdown
-            overlay={
-              <Menu>
-                <Menu.Item key="admin"> 进入管理页</Menu.Item>
-                <Menu.Item key="logout">登出</Menu.Item>
-              </Menu>
-            }
+        breakpoint={false}
+        route={{
+          path: '/',
+          routes: loopMenuItem(route.routes)
+        }}
+        location={{
+          pathname
+        }}
+        menuItemRender={(item, dom) => (
+          <a
+            onClick={() => {
+              setPathname(item.path)
+              history.push(item.path)
+            }}
           >
-            <Button type="text" icon={<UserOutlined />}>
-              {loginUser?.username}
-            </Button>
-          </Dropdown>
-        </Header>
-        <Breadcrumb style={{ padding: '8px 16px', backgroundColor: '#fff' }}>
-          <Breadcrumb.Item>User</Breadcrumb.Item>
-          <Breadcrumb.Item>Bill</Breadcrumb.Item>
-        </Breadcrumb>
-        <Content style={{ padding: 16, backgroundColor: '#fff' }}>
-          <div className="content" style={{ padding: 24, minHeight: 360 }}>
-            {children}
-          </div>
-        </Content>
-      </Layout>
-    </Layout>
+            {dom}
+          </a>
+        )}
+        rightContentRender={() => (
+          <Button type='text'>
+            <Avatar shape="square" size="small" icon={<UserOutlined />} style={{ marginRight: 10 }} />
+            {loginUser?.username}
+          </Button>
+        )}
+      >
+        <Layout.Content style={{ position: 'relative', height: 'calc(100vh - 48px)', padding: 16, overflowY: 'auto', overflowX: 'hidden' }}>
+          {children}
+        </Layout.Content>
+      </ProLayout>
+    </div>
   )
 }
 
