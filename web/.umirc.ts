@@ -33,6 +33,12 @@ export default defineConfig({
       component: '@/layouts',
       routes: [
         {
+          path: '/home',
+          title: '首页',
+          icon: 'HomeOutlined',
+          component: 'Home',
+        },
+        {
           path: '/manage',
           title: 'biaoqian',
           icon: 'HomeOutlined',

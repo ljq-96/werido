@@ -37,3 +37,23 @@ export namespace User {
   export type Login = Pick<Doc, 'username' | 'password'>
   export type Result = Pick<Doc, '_id' | 'username' | 'create_time' | 'last_modified_time' | 'status'>
 }
+
+export namespace Icon {
+  export interface Doc {
+    _id: string
+    icon: string
+    name: string
+    user: string
+  }
+
+  export interface ListParams {
+    page: number
+    size: number
+    name?: string
+  }
+
+  export interface ListResult {
+    presetIcons: Pager<Doc>,
+    customIcons: Doc[]
+  }
+}

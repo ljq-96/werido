@@ -1,23 +1,23 @@
 import { Fetch } from './Fetch'
-import { User } from '../../../interfaces'
+import { User, Icon } from '../../../interfaces'
 
 const baseUrl = '/api'
 
 export const userApi = {
   /** 登录 */
-  login: (data: User.Login) => {
+  login: (body: User.Login) => {
     return Fetch<User.Login>({
       url: `${baseUrl}/login`,
       method: 'POST',
-      data
+      body
     })
   },
   /** 注册 */
-  register: (data: User.Login) => {
+  register: (body: User.Login) => {
     return Fetch<User.Login>({
       url: `${baseUrl}/register`,
       method: 'POST',
-      data
+      body
     })
   },
   /** 获取登录用户 */
@@ -25,6 +25,17 @@ export const userApi = {
     return Fetch<never, User.Result>({
       url: `${baseUrl}/login/user`,
       method: 'GET'
+    })
+  }
+}
+
+export const iconApi = {
+  /** 获取图标 */
+  getIcons: (query: Icon.ListParams) => {
+    return Fetch<Icon.ListParams, Icon.ListResult>({
+      url: `${baseUrl}/icon`,
+      method: 'GET',
+      query
     })
   }
 }

@@ -60,19 +60,12 @@ router.post<never, IResponse, User.Login>('/register', async (req, res) => {
 
 router.get<never, IResponse<User.Result>, never>('/login/user', async (req, res) => {
   const { token } = req.signedCookies
-  if (token) {
-    const user = await userModel.findOne({ _id: token })
-    const { _id, username, create_time, last_modified_time, status } = user
-    res.json({
-      code: 0,
-      data: { _id, username, create_time, last_modified_time, status }
-    })
-  } else {
-    res.json({
-      code: 102,
-      msg: '未登录'
-    })
-  }
+  const user = await userModel.findOne({ _id: token })
+  const { _id, username, create_time, last_modified_time, status } = user
+  res.json({
+    code: 0,
+    data: { _id, username, create_time, last_modified_time, status }
+  })
 })
 
 export default router

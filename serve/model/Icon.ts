@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { User } from '../../interfaces'
+import { Icon } from '../../interfaces'
 
 const IconSchema = new Schema({
   icon: String,
@@ -7,4 +7,4 @@ const IconSchema = new Schema({
   user: String
 })
 
-export default model<User.Doc>('icon', IconSchema)
+export default model<Icon.Doc>('icon', IconSchema)
