@@ -3,6 +3,7 @@ import * as mongoose from 'mongoose'
 import * as bodyParser from 'body-parser'
 import * as cookieParser from 'cookie-parser'
 import * as fs from 'fs'
+import tokenMiddleware from './utils/tokenMiddleware'
 import userRouter from './routes/user'
 const config = require('../config.json')
 
@@ -18,6 +19,7 @@ app.use('/pubilc', express.static('./public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cookieParser('werido'))
+app.use(tokenMiddleware)
 app.use('/api', userRouter)
 
 mongoose.set('useFindAndModify', false)
