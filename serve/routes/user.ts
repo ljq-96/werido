@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import userModel from '../model/User'
+import bookmarkModel from '../model/Bookmark'
 import { IResponse, User } from '../../interfaces'
 
 const router = Router()
@@ -40,10 +41,19 @@ router.post<never, IResponse, User.Login>('/register', async (req, res) => {
         msg: '用户名已存在'
       })
     } else {
-      await userModel.create({
+      const addedUser = await userModel.create({
         username,
         password,
         create_time: Date.now()
+      })
+      await bookmarkModel.create({
+        label: '书签',
+        user: addedUser._id,
+        children: [{
+          title: '百度',
+          url: 'https://www.baidu.com',
+          icon: '620c4cbfac84287c28026711'
+        }]
       })
       res.json({
         code: 0,

@@ -1,8 +1,16 @@
 import userModel from '../model/User'
+import { Request, Response } from 'express'
 
-export default async (req, res, next) => {
+const notNeedToken = [
+  '/api/login',
+  '/api/register'
+]
+
+export default async (req: Request, res: Response, next) => {
   const { token } = req.signedCookies
-  if (token) {
+  if (notNeedToken.includes(req.originalUrl)) {
+    next()
+  } else if (token) {
     const user = await userModel.findOne({ _id: token })
     if (user) {
       next()
