@@ -2,6 +2,7 @@ import { useState, useEffect, createContext, useRef, useContext } from 'react'
 import './index.css'
 
 interface IProps {
+  className?: string
   tagName?: 'div' | 'ul' | 'ol' | 'tr'
   children?: JSX.Element | JSX.Element[] | string
   light?: {
@@ -24,7 +25,7 @@ const Position = createContext({
 })
 
 const FluentDesign = (props: IProps) => {
-  const { tagName: Tag = 'div', light, children } = props
+  const { className, tagName: Tag = 'div', light, children } = props
   const [x, setX] = useState(-1)
   const [y, setY] = useState(-1)
   const [width, setWidth] = useState<number>(0)
@@ -39,7 +40,7 @@ const FluentDesign = (props: IProps) => {
   return (
     <Position.Provider value={{x, y, width, height, light : light || defultStyle}}>
       <Tag
-        className='fd'
+        className={`fd ${className}`}
         ref={wrapper as any}
         onMouseLeave={() => {
           setX(-1000)
@@ -59,7 +60,7 @@ const FluentDesign = (props: IProps) => {
 }
 
 FluentDesign.Item = (props: IProps) => {
-  const { tagName: Tag = 'div', children, light: pLight } = props
+  const { className, tagName: Tag = 'div', children, light: pLight } = props
   const [width, setWidth] = useState<number>(0)
   const [height, setHeight] = useState<number>(0)
   const [left, setLeft] = useState<number>(0)
@@ -71,20 +72,30 @@ FluentDesign.Item = (props: IProps) => {
   useEffect(() => {
     setWidth(itemRef.current?.offsetWidth || 0)
     setHeight(itemRef.current?.offsetHeight || 0)
-    setLeft(itemRef.current?.offsetLeft || 0)
-    setTop(itemRef.current?.offsetTop || 0)
+    let parentNode: Element = itemRef.current?.offsetParent
+    let left = itemRef.current?.offsetLeft || 0
+    let top = itemRef.current?.offsetTop || 0
+    while(!parentNode.className.split(' ').includes('fd')) {
+      left += parentNode.offsetLeft
+      top += parentNode.offsetTop
+      parentNode = parentNode.offsetParent
+    }
+    setLeft(left)
+    setTop(top)
   }, [])
+  
 
   return (
     <Tag
       ref={itemRef as any}
-      className='fd_item'
+      className={`fd_item ${className}`}
     >
         {children}
         <div
           className='fd_item_light'
           style={{
-            border: `${light.size[2] + 1}px solid transparent`,
+            borderRadius: itemRef.current?.style?.borderRadius || 0,
+            border: `${light.size[2]}px solid transparent`,
             borderImage: `radial-gradient(circle ${light.size[1]}px at ${x - left}px ${y - top}px, ${light.color[1]}, transparent) ${light.size[2]}`,
             backgroundImage: x > left && x < left + width && y > top && y < top + height ? 
                 `radial-gradient(circle ${light.size[0]}px at ${x - left}px ${y - top}px, ${light.color[0]}, transparent)`: ''

@@ -57,3 +57,24 @@ export namespace Icon {
     customIcons: Doc[]
   }
 }
+
+export namespace Bookmark {
+  export interface Doc {
+    label: string
+    user: string
+    children: {
+      title: string
+      url: string
+      icon: string
+    }[]
+  }
+
+  export interface ListResult {
+    label: string
+    children: {
+      title: string
+      url: string
+      icon: Icon.Doc
+    }[]
+  }
+}

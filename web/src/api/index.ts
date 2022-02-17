@@ -1,5 +1,5 @@
 import { Fetch } from './Fetch'
-import { User, Icon } from '../../../interfaces'
+import { User, Icon, Bookmark } from '../../../interfaces'
 
 const baseUrl = '/api'
 
@@ -36,6 +36,16 @@ export const iconApi = {
       url: `${baseUrl}/icon`,
       method: 'GET',
       query
+    })
+  }
+}
+
+export const bookmarkApi = {
+  /** 获取图标 */
+  getBookmarks: () => {
+    return Fetch<never, Bookmark.ListResult[]>({
+      url: `${baseUrl}/bookmark`,
+      method: 'GET'
     })
   }
 }

@@ -5,6 +5,8 @@ import * as cookieParser from 'cookie-parser'
 import * as fs from 'fs'
 import tokenMiddleware from './utils/tokenMiddleware'
 import userRouter from './routes/user'
+import iconRouter from './routes/icon'
+import bookmarkRouter from './routes/bookmark'
 const config = require('../config.json')
 
 const app = express()
@@ -21,6 +23,8 @@ app.use(bodyParser.json())
 app.use(cookieParser('werido'))
 app.use(tokenMiddleware)
 app.use('/api', userRouter)
+app.use('/api', iconRouter)
+app.use('/api', bookmarkRouter)
 
 mongoose.set('useFindAndModify', false)
 mongoose
