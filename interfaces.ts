@@ -78,3 +78,10 @@ export namespace Bookmark {
     }[]
   }
 }
+
+export interface BingWallpaper {
+  title: string
+  copyright: string
+  wallpaper: string
+  date: string
+}

@@ -1,7 +1,16 @@
 import { Fetch } from './Fetch'
-import { User, Icon, Bookmark } from '../../../interfaces'
+import { User, Icon, Bookmark, BingWallpaper } from '../../../interfaces'
 
 const baseUrl = '/api'
+
+export const newsApi = {
+  getBing: () => {
+    return Fetch<never, BingWallpaper>({
+      url: `${baseUrl}/news/bing`,
+      method: 'GET'
+    })
+  }
+}
 
 export const userApi = {
   /** 登录 */

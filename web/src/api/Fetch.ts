@@ -21,10 +21,10 @@ export const Fetch = async <F = any, T = any>({ url, method = 'GET', body, query
   })
     .then(res => res.json())
     .then(res => {
-      if ((res).code !== 0) {
-        message.error(res.msg)
+      if (res?.code !== 0) {
+        message.error(res?.msg || '未知错误')
       }
-      return res
+      return res || {}
     })
     .catch((e) => {
       message.error(e.toString())

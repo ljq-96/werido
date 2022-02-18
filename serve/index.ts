@@ -7,6 +7,8 @@ import tokenMiddleware from './utils/tokenMiddleware'
 import userRouter from './routes/user'
 import iconRouter from './routes/icon'
 import bookmarkRouter from './routes/bookmark'
+import newsRouter from './routes/news'
+import './utils/news'
 const config = require('../config.json')
 
 const app = express()
@@ -25,6 +27,7 @@ app.use(tokenMiddleware)
 app.use('/api', userRouter)
 app.use('/api', iconRouter)
 app.use('/api', bookmarkRouter)
+app.use('/api', newsRouter)
 
 mongoose.set('useFindAndModify', false)
 mongoose
