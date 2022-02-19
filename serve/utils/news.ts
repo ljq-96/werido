@@ -7,6 +7,7 @@ import { BingWallpaper } from '../../interfaces'
 export const getBingWallpaper = () => {
   return axios.get('https://cn.bing.com/').then(res => {
     const date = moment().format('yyyy-MM-DD')
+    // @ts-ignore
     const { bingWallpaper } = global
     if (bingWallpaper && bingWallpaper.date === date) return
     let _bingWallpaper: BingWallpaper

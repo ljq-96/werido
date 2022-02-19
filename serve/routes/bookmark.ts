@@ -1,6 +1,5 @@
 import { Router } from 'express'
-import BookmarkModel from '../model/Bookmark'
-import userModel from '../model/User'
+import { UserModal, BookmarkModel } from '../model'
 import { IResponse, Bookmark } from '../../interfaces'
 
 const router = Router()
@@ -8,7 +7,7 @@ const router = Router()
 router.route('/bookmark')
   .get<never, IResponse<Bookmark.Doc[]>>(async (req, res) => {
     const { token } = req.signedCookies
-    const user = await userModel.findById(token)
+    const user = await UserModal.findById(token)
     const data = await BookmarkModel.find({ user: user._id }).populate('children.icon')
 
     res.json({

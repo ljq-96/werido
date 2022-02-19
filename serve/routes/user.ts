@@ -1,6 +1,5 @@
 import { Router } from 'express'
-import userModel from '../model/User'
-import bookmarkModel from '../model/Bookmark'
+import { UserModal, BookmarkModel } from '../model'
 import { IResponse, User } from '../../interfaces'
 
 const router = Router()
@@ -9,7 +8,7 @@ router.post<never, IResponse, User.Login>('/login', async (req, res) => {
   const { body } = req
   const { username, password } = body
   if (username && password) {
-    const user = await userModel.findOne(body)
+    const user = await UserModal.findOne(body)
     if (user) {
       res.cookie('token', user._id, { signed: true })
       res.json({
@@ -34,19 +33,19 @@ router.post<never, IResponse, User.Login>('/register', async (req, res) => {
   const { body } = req
   const { username, password } = body
   if (username && password) {
-    const user = await userModel.findOne(body)
+    const user = await UserModal.findOne(body)
     if (user) {
       res.json({
         code: 100,
         msg: '用户名已存在'
       })
     } else {
-      const addedUser = await userModel.create({
+      const addedUser = await UserModal.create({
         username,
         password,
         create_time: Date.now()
       })
-      await bookmarkModel.create({
+      await BookmarkModel.create({
         label: '书签',
         user: addedUser._id,
         children: [{
@@ -70,7 +69,7 @@ router.post<never, IResponse, User.Login>('/register', async (req, res) => {
 
 router.get<never, IResponse<User.Result>, never>('/login/user', async (req, res) => {
   const { token } = req.signedCookies
-  const user = await userModel.findOne({ _id: token })
+  const user = await UserModal.findOne({ _id: token })
   const { _id, username, create_time, last_modified_time, status } = user
   res.json({
     code: 0,
