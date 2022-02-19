@@ -1,4 +1,4 @@
-import userModel from '../model/User'
+import { UserModal } from '../model'
 import { Request, Response } from 'express'
 
 const notNeedToken = [
@@ -11,7 +11,7 @@ export default async (req: Request, res: Response, next) => {
   if (notNeedToken.includes(req.originalUrl)) {
     next()
   } else if (token) {
-    const user = await userModel.findOne({ _id: token })
+    const user = await UserModal.findOne({ _id: token })
     if (user) {
       next()
     } else {

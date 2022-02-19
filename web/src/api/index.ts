@@ -1,5 +1,7 @@
 import { Fetch } from './Fetch'
 import { User, Icon, Bookmark, BingWallpaper } from '../../../interfaces'
+import { history } from 'umi'
+import { message } from 'antd'
 
 const baseUrl = '/api'
 
@@ -27,6 +29,16 @@ export const userApi = {
       url: `${baseUrl}/register`,
       method: 'POST',
       body
+    })
+  },
+  /** 退出登录 */
+  logout: () => {
+    Fetch({
+      url: `${baseUrl}/logout`,
+      method: 'POST'
+    }).then((res) => {
+      history.push('/login')
+      message.success(res.msg)
     })
   },
   /** 获取登录用户 */

@@ -1,23 +1,25 @@
 .login {
-  display: flex;
   width: calc(100vw - 100px);
   height: calc(100vh - 100px);
   background-color: #fff;
   border: 1px solid #f0f0f0;
   border-radius: 4px;
+  overflow: hidden;
   .login-form {
-    flex: 1;
     padding: 48px;
+    height: 100%;
     .login-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       height: 50px;
-      line-height: 50px;
       font-size: 18px;
       font-weight: 700;
-      text-align: center;
       margin-bottom: 24px;
     }
   }
   .login-img {
-    flex: 1;
+    height: 100%;
+    background: url(../../asserts/image/login.jpg) no-repeat center center / cover;
   }
 }

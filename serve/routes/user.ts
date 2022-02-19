@@ -67,6 +67,13 @@ router.post<never, IResponse, User.Login>('/register', async (req, res) => {
   }
 })
 
+router.post<never, IResponse>('/logout', async (req, res) => {
+  res.clearCookie('token').json({
+    code: 0,
+    msg: '已退出登录'
+  })
+})
+
 router.get<never, IResponse<User.Result>, never>('/login/user', async (req, res) => {
   const { token } = req.signedCookies
   const user = await UserModal.findOne({ _id: token })

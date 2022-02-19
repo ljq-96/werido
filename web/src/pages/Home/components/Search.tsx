@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
-import { Card } from 'antd'
+import { Card, Popover, Tooltip } from 'antd'
 import { newsApi } from '../../../api'
 import { BingWallpaper } from '../../../../../interfaces'
+import { InfoCircleOutlined } from '@ant-design/icons'
 
 export default () => {
   const [bing, setBing] = useState<BingWallpaper>(null)
 
   useEffect(() => {
-    newsApi.getBing().then(res => {
+    newsApi.getBing().then((res) => {
       if (res.code === 0) {
         setBing(res.data)
       }
@@ -15,17 +16,37 @@ export default () => {
   }, [])
 
   return (
-    <Card style={{
-      position: 'relative',
-      marginBottom: 16,
-      borderRadius: 2,
-      overflow: 'hidden',
-      border: '1px solid #f0f0f0'
-    }}>
-      <div style={{
-        paddingTop: '50%',
-        background: `url(${bing?.wallpaper}) no-repeat center center / cover`
-      }} />
+    <Card
+      size="small"
+      style={{
+        position: 'relative',
+        marginBottom: 16,
+        borderRadius: 2,
+        overflow: 'hidden',
+        border: '1px solid #f0f0f0'
+      }}
+    >
+      <div
+        style={{
+          borderRadius: 4,
+          paddingTop: '50%',
+          background: `url(${bing?.wallpaper}) no-repeat center center / cover`
+        }}
+      />
+      {
+        bing && (
+          <Popover content={<div>
+            <div>{bing.desc}</div>
+            <div>{bing.copyright}</div>
+          </div>} placement='topRight'>
+            <div className='bing-title'>
+              <InfoCircleOutlined style={{ marginRight: 10 }} />
+              {bing.title}
+            </div>
+          </Popover>
+          
+        )
+      }
     </Card>
   )
 }

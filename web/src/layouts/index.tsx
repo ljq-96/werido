@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Descriptions, Result, Avatar, Space, Layout } from 'antd'
+import { Button, Descriptions, Result, Avatar, Space, Layout, Dropdown, Menu } from 'antd'
 import { LikeOutlined, UserOutlined } from '@ant-design/icons'
 import * as Icon from '@ant-design/icons'
 import { IRouteComponentProps, history, ConnectProps, connect, IStore } from 'umi'
 import ProLayout from '@ant-design/pro-layout'
 import { User } from '../../../interfaces'
 import { userApi } from '../api/index'
+import Logo from '../components/Logo'
 
 type IProps = IRouteComponentProps &
   ConnectProps & {
@@ -16,6 +17,10 @@ const Layouts = (props: IProps) => {
   const { children, location, route, dispatch, loginUser } = props
   const [pathname, setPathname] = useState('/home')
   const [collapsed, setCollapsed] = useState(true)
+
+  const logout = () => {
+    userApi.logout()
+  }
 
   const loopMenuItem = (menus) =>
     menus.map(({ icon, routes, title, ...item }) => ({
@@ -52,6 +57,9 @@ const Layouts = (props: IProps) => {
         onCollapse={setCollapsed}
         collapsed={collapsed}
         breakpoint={false}
+        logo={<Logo color='#1890ff' style={{ width: 32 }} />}
+        title='Werido'
+        logoStyle={{ color: '#999' }}
         route={{
           path: '/',
           routes: loopMenuItem(route.routes)
@@ -70,14 +78,21 @@ const Layouts = (props: IProps) => {
           </a>
         )}
         rightContentRender={() => (
-          <Button type='text'>
-            <Avatar shape="square" size="small" icon={<UserOutlined />} style={{ marginRight: 10 }} />
-            {loginUser?.username}
-          </Button>
+          <Dropdown overlay={
+            <Menu>
+              <Menu.Item onClick={logout}>退出</Menu.Item>
+            </Menu>
+          }>
+            <Button type='text'>
+              <Avatar shape="square" size="small" icon={<UserOutlined />} style={{ marginRight: 10 }} />
+              {loginUser?.username}
+            </Button>
+          </Dropdown>
+          
         )}
       >
         <Layout.Content style={{ position: 'relative', height: 'calc(100vh - 48px)', padding: 16, overflowY: 'auto', overflowX: 'hidden' }}>
-          {children}
+          {loginUser && children}
         </Layout.Content>
       </ProLayout>
     </div>

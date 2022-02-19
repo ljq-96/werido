@@ -54,7 +54,7 @@ export default (props: IProps) => {
                   <Col xs={6} sm={6} md={6} lg={3} xl={3} key={j.title}>
                     <div className="bookmark-item">
                       <Image style={{ width: '50%', marginBottom: 10 }} preview={false} src={j.icon.icon} />
-                      {j.title}
+                      <div className='bookmark-item-title'>{j.title}</div>
                     </div>
                   </Col>
                 ))}

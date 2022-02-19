@@ -9,6 +9,7 @@ import iconRouter from './routes/icon'
 import bookmarkRouter from './routes/bookmark'
 import newsRouter from './routes/news'
 import './utils/news'
+import { IconModel } from './model'
 const config = require('../config.json')
 
 const app = express()
@@ -44,3 +45,4 @@ mongoose
     },
     reason => console.log(reason)
   )
+  

@@ -12,10 +12,12 @@ export const getBingWallpaper = () => {
     if (bingWallpaper && bingWallpaper.date === date) return
     let _bingWallpaper: BingWallpaper
     const $ = cheerio.load(res.data)
-    const title = $('.title').text()
+    const title = $('#headline').text()
+    const desc = $('.title').text()
     const copyright = $('#copyright').text()
-    const wallpaper = 'https://cn.bing.com/' + $('#preloadBg').attr('href')
-    _bingWallpaper = { title, copyright, wallpaper, date }
+    const url = $('#preloadBg').attr('href')
+    const wallpaper = url.startsWith('https') ? url : 'https://cn.bing.com/' + url
+    _bingWallpaper = { title, desc, copyright, wallpaper, date }
     // @ts-ignore
     global.bingWallpaper = _bingWallpaper
     return _bingWallpaper

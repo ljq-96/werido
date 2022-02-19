@@ -1,16 +1,38 @@
 .home {
   .bookmark {
     .bookmark-item {
-      padding: 16px;
+      padding: 16px 0;
       text-align: center;
       border-radius: 4px;
       border: 1px solid #f0f0f0;
       cursor: pointer;
       user-select: none;
+      overflow: hidden;
       transition: 0.4s;
+      img,.bookmark-item-title {
+        transition: 0.4s;
+      }
       &:hover {
         background-color: #f5f5f5;
+        img {
+          transform: scale(1.1) translateY(15px);
+          transition: 0.4s;
+        }
+        .bookmark-item-title {
+          transform: scale(1.5) translateY(50px);
+        }
       }
     }
+  }
+  .bing-title {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    cursor: pointer;
   }
 }
