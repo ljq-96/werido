@@ -40,8 +40,8 @@ export default () => {
             <div>{bing.copyright}</div>
           </div>} placement='topRight'>
             <div className='bing-title'>
-              <InfoCircleOutlined style={{ marginRight: 10 }} />
               {bing.title}
+              <InfoCircleOutlined style={{ marginLeft: 10 }} />
             </div>
           </Popover>
           

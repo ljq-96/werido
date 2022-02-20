@@ -70,11 +70,24 @@ export namespace Bookmark {
   }
 
   export interface ListResult {
+    _id: string
+    create_time: number
+    update_time: number
     label: string
     children: {
       title: string
       url: string
       icon: Icon.Doc
+    }[]
+  }
+
+  export interface UpdateParams {
+    _id: string
+    label: string
+    children: {
+      title: string
+      url: string
+      icon: string
     }[]
   }
 }

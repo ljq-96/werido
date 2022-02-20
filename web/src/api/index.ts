@@ -62,11 +62,19 @@ export const iconApi = {
 }
 
 export const bookmarkApi = {
-  /** 获取图标 */
+  /** 获取书签 */
   getBookmarks: () => {
     return Fetch<never, Bookmark.ListResult[]>({
       url: `${baseUrl}/bookmark`,
       method: 'GET'
+    })
+  },
+  /** 更新书签 */
+  updateBookmarks: (body: Bookmark.UpdateParams[]) => {
+    return Fetch<Bookmark.UpdateParams[], Bookmark.ListResult[]>({
+      url: `${baseUrl}/bookmark`,
+      method: 'POST',
+      body
     })
   }
 }

@@ -15,5 +15,16 @@ router.route('/bookmark')
       data: data
     })
   })
+  .post<never, IResponse, Bookmark.UpdateParams[]>(async (req, res) => {
+    const { body } = req
+    for (let item of body) {
+      const { _id, ...reset } = item
+      await BookmarkModel.updateOne({ _id }, { ...reset })
+    }
+    res.json({
+      code: 0,
+      msg: 'success'
+    })
+  })
 
 export default router
