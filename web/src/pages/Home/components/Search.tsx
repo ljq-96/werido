@@ -3,6 +3,7 @@ import { Card, Popover, Tooltip } from 'antd'
 import { newsApi } from '../../../api'
 import { BingWallpaper } from '../../../../../interfaces'
 import { InfoCircleOutlined } from '@ant-design/icons'
+import Space from '../../../components/Canvas/Space'
 
 export default () => {
   const [bing, setBing] = useState<BingWallpaper>(null)
@@ -19,7 +20,6 @@ export default () => {
     <Card
       size="small"
       style={{
-        position: 'relative',
         marginBottom: 16,
         borderRadius: 2,
         overflow: 'hidden',
@@ -28,12 +28,13 @@ export default () => {
     >
       <div
         style={{
+          position: 'relative',
           borderRadius: 4,
           paddingTop: '50%',
-          background: `url(${bing?.wallpaper}) no-repeat center center / cover`
+          // background: `url(${bing?.wallpaper}) no-repeat center center / cover`
         }}
       />
-      {
+      {/* {
         bing && (
           <Popover content={<div>
             <div>{bing.desc}</div>
@@ -46,7 +47,8 @@ export default () => {
           </Popover>
           
         )
-      }
+      } */}
+      <Space />
     </Card>
   )
 }

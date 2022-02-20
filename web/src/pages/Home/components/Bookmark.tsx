@@ -36,7 +36,6 @@ const SortableList = SortableContainer(({ items, onAdd, disabled }: {
   disabled: boolean
 }) => {
   const [showIconModal, setShowIconModal] = useState(false)
-  console.log(items);
   
   return (
     <Row gutter={[16, 16]} style={{display: 'flex', flexWrap: 'wrap'}}>
