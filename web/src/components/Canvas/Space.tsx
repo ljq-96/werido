@@ -2,36 +2,42 @@ import { useState, useEffect, useRef } from 'react'
 import { Ball, BallProps, Astronaut, AstronautProps } from './element'
 import chroma from 'chroma-js'
 
-interface SpaceProps {
-
-}
-
 class Space {
   x: number = 0
   y: number = 0
   W: number = 0
   H: number = 0
-  renderBalls:  Ball[] = []
   color: string = '#42666'
   difColor: string
   sun:string =  'rgb(255,187,57)'
   astronaut: AstronautProps
-  renderAstronaut: Astronaut
   orbital: {
     R: number
     speed: number
-    stars: (BallProps & { diff1?: string, angle?: number }) []
+    stars:  {
+      fillStyle?: string, 
+      r: number, 
+      angle: number, 
+      strokeStyle: string, 
+      lineWidth: number
+    }[]
   }[] = []
-  constructor(props: SpacepProps) {
+  constructor(props, ctx: CanvasRenderingContext2D) {
     this.x = 0
     this.y = 0
     this.W = 0
     this.H = 0
     this.orbital = []
-    this.renderBalls = []
     Object.assign(this, props)
+    this.init(ctx)
   }
   init(ctx) {
+    const grd = ctx.createRadialGradient(this.x, this.y, 10, this.x, this.y, 1300)
+    grd.addColorStop(0, this.sun)
+    grd.addColorStop(0.06, this.difColor)
+    grd.addColorStop(1, this.color)
+    ctx.fillStyle = grd
+    ctx.fillRect(0, 0, this.W, this.H)
     this.orbital.forEach(item => {
       new Ball({
         x: this.x,
@@ -39,41 +45,23 @@ class Space {
         r: item.R,
         fillStyle: 'rgba(0, 0, 0, 0)',
         strokeStyle: this.difColor,
-        lineWidth: 2
-      }).render(ctx)
-    })
-    this.orbital.forEach(item => {
+        lineWidth: 2,
+      }, ctx)
       item.stars.forEach(star => {
-        const { fillStyle, diff1, r, angle, strokeStyle, lineWidth } = star
-        this.renderBalls.push(
+        const { fillStyle, r, angle, strokeStyle, lineWidth } = star
+        const x = this.x + item.R * Math.cos(angle)
+        const y = this.y + item.R * Math.sin(angle)
           new Ball({
-            fillStyle,
-            diff1,
             r,
-            angle,
             strokeStyle,
             lineWidth,
-            R: item.R,
-            X: this.x,
-            Y: this.y,
-            speed: item.speed
-          })
-        )
+            x: x,
+            y: y,
+            fillStyle
+          }, ctx)
       })
-    })
-    this.renderAstronaut = new Astronaut(this.astronaut)
-  }
-  render(ctx) {
-    const grd = ctx.createRadialGradient(this.x, this.y, 10, this.x, this.y, 1300)
-    grd.addColorStop(0, this.sun)
-    grd.addColorStop(0.06, this.difColor)
-    grd.addColorStop(1, this.color)
-    ctx.fillStyle = grd
-    console.log(this.difColor, this.color);
-    console.log(this.W, this.H);
-    
-    
-    ctx.fillRect(0, 0, this.W, this.H)
+    }, ctx)
+    new Astronaut(this.astronaut, ctx)
   }
 }
 
@@ -104,7 +92,8 @@ export default (props: { color?: string }) => {
       .css()
     const loh = chroma(color).luminance(0.35).css()
     const sun = 'rgb(255,187,57)'
-    const space = new Space({
+
+    const options = {
       x: W * 0.8,
       y: H * 0.2,
       W: W,
@@ -125,34 +114,34 @@ export default (props: { color?: string }) => {
           stars: [
             {
               fillStyle: diff1,
-              r: 6,
+              r: W * 0.003,
               angle: 0,
               strokeStyle: loh,
-              lineWidth: 2
+              lineWidth: W * 0.001
             },
             {
               fillStyle: diff1,
-              r: 10,
+              r: W * 0.005,
               angle: 4.4,
               strokeStyle: loh,
-              lineWidth: 4
+              lineWidth: W * 0.002
             },
             {
               fillStyle: diff2,
-              r: 20,
+              r: W * 0.01,
               angle: 2,
               strokeStyle: loh
             },
             {
               fillStyle: diff2,
-              r: 8,
+              r: W * 0.004,
               angle: 2.5,
               strokeStyle: loh,
-              lineWidth: 4
+              lineWidth: W * 0.002
             },
             {
               fillStyle: diff3,
-              r: 13,
+              r: W * 0.003,
               angle: 5,
               strokeStyle: loh
             }
@@ -164,38 +153,38 @@ export default (props: { color?: string }) => {
           stars: [
             {
               fillStyle: diff3,
-              r: 24,
+              r: W * 0.012,
               angle: 1.2,
               strokeStyle: loh
             },
             {
               fillStyle: diff3,
-              r: 8,
+              r: W * 0.004,
               angle: 1.8,
               strokeStyle: loh
             },
             {
               fillStyle: diff3,
-              r: 18,
+              r: W * 0.009,
               angle: 2.6,
               strokeStyle: loh,
-              lineWidth: 18
+              lineWidth: W * 0.009
             },
             {
               fillStyle: diff1,
-              r: 18,
+              r: W * 0.009,
               angle: 6,
               strokeStyle: loh,
-              lineWidth: 15
+              lineWidth: W * 0.008
             },
             {
               fillStyle: diff1,
-              r: 8,
+              r: W * 0.004,
               angle: 4
             },
             {
               fillStyle: diff2,
-              r: 26,
+              r: W * 0.013,
               angle: 3.1,
               strokeStyle: loh
             }
@@ -207,80 +196,78 @@ export default (props: { color?: string }) => {
           stars: [
             {
               fillStyle: diff2,
-              r: 26,
+              r: W * 0.013,
               angle: 3.2,
               strokeStyle: loh
             },
             {
               fillStyle: diff2,
-              r: 16,
+              r: W * 0.008,
               angle: 3.6,
               strokeStyle: loh
             },
             {
               fillStyle: diff2,
-              r: 35,
+              r: W * 0.018,
               angle: 5.8,
               strokeStyle: loh
             },
             {
               fillStyle: diff3,
-              r: 20,
+              r: W * 0.01,
               angle: 2.4,
               strokeStyle: loh
             },
             {
               fillStyle: diff3,
-              r: 12,
+              r: W * 0.006,
               angle: 0,
               strokeStyle: loh,
-              lineWidth: 14
+              lineWidth: W * 0.007
             },
             {
               fillStyle: diff1,
-              r: 18,
+              r: W * 0.009,
               angle: 4.7
             },
             {
               fillStyle: diff1,
-              r: 22,
+              r: W * 0.011,
               angle: 1.6,
               strokeStyle: loh,
-              lineWidth: 20
+              lineWidth: W * 0.01
             },
             {
               fillStyle: diff1,
-              r: 8,
+              r: W * 0.004,
               angle: 0.4,
               strokeStyle: loh,
-              lineWidth: 12
+              lineWidth: W * 0.006
             }
           ]
         }
       ]
-    })
-    space.init(ctxRef.current)
+    }
+
+    
     let move = () => {
       ctxRef.current.clearRect(0, 0, W, H)
-      space.render(ctxRef.current)
-      space.renderBalls.forEach(star => {
-        star.x = star.X + star.R * Math.cos(star.angle)
-        star.y = star.Y + star.R * Math.sin(star.angle)
-        star.angle += star.speed
-        star.angle %= Math.PI * 2
-        star.render(ctxRef.current)
+      new Space(options, ctxRef.current)
+      options.orbital.forEach(i => {
+        i.stars.forEach(j => {
+          
+          j.angle += i.speed
+          j.angle %= Math.PI * 2
+        })
       })
-      if (space.renderAstronaut.x > W + space.renderAstronaut.jet) {
-        space.renderAstronaut.x = -60
+      if (options.astronaut.x > W + options.astronaut.jet) {
+        options.astronaut.x = -60
       }
-      space.renderAstronaut.x += 0.5
-      space.renderAstronaut.render(ctxRef.current)
+      options.astronaut.x += 0.5
       timerRef.current = requestAnimationFrame(move)
     }
     move()
   }
-
-  // useEffect(draw, [size])
 
   useEffect(() => {
     if (canvasRef.current) {

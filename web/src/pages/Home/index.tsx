@@ -12,17 +12,16 @@ export default (props: IProps) => {
 
   return (
     <Row className='home' gutter={[16, 16]}>
-      <Col flex='auto'>
+      <Col xxl={20} xl={18} lg={16} md={12} sm={24} xs={24}>
           <Search />
           <Bookmark />
       </Col>
-      <Col flex='256px'>
+      <Col xxl={4} xl={6} lg={8} md={12} sm={24} xs={24}>
         <Card size='small'>
           <Calendar
             fullscreen={false}
           />
         </Card>
-        
       </Col>
     </Row>
   )

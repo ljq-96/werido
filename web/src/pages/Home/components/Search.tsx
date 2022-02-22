@@ -31,9 +31,12 @@ export default () => {
           position: 'relative',
           borderRadius: 4,
           paddingTop: '50%',
+          overflow: 'hidden',
           // background: `url(${bing?.wallpaper}) no-repeat center center / cover`
         }}
-      />
+      >
+          <Space color='#ff4600' />
+      </div>
       {/* {
         bing && (
           <Popover content={<div>
@@ -48,7 +51,7 @@ export default () => {
           
         )
       } */}
-      <Space />
+      
     </Card>
   )
 }

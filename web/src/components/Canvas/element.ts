@@ -5,7 +5,6 @@ export interface BallProps {
   fillStyle?: string
   strokeStyle?: string 
   lineWidth?: number
-  [key: string]: any
 }
 
 export class Ball implements BallProps {
@@ -15,20 +14,16 @@ export class Ball implements BallProps {
   fillStyle?: string = 'rgba(0, 0, 0, 0)'
   strokeStyle?: string = 'rgba(0, 0, 0, 0)'
   lineWidth?: number = 1
-  constructor(props: BallProps) {
+  constructor(props: BallProps, ctx: CanvasRenderingContext2D) {
     Object.assign(this, props)
-  }
-  creatPath(ctx) {
-    ctx.beginPath()
-    ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
-  }
-  render(ctx) {
     ctx.save()
     ctx.fillStyle = this.fillStyle
     ctx.strokeStyle = this.strokeStyle
     ctx.lineWidth = this.lineWidth
     ctx.translate(this.x, this.y)
-    this.creatPath(ctx)
+    // this.creatPath(ctx)
+    ctx.beginPath()
+    ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
     ctx.fill()
     ctx.stroke()
     ctx.restore()
@@ -41,7 +36,6 @@ export interface AstronautProps {
   jet?: number
   peopleStyle?: string
   jetStyle?: string
-  [key: string]: any
 }
 
 export class Astronaut {
@@ -50,10 +44,12 @@ export class Astronaut {
   jet: number = 500
   peopleStyle: string = 'rgb(255,255,255)'
   jetStyle: string = 'rgb(0,0,0)'
-  constructor(props) {
+  constructor(props, ctx: CanvasRenderingContext2D) {
     Object.assign(this, props)
+    this.creatJet(ctx)
+    this.creatBody(ctx)
   }
-  creatBody(ctx) {
+  private creatBody(ctx) {
     ctx.save()
     ctx.fillStyle = this.peopleStyle
     ctx.lineJoin = 'round'
@@ -73,7 +69,7 @@ export class Astronaut {
     ctx.fill()
     ctx.restore()
   }
-  creatJet(ctx) {
+  private creatJet(ctx) {
     ctx.save()
     ctx.fillStyle = this.jetStyle
     ctx.translate(this.x, this.y)
@@ -90,9 +86,5 @@ export class Astronaut {
     ctx.arc(-10, 0, 10, 0, Math.PI * 2)
     ctx.fill()
     ctx.restore()
-  }
-  render(ctx) {
-    this.creatJet(ctx)
-    this.creatBody(ctx)
   }
 }
