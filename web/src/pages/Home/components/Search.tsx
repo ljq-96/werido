@@ -35,7 +35,7 @@ export default () => {
           // background: `url(${bing?.wallpaper}) no-repeat center center / cover`
         }}
       >
-          <Space color='#ff4600' />
+          <Space color='#1C67E7' />
       </div>
       {/* {
         bing && (

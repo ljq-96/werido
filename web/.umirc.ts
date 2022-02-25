@@ -8,6 +8,7 @@ export default defineConfig({
   publicPath: '/pubilc/',
   outputPath: '../dist/public',
   hash: true,
+  mfsu: {},
   history: {
     type: 'hash',
   },

@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef, useMemo } from 'react'
-import { Row, Col, Calendar, Card, Collapse, Image, Button, message, Menu, Dropdown, Spin } from 'antd'
-import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc'
-import { bookmarkApi } from '../../../api'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
+import { Col, Card, Collapse, Image, Button, message, Space, Spin, Popconfirm } from 'antd'
+import Sortable from '../../../components/Sortable'
+import { bookmarkApi, iconApi } from '../../../api'
 import { Bookmark, Icon } from '../../../../../interfaces'
-import { CheckOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
+import { ApiFilled, CheckOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import IconModal from '../../../components/Modal/IconModal'
 
 interface IProps {}
@@ -14,65 +14,23 @@ interface IBookMark {
   icon: Icon.Doc
 }
 
-const SortableItem = SortableElement(({ value, index }: { value: IBookMark, index: number }) => (
-  <Col xs={6} sm={6} md={6} lg={3} xl={3} key={`item-${value.icon._id}-${index}`}>
-    <Dropdown trigger={['contextMenu']} overlay={
-      <Menu>
-        <Menu.Item>编辑</Menu.Item>
-        <Menu.Item>删除</Menu.Item>
-      </Menu>
-    }>
-      <div key={`${value.title}`} className="bookmark-item">
-        <Image style={{ width: '50%', marginBottom: 10 }} preview={false} src={value.icon.icon} />
-        <div className='bookmark-item-title'>{value.title}</div>
-      </div>
-    </Dropdown>
-  </Col>
-));
-
-const SortableList = SortableContainer(({ items, onAdd, disabled }: {
-  items: IBookMark[],
-  onAdd: (b: IBookMark & { icon: string }) => void
-  disabled: boolean
-}) => {
-  const [showIconModal, setShowIconModal] = useState(false)
-  
-  return (
-    <Row gutter={[16, 16]} style={{display: 'flex', flexWrap: 'wrap'}}>
-      {
-        items.map((value, index) => (
-          <SortableItem disabled={disabled} key={`item-${value.icon._id}-${index}`} index={index} value={value} />
-        ))
-      }
-      <Col
-        xs={6} sm={6} md={6} lg={3} xl={3}
-        key={'@add'}
-        className='bookmark-item bookmark-item-add'
-        onClick={() => setShowIconModal(true)}
-      >
-        <PlusOutlined style={{ fontSize: 30 }} />
-      </Col>
-      <IconModal
-        title='123'
-        visible={showIconModal}
-        onCancel={() => setShowIconModal(false)}
-        onOk={values => onAdd(values)}
-      />
-    </Row>
-  )
-})
-
 export default (props: IProps) => {
   const [bookmarkList, setBookmarkList] = useState<Bookmark.ListResult[]>([])
   const [expand, setExpand] = useState<string | string[]>([])
   const [onEdit, setOnEdit] = useState(false)
   const [loading, setLoading] = useState<{ [key: string]: boolean }>({})
+  const [modalState, setModalState] = useState<[number, number?]>(null) /** 当前编辑的图标坐标 */
+  const bookMarkCache = useRef<Bookmark.ListResult[]>(null)
+
+  /** 当前编辑的图标 */
+  const onEditIcon = useMemo(() => modalState && bookmarkList[modalState[0]]?.children[modalState[1]], [modalState])
 
   const getBookmarks = () => {
     bookmarkApi.getBookmarks()
       .then((res) => {
         if (res.code === 0) {
           setBookmarkList(res.data)
+          bookMarkCache.current = [...res.data]
           setExpand(res.data.map(i => i.label))
         }
       }).finally(() => {
@@ -113,65 +71,119 @@ export default (props: IProps) => {
     }
   }
 
+  const onCancel = () => {
+    setLoading(
+      bookmarkList.reduce((a, b) => {
+        a[b._id] = true
+        return a
+      }, {})
+    )
+    getBookmarks()
+    setOnEdit(false)
+  }
+
   useEffect(() => {
     getBookmarks()
   }, [])
 
+  useEffect(() => {
+    console.log(bookmarkList);
+    
+  }, [bookmarkList])
+
   return (
-    <Card
-      title='网址导航'
-      bodyStyle={{ padding: 8 }}
-      extra={
-        <Button
-          onClick={changeEdit}
-          icon={onEdit ? <CheckOutlined/> : <EditOutlined />}
-        />
-      }
-    >
-      <Collapse ghost className="bookmark" expandIconPosition='right' activeKey={expand} onChange={setExpand}>
-        {
-          bookmarkList.map((i, index) => (
-            <Collapse.Panel header={i.label} key={i.label}>
-              <Spin spinning={!!loading[i._id]}>
-                <SortableList
-                  axis='xy'
-                  lockAxis='xy'
-                  disabled={!onEdit}
-                  items={i.children}
-                  onSortEnd={({ oldIndex, newIndex }) => {
-                    const current = { ...bookmarkList[index] }
-                    bookmarkList[index] = {
-                      ...current,
-                      children: arrayMove(i.children, oldIndex, newIndex)
-                    }
-                    setBookmarkList([...bookmarkList])
-                  }}
-                  onAdd={values => {
-                    const { _id, label, children } = i
-                    loading[_id] = true
-                    setLoading({ ...loading })
-                    bookmarkApi.updateBookmarks([{
-                      _id, label,
-                      children: [
-                        ...children.map(i => ({
-                          ...i,
-                          icon: i.icon._id
-                        })),
-                        values
-                      ]
-                    }]).then(res => {
-                      if (res.code === 0) {
-                        message.success('添加成功')
-                        getBookmarks()
-                      }
-                    })
-                  }}
-                />
-              </Spin>
-            </Collapse.Panel>
-          ))
+    <React.Fragment>
+      <Card
+        title='网址导航'
+        bodyStyle={{ padding: 8 }}
+        extra={
+          onEdit ? <Space>
+            <Button onClick={onCancel}>取消</Button>
+            <Button type='primary' onClick={changeEdit}>完成</Button>
+          </Space> : <Button type='text' onClick={changeEdit} icon={<EditOutlined/>}>编辑</Button>
         }
-      </Collapse>
-    </Card>
+      >
+        <Collapse ghost className="bookmark" expandIconPosition='right' activeKey={expand} onChange={setExpand}>
+          {
+            bookmarkList.map((i, idx) => (
+              <Collapse.Panel header={i.label} key={i.label}>
+                <Spin spinning={!!loading[i._id]}>
+                  <Sortable
+                    axis='xy'
+                    lockAxis='xy'
+                    distance={10}
+                    value={i.children}
+                    disabled={!onEdit}
+                    style={{ margin: '0px -8px', display: 'flex', flexWrap: 'wrap', rowGap: 16 }}
+                    onSortEnd={value => {
+                      const current = { ...bookmarkList[idx] }
+                      bookmarkList[idx] = {
+                        ...current,
+                        children: value
+                      }
+                      setBookmarkList([...bookmarkList])
+                    }}
+                    renderItem={(j, jdx) => <>
+                      <Col xs={6} sm={6} md={6} lg={3} xl={3} key={`item-${j.icon._id}-${jdx}`}>
+                        <Card
+                          size='small'
+                          key={`${j.title}`}
+                          className={`${onEdit ? 'bookmark-item-edit' : ''} bookmark-item`}
+                          actions={onEdit ? [
+                            <Button block type='text' icon={<EditOutlined />} onClick={() => setModalState([idx, jdx])} />,
+                            <Popconfirm
+                              title='确定删除此书签吗？'
+                              placement='bottom'
+                              onConfirm={() => {
+                                i.children.splice(jdx, 1)
+                                setBookmarkList([...bookmarkList])
+                              }}
+                            >
+                              <Button block type='text' icon={<DeleteOutlined />} />
+                            </Popconfirm>
+                          ] : []}
+                        >
+                          <Image style={{ width: '50%', marginBottom: 10 }} preview={false} src={j.icon.icon} />
+                          <div className='bookmark-item-title'>{j.title}</div>
+                        </Card>
+                      </Col>
+                      {
+                        onEdit && jdx === i.children.length - 1 && (
+                          <Col
+                            xs={6} sm={6} md={6} lg={3} xl={3}
+                            key={'@add'}
+                            className='bookmark-item bookmark-item-add'
+                            onClick={() => setModalState([idx])}
+                          >
+                            <PlusOutlined style={{ fontSize: 30 }} />
+                          </Col>
+                        )
+                      }
+                    </>}
+                  />
+                </Spin>
+              </Collapse.Panel>
+            ))
+          }
+        </Collapse>
+      </Card>
+      <IconModal
+        title={!!onEditIcon ? '编辑' : '新增'}
+        visible={!!modalState}
+        initialValue={onEditIcon}
+        onCancel={() => {
+          setModalState(null)
+        }}
+        onOk={values => {
+          const [i, j] = modalState
+          if (onEditIcon) {
+            bookmarkList[i].children[j] = values
+          } else {
+            bookmarkList[i].children.push(values)
+          }
+          setBookmarkList([...bookmarkList])
+        }}
+      />
+    </React.Fragment>
   )
 }

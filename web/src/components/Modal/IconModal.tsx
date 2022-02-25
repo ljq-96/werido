@@ -38,6 +38,7 @@ const VirtualGrid = (props: VProps) => {
     }}>
       {({ columnIndex, rowIndex, style }: { columnIndex: number; rowIndex: number; style: React.CSSProperties }) => (
         <div
+          key={`${rowIndex}-${columnIndex}`}
           style={{
             ...style,
             display: 'flex',
@@ -59,12 +60,22 @@ const VirtualGrid = (props: VProps) => {
   )
 }
 
-export default (props: ModalProps & {
+interface IIcon {
+  title: string,
+  url: string,
+  icon: Icon.Doc
+}
+
+interface IProps {
+  title: string
+  visible: boolean
+  initialValue: IIcon
   onCancel: () => void
-  onOk: (i: Icon.Doc) => void
-}) => {
-  const { onCancel, onOk } = props
-  const [form] = Form.useForm()
+  onOk: (i: IIcon) => void
+}
+
+export default (props: IProps) => {
+  const { onCancel, onOk, title, visible, initialValue } = props
   const [iconPageInfo, setIconPageInfo] = useState({ page: 1, size: 60 })
   const [icons, setIcons] = useState<Icon.ListResult>()
   const [iconType, setIconType] = useState('presetIcons')
@@ -72,6 +83,7 @@ export default (props: ModalProps & {
   const [loading, setLoading] = useState(false)
   const [menuDropVisible, setMenuDropVisible] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
+  const [form] = Form.useForm()
 
   const iconList = useMemo(() => {
     if (icons) {
@@ -81,7 +93,10 @@ export default (props: ModalProps & {
   }, [icons, iconType])
 
   const onFinish = (values) => {
-    onOk(values)
+    onOk({
+      ...values,
+      icon: selectedIcon
+    })
     onCancel()
     form.resetFields()
     setSelectedIcon(null)
@@ -113,13 +128,26 @@ export default (props: ModalProps & {
   }
 
   useEffect(() => {
+    if (initialValue) {
+      const { title, url, icon } = initialValue
+      setSelectedIcon(icon)
+      form.setFields([
+        { name: 'title', value: title },
+        { name: 'url', value: url },
+        { name: 'icon', value: icon._id },
+      ])
+    }
+  }, [initialValue])
+
+  useEffect(() => {
     getIcons(iconPageInfo)
   }, [])
 
   return (
     <Modal
+      title={title}
+      visible={visible}
       width={530}
-      {...props}
       onCancel={e => {
         onCancel()
         form.resetFields()
