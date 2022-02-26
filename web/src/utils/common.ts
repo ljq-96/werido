@@ -20,3 +20,17 @@ export const querystring = {
     return result.join('&')
   },
 }
+
+export const debounce = (fn: { apply: (arg0: any, arg1: any[]) => void }, t?: number) => {
+  let timer = null
+  const timeout = t || 500
+  return function (this: any, ...args: any) {
+      if (timer) {
+          clearTimeout(timer)
+      }
+      timer = setTimeout(() => {
+          fn.apply(this, args)
+          timer = null
+      }, timeout)
+  }
+}

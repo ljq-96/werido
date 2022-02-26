@@ -8,7 +8,8 @@ export default defineConfig({
   publicPath: '/pubilc/',
   outputPath: '../dist/public',
   hash: true,
-  mfsu: {},
+  // mfsu: {},
+  dynamicImport: {},
   history: {
     type: 'hash',
   },
@@ -38,6 +39,12 @@ export default defineConfig({
           title: '首页',
           icon: 'HomeOutlined',
           component: 'Home',
+        },
+        {
+          path: '/editor',
+          title: '新建文章',
+          icon: 'FileTextOutlined',
+          component: 'Editor',
         },
         {
           path: '/manage',
