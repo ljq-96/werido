@@ -1,0 +1,245 @@
+.article {
+  .contains-task-list {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .contains-task-list label {
+    display: flex;
+    align-items: center;
+    height: 28px;
+  }
+
+  input[type='checkbox'] {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 14px;
+    margin-right: 6px;
+    border: none;
+    outline: none;
+  }
+
+  input[type='checkbox']::before {
+    content: '\e7fd';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-family: iconfont;
+    color: #fff;
+    font-size: 12px;
+    background-color: #fff;
+    border: 2px solid #7a7a7a;
+  }
+
+  input[type='checkbox']:checked::before {
+    color: #fff;
+    border-color: var(--color);
+    background-color: var(--color);
+  }
+
+  a {
+    color: #4078f2;
+    word-break: break-all;
+    font-family: 'FiraCode';
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  code {
+    font-family: 'FiraCode';
+  }
+
+  h1 {
+    color: #4a4a4a;
+    font-size: 32px;
+    padding: 16px 0;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  h2 {
+    color: #4a4a4a;
+    font-size: 26px;
+    padding: 16px 0;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  h3 {
+    color: #4a4a4a;
+    padding: 10px 0;
+    font-size: 20px;
+  }
+
+  h4 {
+    color: #4a4a4a;
+    padding: 10px 0;
+    font-size: 18px;
+    font-style: italic;
+  }
+
+  h5,
+  h6 {
+    color: #4a4a4a;
+    padding: 10px 0;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: normal;
+  }
+
+  p {
+    margin: 10px 0;
+    line-height: 20px;
+  }
+
+  p > code,
+  li > code,
+  td > code {
+    padding: 2px 6px;
+    margin-right: 4px;
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+
+  mark {
+    padding: 2px 6px;
+    margin: 0 2px;
+    color: var(--content);
+    background-color: #a8c97f;
+  }
+
+  ul,
+  ol {
+    margin: 10px 0;
+    padding-left: 20px;
+  }
+
+  li {
+    margin: 10px 0;
+  }
+
+  pre {
+    margin: 10px 0;
+  }
+
+  blockquote {
+    padding: 4px 10px;
+    margin: 10px 0;
+    font-family: 'Fira Code';
+    border-left: 4px solid #f0f0f0;
+  }
+
+  // blockquote::before {
+  //   content: '\e71a';
+  //   display: block;
+  //   margin-bottom: -10px;
+  //   font-size: 16px;
+  //   font-family: iconfont;
+  //   color: #7a7a7a;
+  // }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #f0f0f0;
+  }
+
+  thead {
+    font-weight: bold;
+    background-color: #f6e0de;
+  }
+
+  td,
+  th {
+    vertical-align: middle;
+    padding: 10px 20px;
+  }
+
+  tr {
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  tbody tr:hover {
+    background-color: #f6e0de;
+  }
+
+  .code-fence {
+    display: block;
+    border: 1px solid #f0f0f0;
+    border-radius: 4px;
+    .code-fence_select-wrapper {
+      position: relative;
+      padding: 0.5em 1em;
+      background-color: #fafafa;
+      border-bottom: 1px solid #f0f0f0;
+      font-family: 'Fira Code';
+      .code-fence_value {
+        display: inline-block;
+        min-width: 100px;
+        padding: 4px 0;
+        span:nth-child(1) {
+          cursor: pointer;
+          padding: 4px 8px;
+          border-radius: 2px;
+          transition: 0.2s;
+          &:hover {
+            background-color: #f0f0f0;
+          }
+        }
+        .icon {
+          display: none;
+        }
+      }
+      .code-fence_select {
+        position: absolute;
+        left: 16px;
+        top: 40px;
+        overflow: auto;
+        background-color: #fff;
+        transition: 0.2s;
+        li {
+          list-style: none;
+          padding: 4px 8px;
+          border-radius: 2px;
+          cursor: pointer;
+          transition: 0.2s;
+          font-family: 'Fira Code';
+          &:hover {
+            background-color: #f5f5f5;
+          }
+        }
+      }
+      [data-fold='true'] {
+        height: 0;
+        padding: 0 8px;
+        border: 0 solid #f0f0f0;
+      }
+      [data-fold='false'] {
+        height: 200px;
+        padding: 8px;
+        border: 1px solid #f0f0f0;
+      }
+    }
+    pre {
+      padding: 0.5em 1em;
+    }
+  }
+
+  pre code {
+    white-space: pre-wrap;
+    color: #455a64;
+    background: transparent;
+    font-family: 'Fira Code';
+  }
+
+  pre code::before {
+    content: attr(data-code);
+    float: right;
+    color: #ddd;
+  }
+}

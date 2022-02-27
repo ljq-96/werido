@@ -15,7 +15,7 @@ type IProps = IRouteComponentProps &
 
 const Layouts = (props: IProps) => {
   const { children, location, route, dispatch, loginUser } = props
-  const [pathname, setPathname] = useState('/home')
+  const [pathname, setPathname] = useState(location.pathname)
   const [collapsed, setCollapsed] = useState(true)
 
   const logout = () => {

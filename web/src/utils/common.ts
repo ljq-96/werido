@@ -1,3 +1,10 @@
+import { createFromIconfontCN } from '@ant-design/icons'
+import icon from './icon.js'
+
+export const IconFont = createFromIconfontCN({
+  scriptUrl: icon,
+})
+
 export const querystring = {
   parse: (search: string = '') => {
     let result: { [k: string]: string } = {}

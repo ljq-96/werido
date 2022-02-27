@@ -14,42 +14,42 @@ export default ({ color = '#1890ff', style }: IProps) => {
           <path
             d=" M 2.712 0.656 L 27.763 70.331 L 43.522 30.863 L 32.225 0.656 L 2.712 0.656 Z "
             fill={color}
-            vector-effect="non-scaling-stroke"
-            stroke-width="1"
+            vectorEffect="non-scaling-stroke"
+            strokeWidth="1"
             stroke={color}
-            stroke-linejoin="round"
-            stroke-linecap="round"
-            stroke-miterlimit="3"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            strokeMiterlimit="3"
           />
           <path
             d=" M 59.5 0.656 L 89.495 0.656 L 100.347 30.764 L 84.475 70.331 L 59.5 0.656 Z "
             fill={color}
-            vector-effect="non-scaling-stroke"
-            stroke-width="1"
+            vectorEffect="non-scaling-stroke"
+            strokeWidth="1"
             stroke={color}
-            stroke-linejoin="round"
-            stroke-linecap="round"
-            stroke-miterlimit="3"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            strokeMiterlimit="3"
           />
           <path
             d=" M 56.642 50.611 L 34.719 110.538 L 64.644 110.538 L 71.345 91.533 L 56.642 50.611 Z "
             fill={color}
-            vector-effect="non-scaling-stroke"
-            stroke-width="1"
+            vectorEffect="non-scaling-stroke"
+            strokeWidth="1"
             stroke={color}
-            stroke-linejoin="round"
-            stroke-linecap="round"
-            stroke-miterlimit="3"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            strokeMiterlimit="3"
           />
           <path
             d=" M 132.629 0.656 L 162.561 0.656 L 122.685 110.633 L 92.698 110.633 L 132.629 0.656 Z "
             fill={color}
-            vector-effect="non-scaling-stroke"
-            stroke-width="1"
+            vectorEffect="non-scaling-stroke"
+            strokeWidth="1"
             stroke={color}
-            stroke-linejoin="round"
-            stroke-linecap="round"
-            stroke-miterlimit="3"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            strokeMiterlimit="3"
           />
         </g>
         {/* <foreignObject requiredExtensions="http://ns.gravit.io/">
