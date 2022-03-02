@@ -128,7 +128,8 @@ export default (props: IProps) => {
                         <Card
                           size='small'
                           key={`${j.title}`}
-                          className={`${onEdit ? 'bookmark-item-edit' : ''} bookmark-item`}
+                          className={`duration-300 text-center hover:bg-gray-50 cursor-pointer ${onEdit ? 'hover:bg-white' : ''}`}
+                          bodyStyle={{ textAlign: 'center' }}
                           actions={onEdit ? [
                             <Button block type='text' icon={<EditOutlined />} onClick={() => setModalState([idx, jdx])} />,
                             <Popconfirm
@@ -143,7 +144,7 @@ export default (props: IProps) => {
                             </Popconfirm>
                           ] : []}
                         >
-                          <Image style={{ width: '50%', marginBottom: 10 }} preview={false} src={j.icon.icon} />
+                          <img className='block mx-auto' style={{ width: '50%', marginBottom: 10 }} src={j.icon.icon} />
                           <div className='bookmark-item-title'>{j.title}</div>
                         </Card>
                       </Col>

@@ -13,6 +13,9 @@ export default defineConfig({
   antd: {
     disableBabelPluginImport: true
   },
+  extraPostCSSPlugins: [
+    require('tailwindcss'),
+  ],
   theme: {
     'root-entry-name': 'variable'
   },

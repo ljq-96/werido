@@ -11,6 +11,7 @@ import { BlockPicker } from 'react-color'
 import { nameTran } from '../utils/common'
 import { ThemeColor } from '../models'
 import 'antd/dist/antd.variable.min.css'
+import 'tailwindcss/tailwind.css'
 
 type IProps = IRouteComponentProps &
   ConnectProps & {
@@ -106,7 +107,7 @@ const Layouts = (props: IProps) => {
             </a>
           )}
           rightContentRender={() => (
-            <Space>
+            <Space className='bg-teal-600 h-96'>
               <Dropdown
                 placement='bottomCenter'
                 overlay={
