@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Card, Input, Popover, Tooltip } from 'antd'
+import { Card, Input, Popover, Tooltip, ConfigProvider } from 'antd'
 import { newsApi } from '../../../api'
 import { BingWallpaper } from '../../../../../interfaces'
 import { FieldTimeOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import Space from '../../../components/Canvas/Space'
 import moment from 'moment'
 import { debounce } from '../../../utils/common'
+import { connect, IStore, ThemeColor } from 'umi'
 
 declare global{
   interface Window {
@@ -13,8 +14,13 @@ declare global{
   }
 }
 
+interface IProps {
+  themeColor: { [key in ThemeColor]: string }
+}
 
-export default () => {
+
+const Search = (props: IProps) => {
+  const { themeColor } = props
   const [time, setTime] = useState(moment().format('yyyy-MM-DD HH:mm:ss'))
   const [sugList, setSugList] = useState<string[]>([])
   const [isOnSearch, setIsOnSearch] = useState(false)
@@ -81,7 +87,7 @@ export default () => {
           overflow: 'hidden'
         }}
       >
-        {useMemo(() => <Space color="#1C67E7" />, [])}
+        {useMemo(() => <Space color={themeColor.primaryColor} />, [themeColor])}
         <div className="time">{time}</div>
         <div className={`search ${isOnSearch ? 'onsearch' : ''}`} style={{ height: height }}>
           <input
@@ -106,3 +112,8 @@ export default () => {
     </Card>
   )
 }
+
+export default connect(({ store }: { store: IStore }) => {
+  const { themeColor } = store
+  return { themeColor }
+})(Search)

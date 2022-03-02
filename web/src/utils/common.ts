@@ -41,3 +41,5 @@ export const debounce = (fn: { apply: (arg0: any, arg1: any[]) => void }, t?: nu
       }, timeout)
   }
 }
+
+export const nameTran = (str: string) => str.replace(/([A-Z|0-9]+)/g, (_, p1) => '-' + p1.toLowerCase())

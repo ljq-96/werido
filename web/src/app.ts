@@ -1,1 +1,1 @@
-import 'material-design-icons';
+import 'material-design-icons'

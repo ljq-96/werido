@@ -3,20 +3,26 @@ const config = require('../config.json')
 
 export default defineConfig({
   nodeModulesTransform: {
-    type: 'none',
+    type: 'none'
   },
   publicPath: '/pubilc/',
   outputPath: '../dist/public',
   hash: true,
   // mfsu: {},
   dynamicImport: {},
+  antd: {
+    disableBabelPluginImport: true
+  },
+  theme: {
+    'root-entry-name': 'variable'
+  },
   history: {
-    type: 'hash',
+    type: 'hash'
   },
   fastRefresh: {},
   dva: {
     immer: true,
-    hmr: false,
+    hmr: false
   },
   proxy: {
     '/api': {
@@ -38,21 +44,21 @@ export default defineConfig({
           path: '/home',
           title: '首页',
           icon: 'HomeOutlined',
-          component: 'Home',
+          component: 'Home'
         },
         {
           path: '/editor',
           title: '新建文章',
           icon: 'FileTextOutlined',
-          component: 'Editor',
+          component: 'Editor'
         },
         {
           path: '/manage',
           title: 'biaoqian',
           icon: 'HomeOutlined',
-          component: 'Manage',
-        },
+          component: 'Manage'
+        }
       ]
-    },
-  ],
+    }
+  ]
 })
