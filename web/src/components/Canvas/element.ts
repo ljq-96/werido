@@ -36,6 +36,7 @@ export interface AstronautProps {
   jet?: number
   peopleStyle?: string
   jetStyle?: string
+  scale?: number
 }
 
 export class Astronaut {
@@ -44,16 +45,18 @@ export class Astronaut {
   jet: number = 500
   peopleStyle: string = 'rgb(255,255,255)'
   jetStyle: string = 'rgb(0,0,0)'
+  scale: number = 1
   constructor(props, ctx: CanvasRenderingContext2D) {
     Object.assign(this, props)
     this.creatJet(ctx)
     this.creatBody(ctx)
   }
-  private creatBody(ctx) {
+  private creatBody(ctx: CanvasRenderingContext2D) {
     ctx.save()
     ctx.fillStyle = this.peopleStyle
     ctx.lineJoin = 'round'
     ctx.translate(this.x, this.y)
+    ctx.scale(this.scale, this.scale)
     ctx.beginPath()
     ctx.arc(-10, 0, 10, Math.PI * 0.5, Math.PI * 1.9)
     ctx.quadraticCurveTo(-19, -10, -8, 10)
@@ -69,10 +72,11 @@ export class Astronaut {
     ctx.fill()
     ctx.restore()
   }
-  private creatJet(ctx) {
+  private creatJet(ctx: CanvasRenderingContext2D) {
     ctx.save()
     ctx.fillStyle = this.jetStyle
     ctx.translate(this.x, this.y)
+    ctx.scale(this.scale, this.scale)
     ctx.beginPath()
     ctx.arc(-27, -4, 8, Math.PI * 1.5, Math.PI * 2)
     ctx.lineTo(-40, -4)

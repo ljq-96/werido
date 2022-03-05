@@ -153,7 +153,7 @@ export default (props: IProps) => {
                           <Col
                             xs={6} sm={6} md={6} lg={3} xl={3}
                             key={'@add'}
-                            className='bookmark-item bookmark-item-add'
+                            className='border border-solid border-gray-100 rounded-sm hover:bg-gray-50 flex justify-center items-center'
                             onClick={() => setModalState([idx])}
                           >
                             <PlusOutlined style={{ fontSize: 30 }} />

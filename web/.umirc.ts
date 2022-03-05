@@ -10,9 +10,9 @@ export default defineConfig({
   hash: true,
   // mfsu: {},
   dynamicImport: {},
-  antd: {
-    disableBabelPluginImport: true
-  },
+  // antd: {
+  //   // disableBabelPluginImport: true
+  // },
   extraPostCSSPlugins: [
     require('tailwindcss'),
   ],

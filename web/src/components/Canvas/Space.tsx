@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Ball, BallProps, Astronaut, AstronautProps } from './element'
 import chroma from 'chroma-js'
+import { randomInArr } from '@/utils/common'
 
 class Space {
   x: number = 0
@@ -65,8 +66,15 @@ class Space {
   }
 }
 
-export default (props: { color?: string }) => {
-  const { color = '#426666' } = props
+interface IProps {
+  color: [string, string]
+  jetColor: string
+  sunColor: string
+  starColors: string[]
+}
+
+export default (props: IProps) => {
+  const { color, jetColor, starColors, sunColor } = props
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const ctxRef = useRef<CanvasRenderingContext2D>(null)
   const timerRef = useRef(0)
@@ -81,31 +89,20 @@ export default (props: { color?: string }) => {
 
   const draw = ([W, H]: [number, number]) => {
     ctxRef.current.clearRect(0, 0, W, H)
-    const diff1 = chroma(chroma.random())
-        .luminance(0.6)
-        .css()
-    const diff2 = chroma(chroma.random())
-      .luminance(0.6)
-      .css()
-    const diff3 = chroma(chroma.random())
-      .luminance(0.6)
-      .css()
-    const loh = chroma(color).luminance(0.35).css()
-    const sun = 'rgb(255,187,57)'
-
     const options = {
       x: W * 0.8,
       y: H * 0.2,
       W: W,
       H: H,
-      color: chroma(color).luminance(0.2).css(),
-      difColor: loh,
-      sun: sun,
+      color: color[0],
+      difColor: color[1],
+      sun: sunColor,
       astronaut: {
         x: W * 0.2,
         y: H * 0.4,
         jet: 400,
-        jetStyle: loh
+        jetStyle: jetColor,
+        scale: 0.7
       },
       orbital: [
         {
@@ -113,37 +110,37 @@ export default (props: { color?: string }) => {
           speed: 0.0012,
           stars: [
             {
-              fillStyle: diff1,
+              fillStyle: randomInArr(starColors),
               r: W * 0.003,
               angle: 0,
-              strokeStyle: loh,
+              strokeStyle: color[1],
               lineWidth: W * 0.001
             },
             {
-              fillStyle: diff1,
+              fillStyle: randomInArr(starColors),
               r: W * 0.005,
               angle: 4.4,
-              strokeStyle: loh,
+              strokeStyle: color[1],
               lineWidth: W * 0.002
             },
             {
-              fillStyle: diff2,
+              fillStyle: randomInArr(starColors),
               r: W * 0.01,
               angle: 2,
-              strokeStyle: loh
+              strokeStyle: color[1]
             },
             {
-              fillStyle: diff2,
+              fillStyle: randomInArr(starColors),
               r: W * 0.004,
               angle: 2.5,
-              strokeStyle: loh,
+              strokeStyle: color[1],
               lineWidth: W * 0.002
             },
             {
-              fillStyle: diff3,
+              fillStyle: randomInArr(starColors),
               r: W * 0.003,
               angle: 5,
-              strokeStyle: loh
+              strokeStyle: color[1]
             }
           ]
         },
@@ -152,41 +149,41 @@ export default (props: { color?: string }) => {
           speed: 0.0006,
           stars: [
             {
-              fillStyle: diff3,
+              fillStyle: randomInArr(starColors),
               r: W * 0.012,
               angle: 1.2,
-              strokeStyle: loh
+              strokeStyle: color[1]
             },
             {
-              fillStyle: diff3,
+              fillStyle: randomInArr(starColors),
               r: W * 0.004,
               angle: 1.8,
-              strokeStyle: loh
+              strokeStyle: color[1]
             },
             {
-              fillStyle: diff3,
+              fillStyle: randomInArr(starColors),
               r: W * 0.009,
               angle: 2.6,
-              strokeStyle: loh,
+              strokeStyle: color[1],
               lineWidth: W * 0.009
             },
             {
-              fillStyle: diff1,
+              fillStyle: randomInArr(starColors),
               r: W * 0.009,
               angle: 6,
-              strokeStyle: loh,
+              strokeStyle: color[1],
               lineWidth: W * 0.008
             },
             {
-              fillStyle: diff1,
+              fillStyle: randomInArr(starColors),
               r: W * 0.004,
               angle: 4
             },
             {
-              fillStyle: diff2,
+              fillStyle: randomInArr(starColors),
               r: W * 0.013,
               angle: 3.1,
-              strokeStyle: loh
+              strokeStyle: color[1]
             }
           ]
         },
@@ -195,53 +192,53 @@ export default (props: { color?: string }) => {
           speed: 0.0002,
           stars: [
             {
-              fillStyle: diff2,
+              fillStyle: randomInArr(starColors),
               r: W * 0.013,
               angle: 3.2,
-              strokeStyle: loh
+              strokeStyle: color[1]
             },
             {
-              fillStyle: diff2,
+              fillStyle: randomInArr(starColors),
               r: W * 0.008,
               angle: 3.6,
-              strokeStyle: loh
+              strokeStyle: color[1]
             },
             {
-              fillStyle: diff2,
+              fillStyle: randomInArr(starColors),
               r: W * 0.018,
               angle: 5.8,
-              strokeStyle: loh
+              strokeStyle: color[1]
             },
             {
-              fillStyle: diff3,
+              fillStyle: randomInArr(starColors),
               r: W * 0.01,
               angle: 2.4,
-              strokeStyle: loh
+              strokeStyle: color[1]
             },
             {
-              fillStyle: diff3,
+              fillStyle: randomInArr(starColors),
               r: W * 0.006,
               angle: 0,
-              strokeStyle: loh,
+              strokeStyle: color[1],
               lineWidth: W * 0.007
             },
             {
-              fillStyle: diff1,
+              fillStyle: randomInArr(starColors),
               r: W * 0.009,
               angle: 4.7
             },
             {
-              fillStyle: diff1,
+              fillStyle: randomInArr(starColors),
               r: W * 0.011,
               angle: 1.6,
-              strokeStyle: loh,
+              strokeStyle: color[1],
               lineWidth: W * 0.01
             },
             {
-              fillStyle: diff1,
+              fillStyle: randomInArr(starColors),
               r: W * 0.004,
               angle: 0.4,
-              strokeStyle: loh,
+              strokeStyle: color[1],
               lineWidth: W * 0.006
             }
           ]

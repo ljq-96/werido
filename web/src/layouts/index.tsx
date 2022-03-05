@@ -10,7 +10,7 @@ import Logo from '../components/Logo'
 import { BlockPicker } from 'react-color'
 import { nameTran } from '../utils/common'
 import { ThemeColor } from '../models'
-import 'antd/dist/antd.variable.min.css'
+// import 'antd/dist/antd.variable.min.css'
 import 'tailwindcss/tailwind.css'
 
 type IProps = IRouteComponentProps &
@@ -86,7 +86,17 @@ const Layouts = (props: IProps) => {
           onCollapse={setCollapsed}
           collapsed={collapsed}
           breakpoint={false}
-          logo={<Logo color={themeColor.primaryColor} style={{ width: 32 }} />}
+          logo={
+            <Logo
+              style={{ width: 32 }}
+              color={[
+                themeColor.primary3,
+                themeColor.primary4,
+                themeColor.primary5,
+                themeColor.primary6
+              ]}
+            />
+          }
           title="Werido"
           logoStyle={{ color: '#999' }}
           route={{
@@ -107,7 +117,7 @@ const Layouts = (props: IProps) => {
             </a>
           )}
           rightContentRender={() => (
-            <Space className='bg-teal-600 h-96'>
+            <Space>
               <Dropdown
                 placement='bottomCenter'
                 overlay={

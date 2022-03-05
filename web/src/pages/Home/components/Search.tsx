@@ -87,8 +87,26 @@ const Search = (props: IProps) => {
           overflow: 'hidden'
         }}
       >
-        {useMemo(() => <Space color={themeColor.primaryColor} />, [themeColor])}
-        <div className="time">{time}</div>
+        {useMemo(() => <Space
+          color={[themeColor.primary7, themeColor.primary4]}
+          jetColor={themeColor.primary5}
+          sunColor={'rgb(250,173,20)'}
+          starColors={[
+            '#f5222d',
+            '#fa541c',
+            '#fa8c16',
+            '#faad14',
+            '#fadb14',
+            '#a0d911',
+            '#52c41a',
+            '#13c2c2',
+            '#1890ff',
+            '#2f54eb',
+            '#722ed1',
+            '#eb2f96'
+          ]}
+        />, [themeColor])}
+        {/* <div className="time">{time}</div> */}
         <div className={`search ${isOnSearch ? 'onsearch' : ''}`} style={{ height: height }}>
           <input
             type="text"
