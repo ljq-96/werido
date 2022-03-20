@@ -16,9 +16,9 @@ export default defineConfig({
   extraPostCSSPlugins: [
     require('tailwindcss'),
   ],
-  theme: {
-    'root-entry-name': 'variable'
-  },
+  // theme: {
+  //   'root-entry-name': 'variable'
+  // },
   history: {
     type: 'hash'
   },
@@ -37,7 +37,7 @@ export default defineConfig({
   routes: [
     {
       path: '/login',
-      component: 'login'
+      component: 'Login'
     },
     {
       path: '/',
@@ -54,12 +54,6 @@ export default defineConfig({
           title: '新建文章',
           icon: 'FileTextOutlined',
           component: 'Editor'
-        },
-        {
-          path: '/manage',
-          title: 'biaoqian',
-          icon: 'HomeOutlined',
-          component: 'Manage'
         }
       ]
     }

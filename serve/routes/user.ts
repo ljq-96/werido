@@ -51,7 +51,7 @@ router.post<never, IResponse, User.Login>('/register', async (req, res) => {
         children: [{
           title: '百度',
           url: 'https://www.baidu.com',
-          icon: '620c4cbfac84287c28026711'
+          icon: '6236ede822c3d73200d550c4'
         }]
       })
       res.json({

@@ -124,14 +124,14 @@ export default (props: IProps) => {
                       setBookmarkList([...bookmarkList])
                     }}
                     renderItem={(j, jdx) => <>
-                      <Col xs={6} sm={6} md={6} lg={3} xl={3} key={`item-${j.icon._id}-${jdx}`}>
+                      <Col xs={6} sm={6} md={6} lg={3} xl={3} key={`item-${j.icon?._id}-${jdx}`}>
                         <Card
                           size='small'
                           key={`${j.title}`}
                           className={`duration-300 text-center hover:bg-gray-50 cursor-pointer ${onEdit ? 'hover:bg-white' : ''}`}
                           bodyStyle={{ textAlign: 'center' }}
                           actions={onEdit ? [
-                            <Button block type='text' icon={<EditOutlined />} onClick={() => setModalState([idx, jdx])} />,
+                            <Button style={{ margin: '-24px 0' }} block type='text' icon={<EditOutlined />} onClick={() => setModalState([idx, jdx])} />,
                             <Popconfirm
                               title='确定删除此书签吗？'
                               placement='bottom'
@@ -140,11 +140,11 @@ export default (props: IProps) => {
                                 setBookmarkList([...bookmarkList])
                               }}
                             >
-                              <Button block type='text' icon={<DeleteOutlined />} />
+                              <Button style={{ margin: '-24px 0' }} block type='text' icon={<DeleteOutlined />} />
                             </Popconfirm>
                           ] : []}
                         >
-                          <img className='block mx-auto' style={{ width: '50%', marginBottom: 10 }} src={j.icon.icon} />
+                          <img className='block mx-auto' style={{ width: '50%', marginBottom: 10 }} src={j.icon?.icon} />
                           <div className='bookmark-item-title'>{j.title}</div>
                         </Card>
                       </Col>
