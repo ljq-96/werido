@@ -1,11 +1,12 @@
 import { Router } from 'express'
 import { UserModal, IconModel } from '../model'
-import { IResponse, Icon } from '../../interfaces'
+import { Icon } from '../../interfaces'
+import { Response, Request } from '../types'
 
 const router = Router()
 
 router.route('/icon')
-  .get<any, IResponse<Icon.ListResult>, any, Icon.ListParams>(async (req, res) => {
+  .get(async (req:Request<any, Icon.ListParams>, res: Response<Icon.ListResult>) => {
     const { token } = req.signedCookies
     const { page, size, name } = req.query
     const user = await UserModal.findById(token)

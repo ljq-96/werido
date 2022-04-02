@@ -1,11 +1,11 @@
 import { Router } from 'express'
 import { getBingWallpaper } from '../utils/news'
-import { IResponse, Icon, BingWallpaper } from '../../interfaces'
+import { Icon, BingWallpaper } from '../../interfaces'
+import { Request, Response } from '../types'
 
 const router = Router()
 
-router.get<never, IResponse<BingWallpaper>>('/news/bing', async (req, res) => {
-  // @ts-ignore
+router.get('/news/bing', async (_, res: Response) => {
   const { bingWallpaper } = global
   if (bingWallpaper) {
     res.json({

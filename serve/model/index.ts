@@ -18,11 +18,11 @@ export const UserModal = model<User.Doc>(
       enum: [0, 1, 100],
       default: 1
     },
-    create_time: {
+    createTime: {
       type: Number,
       default: Date.now()
     },
-    update_time: {
+    updateTime: {
       type: Number,
       default: Date.now()
     }
@@ -36,11 +36,11 @@ export const IconModel = model<Icon.Doc>(
     icon: String,
     name: String,
     user: String,
-    create_time: {
+    createTime: {
       type: Number,
       default: Date.now()
     },
-    update_time: {
+    updateTime: {
       type: Number,
       default: Date.now()
     }
@@ -66,11 +66,11 @@ export const BookmarkModel = model<Bookmark.Doc>(
         }
       }
     ],
-    create_time: {
+    createTime: {
       type: Number,
       default: Date.now()
     },
-    update_time: {
+    updateTime: {
       type: Number,
       default: Date.now()
     },

@@ -12,6 +12,7 @@ export interface Pager<T = never> {
   list?: T extends never ? never : T[]
 }
 
+/** 用户 */
 export namespace User {
   export enum UserStatus {
     ADMIN = 100,
@@ -29,15 +30,16 @@ export namespace User {
     _id: string
     username: string
     password: string
-    create_time: number
-    last_modified_time: number
+    createTime: number
+    updateTime: number
     status: UserStatus
   }
 
   export type Login = Pick<Doc, 'username' | 'password'>
-  export type Result = Pick<Doc, '_id' | 'username' | 'create_time' | 'last_modified_time' | 'status'>
+  export type Result = Pick<Doc, '_id' | 'username' | 'createTime' | 'updateTime' | 'status'>
 }
 
+/** 图标 */
 export namespace Icon {
   export interface Doc {
     _id: string
@@ -58,6 +60,7 @@ export namespace Icon {
   }
 }
 
+/** 标签 */
 export namespace Bookmark {
   export interface Doc {
     label: string
@@ -71,8 +74,8 @@ export namespace Bookmark {
 
   export interface ListResult {
     _id: string
-    create_time: number
-    update_time: number
+    createTime: number
+    updateTime: number
     label: string
     children: {
       title: string
