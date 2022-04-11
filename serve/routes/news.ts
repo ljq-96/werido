@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { getBingWallpaper } from '../utils/news'
 import { Icon, BingWallpaper } from '../../interfaces'
-import { Request, Response } from '../types'
+import { Request, Response } from '../ServeTypes'
 
 const router = Router()
 

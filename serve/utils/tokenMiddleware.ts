@@ -1,5 +1,5 @@
 import { UserModal } from '../model'
-import { Request, Response } from 'express'
+import { Request, Response } from '../ServeTypes'
 
 const notNeedToken = [
   '/api/login',
@@ -11,7 +11,9 @@ export default async (req: Request, res: Response, next) => {
   if (notNeedToken.includes(req.originalUrl)) {
     next()
   } else if (token) {
-    const user = await UserModal.findOne({ _id: token })
+    const [_id, password] = token.split('@')
+    const user = await UserModal.findOne({ _id, password })
+    req.app.locals.user = user
     if (user) {
       next()
     } else {

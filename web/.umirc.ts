@@ -8,7 +8,7 @@ export default defineConfig({
   publicPath: '/pubilc/',
   outputPath: '../dist/public',
   hash: true,
-  // mfsu: {},
+  mfsu: {},
   dynamicImport: {},
   // antd: {
   //   // disableBabelPluginImport: true
@@ -16,9 +16,9 @@ export default defineConfig({
   extraPostCSSPlugins: [
     require('tailwindcss'),
   ],
-  // theme: {
-  //   'root-entry-name': 'variable'
-  // },
+  theme: {
+    'root-entry-name': 'variable'
+  },
   history: {
     type: 'hash'
   },

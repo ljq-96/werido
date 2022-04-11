@@ -1,16 +1,18 @@
 import { Router } from 'express'
+import * as md5 from 'md5'
 import { UserModal, BookmarkModel } from '../model'
 import { IResponse, User } from '../../interfaces'
-import { Request, Response } from '../types'
+import { Request, Response } from '../ServeTypes'
 const router = Router()
 
 router.post('/login', async (req: Request, res: Response<User.Login>) => {
   const { body } = req
   const { username, password } = body
   if (username && password) {
-    const user = await UserModal.findOne(body)
+    const mPassword = md5(password)
+    const user = await UserModal.findOne({ username, password: mPassword })
     if (user) {
-      res.cookie('token', user._id, { signed: true })
+      res.cookie('token', `${user._id}@${mPassword}`, { signed: true })
       res.json({
         code: 0,
         msg: '登录成功'
@@ -33,7 +35,7 @@ router.post('/register', async (req:Request, res: Response<IResponse<User.Login>
   const { body } = req
   const { username, password } = body
   if (username && password) {
-    const user = await UserModal.findOne(body)
+    const user = await UserModal.findOne({ username })
     if (user) {
       res.json({
         code: 100,
@@ -42,7 +44,7 @@ router.post('/register', async (req:Request, res: Response<IResponse<User.Login>
     } else {
       const addedUser = await UserModal.create({
         username,
-        password,
+        password: md5(password),
         createTime: Date.now()
       })
       await BookmarkModel.create({
@@ -51,7 +53,7 @@ router.post('/register', async (req:Request, res: Response<IResponse<User.Login>
         children: [{
           title: '百度',
           url: 'https://www.baidu.com',
-          icon: '6236ede822c3d73200d550c4'
+          icon: '6248010ea4f526b4106dbdc2'
         }]
       })
       res.json({
@@ -75,8 +77,8 @@ router.post('/logout', async (_, res: Response) => {
 })
 
 router.get('/login/user', async (req: Request, res: Response<User.Result>) => {
-  const { token } = req.signedCookies
-  const user = await UserModal.findOne({ _id: token })
+  const token = req.signedCookies.token?.split('@') || []
+  const user = await UserModal.findOne({ _id: token[0], password: token[1] })
   const { _id, username, createTime, updateTime, status } = user
   res.json({
     code: 0,
