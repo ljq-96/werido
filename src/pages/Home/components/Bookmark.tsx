@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { Col, Card, Collapse, Image, Button, message, Space, Spin, Popconfirm } from 'antd'
 import Sortable from '../../../components/Sortable'
 import { bookmarkApi, iconApi } from '../../../api'
-import { Bookmark, Icon } from '../../../../../interfaces'
+import { Bookmark, Icon } from '../../../../interfaces'
 import { ApiFilled, CheckOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import IconModal from '../../../components/Modal/IconModal'
 

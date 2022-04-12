@@ -12,7 +12,7 @@ dist
 DS_Store
 
 # umi
-/web/src/.umi
-/web/src/.umi-production
-/web/src/.umi-test
-/web/.env.local
+.umi
+.umi-production
+.umi-test
+.env.local

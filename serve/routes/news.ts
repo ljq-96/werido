@@ -6,7 +6,7 @@ import { Request, Response } from '../ServeTypes'
 const router = Router()
 
 router.get('/news/bing', async (_, res: Response) => {
-  const { bingWallpaper } = global
+  const { bingWallpaper } = global as any
   if (bingWallpaper) {
     res.json({
       code: 0,

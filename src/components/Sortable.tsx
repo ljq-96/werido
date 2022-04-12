@@ -4,12 +4,12 @@ import { SortableContainer, SortableContainerProps, SortableElement } from 'reac
 interface IProps<T = any> {
   value: T[]
   disabled?: boolean
-  onSortEnd: (list: T) => void
+  onSortEnd: (list: T[]) => void
   style?: React.CSSProperties
   renderItem: (value: T, index: number) => JSX.Element
 }
 
-export default (props: IProps & SortableContainerProps) => {
+export default <T extends {}>(props: IProps<T> & SortableContainerProps) => {
   const { value, onSortEnd, renderItem, disabled = false, style = {}, ...reset } = props
 
   const SortableItem = SortableElement(({ item, sortIndex }) => renderItem( item, sortIndex ))

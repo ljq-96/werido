@@ -1,5 +1,5 @@
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi'
-import { User } from '../../../interfaces'
+import { User } from '../../interfaces'
 
 export enum ThemeColor {
   primaryColor = 'primaryColor',

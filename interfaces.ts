@@ -46,6 +46,8 @@ export namespace Icon {
     icon: string
     name: string
     user: string
+    createTime: number,
+    updateTime: number
   }
 
   export interface ListParams {

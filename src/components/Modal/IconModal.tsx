@@ -2,8 +2,8 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import { Modal, ModalProps, Form, Input, Select, Pagination, Spin, Tabs, Upload, Dropdown, Menu, Image, Empty, message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { VariableSizeGrid as Grid } from 'react-window'
-import { iconApi } from '@/api'
-import { Icon } from '../../../../interfaces'
+import { iconApi } from '../../api'
+import { Icon } from '../../../interfaces'
 
 interface VProps {
   list: Icon.Doc[]

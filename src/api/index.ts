@@ -1,5 +1,5 @@
 import { Fetch } from './Fetch'
-import { User, Icon, Bookmark, BingWallpaper } from '../../../interfaces'
+import { User, Icon, Bookmark, BingWallpaper } from '../../interfaces'
 import { history } from 'umi'
 import { message } from 'antd'
 

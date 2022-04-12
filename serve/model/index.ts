@@ -52,6 +52,7 @@ export const BookmarkModel = model<Bookmark.Doc>(
   'bookmark',
   new Schema({
     label: String,
+    // @ts-ignore
     user: {
       type: Schema.Types.ObjectId,
       ref: 'user'

@@ -1,16 +1,19 @@
 {
   "compilerOptions": {
-      "outDir": "dist",
-      "moduleResolution": "node",
-      "module": "commonjs",
-      "target": "esnext"
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "target": "esnext"
   },
-  "exclude": [
-      "node_modules/**",
-  ],
-  "include": [
-    "src/**/*.ts",
-    "**/*.d.ts",
-    "**/*.ts"
-  ]
+  // "exclude": [
+  //   "node_modules/**",
+  //   "src/**"
+  // ],
+  // "files": [
+  //   "serve/index.ts"
+  // ],
+  // "include": [
+  //   "serve/**.ts",
+  //   "serve/*/**.ts"
+  // ]
 }

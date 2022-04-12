@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Card, Input, Popover, Tooltip, ConfigProvider } from 'antd'
 import { newsApi } from '../../../api'
-import { BingWallpaper } from '../../../../../interfaces'
+import { BingWallpaper } from '../../../../interfaces'
 import { FieldTimeOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import Space from '../../../components/Canvas/Space'
 import moment from 'moment'

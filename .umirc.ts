@@ -1,12 +1,12 @@
 import { defineConfig } from 'umi'
-const config = require('../config.json')
+import config from './config'
 
 export default defineConfig({
   nodeModulesTransform: {
     type: 'none'
   },
   publicPath: '/pubilc/',
-  outputPath: '../dist/public',
+  outputPath: './dist/public',
   hash: true,
   mfsu: {},
   dynamicImport: {},

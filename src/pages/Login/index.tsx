@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Form, Button, Input, Card, message, Row, Col } from 'antd'
 import { userApi } from '../../api'
-import { User } from '../../../../interfaces'
+import { User } from '../../../interfaces'
 import { history } from 'umi'
 import Logo from '../../components/Logo'
 import './index.less'

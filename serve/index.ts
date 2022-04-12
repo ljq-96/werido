@@ -10,7 +10,7 @@ import bookmarkRouter from './routes/bookmark'
 import newsRouter from './routes/news'
 import './utils/news'
 import { IconModel } from './model'
-const config = require('../config.json')
+import config from '../config'
 
 const app = express()
 const { mongo, serve } = config
@@ -30,12 +30,8 @@ app.use('/api', iconRouter)
 app.use('/api', bookmarkRouter)
 app.use('/api', newsRouter)
 
-mongoose.set('useFindAndModify', false)
 mongoose
-  .connect(`${mongo.url}/${mongo.dbname}`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+  .connect(`${mongo.url}/${mongo.dbname}`)
   .then(
     () => {
       console.log(`MongoDB connect at：${mongo.url}/${mongo.dbname}`)
