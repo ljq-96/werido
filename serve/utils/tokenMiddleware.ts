@@ -1,5 +1,5 @@
 import { UserModal } from '../model'
-import { Request, Response } from '../ServeTypes'
+import { Request, Response } from '../../interfaces'
 
 const notNeedToken = [
   '/api/login',

@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import * as md5 from 'md5'
 import { UserModal, BookmarkModel } from '../model'
-import { IResponse, User } from '../../interfaces'
-import { Request, Response } from '../ServeTypes'
+import { Response, Request, IResponse, User } from '../../interfaces'
+
 const router = Router()
 
 router.post('/login', async (req: Request, res: Response<User.Login>) => {

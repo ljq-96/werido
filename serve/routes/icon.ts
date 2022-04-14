@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import { UserModal, IconModel } from '../model'
-import { Icon } from '../../interfaces'
-import { Response, Request } from '../ServeTypes'
+import { Response, Request, Icon } from '../../interfaces'
 import * as fs from 'fs'
 import * as path from 'path'
 
