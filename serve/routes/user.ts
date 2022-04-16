@@ -49,7 +49,7 @@ router.post('/register', async (req:Request, res: Response<IResponse<User.Login>
       })
       await BookmarkModel.create({
         label: '书签',
-        user: addedUser._id,
+        creator: addedUser._id,
         children: [{
           title: '百度',
           url: 'https://www.baidu.com',

@@ -50,7 +50,7 @@ export namespace Icon {
     _id: string
     icon: string
     name: string
-    user: string
+    creator: string
     createTime: number,
     updateTime: number
   }
@@ -71,7 +71,7 @@ export namespace Icon {
 export namespace Bookmark {
   export interface Doc {
     label: string
-    user: string
+    creator: string
     children: {
       title: string
       url: string

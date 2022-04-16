@@ -6,6 +6,8 @@ import * as path from 'path'
 
 const router = Router()
 
+IconModel.updateMany({}, {creator: '' }, { multi: true })
+
 // fs.readdir('./drawable-nodpi-v4', (_, icon) => {
 //   icon.forEach((i, idx) => {
 //     fs.readFile(path.resolve(__dirname, '../drawable-nodpi-v4/' + i), (err, data) => {
@@ -24,10 +26,10 @@ router.route('/icon')
   .get(async (req:Request<any, Icon.ListParams>, res: Response<Icon.ListResult>) => {
     const { _id } = req.app.locals.user
     const { page, size, name } = req.query
-    const total = await IconModel.find({ user: '' }).countDocuments()
-    const customIcons = await IconModel.find({ user: _id })
+    const total = await IconModel.find({ creator: '' }).countDocuments()
+    const customIcons = await IconModel.find({ creator: _id })
     const presetIcons = await IconModel
-      .find({ user: '' })
+      .find({ creator: '' })
       .skip((page - 1) * size)
       .limit(Number(size))
 

@@ -35,7 +35,7 @@ export const IconModel = model<Icon.Doc>(
   new Schema({
     icon: String,
     name: String,
-    user: String,
+    creator: String,
     createTime: {
       type: Number,
       default: Date.now()
@@ -53,7 +53,7 @@ export const BookmarkModel = model<Bookmark.Doc>(
   new Schema({
     label: String,
     // @ts-ignore
-    user: {
+    creator: {
       type: Schema.Types.ObjectId,
       ref: 'user'
     },
