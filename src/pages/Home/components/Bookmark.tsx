@@ -94,13 +94,14 @@ export default (props: IProps) => {
   return (
     <React.Fragment>
       <Card
+        size='small'
         title='网址导航'
         bodyStyle={{ padding: 8 }}
         extra={
           onEdit ? <Space>
             <Button onClick={onCancel}>取消</Button>
             <Button type='primary' onClick={changeEdit}>完成</Button>
-          </Space> : <Button type='text' onClick={changeEdit} icon={<EditOutlined/>}>编辑</Button>
+          </Space> : <Button type='text' onClick={changeEdit} icon={<EditOutlined/>}></Button>
         }
       >
         <Collapse ghost className="bookmark" expandIconPosition='right' activeKey={expand} onChange={setExpand}>

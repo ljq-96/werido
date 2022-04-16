@@ -22,11 +22,10 @@ const router = Router()
 
 router.route('/icon')
   .get(async (req:Request<any, Icon.ListParams>, res: Response<Icon.ListResult>) => {
-    const { token } = req.signedCookies
+    const { _id } = req.app.locals.user
     const { page, size, name } = req.query
-    const user = await UserModal.findById(token)
     const total = await IconModel.find({ user: '' }).countDocuments()
-    const customIcons = await IconModel.find({ user: user._id })
+    const customIcons = await IconModel.find({ user: _id })
     const presetIcons = await IconModel
       .find({ user: '' })
       .skip((page - 1) * size)
