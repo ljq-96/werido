@@ -88,6 +88,8 @@ export namespace Bookmark {
     createTime: number
     updateTime: number
     label: string
+    prev?: string
+    next?: string
     items: {
       title: string
       url: string
@@ -98,6 +100,8 @@ export namespace Bookmark {
   export interface UpdateParams {
     _id: string
     label: string
+    prev?: string
+    next?: string
     items: {
       title: string
       url: string

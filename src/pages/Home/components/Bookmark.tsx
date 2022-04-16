@@ -1,18 +1,12 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
-import { Col, Card, Collapse, Image, Button, message, Space, Spin, Popconfirm, Modal, Form, Input, Empty } from 'antd'
+import { Col, Card, Collapse, Image, Button, message, Space, Spin, Popconfirm, Modal, Form, Input, Empty, Tooltip, Dropdown, Menu } from 'antd'
 import Sortable from '../../../components/Sortable'
 import { bookmarkApi, iconApi } from '../../../api'
 import { Bookmark, Icon } from '../../../../interfaces'
-import { ApiFilled, CheckOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
+import { ApiFilled, BackwardOutlined, CheckOutlined, DeleteOutlined, EditOutlined, PlusOutlined, UndoOutlined } from '@ant-design/icons'
 import IconModal from '../../../components/Modal/IconModal'
 
 interface IProps { }
-
-interface IBookMark {
-  title: string
-  url: string
-  icon: Icon.Doc
-}
 
 export default (props: IProps) => {
   const [bookmarkList, setBookmarkList] = useState<Bookmark.ListResult[]>([])
@@ -31,7 +25,7 @@ export default (props: IProps) => {
       .then((res) => {
         if (res.code === 0) {
           setBookmarkList(res.data)
-          bookMarkCache.current = [...res.data]
+          bookMarkCache.current = JSON.parse(JSON.stringify(res.data))
         }
       }).finally(() => {
         setLoading(
@@ -45,17 +39,20 @@ export default (props: IProps) => {
 
   const changeEdit = () => {
     if (onEdit) {
+      const changed = bookmarkList.filter(i => JSON.stringify(i) !== JSON.stringify(bookMarkCache.current.find(j => j._id === i._id)))   
       setLoading(
-        bookmarkList.reduce((a, b) => {
+        changed.reduce((a, b) => {
           a[b._id] = true
           return a
         }, {})
       )
       bookmarkApi
-        .updateBookmarks(bookmarkList.map(i => ({
+        .updateBookmarks(changed.map(i => ({
           _id: i._id,
           label: i.label,
-          items: i.items.map(j => ({ ...j, icon: j.icon._id }))
+          items: i.items.map(j => ({ ...j, icon: j.icon._id })),
+          prev: i.prev,
+          next: i.next
         })))
         .then(res => {
           if (res.code === 0) {
@@ -72,13 +69,7 @@ export default (props: IProps) => {
   }
 
   const onCancel = () => {
-    setLoading(
-      bookmarkList.reduce((a, b) => {
-        a[b._id] = true
-        return a
-      }, {})
-    )
-    getBookmarks()
+    setBookmarkList([...bookMarkCache.current])
     setOnEdit(false)
   }
 
@@ -87,6 +78,8 @@ export default (props: IProps) => {
     bookmarkApi.createBookmark(values).then(res => {
       if (res.code === 0) {
         setBookmarkList([...bookmarkList, res.data])
+        setShowCreateBookmark(false)
+        message.success('创建成功')
       }
     })
   }
@@ -94,11 +87,6 @@ export default (props: IProps) => {
   useEffect(() => {
     getBookmarks()
   }, [])
-
-  useEffect(() => {
-    console.log(bookmarkList);
-
-  }, [bookmarkList])
 
   return (
     <React.Fragment>
@@ -108,11 +96,19 @@ export default (props: IProps) => {
         bodyStyle={{ padding: 8 }}
         extra={
           onEdit ? <Space>
-            <Button onClick={onCancel}>取消</Button>
-            <Button type='primary' onClick={changeEdit}>完成</Button>
+            <Tooltip title='取消' placement='bottom'>
+              <Button type='text' onClick={onCancel} icon={<UndoOutlined />} />
+            </Tooltip>
+            <Tooltip title='确定' placement='bottom'>
+              <Button type='text' onClick={changeEdit} icon={<CheckOutlined />} />
+            </Tooltip>
           </Space> : <Space>
-            <Button type='text' onClick={changeEdit} icon={<EditOutlined />} />
-            <Button type='text' onClick={() => setShowCreateBookmark(true)} icon={<PlusOutlined />} />
+            <Tooltip title='编辑' placement='bottom'>
+              <Button type='text' onClick={changeEdit} icon={<EditOutlined />} />
+            </Tooltip>
+            <Tooltip title='添加' placement='bottom'>
+              <Button type='text' onClick={() => setShowCreateBookmark(true)} icon={<PlusOutlined />} />
+            </Tooltip>
           </Space>
         }
       >
@@ -123,12 +119,25 @@ export default (props: IProps) => {
           lockAxis='xy'
           distance={10}
           disabled={!onEdit}
-          onSortEnd={values => {
+          onSortEnd={(values) => {
+            for (let i = 0; i < values.length; i ++) {
+              values[i].prev = values[i - 1]?._id || null
+              values[i].next = values[i + 1]?._id || null
+            }
             setBookmarkList(values)
           }}
           renderItem={(i, idx) => (
             <Collapse ghost className="bookmark" expandIconPosition='left' defaultActiveKey={i.label}>
-              <Collapse.Panel header={i.label} key={i.label}>
+              <Collapse.Panel header={i.label} key={i.label} extra={
+                onEdit && <Popconfirm title='确定删除此书签吗？'
+                    placement='bottom'>
+                  <Button
+                    danger
+                    type='link'
+                    icon={<DeleteOutlined />}
+                  />
+                </Popconfirm> }
+              >
                 <Spin spinning={!!loading[i._id]}>
                   {
                     i.items?.length > 0 ? (
@@ -149,28 +158,40 @@ export default (props: IProps) => {
                         }}
                         renderItem={(j, jdx) => <>
                           <Col xs={6} sm={6} md={6} lg={3} xl={3} key={`item-${j.icon?._id}-${jdx}`}>
-                            <Card
-                              size='small'
-                              key={`${j.title}`}
-                              className={`duration-300 text-center hover:bg-gray-50 cursor-pointer ${onEdit ? 'hover:bg-white' : ''}`}
-                              bodyStyle={{ textAlign: 'center' }}
-                              actions={onEdit ? [
-                                <Button style={{ margin: '-24px 0' }} block type='text' icon={<EditOutlined />} onClick={() => setModalState([idx, jdx])} />,
-                                <Popconfirm
-                                  title='确定删除此书签吗？'
-                                  placement='bottom'
-                                  onConfirm={() => {
-                                    i.items.splice(jdx, 1)
-                                    setBookmarkList([...bookmarkList])
-                                  }}
-                                >
-                                  <Button style={{ margin: '-24px 0' }} block type='text' icon={<DeleteOutlined />} />
-                                </Popconfirm>
-                              ] : []}
+                            <Dropdown
+                              trigger={onEdit ? ['contextMenu'] : []}
+                              overlay={<Menu>
+                                <Menu.Item onClick={() => setModalState([idx, jdx])}>编辑</Menu.Item>
+                                <Menu.Item onClick={() => {
+                                  i.items.splice(jdx, 1)
+                                  setBookmarkList([...bookmarkList])
+                                }}>删除</Menu.Item>
+                              </Menu>}
                             >
-                              <img className='block mx-auto' style={{ width: '50%', marginBottom: 10 }} src={j.icon?.icon} />
-                              <div className='bookmark-item-title'>{j.title}</div>
-                            </Card>
+                              <Card
+                                size='small'
+                                key={`${j.title}`}
+                                className={`duration-300 text-center hover:bg-gray-50 cursor-pointer ${onEdit ? 'hover:bg-white' : ''}`}
+                                bodyStyle={{ textAlign: 'center' }}
+                                // actions={onEdit ? [
+                                //   <Button style={{ margin: '-24px 0' }} block type='text' icon={<EditOutlined />} onClick={() => setModalState([idx, jdx])} />,
+                                //   <Popconfirm
+                                //     title='确定删除此书签吗？'
+                                //     placement='bottom'
+                                //     onConfirm={() => {
+                                //       i.items.splice(jdx, 1)
+                                //       setBookmarkList([...bookmarkList])
+                                //     }}
+                                //   >
+                                //     <Button style={{ margin: '-24px 0' }} block type='text' icon={<DeleteOutlined />} />
+                                //   </Popconfirm>
+                                // ] : []}
+                              >
+                                <img className='block mx-auto' style={{ width: '50%', marginBottom: 10 }} src={j.icon?.icon} />
+                                <div className='bookmark-item-title'>{j.title}</div>
+                              </Card>
+                            </Dropdown>
+                            
                           </Col>
                           {
                             onEdit && jdx == i.items.length - 1 && (
@@ -186,13 +207,16 @@ export default (props: IProps) => {
                           }
                         </>}
                       />
-                    ) : <div
-                      className='border border-dashed border-gray-200 cursor-pointer hover:bg-gray-50 transition'
-                      onClick={() => {
-                        setOnEdit(true)
-                        setModalState([idx])
-                      }}
-                    >
+                    ) : onEdit ? (
+                        <Col
+                          xs={6} sm={6} md={6} lg={3} xl={3}
+                          key={'@add'}
+                          className='h-40 border border-solid border-gray-100 rounded-sm hover:bg-gray-50 flex justify-center items-center'
+                          onClick={() => setModalState([idx])}
+                        >
+                          <PlusOutlined style={{ fontSize: 30 }} />
+                        </Col>
+                    ) : <div className='border border-dashed border-gray-200'>
                       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                     </div>
                   }
