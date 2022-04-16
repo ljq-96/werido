@@ -5,7 +5,7 @@ import { Response, Request, IResponse, User } from '../../interfaces'
 
 const router = Router()
 
-router.post('/login', async (req: Request, res: Response<User.Login>) => {
+router.post('/login', async (req: Request<User.Login>, res: Response<User.Login>) => {
   const { body } = req
   const { username, password } = body
   if (username && password) {
@@ -31,7 +31,7 @@ router.post('/login', async (req: Request, res: Response<User.Login>) => {
   }
 })
 
-router.post('/register', async (req:Request, res: Response<IResponse<User.Login>>) => {
+router.post('/register', async (req:Request<User.Login>, res: Response) => {
   const { body } = req
   const { username, password } = body
   if (username && password) {
@@ -47,15 +47,18 @@ router.post('/register', async (req:Request, res: Response<IResponse<User.Login>
         password: md5(password),
         createTime: Date.now()
       })
-      await BookmarkModel.create({
+      const addedBookmark = await BookmarkModel.create({
         label: '书签',
         creator: addedUser._id,
-        children: [{
+        prev: null,
+        next: null,
+        items: [{
           title: '百度',
           url: 'https://www.baidu.com',
           icon: '6248010ea4f526b4106dbdc2'
         }]
       })
+      await UserModal.findByIdAndUpdate(addedUser, { bookmarks: [addedBookmark._id] })
       res.json({
         code: 0,
         msg: '注册成功'
@@ -77,8 +80,7 @@ router.post('/logout', async (_, res: Response) => {
 })
 
 router.get('/login/user', async (req: Request, res: Response<User.Result>) => {
-  const token = req.signedCookies.token?.split('@') || []
-  const user = await UserModal.findOne({ _id: token[0], password: token[1] })
+  const { user } = req.app.locals
   const { _id, username, createTime, updateTime, status } = user
   res.json({
     code: 0,

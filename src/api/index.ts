@@ -76,5 +76,13 @@ export const bookmarkApi = {
       method: 'POST',
       body
     })
+  },
+  /** 创建标签 */
+  createBookmark: (body: { label: string }) => {
+    return Fetch<{ label: string }, Bookmark.ListResult>({
+      url: `${baseUrl}/bookmark`,
+      method: 'PUT',
+      body
+    })
   }
 }

@@ -6,8 +6,6 @@ import * as path from 'path'
 
 const router = Router()
 
-IconModel.updateMany({}, {creator: '' }, { multi: true })
-
 // fs.readdir('./drawable-nodpi-v4', (_, icon) => {
 //   icon.forEach((i, idx) => {
 //     fs.readFile(path.resolve(__dirname, '../drawable-nodpi-v4/' + i), (err, data) => {

@@ -10,7 +10,6 @@ interface IProps<T = any> {
 }
 
 export const Fetch = async <F = any, T = any>({ url, method = 'GET', body, query }: IProps<F>): Promise<IResponse<T>> => {
-  method = body ? 'POST' : method
   return fetch(url + (query ? '?' + querystring.stringify(query) : ''), {
     method,
     body: body && JSON.stringify(body),
