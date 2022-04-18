@@ -1,9 +1,10 @@
 {
   "private": true,
   "scripts": {
+    "dev": "concurrently \"npm run web:dev\" \"npm run serve:dev\"",
     "web:dev": "umi dev",
     "web:build": "umi build",
-    "serve:dev": "ts-node --project ./serve/tsconfig.json ./serve/index.ts"
+    "serve:dev": "tsnd --respawn --project ./serve/tsconfig.json ./serve/index.ts"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -58,6 +59,7 @@
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.5.20",
     "autoprefixer": "^9.8.8",
+    "concurrently": "^7.1.0",
     "lint-staged": "^10.0.7",
     "postcss": "^7.0.39",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
