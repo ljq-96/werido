@@ -15,6 +15,7 @@ export default defineConfig({
   // },
   extraPostCSSPlugins: [
     require('tailwindcss'),
+    require('autoprefixer')
   ],
   theme: {
     'root-entry-name': 'variable'
