@@ -71,10 +71,11 @@ interface IProps {
   jetColor: string
   sunColor: string
   starColors: string[]
+  animate?: boolean
 }
 
 export default (props: IProps) => {
-  const { color, jetColor, starColors, sunColor } = props
+  const { color, jetColor, starColors, sunColor, animate = false } = props
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const ctxRef = useRef<CanvasRenderingContext2D>(null)
   const timerRef = useRef(0)
@@ -261,7 +262,7 @@ export default (props: IProps) => {
         options.astronaut.x = -60
       }
       options.astronaut.x += 0.5
-      timerRef.current = requestAnimationFrame(move)
+      animate && (timerRef.current = requestAnimationFrame(move))
     }
     move()
   }

@@ -1,4 +1,4 @@
-import express from 'express'
+import * as express from 'express'
 
 export type Request<ReqBody = any, ReqQuery = any, Locals = { user: User.Doc }> = express.Request<any, any, ReqBody, ReqQuery, Locals> & { app: { locals: Locals } }
 export type Response<T = any> = express.Response<IResponse<T>>
@@ -38,6 +38,7 @@ export namespace User {
     createTime: number
     updateTime: number
     status: UserStatus
+    themeColor: string
   }
 
   export type Login = Pick<Doc, 'username' | 'password'>
@@ -50,7 +51,7 @@ export namespace Icon {
     _id: string
     icon: string
     name: string
-    user: string
+    creator: string
     createTime: number,
     updateTime: number
   }
@@ -70,9 +71,12 @@ export namespace Icon {
 /** 标签 */
 export namespace Bookmark {
   export interface Doc {
+    _id: string
     label: string
-    user: string
-    children: {
+    creator: string
+    prev?: string
+    next?: string
+    items: {
       title: string
       url: string
       icon: string
@@ -84,7 +88,9 @@ export namespace Bookmark {
     createTime: number
     updateTime: number
     label: string
-    children: {
+    prev?: string
+    next?: string
+    items: {
       title: string
       url: string
       icon: Icon.Doc
@@ -94,7 +100,9 @@ export namespace Bookmark {
   export interface UpdateParams {
     _id: string
     label: string
-    children: {
+    prev?: string
+    next?: string
+    items: {
       title: string
       url: string
       icon: string

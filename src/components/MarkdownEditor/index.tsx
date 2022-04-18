@@ -127,7 +127,6 @@ const MilkdownEditor = (props: IProps) => {
       .use(commonmark.headless())
       // .use(gfm)
       .use(history)
-      .use(table)
       .use(slash)
       .use(math)
       .use(emoji)

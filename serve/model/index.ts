@@ -25,6 +25,10 @@ export const UserModal = model<User.Doc>(
     updateTime: {
       type: Number,
       default: Date.now()
+    },
+    themeColor: {
+      type: String,
+      default: '#1890ff'
     }
   })
 )
@@ -35,7 +39,7 @@ export const IconModel = model<Icon.Doc>(
   new Schema({
     icon: String,
     name: String,
-    user: String,
+    creator: String,
     createTime: {
       type: Number,
       default: Date.now()
@@ -53,11 +57,11 @@ export const BookmarkModel = model<Bookmark.Doc>(
   new Schema({
     label: String,
     // @ts-ignore
-    user: {
+    creator: {
       type: Schema.Types.ObjectId,
       ref: 'user'
     },
-    children: [
+    items: [
       {
         title: String,
         url: String,
@@ -75,5 +79,15 @@ export const BookmarkModel = model<Bookmark.Doc>(
       type: Number,
       default: Date.now()
     },
+    // @ts-ignore
+    prev: {
+      type: Schema.Types.ObjectId,
+      ref: 'bookmark'
+    },
+    // @ts-ignore
+    next: {
+      type: Schema.Types.ObjectId,
+      ref: 'bookmark'
+    }
   })
 )

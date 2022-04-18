@@ -2,11 +2,17 @@ import { useState } from 'react'
 import { Form, Button, Input, Card, message, Row, Col } from 'antd'
 import { userApi } from '../../api'
 import { User } from '../../../interfaces'
-import { history } from 'umi'
+import { connect, history, IStore, ThemeColor } from 'umi'
 import Logo from '../../components/Logo'
+import Space from '../../components/Canvas/Space'
 import './index.less'
 
-const Login = () => {
+interface IProps {
+  themeColor: { [key in ThemeColor]: string }
+}
+
+const Login = (props: IProps) => {
+  const { themeColor } = props
   const [isLogin, setIsLogin] = useState(true)
   const [form] = Form.useForm()
 
@@ -98,8 +104,26 @@ const Login = () => {
             { isLogin ? '没有账号? 点击注册' : '已有账号, 点击登录' }
           </a>
         </Col>
-        <Col className='login-img' lg={16} sm={0}>
-
+        <Col lg={16} sm={0}>
+            <Space
+              color={[themeColor.primary7, themeColor.primary4]}
+              jetColor={themeColor.primary5}
+              sunColor={'rgb(250,173,20)'}
+              starColors={[
+                '#f5222d',
+                '#fa541c',
+                '#fa8c16',
+                '#faad14',
+                '#fadb14',
+                '#a0d911',
+                '#52c41a',
+                '#13c2c2',
+                '#1890ff',
+                '#2f54eb',
+                '#722ed1',
+                '#eb2f96'
+              ]}
+            />
         </Col>
       </Row>
     </div>
@@ -107,4 +131,7 @@ const Login = () => {
   )
 }
 
-export default Login
+export default connect(({ store }) => {
+  const { themeColor } = store as IStore
+  return { themeColor }
+})(Login)

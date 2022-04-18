@@ -73,7 +73,6 @@ const Search = (props: IProps) => {
     <Card
       size="small"
       style={{
-        marginBottom: 16,
         borderRadius: 2,
         overflow: 'hidden',
         border: '1px solid #f0f0f0'
@@ -83,11 +82,12 @@ const Search = (props: IProps) => {
         style={{
           position: 'relative',
           borderRadius: 4,
-          paddingTop: '50%',
+          paddingTop: '30%',
           overflow: 'hidden'
         }}
       >
         {useMemo(() => <Space
+          animate
           color={[themeColor.primary7, themeColor.primary4]}
           jetColor={themeColor.primary5}
           sunColor={'rgb(250,173,20)'}

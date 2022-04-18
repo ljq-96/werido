@@ -97,7 +97,8 @@ const Layouts = (props: IProps) => {
               ]}
             />
           }
-          title="Werido"
+          // @ts-ignore
+          title={<div style={{ transform: 'translate(-12px, 4px)' }}>erido</div>}
           logoStyle={{ color: '#999' }}
           route={{
             path: '/',
