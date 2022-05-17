@@ -129,14 +129,17 @@ export default (props: IProps) => {
           renderItem={(i, idx) => (
             <Collapse ghost className="bookmark" expandIconPosition='left' defaultActiveKey={i.label}>
               <Collapse.Panel header={i.label} key={i.label} extra={
-                onEdit && <Popconfirm title='确定删除此书签吗？'
-                    placement='bottom'>
-                  <Button
-                    danger
-                    type='link'
-                    icon={<DeleteOutlined />}
-                  />
-                </Popconfirm> }
+                onEdit && <span onClick={e => e.stopPropagation()}>
+                  <Popconfirm title='确定删除此书签吗？'
+                      placement='bottom'>
+                    <Button
+                      danger
+                      type='link'
+                      icon={<DeleteOutlined />}
+                      onClick={e => e.stopPropagation()}
+                    />
+                  </Popconfirm>
+                </span>}
               >
                 <Spin spinning={!!loading[i._id]}>
                   {
@@ -168,30 +171,14 @@ export default (props: IProps) => {
                                 }}>删除</Menu.Item>
                               </Menu>}
                             >
-                              <Card
-                                size='small'
+                              <div
                                 key={`${j.title}`}
-                                className={`duration-300 text-center hover:bg-gray-50 cursor-pointer ${onEdit ? 'hover:bg-white' : ''}`}
-                                bodyStyle={{ textAlign: 'center' }}
-                                // actions={onEdit ? [
-                                //   <Button style={{ margin: '-24px 0' }} block type='text' icon={<EditOutlined />} onClick={() => setModalState([idx, jdx])} />,
-                                //   <Popconfirm
-                                //     title='确定删除此书签吗？'
-                                //     placement='bottom'
-                                //     onConfirm={() => {
-                                //       i.items.splice(jdx, 1)
-                                //       setBookmarkList([...bookmarkList])
-                                //     }}
-                                //   >
-                                //     <Button style={{ margin: '-24px 0' }} block type='text' icon={<DeleteOutlined />} />
-                                //   </Popconfirm>
-                                // ] : []}
+                                className={`duration-300 p-5 rounded border-opacity-0 border-gray-200 text-center border-2 hover:bg-gray-50 hover:border-opacity-100 cursor-pointer ${onEdit ? 'hover:bg-white' : ''}`}
                               >
                                 <img className='block mx-auto' style={{ width: '50%', marginBottom: 10 }} src={j.icon?.icon} />
                                 <div className='bookmark-item-title'>{j.title}</div>
-                              </Card>
+                              </div>
                             </Dropdown>
-                            
                           </Col>
                           {
                             onEdit && jdx == i.items.length - 1 && (

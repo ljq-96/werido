@@ -2,17 +2,13 @@ import { useState } from 'react'
 import { Form, Button, Input, Card, message, Row, Col } from 'antd'
 import { userApi } from '../../api'
 import { User } from '../../../interfaces'
-import { connect, history, IStore, ThemeColor } from 'umi'
+import { connect, history, IStore } from 'umi'
 import Logo from '../../components/Logo'
 import Space from '../../components/Canvas/Space'
 import './index.less'
+import { generate } from '@ant-design/colors'
 
-interface IProps {
-  themeColor: { [key in ThemeColor]: string }
-}
-
-const Login = (props: IProps) => {
-  const { themeColor } = props
+const Login = (props) => {
   const [isLogin, setIsLogin] = useState(true)
   const [form] = Form.useForm()
 
@@ -106,8 +102,7 @@ const Login = (props: IProps) => {
         </Col>
         <Col lg={16} sm={0}>
             <Space
-              color={[themeColor.primary7, themeColor.primary4]}
-              jetColor={themeColor.primary5}
+              color={'#1890ff'}
               sunColor={'rgb(250,173,20)'}
               starColors={[
                 '#f5222d',
@@ -131,7 +126,4 @@ const Login = (props: IProps) => {
   )
 }
 
-export default connect(({ store }) => {
-  const { themeColor } = store as IStore
-  return { themeColor }
-})(Login)
+export default Login

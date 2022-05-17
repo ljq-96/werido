@@ -44,8 +44,16 @@ export const userApi = {
   /** 获取登录用户 */
   getLoginUser: () => {
     return Fetch<never, User.Result>({
-      url: `${baseUrl}/login/user`,
+      url: `${baseUrl}/user/detail`,
       method: 'GET'
+    })
+  },
+  /** 更新 */
+  updateUser: (body) => {
+    return Fetch<User.Doc>({
+      url: `${baseUrl}/user/update`,
+      method: 'POST',
+      body
     })
   }
 }

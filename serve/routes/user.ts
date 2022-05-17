@@ -79,12 +79,21 @@ router.post('/logout', async (_, res: Response) => {
   })
 })
 
-router.get('/login/user', async (req: Request, res: Response<User.Result>) => {
+router.get('/user/detail', async (req: Request, res: Response<User.Result>) => {
   const { user } = req.app.locals
-  const { _id, username, createTime, updateTime, status } = user
+  const { _id, username, createTime, updateTime, status, themeColor } = user
   res.json({
     code: 0,
-    data: { _id, username, createTime, updateTime, status }
+    data: { _id, username, createTime, updateTime, status, themeColor }
+  })
+})
+
+router.post('/user/update', async(req: Request<User.Doc>, res: Response) => {
+  const { _id, ...reset } = req.body
+  await UserModal.updateOne({ _id }, reset)
+  res.json({
+    code: 0,
+    msg: '更新成功'
   })
 })
 

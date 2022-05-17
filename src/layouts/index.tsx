@@ -1,29 +1,26 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Button, ConfigProvider, Descriptions, Result, Avatar, Space, Layout, Dropdown, Menu } from 'antd'
+import { Button, ConfigProvider, Descriptions, Result, Avatar, Space, Layout, Dropdown, Menu, Drawer, Form, Segmented, Card } from 'antd'
 import { LikeOutlined, UserOutlined, BgColorsOutlined } from '@ant-design/icons'
+import { generate } from '@ant-design/colors'
 import * as Icon from '@ant-design/icons'
 import { IRouteComponentProps, history, ConnectProps, connect, IStore } from 'umi'
-import ProLayout from '@ant-design/pro-layout'
+import ProLayout, { DefaultFooter } from '@ant-design/pro-layout'
 import { User } from '../../interfaces'
 import { userApi } from '../api/index'
 import Logo from '../components/Logo'
-import { BlockPicker } from 'react-color'
-import { nameTran } from '../utils/common'
-import { ThemeColor } from '../models'
-// import 'antd/dist/antd.variable.min.css'
+import { BlockPicker, CirclePicker, MaterialPicker, SliderPicker  } from 'react-color'
 import 'tailwindcss/tailwind.css'
 
 type IProps = IRouteComponentProps &
   ConnectProps & {
     loginUser: User.Result,
-    themeColor: { [key in ThemeColor]: string }
   }
 
 const Layouts = (props: IProps) => {
-  const { children, location, route, dispatch, loginUser, themeColor } = props
+  const { children, location, route, dispatch, loginUser } = props
   const [pathname, setPathname] = useState(location.pathname)
   const [collapsed, setCollapsed] = useState(true)
-  const themeColorKeys = useMemo(() => Object.values(ThemeColor).map(v => [v, `--ant-${nameTran(v)}`]), [])
+  const [showColorDrawer, setShowColorDrawer] = useState(false)
 
   const logout = () => {
     userApi.logout()
@@ -43,16 +40,15 @@ const Layouts = (props: IProps) => {
         primaryColor: hex
       }
     })
-    const el = getComputedStyle(document.documentElement)
-    const color = themeColorKeys.reduce((a, b) => {
-      const [key, value] = b
-      a[key] = el.getPropertyValue(value).trim()
-      return a
-    }, {})
+    userApi.updateUser({ _id: loginUser._id, themeColor: hex })
+    
     dispatch({
-      type: 'store/setThemeColor',
+      type: 'store/setLoginUser',
       payload: {
-        themeColor: color
+        loginUser: {
+          ...loginUser,
+          themeColor: hex
+        }
       }
     })
   }
@@ -60,10 +56,16 @@ const Layouts = (props: IProps) => {
   useEffect(() => {
     userApi.getLoginUser().then((res) => {
       if (res.code === 0) {
+        res.data.themeColor = res.data.themeColor || '#1890ff'
         dispatch({
           type: 'store/setLoginUser',
           payload: {
             loginUser: res.data
+          }
+        })
+        ConfigProvider.config({
+          theme: {
+            primaryColor: res.data.themeColor
           }
         })
       } else {
@@ -78,8 +80,8 @@ const Layouts = (props: IProps) => {
         <ProLayout
           disableContentMargin
           fixSiderbar={true}
-          navTheme="light"
-          layout="side"
+          navTheme='light'
+          layout='side'
           headerHeight={48}
           fixedHeader={true}
           splitMenus={false}
@@ -89,24 +91,17 @@ const Layouts = (props: IProps) => {
           logo={
             <Logo
               style={{ width: 32 }}
-              color={[
-                themeColor.primary3,
-                themeColor.primary4,
-                themeColor.primary5,
-                themeColor.primary6
-              ]}
+              color={generate(loginUser?.themeColor || '#1890ff').slice(3, 7)}
             />
           }
-          // @ts-ignore
-          title={<div style={{ transform: 'translate(-12px, 4px)' }}>erido</div>}
+          title='werido'
           logoStyle={{ color: '#999' }}
           route={{
-            path: '/',
             routes: loopMenuItem(route.routes)
           }}
           location={{
             pathname
-          }}
+          }}            
           menuItemRender={(item, dom) => (
             <a
               onClick={() => {
@@ -119,33 +114,7 @@ const Layouts = (props: IProps) => {
           )}
           rightContentRender={() => (
             <Space>
-              <Dropdown
-                placement='bottomCenter'
-                overlay={
-                  <div>
-                  <BlockPicker
-                    color={themeColor.primaryColor}
-                    colors={[
-                      '#f5222d',
-                      '#fa541c',
-                      '#fa8c16',
-                      '#faad14',
-                      '#fadb14',
-                      '#a0d911',
-                      '#52c41a',
-                      '#13c2c2',
-                      '#1890ff',
-                      '#2f54eb',
-                      '#722ed1',
-                      '#eb2f96'
-                    ]}
-                    onChange={changeColor}
-                  />
-                  </div>
-                }
-              >
-                <Button type='text' icon={<BgColorsOutlined />} />
-              </Dropdown>
+              <Button type='text' icon={<BgColorsOutlined />} onClick={() => setShowColorDrawer(!showColorDrawer)} />
               <Dropdown
                   overlay={
                     <Menu>
@@ -163,7 +132,48 @@ const Layouts = (props: IProps) => {
         >
           <Layout.Content style={{ position: 'relative', height: 'calc(100vh - 48px)', padding: 16, overflowY: 'auto', overflowX: 'hidden' }}>
             {loginUser && children}
+            <DefaultFooter style={{ background: 'transparent' }} copyright="京ICP备2022008343号" />
+            <Drawer
+              visible={showColorDrawer}
+              getContainer={false}
+              width={300}
+              mask={false}
+              onClose={() => setShowColorDrawer(false)}
+              style={{ top: 48, zIndex: 18 }}
+            >
+              <Form layout='vertical'>
+              <Form.Item label='主题色'>
+                <CirclePicker color={loginUser?.themeColor} onChange={changeColor} />
+                <div style={{ margin: '24px 0' }}>
+                  <SliderPicker color={loginUser?.themeColor} onChange={changeColor} />
+                </div>
+                <Card size='small' hoverable>
+                  <div className='overflow-hidden'>
+                    <div style={{ margin: '0 -1px' }}><MaterialPicker color={loginUser?.themeColor} onChange={changeColor} /></div>
+                  </div>
+                </Card>
+              </Form.Item>
+              
+              <Form.Item label='布局模式'>
+              <Segmented options={[
+                {
+                  label: '侧栏',
+                  value: 'side'
+                },
+                {
+                  label: '顶栏',
+                  value: 'top'
+                }
+              ]}>
+
+              </Segmented>
+              </Form.Item>
+              </Form>
+              
+              
+            </Drawer>
           </Layout.Content>
+          
         </ProLayout>
       </div>
     </ConfigProvider>
@@ -171,6 +181,6 @@ const Layouts = (props: IProps) => {
 }
 
 export default connect(({ store }: { store: IStore }) => {
-  const { loginUser, themeColor } = store
-  return { loginUser, themeColor }
+  const { loginUser } = store
+  return { loginUser }
 })(Layouts)

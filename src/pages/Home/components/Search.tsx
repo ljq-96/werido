@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Card, Input, Popover, Tooltip, ConfigProvider } from 'antd'
 import { newsApi } from '../../../api'
-import { BingWallpaper } from '../../../../interfaces'
+import { BingWallpaper, User } from '../../../../interfaces'
 import { FieldTimeOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import Space from '../../../components/Canvas/Space'
 import moment from 'moment'
 import { debounce } from '../../../utils/common'
-import { connect, IStore, ThemeColor } from 'umi'
+import { connect, IStore } from 'umi'
+import { generate } from '@ant-design/colors'
 
 declare global{
   interface Window {
@@ -15,12 +16,12 @@ declare global{
 }
 
 interface IProps {
-  themeColor: { [key in ThemeColor]: string }
+  loginUser: User.Result
 }
 
 
 const Search = (props: IProps) => {
-  const { themeColor } = props
+  const { loginUser } = props
   const [time, setTime] = useState(moment().format('yyyy-MM-DD HH:mm:ss'))
   const [sugList, setSugList] = useState<string[]>([])
   const [isOnSearch, setIsOnSearch] = useState(false)
@@ -88,8 +89,7 @@ const Search = (props: IProps) => {
       >
         {useMemo(() => <Space
           animate
-          color={[themeColor.primary7, themeColor.primary4]}
-          jetColor={themeColor.primary5}
+          color={loginUser?.themeColor}
           sunColor={'rgb(250,173,20)'}
           starColors={[
             '#f5222d',
@@ -105,7 +105,7 @@ const Search = (props: IProps) => {
             '#722ed1',
             '#eb2f96'
           ]}
-        />, [themeColor])}
+        />, [loginUser])}
         {/* <div className="time">{time}</div> */}
         <div className={`search ${isOnSearch ? 'onsearch' : ''}`} style={{ height: height }}>
           <input
@@ -132,6 +132,6 @@ const Search = (props: IProps) => {
 }
 
 export default connect(({ store }: { store: IStore }) => {
-  const { themeColor } = store
-  return { themeColor }
+  const { loginUser } = store
+  return { loginUser }
 })(Search)

@@ -8,8 +8,10 @@ export default defineConfig({
   publicPath: '/pubilc/',
   outputPath: './dist/public',
   hash: true,
-  mfsu: {},
-  dynamicImport: {},
+  // mfsu: {},
+  dynamicImport: {
+    loading: '@/components/Loading',
+  },
   // antd: {
   //   // disableBabelPluginImport: true
   // },
@@ -41,6 +43,24 @@ export default defineConfig({
       component: 'Login'
     },
     {
+      path: '/manage',
+      component: '@/layouts',
+      routes: [
+        {
+          path: '/home',
+          title: '返回首页',
+          icon: 'RollbackOutlined',
+          component: 'Home'
+        },
+        {
+          path: '/manage/editor',
+          title: '新建文章',
+          icon: 'FileTextOutlined',
+          component: 'Editor'
+        }
+      ]
+    },
+    {
       path: '/',
       component: '@/layouts',
       routes: [
@@ -51,12 +71,12 @@ export default defineConfig({
           component: 'Home'
         },
         {
-          path: '/editor',
-          title: '新建文章',
-          icon: 'FileTextOutlined',
+          path: '/manage/editor',
+          title: '管理系统',
+          icon: 'LaptopOutlined',
           component: 'Editor'
         }
       ]
-    }
+    },
   ]
 })

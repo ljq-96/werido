@@ -61,6 +61,7 @@ const VirtualGrid = (props: VProps) => {
 }
 
 interface IIcon {
+  _id: string
   title: string,
   url: string,
   icon: Icon.Doc

@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { Ball, BallProps, Astronaut, AstronautProps } from './element'
 import chroma from 'chroma-js'
 import { randomInArr } from '@/utils/common'
+import { generate } from '@ant-design/colors'
 
 class Space {
   x: number = 0
@@ -67,25 +68,28 @@ class Space {
 }
 
 interface IProps {
-  color: [string, string]
-  jetColor: string
+  color: string
   sunColor: string
   starColors: string[]
   animate?: boolean
 }
 
 export default (props: IProps) => {
-  const { color, jetColor, starColors, sunColor, animate = false } = props
+  const { color, starColors, sunColor, animate = false } = props
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const ctxRef = useRef<CanvasRenderingContext2D>(null)
   const timerRef = useRef(0)
 
+  const colorPlane = useMemo(() => generate(color), [color])
+
   const init = () => {
-    window.cancelAnimationFrame(timerRef.current)
-    const { offsetWidth, offsetHeight } = canvasRef.current.parentElement
-    canvasRef.current.width = offsetWidth
-    canvasRef.current.height = offsetHeight
-    draw([offsetWidth, offsetHeight])
+    if (canvasRef.current) {
+      window.cancelAnimationFrame(timerRef.current)
+      const { offsetWidth, offsetHeight } = canvasRef.current.parentElement
+      canvasRef.current.width = offsetWidth
+      canvasRef.current.height = offsetHeight
+      draw([offsetWidth, offsetHeight])
+    }
   }
 
   const draw = ([W, H]: [number, number]) => {
@@ -95,14 +99,14 @@ export default (props: IProps) => {
       y: H * 0.2,
       W: W,
       H: H,
-      color: color[0],
-      difColor: color[1],
+      color: colorPlane[6],
+      difColor: colorPlane[4],
       sun: sunColor,
       astronaut: {
         x: W * 0.2,
         y: H * 0.4,
         jet: 400,
-        jetStyle: jetColor,
+        jetStyle: colorPlane[5],
         scale: 0.7
       },
       orbital: [
@@ -114,34 +118,34 @@ export default (props: IProps) => {
               fillStyle: randomInArr(starColors),
               r: W * 0.003,
               angle: 0,
-              strokeStyle: color[1],
+              strokeStyle: colorPlane[4],
               lineWidth: W * 0.001
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.005,
               angle: 4.4,
-              strokeStyle: color[1],
+              strokeStyle: colorPlane[4],
               lineWidth: W * 0.002
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.01,
               angle: 2,
-              strokeStyle: color[1]
+              strokeStyle: colorPlane[4]
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.004,
               angle: 2.5,
-              strokeStyle: color[1],
+              strokeStyle: colorPlane[4],
               lineWidth: W * 0.002
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.003,
               angle: 5,
-              strokeStyle: color[1]
+              strokeStyle: colorPlane[4]
             }
           ]
         },
@@ -153,26 +157,26 @@ export default (props: IProps) => {
               fillStyle: randomInArr(starColors),
               r: W * 0.012,
               angle: 1.2,
-              strokeStyle: color[1]
+              strokeStyle: colorPlane[4]
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.004,
               angle: 1.8,
-              strokeStyle: color[1]
+              strokeStyle: colorPlane[4]
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.009,
               angle: 2.6,
-              strokeStyle: color[1],
+              strokeStyle: colorPlane[4],
               lineWidth: W * 0.009
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.009,
               angle: 6,
-              strokeStyle: color[1],
+              strokeStyle: colorPlane[4],
               lineWidth: W * 0.008
             },
             {
@@ -184,7 +188,7 @@ export default (props: IProps) => {
               fillStyle: randomInArr(starColors),
               r: W * 0.013,
               angle: 3.1,
-              strokeStyle: color[1]
+              strokeStyle: colorPlane[4]
             }
           ]
         },
@@ -196,31 +200,31 @@ export default (props: IProps) => {
               fillStyle: randomInArr(starColors),
               r: W * 0.013,
               angle: 3.2,
-              strokeStyle: color[1]
+              strokeStyle: colorPlane[4]
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.008,
               angle: 3.6,
-              strokeStyle: color[1]
+              strokeStyle: colorPlane[4]
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.018,
               angle: 5.8,
-              strokeStyle: color[1]
+              strokeStyle: colorPlane[4]
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.01,
               angle: 2.4,
-              strokeStyle: color[1]
+              strokeStyle: colorPlane[4]
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.006,
               angle: 0,
-              strokeStyle: color[1],
+              strokeStyle: colorPlane[4],
               lineWidth: W * 0.007
             },
             {
@@ -232,14 +236,14 @@ export default (props: IProps) => {
               fillStyle: randomInArr(starColors),
               r: W * 0.011,
               angle: 1.6,
-              strokeStyle: color[1],
+              strokeStyle: colorPlane[4],
               lineWidth: W * 0.01
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.004,
               angle: 0.4,
-              strokeStyle: color[1],
+              strokeStyle: colorPlane[4],
               lineWidth: W * 0.006
             }
           ]
@@ -271,11 +275,12 @@ export default (props: IProps) => {
     if (canvasRef.current) {
       ctxRef.current = canvasRef.current.getContext('2d')
       init()
-      window.onresize = () => {
-        init()
-      }
+      window.addEventListener('resize', init)
     }
-  })
+    return () => {
+      window.removeEventListener('resize', init)
+    }
+  }, [color])
 
   return (
     <div style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0 }}>

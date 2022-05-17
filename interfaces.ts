@@ -42,7 +42,7 @@ export namespace User {
   }
 
   export type Login = Pick<Doc, 'username' | 'password'>
-  export type Result = Pick<Doc, '_id' | 'username' | 'createTime' | 'updateTime' | 'status'>
+  export type Result = Pick<Doc, '_id' | 'username' | 'createTime' | 'updateTime' | 'status' | 'themeColor'>
 }
 
 /** 图标 */
@@ -91,6 +91,7 @@ export namespace Bookmark {
     prev?: string
     next?: string
     items: {
+      _id: string
       title: string
       url: string
       icon: Icon.Doc

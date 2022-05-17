@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface IProps {
-  color?: [string, string, string, string]
+  color?: string[]
   style?: React.CSSProperties
 }
 
