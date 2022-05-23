@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "target": "esnext",
+    "skipLibCheck": true,
+    // "outDir": "dist",
+    // "module": "commonjs",
+    // "noEmit": false,
+    // "allowSyntheticDefaultImports": true
+  },
+  "exclude": ["src"],
+  "include": ["server"]
+}

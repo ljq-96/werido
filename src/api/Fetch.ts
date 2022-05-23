@@ -1,5 +1,5 @@
 import { message } from 'antd'
-import { IResponse } from '../../interfaces'
+import { IResponse } from '../../server/interfaces'
 import { querystring } from '../utils/common'
 
 interface IProps<T = any> {

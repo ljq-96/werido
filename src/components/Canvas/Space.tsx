@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { Ball, BallProps, Astronaut, AstronautProps } from './element'
-import chroma from 'chroma-js'
-import { randomInArr } from '@/utils/common'
+import { randomInArr } from '../../utils/common'
 import { generate } from '@ant-design/colors'
 
 class Space {

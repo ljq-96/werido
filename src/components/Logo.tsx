@@ -1,13 +1,14 @@
 import React from 'react'
+import { generate } from '@ant-design/colors'
 
 interface IProps {
-  color?: string[]
+  color?: string
   style?: React.CSSProperties
 }
 
 export default (props: IProps) => {
-  const { color = ['#1890ff', '#1890ff', '#1890ff', '#1890ff'], style } = props
-  const [c1, c2, c3, c4] = color
+  const { color = '#1890ff', style } = props
+  const [c1, c2, c3, c4] = generate(color).slice(3, 7)
 
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.28 111.282" style={style}>

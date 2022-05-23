@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { Form, Button, Input, Card, message, Row, Col } from 'antd'
+import { useNavigate } from 'react-router-dom'
 import { userApi } from '../../api'
-import { User } from '../../../interfaces'
-import { connect, history, IStore } from 'umi'
+import { User } from '../../../server/interfaces'
 import Logo from '../../components/Logo'
 import Space from '../../components/Canvas/Space'
 import './index.less'
-import { generate } from '@ant-design/colors'
 
 const Login = (props) => {
   const [isLogin, setIsLogin] = useState(true)
   const [form] = Form.useForm()
+  const navigator = useNavigate()
 
   const handleChangeType = () => {
     setIsLogin(!isLogin)
@@ -23,7 +23,7 @@ const Login = (props) => {
       userApi.login({ username, password }).then(res => {
         if (res.code === 0) {
           message.success(res.msg)
-          history.push('/home')
+          navigator('/home')
         }
       })
     } else {

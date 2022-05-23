@@ -14,7 +14,7 @@ import { clipboard } from '@milkdown/plugin-clipboard'
 import { commonmark } from '@milkdown/preset-commonmark'
 import {} from '@milkdown/plugin-menu'
 import { gfm, commands } from '@milkdown/preset-gfm'
-import { EditorState, MarkType } from '@milkdown/prose'
+// import { EditorState, MarkType } from '@milkdown/prose'
 import { EditorRef, ReactEditor, useEditor, useNodeCtx } from '@milkdown/react'
 import { Button, Divider, Space, Tooltip, Dropdown, Menu, Typography } from 'antd'
 import { IconFont } from '../../utils/common'
@@ -44,7 +44,8 @@ interface IProps {
 
 const { Text } = Typography
 
-const hasMark = (state: EditorState, type: MarkType): boolean => {
+const hasMark = (state, type): boolean => {
+  // const hasMark = (state: EditorState, type: MarkType): boolean => {
   if (!type) return false
   const { from, $from, to, empty } = state.selection
   if (empty) {
@@ -149,8 +150,8 @@ const MilkdownEditor = (props: IProps) => {
   )
 
   return (
-    <div className={style.markdownEditor + ' article'} onClick={getState} onKeyUp={getState}>
-      <div className={style.toolBar}>
+    <div className={'markdownEditor' + ' article'} onClick={getState} onKeyUp={getState}>
+      <div className={'toolBar'}>
         <Space>
           <Tooltip title="撤销" placement="bottom">
             <Button type="text" onClick={undo} icon={<UndoOutlined />} />
@@ -266,7 +267,7 @@ const MilkdownEditor = (props: IProps) => {
           </Tooltip>
         </Space>
       </div>
-      <div className={style.container} style={{ height }}>
+      <div className={'container'} style={{ height }}>
         <ReactEditor editor={editor} ref={editorRef} />
       </div>
     </div>

@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Card, Input, Popover, Tooltip, ConfigProvider } from 'antd'
 import { newsApi } from '../../../api'
-import { BingWallpaper, User } from '../../../../interfaces'
+import { BingWallpaper, User } from '../../../../server/interfaces'
 import { FieldTimeOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import Space from '../../../components/Canvas/Space'
 import moment from 'moment'
 import { debounce } from '../../../utils/common'
-import { connect, IStore } from 'umi'
-import { generate } from '@ant-design/colors'
+import { useUser } from '../../../contexts/useUser'
 
 declare global{
   interface Window {
@@ -15,16 +14,11 @@ declare global{
   }
 }
 
-interface IProps {
-  loginUser: User.Result
-}
-
-
-const Search = (props: IProps) => {
-  const { loginUser } = props
+const Search = (props) => {
   const [time, setTime] = useState(moment().format('yyyy-MM-DD HH:mm:ss'))
   const [sugList, setSugList] = useState<string[]>([])
   const [isOnSearch, setIsOnSearch] = useState(false)
+  const [loginUser] = useUser()
 
   const height = useMemo(() => {
     if (isOnSearch) {
@@ -131,7 +125,4 @@ const Search = (props: IProps) => {
   )
 }
 
-export default connect(({ store }: { store: IStore }) => {
-  const { loginUser } = store
-  return { loginUser }
-})(Search)
+export default Search

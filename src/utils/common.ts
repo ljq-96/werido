@@ -1,9 +1,9 @@
 import { createFromIconfontCN } from '@ant-design/icons'
-import icon from './icon.js'
+// import icon from './icon.js'
 
 /** 自定义图标 */
 export const IconFont = createFromIconfontCN({
-  scriptUrl: icon,
+  // scriptUrl: require('./icon.js'),
 })
 
 /** qs */
@@ -50,3 +50,6 @@ export const nameTran = (str: string) => str.replace(/([A-Z|0-9]+)/g, (_, p1) =>
 
 /** 随机取数组中一项 */
 export const randomInArr = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)]
+
+/** 返回登陆页面 */
+export const toLogin = () => location.href = location.pathname.split('#')[0] + '#/login'
