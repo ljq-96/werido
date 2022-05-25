@@ -15,23 +15,23 @@ router.post('/login', async (req: Request<User.Login>, res: Response<User.Login>
       res.cookie('token', `${user._id}@${mPassword}`, { signed: true })
       res.json({
         code: 0,
-        msg: '登录成功'
+        msg: '登录成功',
       })
     } else {
       res.json({
         code: 100,
-        msg: '用户名或密码错误'
+        msg: '用户名或密码错误',
       })
     }
   } else {
     res.json({
       code: 101,
-      msg: '用户名或密码不能为空'
+      msg: '用户名或密码不能为空',
     })
   }
 })
 
-router.post('/register', async (req:Request<User.Login>, res: Response) => {
+router.post('/register', async (req: Request<User.Login>, res: Response) => {
   const { body } = req
   const { username, password } = body
   if (username && password) {
@@ -39,35 +39,37 @@ router.post('/register', async (req:Request<User.Login>, res: Response) => {
     if (user) {
       res.json({
         code: 100,
-        msg: '用户名已存在'
+        msg: '用户名已存在',
       })
     } else {
       const addedUser = await UserModal.create({
         username,
         password: md5(password),
-        createTime: Date.now()
+        createTime: Date.now(),
       })
       const addedBookmark = await BookmarkModel.create({
         label: '书签',
         creator: addedUser._id,
         prev: null,
         next: null,
-        items: [{
-          title: '百度',
-          url: 'https://www.baidu.com',
-          icon: '6248010ea4f526b4106dbdc2'
-        }]
+        items: [
+          {
+            title: '百度',
+            url: 'https://www.baidu.com',
+            icon: '6248010ea4f526b4106dbdc2',
+          },
+        ],
       })
       await UserModal.findByIdAndUpdate(addedUser, { bookmarks: [addedBookmark._id] })
       res.json({
         code: 0,
-        msg: '注册成功'
+        msg: '注册成功',
       })
     }
   } else {
     res.json({
       code: 101,
-      msg: '用户名或密码不能为空'
+      msg: '用户名或密码不能为空',
     })
   }
 })
@@ -75,7 +77,7 @@ router.post('/register', async (req:Request<User.Login>, res: Response) => {
 router.post('/logout', async (_, res: Response) => {
   res.clearCookie('token').json({
     code: 0,
-    msg: '已退出登录'
+    msg: '已退出登录',
   })
 })
 
@@ -84,16 +86,17 @@ router.get('/user/detail', async (req: Request, res: Response<User.Result>) => {
   const { _id, username, createTime, updateTime, status, themeColor } = user
   res.json({
     code: 0,
-    data: { _id, username, createTime, updateTime, status, themeColor }
+    data: { _id, username, createTime, updateTime, status, themeColor },
   })
 })
 
-router.post('/user/update', async(req: Request<User.Doc>, res: Response) => {
+router.post('/user/update/:id', async (req: Request<User.Doc>, res: Response) => {
+  const { id } = req.params
   const { _id, ...reset } = req.body
-  await UserModal.updateOne({ _id }, reset)
+  await UserModal.updateOne({ _id: id }, reset)
   res.json({
     code: 0,
-    msg: '更新成功'
+    msg: '更新成功',
   })
 })
 

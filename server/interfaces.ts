@@ -1,6 +1,12 @@
 import * as express from 'express'
 
-export type Request<ReqBody = any, ReqQuery = any, Locals = { user: User.Doc }> = express.Request<any, any, ReqBody, ReqQuery, Locals> & { app: { locals: Locals } }
+export type Request<ReqBody = any, ReqQuery = any, Locals = { user: User.Doc }> = express.Request<
+  any,
+  any,
+  ReqBody,
+  ReqQuery,
+  Locals
+> & { app: { locals: Locals } }
 export type Response<T = any> = express.Response<IResponse<T>>
 
 export interface IResponse<T = any> {
@@ -22,13 +28,13 @@ export namespace User {
   export enum UserStatus {
     ADMIN = 100,
     NORMAL = 1,
-    DISABLED = 0
+    DISABLED = 0,
   }
 
   export const UserStatusMap = new Map<UserStatus, string>([
     [UserStatus.ADMIN, '管理员'],
     [UserStatus.NORMAL, '普通用户'],
-    [UserStatus.DISABLED, '已禁用']
+    [UserStatus.DISABLED, '已禁用'],
   ])
 
   export interface Doc {
@@ -52,7 +58,7 @@ export namespace Icon {
     icon: string
     name: string
     creator: string
-    createTime: number,
+    createTime: number
     updateTime: number
   }
 
@@ -63,7 +69,7 @@ export namespace Icon {
   }
 
   export interface ListResult {
-    presetIcons: Pager<Doc>,
+    presetIcons: Pager<Doc>
     customIcons: Doc[]
   }
 }

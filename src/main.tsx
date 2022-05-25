@@ -5,7 +5,7 @@ import Loading from './components/Loading'
 import routes from './routes'
 import { ConfigProvider } from 'antd'
 import UserProvider from './contexts/useUser'
-import zh_CN from 'antd/lib/locale/zh_CN';
+import zhCN from 'antd/lib/locale/zh_CN'
 
 const parseRoute = (route) => {
   return (
@@ -18,11 +18,11 @@ const parseRoute = (route) => {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Suspense fallback={<Loading />}>
     <UserProvider>
-      <ConfigProvider locale={zh_CN}>
+      <ConfigProvider locale={zhCN}>
         <HashRouter>
           <Routes>{routes.map((r) => parseRoute(r))}</Routes>
         </HashRouter>
       </ConfigProvider>
     </UserProvider>
-  </Suspense>
+  </Suspense>,
 )

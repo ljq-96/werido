@@ -21,7 +21,7 @@ import routes from '../routes'
 import { useUser } from '../contexts/useUser'
 import { userApi } from '../api'
 import { CirclePicker, MaterialPicker, SliderPicker } from 'react-color'
-import '../assets/css/index.css'
+import '../assets/css/index.less'
 
 // import 'antd/dist/antd.variable.min.css'
 
@@ -50,7 +50,6 @@ export default () => {
         primaryColor: hex,
       },
     })
-    userApi.updateUser({ _id: loginUser._id, themeColor: hex })
 
     userDispatch.dispatch({
       type: 'update',
@@ -59,6 +58,12 @@ export default () => {
         themeColor: hex,
       },
     })
+  }
+
+  const handleCloseDrawer = () => {
+    setShowColorDrawer(false)
+    const { themeColor, _id } = loginUser
+    userApi.updateUser(_id, { themeColor })
   }
 
   useEffect(() => {
@@ -80,8 +85,8 @@ export default () => {
     <ProLayout
       disableContentMargin
       fixSiderbar={true}
-      navTheme="light"
-      layout="side"
+      navTheme='light'
+      layout='side'
       headerHeight={48}
       fixedHeader={true}
       splitMenus={false}
@@ -98,15 +103,15 @@ export default () => {
       logoStyle={{ color: '#999' }}
       rightContentRender={() => (
         <Space>
-          <Button type="text" icon={<BgColorsOutlined />} onClick={() => setShowColorDrawer(!showColorDrawer)} />
+          <Button type='text' icon={<BgColorsOutlined />} onClick={() => setShowColorDrawer(!showColorDrawer)} />
           <Dropdown
             overlay={
               <Menu>
                 <Menu.Item onClick={logout}>退出</Menu.Item>
               </Menu>
             }>
-            <Button type="text">
-              <Avatar shape="square" size="small" icon={<UserOutlined />} style={{ marginRight: 10 }} />
+            <Button type='text'>
+              <Avatar shape='square' size='small' icon={<UserOutlined />} style={{ marginRight: 10 }} />
               {loginUser?.username}
             </Button>
           </Dropdown>
@@ -121,22 +126,22 @@ export default () => {
           overflowX: 'hidden',
         }}>
         {loginUser?._id && <Outlet />}
-        <DefaultFooter style={{ background: 'transparent' }} copyright="京ICP备2022008343号" />
+        <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
         <Drawer
           visible={showColorDrawer}
           getContainer={false}
           width={300}
           mask={false}
-          onClose={() => setShowColorDrawer(false)}
+          onClose={handleCloseDrawer}
           style={{ top: 48, zIndex: 18 }}>
-          <Form layout="vertical">
-            <Form.Item label="主题色">
+          <Form layout='vertical'>
+            <Form.Item label='主题色'>
               <CirclePicker color={loginUser?.themeColor} onChange={changeColor} />
               <div style={{ margin: '24px 0' }}>
                 <SliderPicker color={loginUser?.themeColor} onChange={changeColor} />
               </div>
-              <Card size="small" hoverable>
-                <div className="overflow-hidden">
+              <Card size='small' hoverable>
+                <div className='overflow-hidden'>
                   <div style={{ margin: '0 -1px' }}>
                     <MaterialPicker color={loginUser?.themeColor} onChange={changeColor} />
                   </div>
@@ -144,7 +149,7 @@ export default () => {
               </Card>
             </Form.Item>
 
-            <Form.Item label="布局模式">
+            <Form.Item label='布局模式'>
               <Segmented
                 options={[
                   {

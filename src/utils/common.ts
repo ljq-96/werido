@@ -1,9 +1,8 @@
 import { createFromIconfontCN } from '@ant-design/icons'
-// import icon from './icon.js'
 
 /** 自定义图标 */
 export const IconFont = createFromIconfontCN({
-  // scriptUrl: require('./icon.js'),
+  scriptUrl: '//at.alicdn.com/t/font_3208498_rvqh0pj9ql.js',
 })
 
 /** qs */
@@ -35,13 +34,13 @@ export const debounce = (fn: { apply: (arg0: any, arg1: any[]) => void }, t?: nu
   let timer = null
   const timeout = t || 500
   return function (this: any, ...args: any) {
-      if (timer) {
-          clearTimeout(timer)
-      }
-      timer = setTimeout(() => {
-          fn.apply(this, args)
-          timer = null
-      }, timeout)
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+      timer = null
+    }, timeout)
   }
 }
 
@@ -52,4 +51,4 @@ export const nameTran = (str: string) => str.replace(/([A-Z|0-9]+)/g, (_, p1) =>
 export const randomInArr = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)]
 
 /** 返回登陆页面 */
-export const toLogin = () => location.href = location.pathname.split('#')[0] + '#/login'
+export const toLogin = () => (location.href = location.pathname.split('#')[0] + '#/login')

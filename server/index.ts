@@ -10,7 +10,7 @@ import bookmarkRouter from './routes/bookmark'
 import newsRouter from './routes/news'
 import './utils/news'
 
-const { PORT = 3606 } = process.env;
+const { PORT = 3606 } = process.env
 
 const app = express()
 
@@ -29,14 +29,11 @@ app.use('/api', iconRouter)
 app.use('/api', bookmarkRouter)
 app.use('/api', newsRouter)
 
-mongoose
-  .connect(`mongodb://8.140.187.127/werido`)
-  .then(
-    () => {
-      app.listen(PORT, function () {
-        console.log(`service running at ${PORT}`)
-      })
-    },
-    reason => console.log(reason)
-  )
-  
+mongoose.connect(`mongodb://8.140.187.127/werido`).then(
+  () => {
+    app.listen(PORT, function () {
+      console.log(`service running at ${PORT}`)
+    })
+  },
+  (reason) => console.log(reason),
+)

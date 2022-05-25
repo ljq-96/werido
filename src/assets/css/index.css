@@ -1,6 +1,0 @@
-@import url('antd/dist/antd.variable.min.css');
-
-.ant-pro-sider.ant-layout-sider-light .ant-menu-item a,
-.ant-pro-sider.ant-layout-sider-light .ant-menu-item a:hover {
-    color: unset;
-}

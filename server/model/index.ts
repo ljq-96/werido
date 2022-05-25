@@ -7,30 +7,30 @@ export const UserModal = model<User.Doc>(
   new Schema({
     username: {
       type: String,
-      required: true
+      required: true,
     },
     password: {
       type: String,
-      required: true
+      required: true,
     },
     status: {
       type: Number,
       enum: [0, 1, 100],
-      default: 1
+      default: 1,
     },
     createTime: {
       type: Number,
-      default: Date.now()
+      default: Date.now(),
     },
     updateTime: {
       type: Number,
-      default: Date.now()
+      default: Date.now(),
     },
     themeColor: {
       type: String,
-      default: '#1890ff'
-    }
-  })
+      default: '#1890ff',
+    },
+  }),
 )
 
 /** 图表模型 */
@@ -42,13 +42,13 @@ export const IconModel = model<Icon.Doc>(
     creator: String,
     createTime: {
       type: Number,
-      default: Date.now()
+      default: Date.now(),
     },
     updateTime: {
       type: Number,
-      default: Date.now()
-    }
-  })
+      default: Date.now(),
+    },
+  }),
 )
 
 /** 书签模型 */
@@ -59,7 +59,7 @@ export const BookmarkModel = model<Bookmark.Doc>(
     // @ts-ignore
     creator: {
       type: Schema.Types.ObjectId,
-      ref: 'user'
+      ref: 'user',
     },
     items: [
       {
@@ -67,27 +67,27 @@ export const BookmarkModel = model<Bookmark.Doc>(
         url: String,
         icon: {
           type: Schema.Types.ObjectId,
-          ref: 'icon'
-        }
-      }
+          ref: 'icon',
+        },
+      },
     ],
     createTime: {
       type: Number,
-      default: Date.now()
+      default: Date.now(),
     },
     updateTime: {
       type: Number,
-      default: Date.now()
+      default: Date.now(),
     },
     // @ts-ignore
     prev: {
       type: Schema.Types.ObjectId,
-      ref: 'bookmark'
+      ref: 'bookmark',
     },
     // @ts-ignore
     next: {
       type: Schema.Types.ObjectId,
-      ref: 'bookmark'
-    }
-  })
+      ref: 'bookmark',
+    },
+  }),
 )

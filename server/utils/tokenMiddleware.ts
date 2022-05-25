@@ -1,10 +1,7 @@
 import { UserModal } from '../model'
 import { Request, Response } from '../interfaces'
 
-const notNeedToken = [
-  '/api/login',
-  '/api/register'
-]
+const notNeedToken = ['/api/login', '/api/register']
 
 export default async (req: Request, res: Response, next) => {
   const { token } = req.signedCookies
@@ -19,13 +16,13 @@ export default async (req: Request, res: Response, next) => {
     } else {
       res.json({
         code: 999,
-        msg: '未登录'
+        msg: '未登录',
       })
     }
   } else {
     res.json({
       code: 999,
-      msg: '未登录'
+      msg: '未登录',
     })
   }
 }

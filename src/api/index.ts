@@ -7,9 +7,9 @@ export const newsApi = {
   getBing: () => {
     return Fetch<never, BingWallpaper>({
       url: `${baseUrl}/news/bing`,
-      method: 'GET'
+      method: 'GET',
     })
-  }
+  },
 }
 
 export const userApi = {
@@ -18,7 +18,7 @@ export const userApi = {
     return Fetch<User.Login>({
       url: `${baseUrl}/login`,
       method: 'POST',
-      body
+      body,
     })
   },
   /** 注册 */
@@ -26,31 +26,31 @@ export const userApi = {
     return Fetch<User.Login>({
       url: `${baseUrl}/register`,
       method: 'POST',
-      body
+      body,
     })
   },
   /** 退出登录 */
   logout: () => {
     return Fetch({
       url: `${baseUrl}/logout`,
-      method: 'POST'
+      method: 'POST',
     })
   },
   /** 获取登录用户 */
   getLoginUser: () => {
     return Fetch<never, User.Result>({
       url: `${baseUrl}/user/detail`,
-      method: 'GET'
+      method: 'GET',
     })
   },
   /** 更新 */
-  updateUser: (body) => {
+  updateUser: (id, body) => {
     return Fetch<User.Doc>({
-      url: `${baseUrl}/user/update`,
+      url: `${baseUrl}/user/update/${id}`,
       method: 'POST',
-      body
+      body,
     })
-  }
+  },
 }
 
 export const iconApi = {
@@ -59,9 +59,9 @@ export const iconApi = {
     return Fetch<Icon.ListParams, Icon.ListResult>({
       url: `${baseUrl}/icon`,
       method: 'GET',
-      query
+      query,
     })
-  }
+  },
 }
 
 export const bookmarkApi = {
@@ -69,7 +69,7 @@ export const bookmarkApi = {
   getBookmarks: () => {
     return Fetch<never, Bookmark.ListResult[]>({
       url: `${baseUrl}/bookmark`,
-      method: 'GET'
+      method: 'GET',
     })
   },
   /** 更新书签 */
@@ -77,7 +77,7 @@ export const bookmarkApi = {
     return Fetch<Bookmark.UpdateParams[], Bookmark.ListResult[]>({
       url: `${baseUrl}/bookmark`,
       method: 'POST',
-      body
+      body,
     })
   },
   /** 创建标签 */
@@ -85,7 +85,7 @@ export const bookmarkApi = {
     return Fetch<{ label: string }, Bookmark.ListResult>({
       url: `${baseUrl}/bookmark`,
       method: 'PUT',
-      body
+      body,
     })
-  }
+  },
 }

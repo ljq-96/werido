@@ -20,29 +20,27 @@ const router = Router()
 //   })
 // })
 
-router.route('/icon')
-  .get(async (req: Request<any, Icon.ListParams>, res: Response<Icon.ListResult>) => {
-    const { _id } = req.app.locals.user
-    const { page, size, name } = req.query
-    const total = await IconModel.find({ creator: '' }).countDocuments()
-    const customIcons = await IconModel.find({ creator: _id })
-    const presetIcons = await IconModel
-      .find({ creator: '' })
-      .skip((page - 1) * size)
-      .limit(Number(size))
+router.route('/icon').get(async (req: Request<any, Icon.ListParams>, res: Response<Icon.ListResult>) => {
+  const { _id } = req.app.locals.user
+  const { page, size, name } = req.query
+  const total = await IconModel.find({ creator: '' }).countDocuments()
+  const customIcons = await IconModel.find({ creator: _id })
+  const presetIcons = await IconModel.find({ creator: '' })
+    .skip((page - 1) * size)
+    .limit(Number(size))
 
-    res.json({
-      code: 0,
-      data: {
-        customIcons,
-        presetIcons: {
-          page,
-          size,
-          total,
-          list: presetIcons
-        }
-      }
-    })
+  res.json({
+    code: 0,
+    data: {
+      customIcons,
+      presetIcons: {
+        page,
+        size,
+        total,
+        list: presetIcons,
+      },
+    },
   })
+})
 
 export default router

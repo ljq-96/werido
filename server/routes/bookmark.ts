@@ -5,7 +5,8 @@ import { formateTree } from '../utils/common'
 
 const router = Router()
 
-router.route('/bookmark')
+router
+  .route('/bookmark')
   /** 获取标签 */
   .get(async (req: Request, res: Response<Bookmark.Doc[]>) => {
     const { _id } = req.app.locals.user
@@ -13,11 +14,11 @@ router.route('/bookmark')
 
     res.json({
       code: 0,
-      data: formateTree(data)
+      data: formateTree(data),
     })
   })
   /** 更新标签 */
-  .post(async (req: Request<Bookmark.UpdateParams[]>, res:Response) => {
+  .post(async (req: Request<Bookmark.UpdateParams[]>, res: Response) => {
     const { body } = req
     for (let item of body) {
       const { _id, ...reset } = item
@@ -26,25 +27,37 @@ router.route('/bookmark')
 
     res.json({
       code: 0,
-      msg: 'success'
+      msg: 'success',
     })
   })
-  .put(async (req: Request<{ label: string }>, res: Response<Bookmark.ListResult>) => {    
+  .put(async (req: Request<{ label: string }>, res: Response<Bookmark.ListResult>) => {
     const { body } = req
     const { user } = req.app.locals
     const prevBookmark = await BookmarkModel.findOne({ creator: user._id, next: null })
     let bookmark
     if (prevBookmark) {
-      bookmark = await BookmarkModel.create({ label: body.label, creator: user._id, prev: prevBookmark._id, next: null, children: [] })
+      bookmark = await BookmarkModel.create({
+        label: body.label,
+        creator: user._id,
+        prev: prevBookmark._id,
+        next: null,
+        children: [],
+      })
       await BookmarkModel.updateOne({ _id: prevBookmark._id }, { next: bookmark._id })
     } else {
-      bookmark = await BookmarkModel.create({ label: body.label, creator: user._id, prev: null, next: null, children: [] })
+      bookmark = await BookmarkModel.create({
+        label: body.label,
+        creator: user._id,
+        prev: null,
+        next: null,
+        children: [],
+      })
     }
 
     res.json({
       code: 0,
       msg: 'success',
-      data: bookmark as any
+      data: bookmark as any,
     })
   })
 

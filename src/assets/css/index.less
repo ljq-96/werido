@@ -1,0 +1,69 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import url('antd/dist/antd.variable.min.css');
+
+img {
+  -webkit-user-drag: none;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background-color: #fff;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+  background-color: #bfbfbf;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #8c8c8c;
+}
+
+.block-picker {
+  width: 140px !important;
+  backdrop-filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.4));
+}
+
+.material-picker {
+  width: unset !important;
+  height: unset !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
+}
+
+.ant-pro-menu-item {
+  display: flex;
+  align-items: center;
+}
+
+.ant-picker-calendar.ant-picker-calendar-mini {
+  .ant-picker-calendar-mode-switch {
+    display: none;
+  }
+}
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  vertical-align: unset !important;
+}
+
+.ant-pro-sider.ant-layout-sider-light .ant-menu-item a,
+.ant-pro-sider.ant-layout-sider-light .ant-menu-item a:hover {
+  color: unset;
+}
+
+.ant-pro-global-footer {
+  margin: 24px 0 8px;
+}
