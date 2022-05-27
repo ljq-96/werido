@@ -15,11 +15,11 @@ const { PORT = 3606 } = process.env
 const app = express()
 
 app.get('/', (req, res) => {
-  const web = fs.readFileSync('./public/index.html')
+  const web = fs.readFileSync('./index.html')
   res.end(web)
 })
 
-app.use('/pubilc', express.static('./public'))
+app.use('/assets', express.static('./assets'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cookieParser('werido'))

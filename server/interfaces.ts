@@ -6,7 +6,7 @@ export type Request<ReqBody = any, ReqQuery = any, Locals = { user: User.Doc }> 
   ReqBody,
   ReqQuery,
   Locals
-> & { app: { locals: Locals } }
+>
 export type Response<T = any> = express.Response<IResponse<T>>
 
 export interface IResponse<T = any> {

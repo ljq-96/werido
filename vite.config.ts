@@ -8,7 +8,7 @@ export default defineConfig({
     alias: [{ find: /^~/, replacement: '' }],
   },
   build: {
-    outDir: 'dist/public',
+    outDir: './dist',
   },
   css: {
     preprocessorOptions: {
