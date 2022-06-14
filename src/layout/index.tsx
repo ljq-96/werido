@@ -39,7 +39,7 @@ export default () => {
       if (res.code === 0) {
         navigate('/login')
         message.success(res.msg)
-        userDispatch.dispatch({ type: 'destory' })
+        userDispatch({ type: 'destory' })
       }
     })
   }
@@ -51,7 +51,7 @@ export default () => {
       },
     })
 
-    userDispatch.dispatch({
+    userDispatch({
       type: 'update',
       payload: {
         ...loginUser,
@@ -69,7 +69,7 @@ export default () => {
   useEffect(() => {
     userApi.getLoginUser().then((res) => {
       if (res.code === 0) {
-        userDispatch.dispatch({ type: 'update', payload: res.data })
+        userDispatch({ type: 'update', payload: res.data })
         ConfigProvider.config({
           theme: {
             primaryColor: res.data.themeColor,
