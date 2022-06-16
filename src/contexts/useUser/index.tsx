@@ -1,21 +1,19 @@
-import React, { createContext, useContext, useMemo, useReducer } from 'react'
-import { User } from '../../server/interfaces'
+import { createContext, useContext, useMemo, useReducer, Dispatch } from 'react'
+import { User } from '../../../server/interfaces'
+import { basicUserView } from './actions'
 
 const INITIAL_STATE: User.Doc | null = null
 const UserContext = createContext<any>(INITIAL_STATE)
 
-type userAction = 'destory' | 'update'
-
-export function useUser(): [User.Doc, React.Dispatch<{ type: userAction; payload?: any }>] {
+export function useUser(): [User.Doc, Dispatch<{ type: User.Doc; payload: Partial<User.Doc> }>] {
   return useContext(UserContext)
 }
 
-//reducer
-function reducer(state: any, { type, payload }: { type: userAction; payload?: any }) {
+function reducer(state: any, { type, payload }) {
   switch (type) {
-    case 'destory':
+    case basicUserView.destroy.type:
       return null
-    case 'update':
+    case basicUserView.update.type:
       return payload ? Object.assign({}, state, payload) : null
   }
 }

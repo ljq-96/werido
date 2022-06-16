@@ -21,9 +21,8 @@ import routes from '../routes'
 import { useUser } from '../contexts/useUser'
 import { userApi } from '../api'
 import { CirclePicker, MaterialPicker, SliderPicker } from 'react-color'
+import { basicUserView } from '../contexts/useUser/actions'
 import '../assets/css/index.less'
-
-// import 'antd/dist/antd.variable.min.css'
 
 export default () => {
   const { pathname } = useLocation()
@@ -39,7 +38,7 @@ export default () => {
       if (res.code === 0) {
         navigate('/login')
         message.success(res.msg)
-        userDispatch({ type: 'destory' })
+        userDispatch(basicUserView.destroy.actions())
       }
     })
   }
@@ -50,14 +49,7 @@ export default () => {
         primaryColor: hex,
       },
     })
-
-    userDispatch({
-      type: 'update',
-      payload: {
-        ...loginUser,
-        themeColor: hex,
-      },
-    })
+    userDispatch(basicUserView.update.actions({ themeColor: hex }))
   }
 
   const handleCloseDrawer = () => {
@@ -69,7 +61,7 @@ export default () => {
   useEffect(() => {
     userApi.getLoginUser().then((res) => {
       if (res.code === 0) {
-        userDispatch({ type: 'update', payload: res.data })
+        userDispatch(basicUserView.update.actions(res.data))
         ConfigProvider.config({
           theme: {
             primaryColor: res.data.themeColor,

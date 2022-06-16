@@ -1,1 +1,1 @@
-export const baseActions = (type, payload) => ({ type, payload })
+export const basicActions = (type: any, payload?: any) => ({ type, payload })
