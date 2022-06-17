@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Card, Input, Popover, Tooltip, ConfigProvider } from 'antd'
-import { newsApi } from '../../../api'
 import { BingWallpaper, User } from '../../../../server/interfaces'
 import { FieldTimeOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import Space from '../../../components/Canvas/Space'

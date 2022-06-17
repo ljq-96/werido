@@ -18,7 +18,7 @@ import {
   Menu,
 } from 'antd'
 import Sortable from '../../../components/Sortable'
-import { bookmarkApi, iconApi } from '../../../api'
+import { bookmarkApi, iconApi, myProfile } from '../../../api'
 import { Bookmark, Icon } from '../../../../server/interfaces'
 import {
   ApiFilled,
@@ -46,8 +46,8 @@ export default (props: IProps) => {
   const onEditIcon = useMemo(() => modalState && bookmarkList[modalState[0]]?.items[modalState[1]], [modalState])
 
   const getBookmarks = () => {
-    bookmarkApi
-      .getBookmarks()
+    myProfile
+      .getBookMark()
       .then((res) => {
         if (res.code === 0) {
           setBookmarkList(res.data)
@@ -75,18 +75,19 @@ export default (props: IProps) => {
           return a
         }, {}),
       )
-      bookmarkApi
-        .updateBookmarks(
-          changed.map((i) => ({
+      Promise.all(
+        changed.map((i) =>
+          bookmarkApi.put({
             _id: i._id,
             label: i.label,
             items: i.items.map((j) => ({ ...j, icon: j.icon._id })),
             prev: i.prev,
             next: i.next,
-          })),
-        )
+          }),
+        ),
+      )
         .then((res) => {
-          if (res.code === 0) {
+          if (res.every((i) => i.code === 0)) {
             getBookmarks()
           }
         })
@@ -106,7 +107,7 @@ export default (props: IProps) => {
 
   /** 添加标签组 */
   const createBookmark = (values) => {
-    bookmarkApi.createBookmark(values).then((res) => {
+    bookmarkApi.post(values).then((res) => {
       if (res.code === 0) {
         setBookmarkList([...bookmarkList, res.data])
         setShowCreateBookmark(false)

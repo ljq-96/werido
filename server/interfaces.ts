@@ -23,6 +23,11 @@ export interface Pager<T = never> {
   list?: T extends never ? never : T[]
 }
 
+export type QueryList<T = any> = {
+  page: number
+  size: number
+} & Partial<T>
+
 /** 用户 */
 export namespace User {
   export enum UserStatus {

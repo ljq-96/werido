@@ -1,9 +1,24 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { Modal, ModalProps, Form, Input, Select, Pagination, Spin, Tabs, Upload, Dropdown, Menu, Image, Empty, message } from 'antd'
+import {
+  Modal,
+  ModalProps,
+  Form,
+  Input,
+  Select,
+  Pagination,
+  Spin,
+  Tabs,
+  Upload,
+  Dropdown,
+  Menu,
+  Image,
+  Empty,
+  message,
+} from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { VariableSizeGrid as Grid } from 'react-window'
-import { iconApi } from '../../api'
-import { Icon } from '../../../interfaces'
+import { myProfile } from '../../api'
+import { Icon } from '../../../server/interfaces'
 
 interface VProps {
   list: Icon.Doc[]
@@ -14,7 +29,7 @@ interface VProps {
 const VirtualGrid = (props: VProps) => {
   const { list, onChange, loadMore } = props
   const gridRef = useRef(null)
-  const rowCount = useMemo(() =>  Math.ceil(list.length / 6), [list])
+  const rowCount = useMemo(() => Math.ceil(list.length / 6), [list])
   const scrollTop = useRef(null)
 
   return (
@@ -31,11 +46,13 @@ const VirtualGrid = (props: VProps) => {
         scrollTop.current = _scrollTop
         if (totalHeight - _scrollTop < 350) {
           gridRef.current?._outerRef?.scrollTo(0, scrollTop.current)
-          totalHeight && loadMore && loadMore()?.finally(() => {
-            gridRef.current?._outerRef?.scrollTo(0, scrollTop.current)
-          })
+          totalHeight &&
+            loadMore &&
+            loadMore()?.finally(() => {
+              gridRef.current?._outerRef?.scrollTo(0, scrollTop.current)
+            })
         }
-    }}>
+      }}>
       {({ columnIndex, rowIndex, style }: { columnIndex: number; rowIndex: number; style: React.CSSProperties }) => (
         <div
           key={`${rowIndex}-${columnIndex}`}
@@ -45,13 +62,11 @@ const VirtualGrid = (props: VProps) => {
             alignItems: 'center',
             justifyContent: 'center',
             padding: 5,
-          }}
-        >
+          }}>
           <div
             className='hover-bg'
             style={{ padding: 5, borderRadius: 2, cursor: 'pointer' }}
-            onClick={() => onChange(list[rowIndex * 6 + columnIndex])}
-          >
+            onClick={() => onChange(list[rowIndex * 6 + columnIndex])}>
             <Image preview={false} style={{ width: '100%' }} src={list[rowIndex * 6 + columnIndex]?.icon} />
           </div>
         </div>
@@ -62,8 +77,8 @@ const VirtualGrid = (props: VProps) => {
 
 interface IIcon {
   _id: string
-  title: string,
-  url: string,
+  title: string
+  url: string
   icon: Icon.Doc
 }
 
@@ -90,13 +105,12 @@ export default (props: IProps) => {
     if (icons) {
       return iconType === 'presetIcons' ? icons.presetIcons.list : icons.customIcons
     }
-    
   }, [icons, iconType])
 
   const onFinish = (values) => {
     onOk({
       ...values,
-      icon: selectedIcon
+      icon: selectedIcon,
     })
     onCancel()
     form.resetFields()
@@ -105,8 +119,9 @@ export default (props: IProps) => {
 
   const getIcons = (pageInfo) => {
     setLoading(true)
-    return iconApi.getIcons(pageInfo)
-      .then(res => {
+    return myProfile
+      .getIcon(pageInfo)
+      .then((res) => {
         if (res.code === 0) {
           if (icons) {
             const { customIcons, presetIcons } = icons
@@ -115,14 +130,15 @@ export default (props: IProps) => {
               customIcons,
               presetIcons: {
                 ...res.data.presetIcons,
-                list: [...list, ...res.data.presetIcons.list]
-              }
+                list: [...list, ...res.data.presetIcons.list],
+              },
             })
           } else {
             setIcons(res.data)
           }
         }
-      }).finally(() => {
+      })
+      .finally(() => {
         setLoading(false)
         setIconPageInfo(pageInfo)
       })
@@ -149,44 +165,35 @@ export default (props: IProps) => {
       title={title}
       visible={visible}
       width={530}
-      onCancel={e => {
+      onCancel={(e) => {
         onCancel()
         form.resetFields()
         setSelectedIcon(null)
       }}
-      onOk={form.submit}
-    >
+      onOk={form.submit}>
       <Form form={form} onFinish={onFinish}>
-        <Form.Item
-          label='标题'
-          name='title'
-          rules={[{ required: true, message: '请输入标题' }]}
-        >
+        <Form.Item label='标题' name='title' rules={[{ required: true, message: '请输入标题' }]}>
           <Input placeholder='请输入书签的名称' />
         </Form.Item>
-        <Form.Item
-          label='地址'
-          name='url'
-          rules={[{ required: true, message: '请输入地址' }]}
-        >
+        <Form.Item label='地址' name='url' rules={[{ required: true, message: '请输入地址' }]}>
           <Input placeholder='请输入书签地址' />
         </Form.Item>
-        <Form.Item
-          label='图标'
-          name='icon'
-          rules={[{ required: true, message: '请选择图标' }]}
-        >
-          <Dropdown visible={menuDropVisible} arrow onVisibleChange={setMenuDropVisible} trigger={['click']} overlay={
-            <Menu style={{ backgroundColor: '#fff', padding: '0 16px 16px' }}>
-              <Spin spinning={loading}>
-                <div style={{ padding: '0 16px' }}>
-                  <Tabs onChange={setIconType}>
-                    <Tabs.TabPane tab='预设图标' key='presetIcons' />
-                    <Tabs.TabPane tab='我的图标' key='customIcons' />
-                  </Tabs>
-                </div>
-                {
-                  iconList && iconList.length > 0 ? (
+        <Form.Item label='图标' name='icon' rules={[{ required: true, message: '请选择图标' }]}>
+          <Dropdown
+            visible={menuDropVisible}
+            arrow
+            onVisibleChange={setMenuDropVisible}
+            trigger={['click']}
+            overlay={
+              <Menu style={{ backgroundColor: '#fff', padding: '0 16px 16px' }}>
+                <Spin spinning={loading}>
+                  <div style={{ padding: '0 16px' }}>
+                    <Tabs onChange={setIconType}>
+                      <Tabs.TabPane tab='预设图标' key='presetIcons' />
+                      <Tabs.TabPane tab='我的图标' key='customIcons' />
+                    </Tabs>
+                  </div>
+                  {iconList && iconList.length > 0 ? (
                     <VirtualGrid
                       list={iconList}
                       onChange={(icon) => {
@@ -194,34 +201,42 @@ export default (props: IProps) => {
                         form.setFields([{ name: 'icon', value: icon._id }])
                         setSelectedIcon(icon)
                       }}
-                      loadMore={() => loading ? Promise.reject(false) : getIcons({ page: iconPageInfo.page + 1, size: iconPageInfo.size })}
+                      loadMore={() =>
+                        loading
+                          ? Promise.reject(false)
+                          : getIcons({ page: iconPageInfo.page + 1, size: iconPageInfo.size })
+                      }
                     />
-                  ) : <Empty style={{ width: 426 }} image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                }
-                
-              </Spin>
-            </Menu>
-          }>
-            <div className='hover-bg' style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'column',
-              width: 102,
-              height: 102,
-              padding: 16,
-              border: '1px dashed #d9d9d9',
-              borderRadius: 2,
-              cursor: 'pointer',
-              userSelect: 'none',
-              color: '#8c8c8c'
-            }}>
-              {
-                selectedIcon ? <Image preview={false} src={selectedIcon.icon} /> : <>
+                  ) : (
+                    <Empty style={{ width: 426 }} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                  )}
+                </Spin>
+              </Menu>
+            }>
+            <div
+              className='hover-bg'
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                width: 102,
+                height: 102,
+                padding: 16,
+                border: '1px dashed #d9d9d9',
+                borderRadius: 2,
+                cursor: 'pointer',
+                userSelect: 'none',
+                color: '#8c8c8c',
+              }}>
+              {selectedIcon ? (
+                <Image preview={false} src={selectedIcon.icon} />
+              ) : (
+                <>
                   <PlusOutlined />
                   <div style={{ marginTop: 8 }}>选择图标</div>
                 </>
-              }
+              )}
             </div>
           </Dropdown>
         </Form.Item>

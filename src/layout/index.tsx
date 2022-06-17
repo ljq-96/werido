@@ -19,7 +19,7 @@ import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
 import Logo from '../components/Logo'
 import routes from '../routes'
 import { useUser } from '../contexts/useUser'
-import { userApi } from '../api'
+import { basicApi, myProfile } from '../api'
 import { CirclePicker, MaterialPicker, SliderPicker } from 'react-color'
 import { basicUserView } from '../contexts/useUser/actions'
 import '../assets/css/index.less'
@@ -34,7 +34,7 @@ export default () => {
   const currentRoutes = useMemo(() => routes.find((item) => pathname.startsWith(item.path)), [pathname])
 
   const logout = () => {
-    userApi.logout().then((res) => {
+    basicApi.logout().then((res) => {
       if (res.code === 0) {
         navigate('/login')
         message.success(res.msg)
@@ -50,16 +50,15 @@ export default () => {
       },
     })
     userDispatch(basicUserView.update.actions({ themeColor: hex }))
+    myProfile.put({ themeColor: hex })
   }
 
   const handleCloseDrawer = () => {
     setShowColorDrawer(false)
-    const { themeColor, _id } = loginUser
-    userApi.updateUser(_id, { themeColor })
   }
 
   useEffect(() => {
-    userApi.getLoginUser().then((res) => {
+    myProfile.get().then((res) => {
       if (res.code === 0) {
         userDispatch(basicUserView.update.actions(res.data))
         ConfigProvider.config({

@@ -1,91 +1,14 @@
-import { Fetch } from './Fetch'
+import { BASE_API } from '../../constants'
+import { BaseApi, Fetch } from './utils'
 import { User, Icon, Bookmark, BingWallpaper } from '../../server/interfaces'
+import { MyProfile, basicApi } from './apis'
 
-const baseUrl = '/api'
+const bookmarkApi = new BaseApi<Bookmark.Doc>(`${BASE_API}/bookmark`)
 
-export const newsApi = {
-  getBing: () => {
-    return Fetch<never, BingWallpaper>({
-      url: `${baseUrl}/news/bing`,
-      method: 'GET',
-    })
-  },
-}
+const iconApi = new BaseApi<Icon.Doc>(`${BASE_API}/icon`)
 
-export const userApi = {
-  /** 登录 */
-  login: (body: User.Login) => {
-    return Fetch<User.Login>({
-      url: `${baseUrl}/login`,
-      method: 'POST',
-      body,
-    })
-  },
-  /** 注册 */
-  register: (body: User.Login) => {
-    return Fetch<User.Login>({
-      url: `${baseUrl}/register`,
-      method: 'POST',
-      body,
-    })
-  },
-  /** 退出登录 */
-  logout: () => {
-    return Fetch({
-      url: `${baseUrl}/logout`,
-      method: 'POST',
-    })
-  },
-  /** 获取登录用户 */
-  getLoginUser: () => {
-    return Fetch<never, User.Result>({
-      url: `${baseUrl}/user/detail`,
-      method: 'GET',
-    })
-  },
-  /** 更新 */
-  updateUser: (id, body) => {
-    return Fetch<User.Doc>({
-      url: `${baseUrl}/user/update/${id}`,
-      method: 'POST',
-      body,
-    })
-  },
-}
+const myProfile = new MyProfile(`${BASE_API}/myProfile`)
 
-export const iconApi = {
-  /** 获取图标 */
-  getIcons: (query: Icon.ListParams) => {
-    return Fetch<Icon.ListParams, Icon.ListResult>({
-      url: `${baseUrl}/icon`,
-      method: 'GET',
-      query,
-    })
-  },
-}
+const userApi = new BaseApi<User.Doc>(`${BASE_API}/user`)
 
-export const bookmarkApi = {
-  /** 获取书签 */
-  getBookmarks: () => {
-    return Fetch<never, Bookmark.ListResult[]>({
-      url: `${baseUrl}/bookmark`,
-      method: 'GET',
-    })
-  },
-  /** 更新书签 */
-  updateBookmarks: (body: Bookmark.UpdateParams[]) => {
-    return Fetch<Bookmark.UpdateParams[], Bookmark.ListResult[]>({
-      url: `${baseUrl}/bookmark`,
-      method: 'POST',
-      body,
-    })
-  },
-  /** 创建标签 */
-  createBookmark: (body: { label: string }) => {
-    return Fetch<{ label: string }, Bookmark.ListResult>({
-      url: `${baseUrl}/bookmark`,
-      method: 'PUT',
-      body,
-    })
-  },
-}
+export { basicApi, bookmarkApi, iconApi, myProfile, userApi }
