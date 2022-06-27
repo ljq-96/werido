@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import ProLayout, { DefaultFooter } from '@ant-design/pro-layout'
-import { BgColorsOutlined, UserOutlined } from '@ant-design/icons'
+import { BgColorsOutlined, SettingFilled, UserOutlined } from '@ant-design/icons'
 import {
   ConfigProvider,
   Menu,
@@ -33,6 +33,11 @@ export default () => {
 
   const currentRoutes = useMemo(() => routes.find((item) => pathname.startsWith(item.path)), [pathname])
 
+  const currentLayout = useMemo(
+    () => (currentRoutes.path === '/home' ? loginUser.layoutC : loginUser.layoutB),
+    [currentRoutes, loginUser],
+  )
+
   const logout = () => {
     basicApi.logout().then((res) => {
       if (res.code === 0) {
@@ -50,11 +55,14 @@ export default () => {
       },
     })
     userDispatch(basicUserView.update.actions({ themeColor: hex }))
-    myProfile.put({ themeColor: hex })
   }
 
-  const handleCloseDrawer = () => {
-    setShowColorDrawer(false)
+  const handleDrawer = () => {
+    setShowColorDrawer(!showColorDrawer)
+    if (showColorDrawer) {
+      const { themeColor, layoutB, layoutC } = loginUser
+      myProfile.put({ themeColor, layoutB, layoutC })
+    }
   }
 
   useEffect(() => {
@@ -77,7 +85,8 @@ export default () => {
       disableContentMargin
       fixSiderbar={true}
       navTheme='light'
-      layout='side'
+      layout={currentLayout}
+      contentWidth='fixed'
       headerHeight={48}
       fixedHeader={true}
       splitMenus={false}
@@ -94,7 +103,7 @@ export default () => {
       logoStyle={{ color: '#999' }}
       rightContentRender={() => (
         <Space>
-          <Button type='text' icon={<BgColorsOutlined />} onClick={() => setShowColorDrawer(!showColorDrawer)} />
+          <Button type='text' icon={<BgColorsOutlined />} onClick={handleDrawer} />
           <Dropdown
             overlay={
               <Menu>
@@ -123,7 +132,7 @@ export default () => {
           getContainer={false}
           width={300}
           mask={false}
-          onClose={handleCloseDrawer}
+          onClose={handleDrawer}
           style={{ top: 48, zIndex: 18 }}>
           <Form layout='vertical'>
             <Form.Item label='主题色'>
@@ -141,17 +150,38 @@ export default () => {
             </Form.Item>
 
             <Form.Item label='布局模式'>
-              <Segmented
-                options={[
-                  {
-                    label: '侧栏',
-                    value: 'side',
-                  },
-                  {
-                    label: '顶栏',
-                    value: 'top',
-                  },
-                ]}></Segmented>
+              <div>
+                前台系统：
+                <Segmented
+                  value={loginUser.layoutC}
+                  onChange={(e: any) => userDispatch(basicUserView.update.actions({ layoutC: e }))}
+                  options={[
+                    {
+                      label: '侧栏',
+                      value: 'side',
+                    },
+                    {
+                      label: '顶栏',
+                      value: 'top',
+                    },
+                  ]}></Segmented>
+              </div>
+              <div>
+                后台管理：
+                <Segmented
+                  value={loginUser.layoutB}
+                  onChange={(e: any) => userDispatch(basicUserView.update.actions({ layoutB: e }))}
+                  options={[
+                    {
+                      label: '侧栏',
+                      value: 'side',
+                    },
+                    {
+                      label: '顶栏',
+                      value: 'top',
+                    },
+                  ]}></Segmented>
+              </div>
             </Form.Item>
           </Form>
         </Drawer>

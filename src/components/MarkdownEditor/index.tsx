@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import {
   Editor,
   rootCtx,
@@ -6,10 +6,12 @@ import {
   commandsCtx,
   Ctx,
   editorViewCtx,
+  serializerCtx,
   editorViewOptionsCtx,
   viewCtx,
   editorState,
 } from '@milkdown/core'
+import { insert } from '@milkdown/utils'
 import { nord } from '@milkdown/theme-nord'
 import { prism } from '@milkdown/plugin-prism'
 import { history, Undo } from '@milkdown/plugin-history'
@@ -52,6 +54,11 @@ interface IProps {
   height?: number | string
 }
 
+export interface EditorIntance {
+  getValue: () => string
+  setValue: (value: string) => void
+}
+
 const { Text } = Typography
 
 const hasMark = (state, type): boolean => {
@@ -64,10 +71,44 @@ const hasMark = (state, type): boolean => {
   return state.doc.rangeHasMark(from, to, type)
 }
 
-const MilkdownEditor = (props: IProps) => {
+const MilkdownEditor = (props: IProps, ref) => {
   const { height } = props
   const [activeBtns, setActiveBtns] = useState<('strong' | 'link' | 'em' | 'code_inline')[]>([])
   const editorRef = useRef<EditorRef>(null)
+
+  const editor = useEditor((root) =>
+    Editor.make()
+      .config((ctx) => {
+        ctx.set(rootCtx, root)
+        // ctx.set(editorViewOptionsCtx, { editable: () => false });
+      })
+      .use(nord)
+      .use(commonmark.headless())
+      // .use(gfm)
+      .use(history)
+      .use(slash)
+      .use(math)
+      .use(emoji)
+      .use(listener)
+      .use(prism)
+      // .use(cursor)
+      .use(clipboard)
+      .use(tooltip),
+  )
+
+  useImperativeHandle<any, EditorIntance>(ref, () => {
+    return {
+      getValue: () =>
+        editorRef.current.get().action((ctx) => {
+          const editorView = ctx.get(editorViewCtx)
+          const serializer = ctx.get(serializerCtx)
+          return serializer(editorView.state.doc)
+        }),
+      setValue: (value) => {
+        editorRef.current.get().action(insert(value))
+      },
+    }
+  })
 
   const getState = () => {
     editorRef.current.get().action((ctx) => {
@@ -134,26 +175,6 @@ const MilkdownEditor = (props: IProps) => {
 
   /** 分割线 */
   const insertHr = () => editorRef.current.get().action((ctx) => ctx.get(commandsCtx).call(commands.InsertHr))
-
-  const editor = useEditor((root) =>
-    Editor.make()
-      .config((ctx) => {
-        ctx.set(rootCtx, root)
-        // ctx.set(editorViewOptionsCtx, { editable: () => false });
-      })
-      .use(nord)
-      .use(commonmark.headless())
-      // .use(gfm)
-      .use(history)
-      .use(slash)
-      .use(math)
-      .use(emoji)
-      .use(listener)
-      .use(prism)
-      // .use(cursor)
-      .use(clipboard)
-      .use(tooltip),
-  )
 
   return (
     <div className={style.markdownEditor + ' article'} onClick={getState} onKeyUp={getState}>
@@ -296,4 +317,4 @@ const MilkdownEditor = (props: IProps) => {
   )
 }
 
-export default MilkdownEditor
+export default forwardRef(MilkdownEditor)

@@ -59,7 +59,7 @@ export class BaseApi<T = any> {
     })
   }
   /** 新增 */
-  post(body: T) {
+  post(body: Partial<T>) {
     return Fetch({
       url: this.baseUrl,
       method: 'POST',

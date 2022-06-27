@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { User, Icon, Bookmark } from '../interfaces'
+import { User, Icon, Bookmark, Blog } from '../interfaces'
 
 /** 用户模型 */
 export const UserModal = model<User.Doc>(
@@ -29,6 +29,14 @@ export const UserModal = model<User.Doc>(
     themeColor: {
       type: String,
       default: '#1890ff',
+    },
+    layoutC: {
+      type: String,
+      default: 'top',
+    },
+    layoutB: {
+      type: String,
+      default: 'side',
     },
   }),
 )
@@ -88,6 +96,40 @@ export const BookmarkModel = model<Bookmark.Doc>(
     next: {
       type: Schema.Types.ObjectId,
       ref: 'bookmark',
+    },
+  }),
+)
+
+/** 书签模型 */
+export const BlogModel = model<Blog.Doc>(
+  'blog',
+  new Schema({
+    title: String,
+    content: String,
+    description: String,
+    creator: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
+    createTime: {
+      type: Number,
+      default: Date.now(),
+    },
+    updateTime: {
+      type: Number,
+      default: Date.now(),
+    },
+    prev: {
+      type: Schema.Types.ObjectId,
+      ref: 'blog',
+    },
+    next: {
+      type: Schema.Types.ObjectId,
+      ref: 'blog',
+    },
+    parent: {
+      type: Schema.Types.ObjectId,
+      ref: 'blog',
     },
   }),
 )

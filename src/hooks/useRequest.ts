@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { IResponse } from '../../server/interfaces'
 
-export const useAsync = <DataType>(asnycFunction: () => Promise<IResponse<DataType>>, resetData?: boolean) => {
+const useRequest = <DataType>(asnycFunction: () => Promise<IResponse<DataType>>, resetData?: boolean) => {
   const [data, setData] = useState<DataType | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -20,3 +20,5 @@ export const useAsync = <DataType>(asnycFunction: () => Promise<IResponse<DataTy
 
   return { execute, data, loading }
 }
+
+export default useRequest

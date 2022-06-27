@@ -16,11 +16,11 @@ export interface IResponse<T = any> {
   data?: T
 }
 
-export interface Pager<T = never> {
+export interface Pager<T = any> {
   page?: number
   size?: number
   total?: number
-  list?: T extends never ? never : T[]
+  list?: T[]
 }
 
 export type QueryList<T = any> = {
@@ -50,6 +50,8 @@ export namespace User {
     updateTime: number
     status: UserStatus
     themeColor: string
+    layoutB: 'side' | 'top'
+    layoutC: 'side' | 'top'
   }
 
   export type Login = Pick<Doc, 'username' | 'password'>
@@ -121,6 +123,22 @@ export namespace Bookmark {
       url: string
       icon: string
     }[]
+  }
+}
+
+export namespace Blog {
+  export interface Doc {
+    _id: string
+    prev: string
+    next: string
+    parent: string
+    createTime: number
+    updateTime: number
+    title: string
+    content: string
+    description: string
+    creator: string
+    tags: string
   }
 }
 

@@ -9,6 +9,7 @@ import basicRouter from './routes/basic'
 import userRouter from './routes/user'
 import iconRouter from './routes/icon'
 import bookmarkRouter from './routes/bookmark'
+import blogRouter from './routes/blog'
 import { BASE_API } from '../constants'
 import './utils/news'
 
@@ -25,8 +26,9 @@ app
   .use(tokenMiddleware)
   .use(`${BASE_API}`, basicRouter)
   .use(`${BASE_API}/myProfile`, myProfileRouter)
-  .use('/api/icon', iconRouter)
-  .use('/api/bookmark', bookmarkRouter)
+  .use(`${BASE_API}/icon`, iconRouter)
+  .use(`${BASE_API}/bookmark`, bookmarkRouter)
+  .use(`${BASE_API}/blog`, blogRouter)
 
 mongoose.connect(`mongodb://8.140.187.127/werido`).then(
   () => {
