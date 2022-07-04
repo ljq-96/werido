@@ -14,8 +14,10 @@ const useRequest = <DataType>(asnycFunction: () => Promise<IResponse<DataType>>,
         if (res.code === 0) {
           setData(res.data)
         }
+        return res
       })
-      .catch(() => setLoading(false))
+      .catch((e) => Promise.reject(e))
+      .finally(() => setLoading(false))
   }, [asnycFunction])
 
   return { execute, data, loading }

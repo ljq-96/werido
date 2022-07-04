@@ -21,6 +21,12 @@ export const Fetch = <F = any, T = any>({ url, method = 'GET', body, query }: IP
     .then((res) => res.json())
     .then((res) => {
       if (res?.code !== 0) {
+        switch (res?.code) {
+          case 401:
+            message.error('登陆过期 请重新登陆！')
+            location.href = '/login'
+            break
+        }
         message.error(res?.msg || '未知错误')
       }
       return res || {}

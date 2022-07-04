@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
-import { HashRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Loading from './components/Loading'
 import routes from './routes'
 import { ConfigProvider } from 'antd'
@@ -19,9 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <Suspense fallback={<Loading />}>
     <UserProvider>
       <ConfigProvider locale={zhCN}>
-        <HashRouter>
+        <BrowserRouter>
           <Routes>{routes.map((r) => parseRoute(r))}</Routes>
-        </HashRouter>
+        </BrowserRouter>
       </ConfigProvider>
     </UserProvider>
   </Suspense>,

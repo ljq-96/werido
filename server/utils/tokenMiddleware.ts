@@ -15,13 +15,13 @@ export default async (req: Request, res: Response, next) => {
       next()
     } else {
       res.json({
-        code: 999,
+        code: 401,
         msg: '未登录',
       })
     }
   } else {
     res.json({
-      code: 999,
+      code: 401,
       msg: '未登录',
     })
   }

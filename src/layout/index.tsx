@@ -38,6 +38,19 @@ export default () => {
     [currentRoutes, loginUser],
   )
 
+  const getMyProfile = () => {
+    myProfile.get().then((res) => {
+      if (res.code === 0) {
+        userDispatch(basicUserView.update.actions(res.data))
+        ConfigProvider.config({
+          theme: {
+            primaryColor: res.data.themeColor,
+          },
+        })
+      }
+    })
+  }
+
   const logout = () => {
     basicApi.logout().then((res) => {
       if (res.code === 0) {
@@ -65,20 +78,7 @@ export default () => {
     }
   }
 
-  useEffect(() => {
-    myProfile.get().then((res) => {
-      if (res.code === 0) {
-        userDispatch(basicUserView.update.actions(res.data))
-        ConfigProvider.config({
-          theme: {
-            primaryColor: res.data.themeColor,
-          },
-        })
-      } else {
-        navigate('/login')
-      }
-    })
-  }, [])
+  useEffect(getMyProfile, [])
 
   return (
     <ProLayout
@@ -103,10 +103,12 @@ export default () => {
       logoStyle={{ color: '#999' }}
       rightContentRender={() => (
         <Space>
-          <Button type='text' icon={<BgColorsOutlined />} onClick={handleDrawer} />
           <Dropdown
             overlay={
               <Menu>
+                <Menu.Item>个人中心</Menu.Item>
+                <Menu.Item onClick={() => setShowColorDrawer(true)}>系统设置</Menu.Item>
+                <Menu.Divider />
                 <Menu.Item onClick={logout}>退出</Menu.Item>
               </Menu>
             }>
@@ -133,57 +135,65 @@ export default () => {
           width={300}
           mask={false}
           onClose={handleDrawer}
+          closeIcon={false}
           style={{ top: 48, zIndex: 18 }}>
-          <Form layout='vertical'>
-            <Form.Item label='主题色'>
-              <CirclePicker color={loginUser?.themeColor} onChange={changeColor} />
-              <div style={{ margin: '24px 0' }}>
-                <SliderPicker color={loginUser?.themeColor} onChange={changeColor} />
+          <CirclePicker color={loginUser?.themeColor} onChange={changeColor} />
+          <div style={{ margin: '24px 0' }}>
+            <SliderPicker color={loginUser?.themeColor} onChange={changeColor} />
+          </div>
+          <Card size='small' hoverable>
+            <div className='overflow-hidden'>
+              <div style={{ margin: '0 -1px' }}>
+                <MaterialPicker color={loginUser?.themeColor} onChange={changeColor} />
               </div>
-              <Card size='small' hoverable>
-                <div className='overflow-hidden'>
-                  <div style={{ margin: '0 -1px' }}>
-                    <MaterialPicker color={loginUser?.themeColor} onChange={changeColor} />
-                  </div>
-                </div>
-              </Card>
-            </Form.Item>
+            </div>
+          </Card>
 
-            <Form.Item label='布局模式'>
-              <div>
-                前台系统：
-                <Segmented
-                  value={loginUser.layoutC}
-                  onChange={(e: any) => userDispatch(basicUserView.update.actions({ layoutC: e }))}
-                  options={[
-                    {
-                      label: '侧栏',
-                      value: 'side',
-                    },
-                    {
-                      label: '顶栏',
-                      value: 'top',
-                    },
-                  ]}></Segmented>
-              </div>
-              <div>
-                后台管理：
-                <Segmented
-                  value={loginUser.layoutB}
-                  onChange={(e: any) => userDispatch(basicUserView.update.actions({ layoutB: e }))}
-                  options={[
-                    {
-                      label: '侧栏',
-                      value: 'side',
-                    },
-                    {
-                      label: '顶栏',
-                      value: 'top',
-                    },
-                  ]}></Segmented>
-              </div>
-            </Form.Item>
-          </Form>
+          <div style={{ marginBottom: 8 }}>
+            前台系统：
+            <Segmented
+              value={loginUser.layoutC}
+              onChange={(e: any) => userDispatch(basicUserView.update.actions({ layoutC: e }))}
+              options={[
+                {
+                  label: '侧栏',
+                  value: 'side',
+                },
+                {
+                  label: '顶栏',
+                  value: 'top',
+                },
+              ]}></Segmented>
+          </div>
+          <div>
+            后台管理：
+            <Segmented
+              value={loginUser.layoutB}
+              onChange={(e: any) => userDispatch(basicUserView.update.actions({ layoutB: e }))}
+              options={[
+                {
+                  label: '侧栏',
+                  value: 'side',
+                },
+                {
+                  label: '顶栏',
+                  value: 'top',
+                },
+              ]}></Segmented>
+          </div>
+
+          <Space style={{ marginTop: 24 }}>
+            <Button
+              onClick={() => {
+                setShowColorDrawer(false)
+                getMyProfile()
+              }}>
+              取消
+            </Button>
+            <Button onClick={handleDrawer} type='primary'>
+              应用
+            </Button>
+          </Space>
         </Drawer>
       </Layout.Content>
     </ProLayout>

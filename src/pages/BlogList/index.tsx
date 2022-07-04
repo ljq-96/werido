@@ -1,26 +1,26 @@
-import { Col, Row, Card } from 'antd'
+import { Col, Row, Card, Spin } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { Blog } from '../../../server/interfaces'
 import { blogApi } from '../../api'
+import useRequest from '../../hooks/useRequest'
 import BlogItemCard from './components/BlogItemCard'
 
 const SIZE = 20
 const BlogList = () => {
   const [page, setPage] = useState(1)
-  const [blogList, setBlogList] = useState<Blog.Doc[]>([])
-  const getData = () => {
-    blogApi
-      .getList({
-        page: page,
-        size: SIZE,
-      })
-      .then((res) => {
-        setBlogList(res.data.list)
-      })
-  }
+  const {
+    loading,
+    data: blogList,
+    execute: getBlogList,
+  } = useRequest(() =>
+    blogApi.getList({
+      page: page,
+      size: SIZE,
+    }),
+  )
 
   useEffect(() => {
-    getData()
+    getBlogList()
   }, [])
 
   return (
@@ -30,11 +30,13 @@ const BlogList = () => {
           <Card></Card>
         </Col>
         <Col flex='auto'>
-          <Card>
-            {blogList.map((item) => (
-              <BlogItemCard key={item._id} {...item} />
-            ))}
-          </Card>
+          <Spin spinning={loading}>
+            <Card>
+              {blogList?.list?.map((item) => (
+                <BlogItemCard key={item._id} {...item} />
+              ))}
+            </Card>
+          </Spin>
         </Col>
         <Col flex='256px'>
           <Card></Card>

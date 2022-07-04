@@ -1,4 +1,4 @@
-import { Button, Card, Dropdown, Input, Menu, Row, Space } from 'antd'
+import { Button, Card, Dropdown, Input, Menu, message, Row, Space } from 'antd'
 import { useState, useEffect, useRef } from 'react'
 import { blogApi } from '../../api'
 import MarkdownEditor, { EditorIntance } from '../../components/MarkdownEditor'
@@ -15,8 +15,13 @@ const Editor = () => {
   )
 
   const handleSave = () => {
-    execute().then(() => {
-      editor.current.setValue(undefined)
+    execute().then((res) => {
+      console.log(res)
+
+      if (res.code === 0) {
+        message.success('保存成功')
+        editor.current.setValue('')
+      }
     })
   }
 
@@ -39,6 +44,8 @@ const Editor = () => {
               <Menu>
                 <Menu.Item>暂存</Menu.Item>
                 <Menu.Item onClick={() => editor.current.setValue('')}>清空</Menu.Item>
+                <Menu.Divider />
+                <Menu.Item>导入</Menu.Item>
               </Menu>
             }>
             保存
