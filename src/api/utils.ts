@@ -9,8 +9,8 @@ interface IProps<T = any> {
   body?: T
 }
 
-export const Fetch = <F = any, T = any>({ url, method = 'GET', body, query }: IProps<F>): Promise<IResponse<T>> => {
-  return fetch(url + (query ? '?' + querystring.stringify(query) : ''), {
+export async function Fetch<F = any, T = any>({ url, method = 'GET', body, query }: IProps<F>): Promise<IResponse<T>> {
+  const response = await fetch(url + (query ? '?' + querystring.stringify(query) : ''), {
     method,
     body: body && JSON.stringify(body),
     credentials: 'include',
@@ -18,22 +18,17 @@ export const Fetch = <F = any, T = any>({ url, method = 'GET', body, query }: IP
       'Content-Type': 'application/json',
     },
   })
-    .then((res) => res.json())
-    .then((res) => {
-      if (res?.code !== 0) {
-        switch (res?.code) {
-          case 401:
-            message.error('登陆过期 请重新登陆！')
-            location.href = '/login'
-            break
-        }
-        message.error(res?.msg || '未知错误')
-      }
-      return res || {}
-    })
-    .catch((e) => {
-      message.error(e.toString())
-    })
+  if (response.ok) {
+    return await response.json()
+  }
+  switch (response.status) {
+    case 401:
+      location.href = '/login'
+      break
+  }
+  const errMsg = await response.text()
+  message.error(errMsg)
+  throw errMsg
 }
 
 export class BaseApi<T = any> {
@@ -51,15 +46,15 @@ export class BaseApi<T = any> {
   /** 批量查询 */
   getList(query: QueryList<T>) {
     return Fetch<QueryList<T>, Pager<T>>({
-      url: `${this.baseUrl}/list`,
+      url: `${this.baseUrl}`,
       method: 'GET',
       query,
     })
   }
   /** 修改 */
-  put(body: Partial<T>) {
+  put(id, body: Partial<T>) {
     return Fetch({
-      url: this.baseUrl,
+      url: `${this.baseUrl}/${id}`,
       method: 'PUT',
       body,
     })
@@ -73,11 +68,10 @@ export class BaseApi<T = any> {
     })
   }
   /** 删除 */
-  delete(body: string[]) {
+  delete(id: string) {
     return Fetch({
-      url: this.baseUrl,
+      url: `${this.baseUrl}/${id}`,
       method: 'DELETE',
-      body,
     })
   }
 }

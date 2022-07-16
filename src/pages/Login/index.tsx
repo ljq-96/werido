@@ -21,21 +21,17 @@ const Login = (props) => {
     const { username, password, password_c } = fields
     if (isLogin) {
       basicApi.login({ username, password }).then((res) => {
-        if (res.code === 0) {
-          message.success(res.msg)
-          navigator('/home')
-        }
+        message.success(res.msg)
+        navigator('/home')
       })
     } else {
       basicApi.register({ username, password }).then((res) => {
-        if (res.code === 0) {
-          message.success('注册成功，请登录！')
-          setIsLogin(true)
-          form.setFields([
-            { name: 'username', value: username },
-            { name: 'password', value: '' },
-          ])
-        }
+        message.success('注册成功，请登录！')
+        setIsLogin(true)
+        form.setFields([
+          { name: 'username', value: username },
+          { name: 'password', value: '' },
+        ])
       })
     }
   }

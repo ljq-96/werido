@@ -1,60 +1,59 @@
-import { Router } from 'express'
-import { UserModal, BookmarkModel, IconModel } from '../model'
-import { Request, Response, Bookmark, Icon, User } from '../interfaces'
+import { controller, GET, PUT, unifyUse, use } from '../decorator'
+import { RouterCtx } from '../interfaces'
+import { validateToken } from '../middlewares'
+import { BookmarkModel, IconModel, UserModal } from '../model'
 import { formateTree } from '../utils/common'
 
-const router = Router()
-
-router
-  .route('/')
-  .get(async (req: Request, res: Response<User.Result>) => {
-    const { user } = req.app.locals
+@controller('/api/myProfile')
+@unifyUse(validateToken)
+class MyProfile {
+  @GET()
+  async getMyProfile(ctx: RouterCtx) {
+    const { user } = ctx.app.context
     const { _id, username, createTime, updateTime, status, themeColor } = user
-    res.json({
-      code: 0,
-      data: { _id, username, createTime, updateTime, status, themeColor },
-    })
-  })
-  .put(async (req: Request<User.Doc>, res: Response) => {
-    const { user } = req.app.locals
-    await UserModal.updateOne({ _id: user._id }, req.body)
-    res.json({
-      code: 0,
-      msg: '更新成功',
-    })
-  })
 
-router
-  .get('/bookmark', async (req: Request, res: Response<Bookmark.Doc[]>) => {
-    const { _id } = req.app.locals.user
+    ctx.body = {
+      data: { _id, username, createTime, updateTime, status, themeColor },
+    }
+  }
+
+  @PUT()
+  async setMyProfile(ctx: RouterCtx) {
+    const { user } = ctx.app.context
+    await UserModal.updateOne({ _id: user._id }, ctx.request.body)
+    ctx.body = { msg: '更新成功' }
+  }
+
+  @GET('/bookmark')
+  async getMyBookmarks(ctx: RouterCtx) {
+    const { _id } = ctx.app.context.user
     const data = await BookmarkModel.find({ creator: _id }).populate('items.icon')
 
-    res.json({
-      code: 0,
+    ctx.body = {
       data: formateTree(data),
-    })
-  })
-  .get('/icon', async (req: Request<any, Icon.ListParams>, res: Response<Icon.ListResult>) => {
-    const { _id } = req.app.locals.user
-    const { page, size, name } = req.query
+    }
+  }
+
+  @GET('/icon')
+  async getMyIcons(ctx: RouterCtx) {
+    const { _id } = ctx.app.context.user
+    const { page, size, name } = ctx.request.query
     const total = await IconModel.find({ creator: '' }).countDocuments()
     const customIcons = await IconModel.find({ creator: _id })
     const presetIcons = await IconModel.find({ creator: '' })
       .skip((page - 1) * size)
       .limit(Number(size))
 
-    res.json({
-      code: 0,
+    ctx.body = {
       data: {
         customIcons,
         presetIcons: {
-          page,
-          size,
+          page: Number(page),
+          size: Number(size),
           total,
           list: presetIcons,
         },
       },
-    })
-  })
-
-export default router
+    }
+  }
+}

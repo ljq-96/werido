@@ -6,6 +6,7 @@ import {
   FileTextOutlined,
   AreaChartOutlined,
   ReadOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
 import { useNavigate, Navigator } from 'react-router-dom'
 import Layout from '../layout'
@@ -31,23 +32,23 @@ const routes = [
     component: <Login />,
   },
   {
-    path: '/home',
+    path: '/',
     component: <Layout />,
     routes: [
       {
-        path: '/home/a',
+        path: '/home',
         name: '首页',
         icon: <HomeOutlined />,
         component: <Home />,
       },
       {
-        path: '/home/blog',
+        path: '/blog',
         name: '文章列表',
         icon: <ReadOutlined />,
         component: <BlogList />,
       },
       {
-        path: '/home/to_manage',
+        path: '/to_manage',
         name: '管理系统',
         icon: <LaptopOutlined />,
         component: <Redirect to='/manage/editor' />,
@@ -66,15 +67,33 @@ const routes = [
       },
       {
         path: '/manage/overview',
-        name: '总揽',
+        name: '总览',
         icon: <AreaChartOutlined />,
         component: <Result />,
+      },
+      {
+        path: '/manage/blogs',
+        name: '文章管理',
+        icon: <FileTextOutlined />,
+        routes: [
+          {
+            path: '/manage/blogs/list',
+            name: '文章列表',
+            icon: <AreaChartOutlined />,
+            component: <Result />,
+          },
+        ],
       },
       {
         path: '/manage/editor',
         name: '新建文章',
         icon: <FileTextOutlined />,
         component: <Editor />,
+      },
+      {
+        path: '/manage/users',
+        name: '用户管理',
+        icon: <UserOutlined />,
       },
     ],
   },

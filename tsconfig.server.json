@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
-    "moduleResolution": "node",
+    "target": "esnext" /* 将TS编译成目标版本js 'ES3' (默认), 'ES5', 'ES2015', 'ES2016'*/,
     "module": "commonjs",
-    "target": "esnext",
-    "skipLibCheck": true,
+    "rootDir": "./server/" /* 项目源码文件夹 */,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist",
+    "experimentalDecorators": true
     // "outDir": "dist",
     // "module": "commonjs",
     // "noEmit": false,

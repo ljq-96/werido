@@ -1,83 +1,59 @@
-import { Router } from 'express'
-import * as md5 from 'md5'
+import { POST, controller } from '../decorator'
 import { UserModal, BookmarkModel } from '../model'
-import { Response, Request, User } from '../interfaces'
+import md5 from 'md5'
+import { sign } from 'jsonwebtoken'
+import { RouterCtx } from '../interfaces'
 
-const router = Router()
+@controller('/api')
+class UserRoute {
+  @POST('/login')
+  async login(ctx: RouterCtx) {
+    const body = ctx.request?.body || {}
+    const { username, password } = body
+    ctx.assert(username && password, 400, '用户名或密码不能为空')
+    const mPassword = md5(password)
+    const user = await UserModal.findOne({ username, password: mPassword })
+    ctx.assert(user, 404, '用户名或密码错误')
+    const token = sign({ exp: Math.floor(Date.now() / 1000) + 60 * 60, data: `${user._id}@${mPassword}` }, 'werido')
+    ctx.cookies.set('token', token)
+    ctx.body = { msg: '登录成功' }
+  }
 
-router
-  .post('/login', async (req: Request<User.Login>, res: Response<User.Login>) => {
-    const { body } = req
+  @POST('/register')
+  async register(ctx: RouterCtx) {
+    const { body } = ctx.request
     const { username, password } = body
-    if (username && password) {
-      const mPassword = md5(password)
-      const user = await UserModal.findOne({ username, password: mPassword })
-      if (user) {
-        res.cookie('token', `${user._id}@${mPassword}`, { signed: true })
-        res.json({
-          code: 0,
-          msg: '登录成功',
-        })
-      } else {
-        res.json({
-          code: 100,
-          msg: '用户名或密码错误',
-        })
-      }
-    } else {
-      res.json({
-        code: 101,
-        msg: '用户名或密码不能为空',
-      })
-    }
-  })
-  .post('/register', async (req: Request<User.Login>, res: Response) => {
-    const { body } = req
-    const { username, password } = body
-    if (username && password) {
-      const user = await UserModal.findOne({ username })
-      if (user) {
-        res.json({
-          code: 100,
-          msg: '用户名已存在',
-        })
-      } else {
-        const addedUser = await UserModal.create({
-          username,
-          password: md5(password),
-          createTime: Date.now(),
-        })
-        const addedBookmark = await BookmarkModel.create({
-          label: '书签',
-          creator: addedUser._id,
-          prev: null,
-          next: null,
-          items: [
-            {
-              title: '百度',
-              url: 'https://www.baidu.com',
-              icon: '6248010ea4f526b4106dbdc2',
-            },
-          ],
-        })
-        await UserModal.findByIdAndUpdate(addedUser, { bookmarks: [addedBookmark._id] })
-        res.json({
-          code: 0,
-          msg: '注册成功',
-        })
-      }
-    } else {
-      res.json({
-        code: 101,
-        msg: '用户名或密码不能为空',
-      })
-    }
-  })
-  .post('/logout', async (_, res: Response) => {
-    res.clearCookie('token').json({
-      code: 0,
-      msg: '已退出登录',
+    ctx.assert(username && password, 400, '用户名或密码不能为空')
+    const user = await UserModal.findOne({ username })
+    ctx.assert(!user, 400, '用户名已存在')
+    const addedUser = await UserModal.create({
+      username,
+      password: md5(password),
+      createTime: Date.now(),
     })
-  })
+    const addedBookmark = await BookmarkModel.create({
+      label: '书签',
+      creator: addedUser._id,
+      prev: null,
+      next: null,
+      items: [
+        {
+          title: '百度',
+          url: 'https://www.baidu.com',
+          icon: '6248010ea4f526b4106dbdc2',
+        },
+      ],
+    })
+    await UserModal.findByIdAndUpdate(addedUser, { bookmarks: [addedBookmark._id] })
+    ctx.body = {
+      code: 0,
+      msg: '注册成功',
+    }
+  }
 
-export default router
+  @POST('/logout')
+  async logout(ctx: RouterCtx) {
+    ctx.cookies.set('token', '')
+    ctx.body = { message: '已退出登录' }
+  }
+}

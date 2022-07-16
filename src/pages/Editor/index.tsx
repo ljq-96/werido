@@ -5,7 +5,7 @@ import MarkdownEditor, { EditorIntance } from '../../components/MarkdownEditor'
 import useRequest from '../../hooks/useRequest'
 
 const Editor = () => {
-  const [title, setTitle] = useState('新增文章')
+  const [title, setTitle] = useState('')
   const editor = useRef<EditorIntance>(null)
   const { loading, execute } = useRequest(() =>
     blogApi.post({
@@ -16,12 +16,8 @@ const Editor = () => {
 
   const handleSave = () => {
     execute().then((res) => {
-      console.log(res)
-
-      if (res.code === 0) {
-        message.success('保存成功')
-        editor.current.setValue('')
-      }
+      message.success('保存成功')
+      editor.current.setValue('')
     })
   }
 
@@ -32,7 +28,7 @@ const Editor = () => {
         align='middle'
         style={{ padding: 8, backgroundColor: '#fff', border: '1px solid #f0f0f0', borderBottom: 'none' }}>
         <Space>
-          <Input value={title} bordered={false} onChange={(e) => setTitle(e.target.value)} />
+          <Input placeholder='请输入标题' value={title} onChange={(e) => setTitle(e.target.value)} />
         </Space>
 
         <Space>

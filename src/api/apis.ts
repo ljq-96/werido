@@ -41,6 +41,13 @@ export class MyProfile extends BaseApi {
       method: 'GET',
     })
   }
+  put(body) {
+    return Fetch<string, User.Doc>({
+      url: this.baseUrl,
+      method: 'PUT',
+      body,
+    })
+  }
   getBookMark() {
     return Fetch<never, Bookmark.ListResult[]>({
       url: `${this.baseUrl}/bookmark`,

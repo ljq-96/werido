@@ -31,7 +31,7 @@ const BlogList = () => {
         </Col>
         <Col flex='auto'>
           <Spin spinning={loading}>
-            <Card>
+            <Card size='small'>
               {blogList?.list?.map((item) => (
                 <BlogItemCard key={item._id} {...item} />
               ))}

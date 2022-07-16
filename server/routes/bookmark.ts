@@ -1,24 +1,26 @@
-import { Router } from 'express'
-import { UserModal, BookmarkModel } from '../model'
-import { Request, Response, Bookmark, IResponse } from '../interfaces'
-import { formateTree } from '../utils/common'
+import { controller, POST, PUT, unifyUse } from '../decorator'
+import { RouterCtx } from '../interfaces'
+import { validateToken } from '../middlewares'
+import { BookmarkModel } from '../model'
 
-const router = Router()
-
-router
-  .route('/')
-  .put(async (req: Request<Bookmark.UpdateParams>, res: Response) => {
-    const { _id, ...reset } = req.body
+@controller('/api/bookmark')
+@unifyUse(validateToken)
+class BookmarkRoute {
+  @PUT()
+  async updateBookmark(ctx: RouterCtx) {
+    const { _id, ...reset } = ctx.request.body
     await BookmarkModel.updateOne({ _id }, { ...reset })
 
-    res.json({
+    ctx.body = {
       code: 0,
       msg: 'success',
-    })
-  })
-  .post(async (req: Request<{ label: string }>, res: Response<Bookmark.ListResult>) => {
-    const { body } = req
-    const { user } = req.app.locals
+    }
+  }
+
+  @POST()
+  async createBookmark(ctx: RouterCtx) {
+    const { body } = ctx.request
+    const { user } = ctx.app.context
     const prevBookmark = await BookmarkModel.findOne({ creator: user._id, next: null })
     let bookmark
     if (prevBookmark) {
@@ -40,11 +42,9 @@ router
       })
     }
 
-    res.json({
-      code: 0,
+    ctx.body = {
       msg: 'success',
       data: bookmark as any,
-    })
-  })
-
-export default router
+    }
+  }
+}

@@ -1,21 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import ProLayout, { DefaultFooter } from '@ant-design/pro-layout'
 import { BgColorsOutlined, SettingFilled, UserOutlined } from '@ant-design/icons'
-import {
-  ConfigProvider,
-  Menu,
-  Layout,
-  Space,
-  Button,
-  Avatar,
-  Dropdown,
-  Drawer,
-  Form,
-  Segmented,
-  Card,
-  message,
-} from 'antd'
-import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
+import { ConfigProvider, Menu, Layout, Space, Button, Avatar, Dropdown, Drawer, Segmented, Card, message } from 'antd'
+import { Link, Outlet, useNavigate, useLocation, useMatch } from 'react-router-dom'
 import Logo from '../components/Logo'
 import routes from '../routes'
 import { useUser } from '../contexts/useUser'
@@ -31,33 +18,37 @@ export default () => {
   const [showColorDrawer, setShowColorDrawer] = useState(false)
   const [loginUser, userDispatch] = useUser()
 
-  const currentRoutes = useMemo(() => routes.find((item) => pathname.startsWith(item.path)), [pathname])
+  const currentRoutes = useMemo(() => {
+    let route: any = []
+    for (let i = 0; i < routes.length; i++) {
+      if (routes[i].path === pathname || routes[i]?.routes?.find((item) => pathname.startsWith(item.path))) {
+        route = routes[i]
+      }
+    }
+    return route
+  }, [pathname])
 
   const currentLayout = useMemo(
-    () => (currentRoutes.path === '/home' ? loginUser.layoutC : loginUser.layoutB),
+    () => (currentRoutes.path === '/' ? loginUser.layoutC : loginUser.layoutB),
     [currentRoutes, loginUser],
   )
 
   const getMyProfile = () => {
     myProfile.get().then((res) => {
-      if (res.code === 0) {
-        userDispatch(basicUserView.update.actions(res.data))
-        ConfigProvider.config({
-          theme: {
-            primaryColor: res.data.themeColor,
-          },
-        })
-      }
+      userDispatch(basicUserView.update.actions(res.data))
+      ConfigProvider.config({
+        theme: {
+          primaryColor: res.data.themeColor,
+        },
+      })
     })
   }
 
   const logout = () => {
     basicApi.logout().then((res) => {
-      if (res.code === 0) {
-        navigate('/login')
-        message.success(res.msg)
-        userDispatch(basicUserView.destroy.actions())
-      }
+      navigate('/login')
+      message.success(res.msg)
+      userDispatch(basicUserView.destroy.actions())
     })
   }
 

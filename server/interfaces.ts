@@ -1,4 +1,5 @@
 import * as express from 'express'
+import Koa from 'koa'
 
 export type Request<ReqBody = any, ReqQuery = any, Locals = { user: User.Doc }> = express.Request<
   any,
@@ -9,9 +10,14 @@ export type Request<ReqBody = any, ReqQuery = any, Locals = { user: User.Doc }> 
 >
 export type Response<T = any> = express.Response<IResponse<T>>
 
+export interface RouterCtx<Query = any, Body = any, Response = any> extends Koa.ParameterizedContext {
+  request: Koa.Request & {
+    body: Body
+    query: Query
+  }
+}
+
 export interface IResponse<T = any> {
-  // 0为成功
-  code: number
   msg?: string
   data?: T
 }

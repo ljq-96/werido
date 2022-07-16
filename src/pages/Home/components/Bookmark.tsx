@@ -49,10 +49,8 @@ export default (props: IProps) => {
     myProfile
       .getBookMark()
       .then((res) => {
-        if (res.code === 0) {
-          setBookmarkList(res.data)
-          bookMarkCache.current = JSON.parse(JSON.stringify(res.data))
-        }
+        setBookmarkList(res.data)
+        bookMarkCache.current = JSON.parse(JSON.stringify(res.data))
       })
       .finally(() => {
         setLoading(
@@ -87,9 +85,7 @@ export default (props: IProps) => {
         ),
       )
         .then((res) => {
-          if (res.every((i) => i.code === 0)) {
-            getBookmarks()
-          }
+          getBookmarks()
         })
         .finally(() => {
           setOnEdit(false)
@@ -108,11 +104,9 @@ export default (props: IProps) => {
   /** 添加标签组 */
   const createBookmark = (values) => {
     bookmarkApi.post(values).then((res) => {
-      if (res.code === 0) {
-        setBookmarkList([...bookmarkList, res.data])
-        setShowCreateBookmark(false)
-        message.success('创建成功')
-      }
+      setBookmarkList([...bookmarkList, res.data])
+      setShowCreateBookmark(false)
+      message.success('创建成功')
     })
   }
 

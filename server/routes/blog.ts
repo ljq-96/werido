@@ -1,48 +1,48 @@
-import { Router } from 'express'
-import { UserModal, BookmarkModel, BlogModel } from '../model'
-import { Request, Response, Bookmark, IResponse, QueryList, Pager } from '../interfaces'
-import { formateTree } from '../utils/common'
+import { RouterContext } from 'koa-router'
+import { controller, GET, POST, PUT, unifyUse } from '../decorator'
+import { RouterCtx } from '../interfaces'
+import { validateToken } from '../middlewares'
+import { BlogModel } from '../model'
 
-const router = Router()
-
-router
-  .route('/')
-  .put(async (req: Request<Bookmark.UpdateParams>, res: Response) => {
-    const { _id, ...reset } = req.body
-    await BookmarkModel.updateOne({ _id }, { ...reset })
-
-    res.json({
-      code: 0,
+@controller('/api/blog')
+@unifyUse(validateToken)
+export class BlogRoute {
+  @GET()
+  async getBlogs(ctx: RouterCtx) {
+    const { page, size } = ctx.request.query
+    const { user } = ctx.app.context
+    const list = await BlogModel.find({ creator: user.id })
+      .skip((page - 1) * size)
+      .limit(size)
+    const total = await BlogModel.find({ creator: user._id }).countDocuments()
+    ctx.body = {
       msg: 'success',
-    })
-  })
-  .post(async (req: Request, res: Response) => {
-    const { body } = req
-    const { user } = req.app.locals
+      data: { list, total, page: Number(page), size: Number(size) },
+    }
+  }
+
+  @POST()
+  async createBlog(ctx: RouterCtx) {
+    const { body } = ctx.request
+    const { user } = ctx.app.context
     const blog = await BlogModel.create({
       creator: user._id,
       ...body,
     })
 
-    res.json({
-      code: 0,
+    ctx.body = {
       msg: 'success',
       data: blog,
-    })
-  })
+    }
+  }
 
-router.get('/list', async (req: Request<never, QueryList>, res: Response<Pager>) => {
-  const { page, size } = req.query
-  const { user } = req.app.locals
-  const list = await BlogModel.find({ creator: user.id })
-    .skip((page - 1) * size)
-    .limit(size)
-  const total = await BlogModel.find({ creator: user._id }).countDocuments()
-  res.json({
-    code: 0,
-    msg: 'success',
-    data: { list, total, page, size },
-  })
-})
+  @PUT('/:id')
+  async updateBlog(ctx: RouterCtx) {
+    const _id = ctx.request
+    await BlogModel.updateOne({ _id }, { ...ctx.request.body })
 
-export default router
+    ctx.body = {
+      msg: 'success',
+    }
+  }
+}
