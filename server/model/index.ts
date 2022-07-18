@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose'
-import { User, Icon, Bookmark, Blog } from '../interfaces'
+import { UserType, IconType, BookmarkType, BlogType } from '../types'
 
 /** 用户模型 */
-export const UserModal = model<User.Doc>(
+export const UserModal = model<UserType>(
   'user',
   new Schema({
     username: {
@@ -42,7 +42,7 @@ export const UserModal = model<User.Doc>(
 )
 
 /** 图表模型 */
-export const IconModel = model<Icon.Doc>(
+export const IconModel = model<IconType>(
   'icon',
   new Schema({
     icon: String,
@@ -60,7 +60,7 @@ export const IconModel = model<Icon.Doc>(
 )
 
 /** 书签模型 */
-export const BookmarkModel = model<Bookmark.Doc>(
+export const BookmarkModel = model<BookmarkType>(
   'bookmark',
   new Schema({
     label: String,
@@ -101,7 +101,7 @@ export const BookmarkModel = model<Bookmark.Doc>(
 )
 
 /** 书签模型 */
-export const BlogModel = model<Blog.Doc>(
+export const BlogModel = model<BlogType>(
   'blog',
   new Schema({
     title: String,

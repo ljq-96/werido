@@ -18,11 +18,11 @@ import {
 import { PlusOutlined } from '@ant-design/icons'
 import { VariableSizeGrid as Grid } from 'react-window'
 import { myProfile } from '../../api'
-import { Icon } from '../../../server/interfaces'
+import { IconType } from '../../../server/types'
 
 interface VProps {
-  list: Icon.Doc[]
-  onChange: (icon: Icon.Doc) => void
+  list: IconType[]
+  onChange: (icon: IconType) => void
   loadMore: () => Promise<any>
 }
 
@@ -79,7 +79,7 @@ interface IIcon {
   _id: string
   title: string
   url: string
-  icon: Icon.Doc
+  icon: IconType
 }
 
 interface IProps {
@@ -93,9 +93,9 @@ interface IProps {
 export default (props: IProps) => {
   const { onCancel, onOk, title, visible, initialValue } = props
   const [iconPageInfo, setIconPageInfo] = useState({ page: 1, size: 60 })
-  const [icons, setIcons] = useState<Icon.ListResult>()
+  const [icons, setIcons] = useState<any>()
   const [iconType, setIconType] = useState('presetIcons')
-  const [selectedIcon, setSelectedIcon] = useState<Icon.Doc>(null)
+  const [selectedIcon, setSelectedIcon] = useState<IconType>(null)
   const [loading, setLoading] = useState(false)
   const [menuDropVisible, setMenuDropVisible] = useState(false)
   const [imageUrl, setImageUrl] = useState('')

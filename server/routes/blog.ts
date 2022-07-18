@@ -1,6 +1,6 @@
 import { RouterContext } from 'koa-router'
 import { controller, GET, POST, PUT, unifyUse } from '../decorator'
-import { RouterCtx } from '../interfaces'
+import { RouterCtx } from '../types'
 import { validateToken } from '../middlewares'
 import { BlogModel } from '../model'
 

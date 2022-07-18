@@ -2,19 +2,18 @@ import { POST, controller } from '../decorator'
 import { UserModal, BookmarkModel } from '../model'
 import md5 from 'md5'
 import { sign } from 'jsonwebtoken'
-import { RouterCtx } from '../interfaces'
+import { RouterCtx } from '../types'
 
 @controller('/api')
-class UserRoute {
+class BasicRoute {
   @POST('/login')
   async login(ctx: RouterCtx) {
     const body = ctx.request?.body || {}
     const { username, password } = body
     ctx.assert(username && password, 400, '用户名或密码不能为空')
-    const mPassword = md5(password)
-    const user = await UserModal.findOne({ username, password: mPassword })
+    const user = await UserModal.findOne({ username, password })
     ctx.assert(user, 404, '用户名或密码错误')
-    const token = sign({ exp: Math.floor(Date.now() / 1000) + 60 * 60, data: `${user._id}@${mPassword}` }, 'werido')
+    const token = sign({ exp: Math.floor(Date.now() / 1000) + 60 * 60, data: user._id }, 'werido')
     ctx.cookies.set('token', token)
     ctx.body = { msg: '登录成功' }
   }
@@ -28,7 +27,7 @@ class UserRoute {
     ctx.assert(!user, 400, '用户名已存在')
     const addedUser = await UserModal.create({
       username,
-      password: md5(password),
+      password,
       createTime: Date.now(),
     })
     const addedBookmark = await BookmarkModel.create({
@@ -57,3 +56,5 @@ class UserRoute {
     ctx.body = { message: '已退出登录' }
   }
 }
+
+export default new BasicRoute()

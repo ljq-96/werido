@@ -1,5 +1,5 @@
 import { controller, POST, PUT, unifyUse } from '../decorator'
-import { RouterCtx } from '../interfaces'
+import { RouterCtx } from '../types'
 import { validateToken } from '../middlewares'
 import { BookmarkModel } from '../model'
 

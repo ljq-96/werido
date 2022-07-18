@@ -9,7 +9,7 @@ import zhCN from 'antd/lib/locale/zh_CN'
 
 const parseRoute = (route) => {
   return (
-    <Route key={route.path} path={route.path} element={route.component}>
+    <Route key={route.path} path={route.path} element={<route.component />}>
       {route?.routes?.map((item) => parseRoute(item))}
     </Route>
   )

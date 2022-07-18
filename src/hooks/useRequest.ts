@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { IResponse } from '../../server/interfaces'
+import { IResponse } from '../../server/types'
 
 const useRequest = <DataType>(asnycFunction: () => Promise<IResponse<DataType>>, resetData?: boolean) => {
   const [data, setData] = useState<DataType | null>(null)

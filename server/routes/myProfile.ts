@@ -1,5 +1,5 @@
 import { controller, GET, PUT, unifyUse, use } from '../decorator'
-import { RouterCtx } from '../interfaces'
+import { RouterCtx } from '../types'
 import { validateToken } from '../middlewares'
 import { BookmarkModel, IconModel, UserModal } from '../model'
 import { formateTree } from '../utils/common'

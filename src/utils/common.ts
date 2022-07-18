@@ -1,4 +1,5 @@
 import { createFromIconfontCN } from '@ant-design/icons'
+import moment, { Moment } from 'moment'
 
 /** 自定义图标 */
 export const IconFont = createFromIconfontCN({
@@ -52,3 +53,5 @@ export const randomInArr = (arr: any[]) => arr[Math.floor(Math.random() * arr.le
 
 /** 返回登陆页面 */
 export const toLogin = () => (location.href = location.pathname.split('#')[0] + '#/login')
+
+export const formatTime = (time, formats = 'yyyy-MM-DD HH:mm:ss') => moment(time).format(formats)

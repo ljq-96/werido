@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Form, Button, Input, Card, message, Row, Col } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { basicApi } from '../../api'
-import { User } from '../../../server/interfaces'
+import { UserType } from '../../../server/types'
 import Logo from '../../components/Logo'
 import Space from '../../components/Canvas/Space'
 import './index.less'
@@ -17,7 +17,7 @@ const Login = (props) => {
     form.resetFields()
   }
 
-  const onFinish = (fields: User.Login & { password_c?: string }) => {
+  const onFinish = (fields: UserType & { password_c?: string }) => {
     const { username, password, password_c } = fields
     if (isLogin) {
       basicApi.login({ username, password }).then((res) => {

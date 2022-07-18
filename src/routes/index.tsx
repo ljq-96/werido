@@ -16,6 +16,7 @@ const Login = lazy(() => import('../pages/Login'))
 const Home = lazy(() => import('../pages/Home'))
 const Editor = lazy(() => import('../pages/Editor'))
 const BlogList = lazy(() => import('../pages/BlogList'))
+const UsersManage = lazy(() => import('../pages/UsersManage'))
 
 function Redirect({ to }) {
   let navigate = useNavigate()
@@ -29,47 +30,47 @@ const routes = [
   {
     path: '/login',
     name: '登陆',
-    component: <Login />,
+    component: Login,
   },
   {
     path: '/',
-    component: <Layout />,
+    component: Layout,
     routes: [
       {
         path: '/home',
         name: '首页',
         icon: <HomeOutlined />,
-        component: <Home />,
+        component: Home,
       },
       {
         path: '/blog',
         name: '文章列表',
         icon: <ReadOutlined />,
-        component: <BlogList />,
+        component: BlogList,
       },
       {
         path: '/to_manage',
         name: '管理系统',
         icon: <LaptopOutlined />,
-        component: <Redirect to='/manage/editor' />,
+        component: () => <Redirect to='/manage/overview' />,
       },
     ],
   },
   {
     path: '/manage',
-    component: <Layout />,
+    component: Layout,
     routes: [
       {
         path: '/manage/to_home',
         name: '返回首页',
         icon: <RollbackOutlined />,
-        component: <Redirect to='/home' />,
+        component: () => <Redirect to='/home' />,
       },
       {
         path: '/manage/overview',
         name: '总览',
         icon: <AreaChartOutlined />,
-        component: <Result />,
+        component: Result,
       },
       {
         path: '/manage/blogs',
@@ -80,7 +81,7 @@ const routes = [
             path: '/manage/blogs/list',
             name: '文章列表',
             icon: <AreaChartOutlined />,
-            component: <Result />,
+            component: Result,
           },
         ],
       },
@@ -88,19 +89,20 @@ const routes = [
         path: '/manage/editor',
         name: '新建文章',
         icon: <FileTextOutlined />,
-        component: <Editor />,
+        component: Editor,
       },
       {
         path: '/manage/users',
         name: '用户管理',
         icon: <UserOutlined />,
+        component: UsersManage,
       },
     ],
   },
   {
     path: '/',
     name: '首页',
-    component: <Redirect to='/home' />,
+    component: () => <Redirect to='/home' />,
   },
 ]
 

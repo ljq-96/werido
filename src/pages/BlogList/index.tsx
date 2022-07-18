@@ -1,6 +1,6 @@
 import { Col, Row, Card, Spin } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
-import { Blog } from '../../../server/interfaces'
+import { BlogType } from '../../../server/types'
 import { blogApi } from '../../api'
 import useRequest from '../../hooks/useRequest'
 import BlogItemCard from './components/BlogItemCard'

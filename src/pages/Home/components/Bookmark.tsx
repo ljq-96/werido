@@ -19,7 +19,7 @@ import {
 } from 'antd'
 import Sortable from '../../../components/Sortable'
 import { bookmarkApi, iconApi, myProfile } from '../../../api'
-import { Bookmark, Icon } from '../../../../server/interfaces'
+import { BookmarkType, IconType } from '../../../../server/types'
 import {
   ApiFilled,
   BackwardOutlined,
@@ -34,11 +34,11 @@ import IconModal from '../../../components/Modal/IconModal'
 interface IProps {}
 
 export default (props: IProps) => {
-  const [bookmarkList, setBookmarkList] = useState<Bookmark.ListResult[]>([])
+  const [bookmarkList, setBookmarkList] = useState<BookmarkType[]>([])
   const [onEdit, setOnEdit] = useState(false)
   const [loading, setLoading] = useState<{ [key: string]: boolean }>({})
   const [modalState, setModalState] = useState<[number, number?]>(null) /** 当前编辑的图标坐标 */
-  const bookMarkCache = useRef<Bookmark.ListResult[]>(null)
+  const bookMarkCache = useRef<BookmarkType[]>(null)
   const [showCreateBookmark, setShowCreateBookmark] = useState(false)
   const [bookmarkForm] = Form.useForm()
 
@@ -75,10 +75,9 @@ export default (props: IProps) => {
       )
       Promise.all(
         changed.map((i) =>
-          bookmarkApi.put({
-            _id: i._id,
+          bookmarkApi.put(i._id, {
             label: i.label,
-            items: i.items.map((j) => ({ ...j, icon: j.icon._id })),
+            items: i.items.map((j) => ({ ...j, icon: (j.icon as IconType)._id })),
             prev: i.prev,
             next: i.next,
           }),
@@ -187,7 +186,7 @@ export default (props: IProps) => {
                       }}
                       renderItem={(j, jdx) => (
                         <>
-                          <Col xs={6} sm={6} md={6} lg={3} xl={3} key={`item-${j.icon?._id}-${jdx}`}>
+                          <Col xs={6} sm={6} md={6} lg={3} xl={3} key={`item-${(j.icon as IconType)?._id}-${jdx}`}>
                             <Dropdown
                               trigger={onEdit ? ['contextMenu'] : []}
                               overlay={
@@ -210,7 +209,7 @@ export default (props: IProps) => {
                                 <img
                                   className='block mx-auto'
                                   style={{ width: '100%', marginBottom: 10 }}
-                                  src={j.icon?.icon}
+                                  src={(j.icon as IconType)?.icon}
                                 />
                                 <div className='bookmark-item-title'>{j.title}</div>
                               </div>

@@ -1,5 +1,5 @@
 import { message } from 'antd'
-import { Bookmark, Icon, IResponse, Pager, QueryList, User } from '../../server/interfaces'
+import { IResponse, Pager, QueryList, UserType } from '../../server/types'
 import { querystring } from '../utils/common'
 
 interface IProps<T = any> {
