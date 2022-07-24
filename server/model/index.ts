@@ -107,6 +107,8 @@ export const BlogModel = model<BlogType>(
     title: String,
     content: String,
     description: String,
+    words: Number,
+    tags: Array,
     creator: {
       type: Schema.Types.ObjectId,
       ref: 'user',

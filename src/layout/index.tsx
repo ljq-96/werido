@@ -10,6 +10,7 @@ import { basicApi, myProfile } from '../api'
 import { CirclePicker, MaterialPicker, SliderPicker } from 'react-color'
 import { basicUserView } from '../contexts/useUser/actions'
 import '../assets/css/index.less'
+import { RouteProps } from '../../server/types'
 
 export default () => {
   const { pathname } = useLocation()
@@ -19,13 +20,24 @@ export default () => {
   const [loginUser, userDispatch] = useUser()
 
   const currentRoutes = useMemo(() => {
-    let route: any = []
+    function parseRoute(item: RouteProps) {
+      const { routes } = item
+      if (routes) {
+        return {
+          ...item,
+          routes: routes.filter((item) => !item.hide).map((item) => parseRoute(item)),
+        }
+      }
+      return item
+    }
+
+    let route: RouteProps
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].path === pathname || routes[i]?.routes?.find((item) => pathname.startsWith(item.path))) {
         route = routes[i]
       }
     }
-    return route
+    return parseRoute(route)
   }, [pathname])
 
   const currentLayout = useMemo(

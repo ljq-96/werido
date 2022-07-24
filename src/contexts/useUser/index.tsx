@@ -1,13 +1,13 @@
 import { createContext, useContext, useMemo, useReducer, Dispatch } from 'react'
-import { User } from '../../../server/interfaces'
+import { UserType } from '../../../server/types'
 import { basicUserView } from './actions'
 import { useLocalStorage } from 'react-use'
 
-const INITIAL_STATE: User.Doc | null = null
-// const INITIAL_STATE: User.Doc | null = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
+const INITIAL_STATE: UserType | null = null
+// const INITIAL_STATE: UserType | null = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
 const UserContext = createContext<any>(INITIAL_STATE)
 
-export function useUser(): [User.Doc, Dispatch<{ type: User.Doc; payload: Partial<User.Doc> }>] {
+export function useUser(): [UserType, Dispatch<{ type: UserType; payload: Partial<UserType> }>] {
   return useContext(UserContext)
 }
 

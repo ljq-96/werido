@@ -8,15 +8,18 @@ import {
   ReadOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-import { useNavigate, Navigator } from 'react-router-dom'
+import { useNavigate, Navigator, Outlet } from 'react-router-dom'
 import Layout from '../layout'
 import { Result } from 'antd'
+import { RouteProps } from '../../server/types'
 
 const Login = lazy(() => import('../pages/Login'))
 const Home = lazy(() => import('../pages/Home'))
 const Editor = lazy(() => import('../pages/Editor'))
 const BlogList = lazy(() => import('../pages/BlogList'))
-const UsersManage = lazy(() => import('../pages/UsersManage'))
+const UserManage = lazy(() => import('../pages/UserManage'))
+const BlogManage = lazy(() => import('../pages/BlogManage'))
+const BlogEditor = lazy(() => import('../pages/BlogManage/BlogEditor'))
 
 function Redirect({ to }) {
   let navigate = useNavigate()
@@ -26,7 +29,7 @@ function Redirect({ to }) {
   return null
 }
 
-const routes = [
+const routes: RouteProps[] = [
   {
     path: '/login',
     name: '登陆',
@@ -76,26 +79,28 @@ const routes = [
         path: '/manage/blogs',
         name: '文章管理',
         icon: <FileTextOutlined />,
+        component: Outlet,
         routes: [
           {
             path: '/manage/blogs/list',
             name: '文章列表',
             icon: <AreaChartOutlined />,
-            component: Result,
+            component: BlogManage,
+          },
+          {
+            path: '/manage/blogs/editor',
+            name: '新建文章',
+            hide: true,
+            icon: <FileTextOutlined />,
+            component: BlogEditor,
           },
         ],
-      },
-      {
-        path: '/manage/editor',
-        name: '新建文章',
-        icon: <FileTextOutlined />,
-        component: Editor,
       },
       {
         path: '/manage/users',
         name: '用户管理',
         icon: <UserOutlined />,
-        component: UsersManage,
+        component: UserManage,
       },
     ],
   },

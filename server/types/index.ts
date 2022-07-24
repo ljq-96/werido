@@ -1,5 +1,6 @@
 import * as express from 'express'
 import Koa from 'koa'
+import { ComponentType, LazyExoticComponent, ReactElement } from 'react'
 import { UserStatus } from './enum'
 
 export type Request<ReqBody = any, ReqQuery = any, Locals = { user: UserType }> = express.Request<
@@ -35,6 +36,15 @@ export type QueryList<T = any> = {
   page: number
   size: number
 } & Partial<T>
+
+export interface RouteProps {
+  path: string
+  name?: string
+  icon?: JSX.Element
+  component?: ComponentType | LazyExoticComponent<any>
+  hide?: boolean
+  routes?: RouteProps[]
+}
 
 export interface UserType {
   _id: string
@@ -81,9 +91,10 @@ export interface BlogType {
   updateTime: number
   title: string
   content: string
+  words: number
   description: string
   creator: string
-  tags: string
+  tags: string[]
 }
 
 export interface BingWallpaperType {

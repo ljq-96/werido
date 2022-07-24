@@ -1,0 +1,103 @@
+.milkdown {
+  box-shadow: none !important;
+
+  .editor {
+    max-width: 100% !important;
+    padding: 0 !important;
+    * {
+      margin: 0;
+    }
+    .paragraph.empty-node::before {
+      color: #aaa;
+    }
+    h1 {
+      margin: 25px 0;
+      padding: 15px 0;
+      border-bottom: 2px solid #eee;
+    }
+    h2 {
+      margin: 25px 0;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+    code.code-inline {
+      color: #4a4a4a;
+      background-color: #f0f0f0;
+      border-radius: 2px;
+      font-size: 1em;
+    }
+    .code-fence {
+      background-color: #f5f5f5;
+      border: 1px solid #eee;
+      border-radius: 2px;
+      pre {
+        background-color: transparent !important;
+      }
+      .code-fence_selector-wrapper {
+        .code-fence_selector {
+          margin: -1em 0 0 0;
+          box-shadow: none;
+          border: none;
+          color: #aaa;
+          font-family: 'Fira Code';
+          transition: 0.4s;
+          border-radius: 2px;
+          &:hover {
+            color: #4a4a4a;
+          }
+          .icon {
+            color: #7a7a7a;
+            border-left: none;
+          }
+        }
+      }
+      .code-fence_selector-list {
+        background-color: #fff;
+        font-family: 'Fira Code';
+        transform-origin: top center;
+        transition: 0.4s;
+        &[data-fold='true'] {
+          display: unset;
+          transform: scaleY(0);
+          opacity: 0;
+        }
+        &[data-fold='false'] {
+          box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
+        }
+        &::-webkit-scrollbar-thumb {
+          background-color: #eee;
+          &:hover {
+            background-color: #aaa;
+          }
+        }
+        .code-fence_selector-list-item {
+          transition: 0.3s;
+          line-height: 22px;
+          padding: 5px 12px;
+          &:hover {
+            background-color: #f5f5f5;
+          }
+        }
+      }
+    }
+  }
+  // .tooltip {
+  //   display: none;
+  // }
+  .tableWrapper {
+    margin: 16px 0 !important;
+  }
+  .table-tooltip {
+    background-color: #fff;
+    border: 1px solid #f0f0f0;
+  }
+}
+
+.ant-btn-text.active {
+  font-size: 20px;
+  background-color: #f0f0f0;
+}
+.ant-dropdown-menu-title-content {
+  display: flex;
+  justify-content: space-between;
+}

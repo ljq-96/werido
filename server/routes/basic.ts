@@ -13,7 +13,7 @@ class BasicRoute {
     ctx.assert(username && password, 400, '用户名或密码不能为空')
     const user = await UserModal.findOne({ username, password })
     ctx.assert(user, 404, '用户名或密码错误')
-    const token = sign({ exp: Math.floor(Date.now() / 1000) + 60 * 60, data: user._id }, 'werido')
+    const token = sign({ exp: Math.floor(Date.now() / 1000) + 3600 * 24 * 30, data: user._id }, 'werido')
     ctx.cookies.set('token', token)
     ctx.body = { msg: '登录成功' }
   }

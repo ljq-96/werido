@@ -21,12 +21,23 @@ export class BlogRoute {
     }
   }
 
+  @GET('/:id')
+  async getBlogById(ctx: RouterCtx) {
+    const { id } = ctx.request.params
+    const data = await BlogModel.findById(id)
+    ctx.body = {
+      message: 'success',
+      data,
+    }
+  }
+
   @POST()
   async createBlog(ctx: RouterCtx) {
     const { body } = ctx.request
     const { user } = ctx.app.context
     const blog = await BlogModel.create({
       creator: user._id,
+      words: body.content.length,
       ...body,
     })
 
@@ -38,8 +49,10 @@ export class BlogRoute {
 
   @PUT('/:id')
   async updateBlog(ctx: RouterCtx) {
-    const _id = ctx.request
-    await BlogModel.updateOne({ _id }, { ...ctx.request.body })
+    const { id } = ctx.request.params
+    const data = { ...ctx.request.body }
+    data.content && (data.words = data.content.length)
+    await BlogModel.updateOne({ _id: id }, data)
 
     ctx.body = {
       msg: 'success',
