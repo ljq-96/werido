@@ -24,7 +24,7 @@ import {
   SaveOutlined,
 } from '@ant-design/icons'
 import { ReactElement, useCallback, useEffect, useState } from 'react'
-import { Button, Divider, Dropdown, Menu, Popconfirm, Tooltip, Typography } from 'antd'
+import { Button, Divider, Dropdown, Menu, Popconfirm, Tooltip, Typography, Upload } from 'antd'
 import { EditorRef } from '@milkdown/react'
 
 export type Controls =
@@ -97,9 +97,12 @@ function useControls(
   }, [editor])
 
   /** 图片 */
-  const insertImage = useCallback(() => {
-    editor.action((ctx) => ctx.get(commandsCtx).call(commands.InsertImage))
-  }, [editor])
+  const insertImage = useCallback(
+    (url: string) => {
+      editor.action((ctx) => ctx.get(commandsCtx).call(commands.InsertImage, url))
+    },
+    [editor],
+  )
 
   /** 行内代码 */
   const toggleInlineCode = useCallback(() => {
@@ -249,7 +252,9 @@ function useControls(
       action: insertImage,
       element: (
         <Tooltip title='图片' placement='bottom'>
-          <Button type='text' onClick={insertImage} icon={<IconFont type='icon-image' />} />
+          <Upload showUploadList={false}>
+            <Button type='text' icon={<IconFont type='icon-image' />} />
+          </Upload>
         </Tooltip>
       ),
     },

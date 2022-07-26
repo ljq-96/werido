@@ -1,27 +1,44 @@
 import { useMemo } from 'react'
-import { themeFactory, ThemeColor, ThemeSize, ThemeIcon, ThemeFont, ThemeGlobal } from '@milkdown/core'
+import {
+  themeFactory,
+  ThemeColor,
+  ThemeSize,
+  ThemeIcon,
+  ThemeShadow,
+  ThemeBorder,
+  ThemeGlobal,
+  ThemeScrollbar,
+  ThemeFont,
+} from '@milkdown/core'
 import { generate } from '@ant-design/colors'
 import { useUser } from '../../../../contexts/useUser'
-import './fix.less'
+import { useAllPresetRenderer } from '@milkdown/theme-pack-helper'
+import { getStyle } from './style'
+// import './fix.less'
+
+const size = {
+  radius: '4px',
+  lineWidth: '2px',
+}
 
 function useTheme() {
   const [{ themeColor }] = useUser()
 
   const theme = useMemo(() => {
     const [c1, c2, c3, c4, c5, c6, c7] = generate(themeColor)
-    console.log(c1, c2, c3, c4, c5, c6, c7)
     const iconMapping = {
       downArrow: 'icon-down',
       image: 'icon-image',
     }
 
     return themeFactory((emotion, manager) => {
+      const { css } = emotion
       manager.set(ThemeColor, ([key, opacity]) => {
         switch (key) {
           case 'primary':
             return c6
           case 'secondary':
-            return c4
+            return c2
           case 'solid':
             return '#f0f0f0'
           case 'neutral':
@@ -30,12 +47,71 @@ function useTheme() {
             return '#e6e6e6'
           case 'shadow':
             return '#eee'
+          case 'background':
+            return '#f5f5f5'
         }
       })
-      manager.set(ThemeFont, (key) => {
-        if (key === 'typography') return 'Roboto, arial, sans-serif'
-        return 'Fira Code'
+
+      manager.set(ThemeSize, (key) => {
+        if (!key) return
+        return size[key]
       })
+
+      manager.set(ThemeScrollbar, ([direction = 'y', type = 'normal'] = ['y', 'normal'] as never) => {
+        const main = manager.get(ThemeColor, ['secondary', 0.38])
+        const bg = manager.get(ThemeColor, ['secondary', 0.12])
+        const hover = manager.get(ThemeColor, ['secondary'])
+        return css`
+          scrollbar-width: thin;
+          scrollbar-color: ${main} ${bg};
+          -webkit-overflow-scrolling: touch;
+
+          &::-webkit-scrollbar {
+            ${direction === 'y' ? 'width' : 'height'}: ${type === 'thin' ? 2 : 12}px;
+            background-color: transparent;
+          }
+
+          &::-webkit-scrollbar-track {
+            border-radius: 999px;
+            background: transparent;
+            border: 4px solid transparent;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            border-radius: 999px;
+            background-color: ${main};
+            border: ${type === 'thin' ? 0 : 4}px solid transparent;
+            background-clip: content-box;
+          }
+
+          &::-webkit-scrollbar-thumb:hover {
+            background-color: ${hover};
+          }
+        `
+      })
+
+      manager.set(ThemeShadow, () => {
+        const lineWidth = manager.get(ThemeSize, 'lineWidth')
+        const getShadow = (opacity: number) => manager.get(ThemeColor, ['shadow', opacity])
+        return css`
+          box-shadow: 0 ${lineWidth} ${lineWidth} ${getShadow(0.14)}, 0 2px ${lineWidth} ${getShadow(0.12)},
+            0 ${lineWidth} 3px ${getShadow(0.2)};
+        `
+      })
+
+      manager.set(ThemeBorder, (direction) => {
+        const lineWidth = manager.get(ThemeSize, 'lineWidth')
+        const line = manager.get(ThemeColor, ['line'])
+        if (!direction) {
+          return css`
+            border: ${lineWidth} solid ${line};
+          `
+        }
+        return css`
+          ${`border-${direction}`}: ${lineWidth} solid ${line};
+        `
+      })
+
       manager.set(ThemeIcon, (key) => {
         const icon = iconMapping[key]
         if (!icon) {
@@ -49,21 +125,17 @@ function useTheme() {
           label: '123',
         }
       })
-      // manager.set(ThemeGlobal, () => {
-      //   emotion.injectGlobal`
-      //     * {
-      //       margin: 0;
-      //     }
-      //     .paragraph.empty-node::before {
-      //       color: #aaa;
-      //     }
-      //     h1,h2 {
-      //       margin: 25px 0;
-      //       padding: 15px 0;
-      //       border-bottom: 2px solid #eee;
-      //     }
-      //   `
-      // })
+
+      manager.set(ThemeGlobal, () => {
+        getStyle(manager, emotion)
+      })
+
+      manager.set(ThemeFont, (key) => {
+        if (key === 'typography') return 'Roboto, arial, sans-serif'
+        return 'Fira Code'
+      })
+
+      useAllPresetRenderer(manager, emotion)
     })
   }, [themeColor])
   return theme

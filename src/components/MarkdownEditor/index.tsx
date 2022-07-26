@@ -8,10 +8,10 @@ import {
   editorViewCtx,
   serializerCtx,
   editorViewOptionsCtx,
-  viewCtx,
   editorState,
   themeManagerCtx,
 } from '@milkdown/core'
+// import { gfm, commonmark, image, link } from '@milkdown/preset-gfm'
 import { insert, forceUpdate, replaceAll, outline } from '@milkdown/utils'
 import { nord } from '@milkdown/theme-nord'
 import { prism } from '@milkdown/plugin-prism'
@@ -24,7 +24,7 @@ import { listener, listenerCtx } from '@milkdown/plugin-listener'
 import { cursor } from '@milkdown/plugin-cursor'
 import { table } from '@milkdown/plugin-table'
 import { clipboard } from '@milkdown/plugin-clipboard'
-import { commonmark, image, link } from '@milkdown/preset-commonmark'
+import { commonmark, image, link, codeFence } from '@milkdown/preset-commonmark'
 import {} from '@milkdown/plugin-menu'
 import { EditorRef, ReactEditor, useEditor, useNodeCtx } from '@milkdown/react'
 import { Anchor, Button, Drawer, Space, Tooltip, Tree, TreeNodeProps } from 'antd'
@@ -92,7 +92,6 @@ const MilkdownEditor = (props: IProps, ref) => {
           setCatalog(outline()(ctx))
         })
       })
-      .use(nord)
       .use(
         commonmark
           .configure(image, {
@@ -194,11 +193,11 @@ const MilkdownEditor = (props: IProps, ref) => {
   )
 }
 
-function formatAnchor(tree: DataNode[]) {
+function formatAnchor(tree: any[]) {
   return (
     <Fragment>
       {tree.map((item) => (
-        <Anchor.Link href={'#' + item.title} title={item.title}>
+        <Anchor.Link key={item.title} href={'#' + item.title} title={item.title}>
           {item.children && formatAnchor(item.children)}
         </Anchor.Link>
       ))}
