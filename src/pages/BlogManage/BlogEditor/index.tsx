@@ -77,7 +77,7 @@ const BlogEditor = () => {
           {id ? '更新' : '保存'}
         </Button>
       </Row> */}
-      <MarkdownEditor height={'calc(100vh - 275px)'} ref={editor} />
+      <MarkdownEditor ref={editor} />
     </div>
   )
 }

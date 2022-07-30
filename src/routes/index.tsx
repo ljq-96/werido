@@ -12,6 +12,7 @@ import { useNavigate, Navigator, Outlet } from 'react-router-dom'
 import Layout from '../layout'
 import { Result } from 'antd'
 import { RouteProps } from '../../server/types'
+import BlogDetail from '../pages/BlogDetail'
 
 const Login = lazy(() => import('../pages/Login'))
 const Home = lazy(() => import('../pages/Home'))
@@ -50,6 +51,12 @@ const routes: RouteProps[] = [
         name: '文章列表',
         icon: <ReadOutlined />,
         component: BlogList,
+      },
+      {
+        path: '/blog/:id',
+        name: '文章详情',
+        hide: true,
+        component: BlogDetail,
       },
       {
         path: '/to_manage',

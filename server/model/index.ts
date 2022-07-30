@@ -109,6 +109,7 @@ export const BlogModel = model<BlogType>(
     description: String,
     words: Number,
     tags: Array,
+    // @ts-ignore
     creator: {
       type: Schema.Types.ObjectId,
       ref: 'user',
@@ -121,14 +122,17 @@ export const BlogModel = model<BlogType>(
       type: Number,
       default: Date.now(),
     },
+    // @ts-ignore
     prev: {
       type: Schema.Types.ObjectId,
       ref: 'blog',
     },
+    // @ts-ignore
     next: {
       type: Schema.Types.ObjectId,
       ref: 'blog',
     },
+    // @ts-ignore
     parent: {
       type: Schema.Types.ObjectId,
       ref: 'blog',

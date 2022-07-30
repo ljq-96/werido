@@ -1,13 +1,15 @@
 import { FieldStringOutlined, FieldTimeOutlined, FileTextOutlined } from '@ant-design/icons'
 import { Space } from 'antd'
 import moment from 'moment'
-import { Blog } from '../../../../../server/interfaces'
+import { useNavigate } from 'react-router-dom'
+import { BlogType } from '../../../../../server/types'
 import style from './style.module.less'
 
-const BlogItemCard = (props: Blog.Doc) => {
-  const { title, content, description, tags, createTime } = props
+const BlogItemCard = ({ item }: { item: BlogType }) => {
+  const { title, content, description, tags, createTime, _id } = item
+  const navigate = useNavigate()
   return (
-    <div className={style.blogItem}>
+    <div className={style.blogItem} onClick={() => navigate(`/blog/${_id}`)}>
       <div className={style.title}>{title}</div>
       <div className={style.description}>{content}</div>
       <div className={style.meta}>

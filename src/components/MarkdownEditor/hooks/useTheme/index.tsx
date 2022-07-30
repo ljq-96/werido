@@ -29,6 +29,7 @@ function useTheme() {
     const iconMapping = {
       downArrow: 'icon-down',
       image: 'icon-image',
+      unchecked: 'icon-image',
     }
 
     return themeFactory((emotion, manager) => {

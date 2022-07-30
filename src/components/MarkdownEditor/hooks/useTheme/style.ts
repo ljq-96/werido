@@ -32,8 +32,9 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   `
 
   const editorLayout = css`
-    padding: 3.125em 1.25em;
+    padding: 16px;
     outline: none;
+    min-height: 500px;
   `
 
   const paragraph = css`
@@ -41,54 +42,57 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       font-size: 1em;
       line-height: 1.5;
       letter-spacing: 0.5px;
+      margin: 0;
     }
   `
 
   const blockquote = css`
     blockquote {
-      padding-left: 1.875em;
+      padding: 1em;
       line-height: 1.75em;
       border-left: 4px solid ${palette('primary')};
       margin-left: 0;
       margin-right: 0;
-      * {
+      border-radius: ${radius};
+      background: ${palette('background')};
+      /* * {
         font-size: 1em;
         line-height: 1.5em;
-      }
+        margin: 0;
+      } */
     }
   `
 
   const heading = css`
     h1 {
       border-bottom: 2px solid #eee;
-      font-size: 3em;
-      line-height: 1.167;
+      font-size: 38px;
+      line-height: 1.23;
+      padding: 15px 0;
     }
     h2 {
       border-bottom: 1px solid #eee;
-      font-size: 2.5em;
-      line-height: 1.2;
+      font-size: 30px;
+      line-height: 1.35;
+      padding: 15px 0;
     }
     h3 {
-      font-size: 2.125em;
-      line-height: 1.05;
+      font-size: 24px;
+      line-height: 1.35;
+      margin: 15px 0;
     }
     h4 {
-      font-size: 1.75em;
-      line-height: 1.14;
+      font-size: 20px;
+      line-height: 1.4;
+      margin: 15px 0;
     }
     h5 {
-      font-size: 1.5em;
-      line-height: 1;
-    }
-    h6 {
-      font-size: 1.25em;
-      line-height: 1;
+      font-size: 16px;
+      line-height: 1.5;
+      margin: 15px 0;
     }
     .heading {
-      margin: 25px 0;
-      padding: 15px 0;
-      font-weight: 400;
+      font-weight: 600;
     }
   `
 
@@ -101,15 +105,20 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   `
 
   const list = css`
-    .list-item,
-    .list-item > * {
-      margin: 0.5em 0;
+    .ordered-list,
+    .bullet-list {
+      padding-left: 0;
+    }
+    .list-item {
+      display: flex;
+      .list-item_label {
+        display: inline-block;
+        margin-right: 0.5em;
+      }
     }
 
     li {
-      &::marker {
-        color: ${palette('primary')};
-      }
+      list-style: none;
     }
 
     .task-list-item {
@@ -126,6 +135,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const code = css`
     .code-fence {
       border: 1px solid #eee;
+      margin: 1em 0;
       pre {
         font-family: ${manager.get(ThemeFont, 'code')};
         margin: 0 1.2em !important;
@@ -210,7 +220,9 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       font-weight: 500;
       font-family: ${code};
       padding: 0 0.2em;
+      margin: 0 0.2em;
       font-size: 1em;
+      border: 1px solid ${line};
     }
 
     .strong {
@@ -230,7 +242,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     }
 
     .strike-through {
-      text-decoration-color: ${palette('secondary')};
+      /* text-decoration-color: ${palette('secondary')}; */
     }
   `
 
@@ -336,10 +348,25 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     }
   `
 
+  const iframe = css`
+    .iframe {
+      width: 100%;
+      border: 1px solid #f0f0f0;
+      border-radius: ${radius};
+      margin: 16px 0;
+    }
+  `
+
   injectProsemirrorView(emotion)
 
   injectGlobal`
     .milkdown {
+      .empty-node {
+        white-space: nowrap;
+        &::before {
+          color: #aaa;
+        }
+      }
       ${manager.get(ThemeShadow, undefined)}
       ${manager.get(ThemeScrollbar, undefined)}
       ${selection};
@@ -356,6 +383,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
         ${table};
         ${footnote};
         ${inline};
+        ${iframe};
       }
     }
   `

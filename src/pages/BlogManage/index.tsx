@@ -71,7 +71,14 @@ function BlogManage() {
     {
       title: '标签',
       dataIndex: 'tags',
-      render: (val: string[]) => (val?.length ? val.map((item) => <Tag key={item}>{item}</Tag>) : '--'),
+      render: (val: string[]) =>
+        val?.length
+          ? val.map((item) => (
+              <Tag className='werido-tag' key={item}>
+                {item}
+              </Tag>
+            ))
+          : '--',
     },
     {
       title: '字数',

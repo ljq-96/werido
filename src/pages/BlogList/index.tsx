@@ -33,7 +33,7 @@ const BlogList = () => {
           <Spin spinning={loading}>
             <Card size='small'>
               {blogList?.list?.map((item) => (
-                <BlogItemCard key={item._id} {...item} />
+                <BlogItemCard key={item._id} item={item} />
               ))}
             </Card>
           </Spin>
