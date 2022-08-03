@@ -35,9 +35,14 @@ export class BlogRoute {
   async createBlog(ctx: RouterCtx) {
     const { body } = ctx.request
     const { user } = ctx.app.context
+    const { content } = body
+    console.log(content)
+
+    // const description = content.re
     const blog = await BlogModel.create({
       creator: user._id,
-      words: body.content.length,
+      words: content.length,
+      description: '123',
       ...body,
     })
 
@@ -51,7 +56,11 @@ export class BlogRoute {
   async updateBlog(ctx: RouterCtx) {
     const { id } = ctx.request.params
     const data = { ...ctx.request.body }
-    data.content && (data.words = data.content.length)
+    const { content } = data
+    if (content) {
+      data.description = content?.match(/^([\w\W]*?)\n\n\*\*\*\n\n/)?.[1]
+      data.words = data.content.length
+    }
     await BlogModel.updateOne({ _id: id }, data)
 
     ctx.body = {

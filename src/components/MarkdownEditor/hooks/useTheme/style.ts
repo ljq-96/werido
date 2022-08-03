@@ -34,7 +34,6 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const editorLayout = css`
     padding: 16px;
     outline: none;
-    min-height: 500px;
   `
 
   const paragraph = css`
@@ -367,7 +366,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
           color: #aaa;
         }
       }
-      ${manager.get(ThemeShadow, undefined)}
+      /* ${manager.get(ThemeShadow, undefined)} */
       ${manager.get(ThemeScrollbar, undefined)}
       ${selection};
 

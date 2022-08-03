@@ -17,8 +17,10 @@ const BlogEditor = () => {
     setLoading(true)
     if (id) {
       await blogApi.put(id, { content: editor.current.getValue(), ...fields })
+      message.success('已更新')
     } else {
       await blogApi.post({ content: editor.current.getValue(), ...fields })
+      message.success('已创建')
     }
     setLoading(false)
   }
@@ -62,21 +64,6 @@ const BlogEditor = () => {
           </Button>,
         ]}
       />
-      {/* <Row
-        justify='space-between'
-        style={{ padding: 16, backgroundColor: '#fff', height: 65, border: '1px solid #f0f0f0', borderBottom: 'none' }}>
-        <Form form={form} onFinish={handleFinish} layout='inline'>
-          <Form.Item label='标题' name='title' rules={[{ required: true, message: '' }]}>
-            <Input placeholder='请输入标题' style={{ width: 256 }} allowClear />
-          </Form.Item>
-          <Form.Item label='标签' name='tags'>
-            <Select mode='tags' placeholder='请选择标签' maxTagCount='responsive' style={{ width: 256 }} allowClear />
-          </Form.Item>
-        </Form>
-        <Button type='primary' onClick={form.submit} loading={loading}>
-          {id ? '更新' : '保存'}
-        </Button>
-      </Row> */}
       <MarkdownEditor ref={editor} />
     </div>
   )

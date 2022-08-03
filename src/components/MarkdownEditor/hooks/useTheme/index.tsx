@@ -133,7 +133,7 @@ function useTheme() {
 
       manager.set(ThemeFont, (key) => {
         if (key === 'typography') return 'Roboto, arial, sans-serif'
-        return 'Fira Code'
+        return 'code'
       })
 
       useAllPresetRenderer(manager, emotion)

@@ -1,7 +1,7 @@
 import { forwardRef, Fragment, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { Editor, rootCtx, defaultValueCtx, editorViewCtx, serializerCtx, editorViewOptionsCtx } from '@milkdown/core'
 import { gfm, commonmark, image, link } from '@milkdown/preset-gfm'
-import { replaceAll, outline, forceUpdate } from '@milkdown/utils'
+import { replaceAll, outline, forceUpdate, getHTML } from '@milkdown/utils'
 import { prism } from '@milkdown/plugin-prism'
 import { history, Undo } from '@milkdown/plugin-history'
 import { tooltip, tooltipPlugin } from '@milkdown/plugin-tooltip'
@@ -15,6 +15,7 @@ import { clipboard } from '@milkdown/plugin-clipboard'
 import { indent, indentPlugin } from '@milkdown/plugin-indent'
 import { iframePlugin } from './plugin/iframe'
 import {} from '@milkdown/plugin-menu'
+import { nord } from '@milkdown/theme-nord'
 import { EditorRef, ReactEditor, useEditor, useNodeCtx } from '@milkdown/react'
 import { Anchor, Button, Drawer, Space, Tooltip, Tree, TreeNodeProps } from 'antd'
 import useControls, { Controls } from './hooks/useControls'
@@ -224,3 +225,27 @@ function formatAnchor(tree: any[]) {
 }
 
 export default forwardRef(MilkdownEditor)
+
+export function Render({ value }: { value: string }) {
+  const theme = useTheme()
+  const dom = useRef(null)
+  useEffect(() => {
+    setTimeout(() => {
+      Editor.make()
+        .config((ctx) => {
+          ctx.set(rootCtx, dom.current)
+          ctx.set(defaultValueCtx, value)
+          ctx.set(editorViewOptionsCtx, { editable: () => false })
+        })
+        .use(gfm)
+        .use(emoji)
+        .use(prism)
+        .use(iframePlugin)
+        .use(slash)
+        .use(theme)
+        .create()
+    })
+  }, [dom])
+
+  return <div ref={dom}></div>
+}

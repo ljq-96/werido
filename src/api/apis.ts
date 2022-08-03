@@ -1,17 +1,17 @@
 import { BASE_API } from '../../constants'
 import { BaseApi, Fetch } from './utils'
-import { User, Bookmark, Icon, BingWallpaper } from '../../server/interfaces'
+import { UserType, BookmarkType, IconType, BingWallpaperType } from '../../server/types'
 
 export const basicApi = {
-  login: (body: User.Login) => {
-    return Fetch<User.Login>({
+  login: (body) => {
+    return Fetch({
       url: `${BASE_API}/login`,
       method: 'POST',
       body,
     })
   },
-  register: (body: User.Login) => {
-    return Fetch<User.Login>({
+  register: (body) => {
+    return Fetch({
       url: `${BASE_API}/register`,
       method: 'POST',
       body,
@@ -24,7 +24,7 @@ export const basicApi = {
     })
   },
   getBing: () => {
-    return Fetch<never, BingWallpaper>({
+    return Fetch<never, BookmarkType>({
       url: `${BASE_API}/news/bing`,
       method: 'GET',
     })
@@ -36,26 +36,26 @@ export class MyProfile extends BaseApi {
     super(baseUrl)
   }
   get() {
-    return Fetch<string, User.Doc>({
+    return Fetch<string, UserType>({
       url: this.baseUrl,
       method: 'GET',
     })
   }
   put(body) {
-    return Fetch<string, User.Doc>({
+    return Fetch<string, UserType>({
       url: this.baseUrl,
       method: 'PUT',
       body,
     })
   }
   getBookMark() {
-    return Fetch<never, Bookmark.ListResult[]>({
+    return Fetch<never, BookmarkType[]>({
       url: `${this.baseUrl}/bookmark`,
       method: 'GET',
     })
   }
   getIcon(query: { page: number; size: number }) {
-    return Fetch<any, Icon.ListResult>({
+    return Fetch<any, IconType>({
       url: `${this.baseUrl}/icon`,
       method: 'GET',
       query,

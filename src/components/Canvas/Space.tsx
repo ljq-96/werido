@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, useLayoutEffect } from 'react'
 import { Ball, BallProps, Astronaut, AstronautProps } from './element'
 import { randomInArr } from '../../utils/common'
 import { generate } from '@ant-design/colors'
@@ -10,16 +10,16 @@ class Space {
   H: number = 0
   color: string = '#42666'
   difColor: string
-  sun:string =  'rgb(255,187,57)'
+  sun: string = 'rgb(255,187,57)'
   astronaut: AstronautProps
   orbital: {
     R: number
     speed: number
-    stars:  {
-      fillStyle?: string, 
-      r: number, 
-      angle: number, 
-      strokeStyle: string, 
+    stars: {
+      fillStyle?: string
+      r: number
+      angle: number
+      strokeStyle: string
       lineWidth: number
     }[]
   }[] = []
@@ -39,27 +39,33 @@ class Space {
     grd.addColorStop(1, this.color)
     ctx.fillStyle = grd
     ctx.fillRect(0, 0, this.W, this.H)
-    this.orbital.forEach(item => {
-      new Ball({
-        x: this.x,
-        y: this.y,
-        r: item.R,
-        fillStyle: 'rgba(0, 0, 0, 0)',
-        strokeStyle: this.difColor,
-        lineWidth: 2,
-      }, ctx)
-      item.stars.forEach(star => {
+    this.orbital.forEach((item) => {
+      new Ball(
+        {
+          x: this.x,
+          y: this.y,
+          r: item.R,
+          fillStyle: 'rgba(0, 0, 0, 0)',
+          strokeStyle: this.difColor,
+          lineWidth: 2,
+        },
+        ctx,
+      )
+      item.stars.forEach((star) => {
         const { fillStyle, r, angle, strokeStyle, lineWidth } = star
         const x = this.x + item.R * Math.cos(angle)
         const y = this.y + item.R * Math.sin(angle)
-          new Ball({
+        new Ball(
+          {
             r,
             strokeStyle,
             lineWidth,
             x: x,
             y: y,
-            fillStyle
-          }, ctx)
+            fillStyle,
+          },
+          ctx,
+        )
       })
     }, ctx)
     new Astronaut(this.astronaut, ctx)
@@ -106,7 +112,7 @@ export default (props: IProps) => {
         y: H * 0.4,
         jet: 400,
         jetStyle: colorPlane[5],
-        scale: 0.7
+        scale: 0.7,
       },
       orbital: [
         {
@@ -118,35 +124,35 @@ export default (props: IProps) => {
               r: W * 0.003,
               angle: 0,
               strokeStyle: colorPlane[4],
-              lineWidth: W * 0.001
+              lineWidth: W * 0.001,
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.005,
               angle: 4.4,
               strokeStyle: colorPlane[4],
-              lineWidth: W * 0.002
+              lineWidth: W * 0.002,
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.01,
               angle: 2,
-              strokeStyle: colorPlane[4]
+              strokeStyle: colorPlane[4],
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.004,
               angle: 2.5,
               strokeStyle: colorPlane[4],
-              lineWidth: W * 0.002
+              lineWidth: W * 0.002,
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.003,
               angle: 5,
-              strokeStyle: colorPlane[4]
-            }
-          ]
+              strokeStyle: colorPlane[4],
+            },
+          ],
         },
         {
           R: W * 0.4,
@@ -156,40 +162,40 @@ export default (props: IProps) => {
               fillStyle: randomInArr(starColors),
               r: W * 0.012,
               angle: 1.2,
-              strokeStyle: colorPlane[4]
+              strokeStyle: colorPlane[4],
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.004,
               angle: 1.8,
-              strokeStyle: colorPlane[4]
+              strokeStyle: colorPlane[4],
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.009,
               angle: 2.6,
               strokeStyle: colorPlane[4],
-              lineWidth: W * 0.009
+              lineWidth: W * 0.009,
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.009,
               angle: 6,
               strokeStyle: colorPlane[4],
-              lineWidth: W * 0.008
+              lineWidth: W * 0.008,
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.004,
-              angle: 4
+              angle: 4,
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.013,
               angle: 3.1,
-              strokeStyle: colorPlane[4]
-            }
-          ]
+              strokeStyle: colorPlane[4],
+            },
+          ],
         },
         {
           R: W * 0.7,
@@ -199,64 +205,62 @@ export default (props: IProps) => {
               fillStyle: randomInArr(starColors),
               r: W * 0.013,
               angle: 3.2,
-              strokeStyle: colorPlane[4]
+              strokeStyle: colorPlane[4],
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.008,
               angle: 3.6,
-              strokeStyle: colorPlane[4]
+              strokeStyle: colorPlane[4],
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.018,
               angle: 5.8,
-              strokeStyle: colorPlane[4]
+              strokeStyle: colorPlane[4],
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.01,
               angle: 2.4,
-              strokeStyle: colorPlane[4]
+              strokeStyle: colorPlane[4],
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.006,
               angle: 0,
               strokeStyle: colorPlane[4],
-              lineWidth: W * 0.007
+              lineWidth: W * 0.007,
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.009,
-              angle: 4.7
+              angle: 4.7,
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.011,
               angle: 1.6,
               strokeStyle: colorPlane[4],
-              lineWidth: W * 0.01
+              lineWidth: W * 0.01,
             },
             {
               fillStyle: randomInArr(starColors),
               r: W * 0.004,
               angle: 0.4,
               strokeStyle: colorPlane[4],
-              lineWidth: W * 0.006
-            }
-          ]
-        }
-      ]
+              lineWidth: W * 0.006,
+            },
+          ],
+        },
+      ],
     }
 
-    
     let move = () => {
       ctxRef.current.clearRect(0, 0, W, H)
       new Space(options, ctxRef.current)
-      options.orbital.forEach(i => {
-        i.stars.forEach(j => {
-          
+      options.orbital.forEach((i) => {
+        i.stars.forEach((j) => {
           j.angle += i.speed
           j.angle %= Math.PI * 2
         })

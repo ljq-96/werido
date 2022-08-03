@@ -7,6 +7,27 @@ img {
   -webkit-user-drag: none;
 }
 
+@font-face {
+  font-family: code;
+  font-style: normal;
+  src: url('../fonts/OperatorMono-Medium.otf');
+}
+
+@font-face {
+  font-family: code;
+  font-style: italic;
+  src: url('../fonts/OperatorMono-MediumItalic.otf');
+}
+
+@font-face {
+  font-family: Ubuntu;
+  src: url('../fonts/ubuntu.woff');
+}
+
+body {
+  font-family: Ubuntu;
+}
+
 // ::-webkit-scrollbar {
 //   width: 5px;
 //   height: 5px;
@@ -25,10 +46,36 @@ img {
 //   background-color: #8c8c8c;
 // }
 
+// .ant-layout-sider-collapsed {
+//   min-width: 56px !important;
+//   max-width: 56px !important;
+//   width: 56px !important;
+//   .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+//     border-color: var(--ant-primary-2);
+//   }
+//   .ant-menu-inline-collapsed {
+//     padding: 0 8px;
+//     li {
+//       border-radius: 4px;
+//       border: 1px solid transparent;
+//     }
+//   }
+// }
+
 .ant-page-header {
   padding: 19px 16px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
+.ant-layout {
+  background: linear-gradient(rgba(250, 250, 250, 0.95), rgba(250, 250, 250, 0.95)),
+    linear-gradient(var(--ant-primary-color), var(--ant-primary-color));
+}
+.ant-pro-sider-light .ant-pro-sider-logo h1 {
+  color: var(--ant-primary-color);
+  font-family: code;
+  font-style: italic;
+}
 .ant-pro-top-nav-header-logo > a {
   display: flex;
   align-items: center;
@@ -87,4 +134,20 @@ object {
   border-color: #f0f0f0;
   cursor: pointer;
   user-select: none;
+}
+
+.werido-title {
+  position: relative;
+  padding-left: 16px;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 16px;
+    border-top: 4px solid var(--ant-primary-color);
+    border-bottom: 8px solid var(--ant-primary-4);
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 }

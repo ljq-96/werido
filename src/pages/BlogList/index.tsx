@@ -1,4 +1,4 @@
-import { Col, Row, Card, Spin } from 'antd'
+import { Col, Row, Card, Spin, Affix } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { BlogType } from '../../../server/types'
 import { blogApi } from '../../api'
@@ -25,21 +25,25 @@ const BlogList = () => {
 
   return (
     <Fragment>
-      <Row gutter={16}>
+      <Row gutter={16} wrap={false}>
         <Col flex='256px'>
-          <Card></Card>
+          <Affix offsetTop={16} target={() => document.getElementById('content')}>
+            <Card></Card>
+          </Affix>
         </Col>
         <Col flex='auto'>
           <Spin spinning={loading}>
-            <Card size='small'>
-              {blogList?.list?.map((item) => (
-                <BlogItemCard key={item._id} item={item} />
-              ))}
-            </Card>
+            {/* <Card size='small'> */}
+            {blogList?.list?.map((item) => (
+              <BlogItemCard key={item._id} item={item} />
+            ))}
+            {/* </Card> */}
           </Spin>
         </Col>
         <Col flex='256px'>
-          <Card></Card>
+          <Affix offsetTop={16} target={() => document.getElementById('content')}>
+            <Card></Card>
+          </Affix>
         </Col>
       </Row>
     </Fragment>

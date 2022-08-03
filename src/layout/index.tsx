@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
 import ProLayout, { DefaultFooter } from '@ant-design/pro-layout'
 import { BgColorsOutlined, SettingFilled, UserOutlined } from '@ant-design/icons'
 import { ConfigProvider, Menu, Layout, Space, Button, Avatar, Dropdown, Drawer, Segmented, Card, message } from 'antd'
@@ -11,6 +11,7 @@ import { CirclePicker, MaterialPicker, SliderPicker } from 'react-color'
 import { basicUserView } from '../contexts/useUser/actions'
 import '../assets/css/index.less'
 import { RouteProps } from '../../server/types'
+import Loading from '../components/Loading'
 
 export default () => {
   const { pathname } = useLocation()
@@ -100,10 +101,7 @@ export default () => {
       logo={<Logo style={{ width: 32 }} color={loginUser?.themeColor} />}
       route={currentRoutes}
       menuItemRender={(item, dom) => <Link to={item.path}>{dom}</Link>}
-      location={{
-        pathname: pathname,
-      }}
-      logoStyle={{ color: '#999' }}
+      location={{ pathname }}
       rightContentRender={() => (
         <Space>
           <Dropdown
@@ -131,8 +129,10 @@ export default () => {
           overflowY: 'auto',
           overflowX: 'hidden',
         }}>
-        {loginUser?._id && <Outlet />}
-        <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
+        <Suspense fallback={<Loading />}>
+          {loginUser?._id && <Outlet />}
+          <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
+        </Suspense>
       </Layout.Content>
       <Drawer
         visible={showColorDrawer}
@@ -141,7 +141,30 @@ export default () => {
         onClose={handleDrawer}
         closeIcon={null}
         style={{ top: 16, zIndex: 18 }}>
-        <CirclePicker color={loginUser?.themeColor} onChange={changeColor} />
+        <CirclePicker
+          colors={[
+            '#f44336',
+            '#e91e63',
+            '#9c27b0',
+            '#673ab7',
+            '#3f51b5',
+            '#2196f3',
+            '#0288d1',
+            '#0097a7',
+            '#00796b',
+            '#388e3c',
+            '#689f38',
+            '#afb42b',
+            '#ffa000',
+            '#f57c00',
+            '#e64a19',
+            '#795548',
+            '#607d8b',
+            '#969696',
+          ]}
+          color={loginUser?.themeColor}
+          onChange={changeColor}
+        />
         <div style={{ margin: '24px 0' }}>
           <SliderPicker color={loginUser?.themeColor} onChange={changeColor} />
         </div>

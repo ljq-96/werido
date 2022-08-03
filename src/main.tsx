@@ -16,13 +16,13 @@ const parseRoute = (route) => {
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <Suspense fallback={<Loading />}>
-    <UserProvider>
-      <ConfigProvider locale={zhCN}>
-        <BrowserRouter>
-          <Routes>{routes.map((r) => parseRoute(r))}</Routes>
-        </BrowserRouter>
-      </ConfigProvider>
-    </UserProvider>
-  </Suspense>,
+  // <Suspense fallback={<Loading />}>
+  <UserProvider>
+    <ConfigProvider locale={zhCN}>
+      <BrowserRouter>
+        <Routes>{routes.map((r) => parseRoute(r))}</Routes>
+      </BrowserRouter>
+    </ConfigProvider>
+  </UserProvider>,
+  // </Suspense>,
 )
