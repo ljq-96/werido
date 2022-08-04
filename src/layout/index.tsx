@@ -6,7 +6,7 @@ import { Link, Outlet, useNavigate, useLocation, useMatch } from 'react-router-d
 import Logo from '../components/Logo'
 import routes from '../routes'
 import { useUser } from '../contexts/useUser'
-import { basicApi, myProfile } from '../api'
+import { request } from '../api'
 import { CirclePicker, MaterialPicker, SliderPicker } from 'react-color'
 import { basicUserView } from '../contexts/useUser/actions'
 import '../assets/css/index.less'
@@ -47,18 +47,18 @@ export default () => {
   )
 
   const getMyProfile = () => {
-    myProfile.get().then((res) => {
-      userDispatch(basicUserView.update.actions(res.data))
+    request.myProfile.get().then((res) => {
+      userDispatch(basicUserView.update.actions(res))
       ConfigProvider.config({
         theme: {
-          primaryColor: res.data.themeColor,
+          primaryColor: res.themeColor,
         },
       })
     })
   }
 
   const logout = () => {
-    basicApi.logout().then((res) => {
+    request.logout.get().then((res) => {
       navigate('/login')
       message.success(res.msg)
       userDispatch(basicUserView.destroy.actions())
@@ -78,7 +78,7 @@ export default () => {
     setShowColorDrawer(!showColorDrawer)
     if (showColorDrawer) {
       const { themeColor, layoutB, layoutC } = loginUser
-      myProfile.put({ themeColor, layoutB, layoutC })
+      request.myProfile.put({ themeColor, layoutB, layoutC })
     }
   }
 

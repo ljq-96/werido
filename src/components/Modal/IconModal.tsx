@@ -17,7 +17,7 @@ import {
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { VariableSizeGrid as Grid } from 'react-window'
-import { myProfile } from '../../api'
+import { request } from '../../api'
 import { IconType } from '../../../server/types'
 
 interface VProps {
@@ -119,8 +119,8 @@ export default (props: IProps) => {
 
   const getIcons = (pageInfo) => {
     setLoading(true)
-    return myProfile
-      .getIcon(pageInfo)
+    return request.icon
+      .get(pageInfo)
       .then((res) => {
         if (res.code === 0) {
           if (icons) {

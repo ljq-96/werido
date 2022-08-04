@@ -16,7 +16,6 @@ import BlogDetail from '../pages/BlogDetail'
 
 const Login = lazy(() => import('../pages/Login'))
 const Home = lazy(() => import('../pages/Home'))
-const Editor = lazy(() => import('../pages/Editor'))
 const BlogList = lazy(() => import('../pages/BlogList'))
 const UserManage = lazy(() => import('../pages/UserManage'))
 const BlogManage = lazy(() => import('../pages/BlogManage'))
@@ -25,7 +24,7 @@ const BlogEditor = lazy(() => import('../pages/BlogManage/BlogEditor'))
 function Redirect({ to }) {
   let navigate = useNavigate()
   useEffect(() => {
-    navigate(to)
+    navigate(to, { replace: true })
   })
   return null
 }
@@ -83,19 +82,19 @@ const routes: RouteProps[] = [
         component: Result,
       },
       {
-        path: '/manage/blogs',
+        path: '/manage/blog',
         name: '文章管理',
         icon: <FileTextOutlined />,
         component: Outlet,
         routes: [
           {
-            path: '/manage/blogs/list',
+            path: '/manage/blog/list',
             name: '文章列表',
             icon: <AreaChartOutlined />,
             component: BlogManage,
           },
           {
-            path: '/manage/blogs/editor',
+            path: '/manage/blog/editor',
             name: '新建文章',
             hide: true,
             icon: <FileTextOutlined />,

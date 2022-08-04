@@ -4,7 +4,7 @@ import { ColumnsType } from 'antd/lib/table'
 import { Fragment, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BlogType, UserType } from '../../../server/types'
-import { blogApi, userApi } from '../../api'
+import { request } from '../../api'
 import CommonTable, { CommonTableInstance, ToolItem } from '../../components/CommonTable'
 import { formatTime } from '../../utils/common'
 
@@ -12,7 +12,7 @@ const toolList: ToolItem[] = [
   {
     type: 'input',
     name: 'username',
-    label: '用户名',
+    label: '文章标题',
   },
   {
     type: 'date',
@@ -40,7 +40,7 @@ function BlogManage() {
       content: '确定要删除此用户吗？',
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
-        return blogApi.delete(id).then(() => {
+        return request.blog.delete(id).then(() => {
           setShowModal(false)
           message.success('删除成功')
           tableRef.current.fetchData()
@@ -49,19 +49,7 @@ function BlogManage() {
     })
   }
 
-  const handleSubmit = async (fields: Partial<UserType>) => {
-    if (typeof showModal === 'boolean') {
-      const { username, password } = fields
-      await userApi.post({ username, password })
-      message.success('新增成功')
-    } else {
-      const { _id, ...reset } = fields
-      await userApi.put(_id, { ...reset })
-      message.success('修改成功')
-    }
-    setShowModal(false)
-    tableRef.current.fetchData()
-  }
+  const handleSubmit = async (fields: Partial<UserType>) => {}
 
   const columns: ColumnsType<BlogType> = [
     {
@@ -100,7 +88,7 @@ function BlogManage() {
             <Button type='link' onClick={() => {}}>
               查看
             </Button>
-            <Button type='link' onClick={() => navigate(`/manage/blogs/editor?id=${record._id}`)}>
+            <Button type='link' onClick={() => navigate(`/manage/blog/editor?id=${record._id}`)}>
               编辑
             </Button>
             <Button type='link' danger onClick={() => handleDelete(record._id)}>
@@ -116,7 +104,7 @@ function BlogManage() {
     <Fragment>
       <CommonTable
         ref={tableRef}
-        request={blogApi}
+        request={request.blog}
         title={() => (
           <Space>
             文章管理
@@ -130,8 +118,8 @@ function BlogManage() {
         )}
         extra={
           <Space>
-            <Button type='primary' onClick={() => setShowModal(true)}>
-              新增用户
+            <Button type='primary' onClick={() => navigate('/manage/blog/editor')}>
+              新建文章
             </Button>
           </Space>
         }

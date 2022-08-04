@@ -1,7 +1,7 @@
 import { Col, Row, Card, Spin, Affix } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { BlogType } from '../../../server/types'
-import { blogApi } from '../../api'
+import { request } from '../../api'
 import useRequest from '../../hooks/useRequest'
 import BlogItemCard from './components/BlogItemCard'
 
@@ -13,7 +13,7 @@ const BlogList = () => {
     data: blogList,
     execute: getBlogList,
   } = useRequest(() =>
-    blogApi.getList({
+    request.blog.get({
       page: page,
       size: SIZE,
     }),

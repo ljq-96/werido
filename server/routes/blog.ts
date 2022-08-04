@@ -15,20 +15,14 @@ export class BlogRoute {
       .skip((page - 1) * size)
       .limit(size)
     const total = await BlogModel.find({ creator: user._id }).countDocuments()
-    ctx.body = {
-      msg: 'success',
-      data: { list, total, page: Number(page), size: Number(size) },
-    }
+    ctx.body = { list, total, page: Number(page), size: Number(size) }
   }
 
   @GET('/:id')
   async getBlogById(ctx: RouterCtx) {
     const { id } = ctx.request.params
     const data = await BlogModel.findById(id)
-    ctx.body = {
-      message: 'success',
-      data,
-    }
+    ctx.body = data
   }
 
   @POST()
@@ -46,10 +40,7 @@ export class BlogRoute {
       ...body,
     })
 
-    ctx.body = {
-      msg: 'success',
-      data: blog,
-    }
+    ctx.body = blog
   }
 
   @PUT('/:id')
@@ -61,10 +52,8 @@ export class BlogRoute {
       data.description = content?.match(/^([\w\W]*?)\n\n\*\*\*\n\n/)?.[1]
       data.words = data.content.length
     }
-    await BlogModel.updateOne({ _id: id }, data)
+    const blog = await BlogModel.updateOne({ _id: id }, data)
 
-    ctx.body = {
-      msg: 'success',
-    }
+    ctx.body = blog
   }
 }

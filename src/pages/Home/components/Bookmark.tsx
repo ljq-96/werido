@@ -18,7 +18,7 @@ import {
   Menu,
 } from 'antd'
 import Sortable from '../../../components/Sortable'
-import { bookmarkApi, iconApi, myProfile } from '../../../api'
+import { request } from '../../../api'
 import { BookmarkType, IconType } from '../../../../server/types'
 import {
   ApiFilled,
@@ -46,11 +46,11 @@ export default (props: IProps) => {
   const onEditIcon = useMemo(() => modalState && bookmarkList[modalState[0]]?.items[modalState[1]], [modalState])
 
   const getBookmarks = () => {
-    myProfile
-      .getBookMark()
+    request.bookmark
+      .get()
       .then((res) => {
-        setBookmarkList(res.data)
-        bookMarkCache.current = JSON.parse(JSON.stringify(res.data))
+        setBookmarkList(res)
+        bookMarkCache.current = JSON.parse(JSON.stringify(res))
       })
       .finally(() => {
         setLoading(
@@ -75,7 +75,8 @@ export default (props: IProps) => {
       )
       Promise.all(
         changed.map((i) =>
-          bookmarkApi.put(i._id, {
+          request.bookmark.put({
+            _id: i._id,
             label: i.label,
             items: i.items.map((j) => ({ ...j, icon: (j.icon as IconType)._id })),
             prev: i.prev,
@@ -102,7 +103,7 @@ export default (props: IProps) => {
 
   /** 添加标签组 */
   const createBookmark = (values) => {
-    bookmarkApi.post(values).then((res) => {
+    request.bookmark.post(values).then((res) => {
       setBookmarkList([...bookmarkList, res.data])
       setShowCreateBookmark(false)
       message.success('创建成功')

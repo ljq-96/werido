@@ -1,10 +1,9 @@
-import { Button, Card, Dropdown, Form, Input, Menu, message, PageHeader, Row, Select, Space, Spin } from 'antd'
+import { Button, Form, Input, message, PageHeader, Select } from 'antd'
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSearchParam } from 'react-use'
-import { blogApi } from '../../../api'
+import { request } from '../../../api'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
-import useRequest from '../../../hooks/useRequest'
 
 const BlogEditor = () => {
   const [loading, setLoading] = useState(false)
@@ -16,10 +15,11 @@ const BlogEditor = () => {
   const handleFinish = async (fields) => {
     setLoading(true)
     if (id) {
-      await blogApi.put(id, { content: editor.current.getValue(), ...fields })
+      await request.blog.put({ _id: id, content: editor.current.getValue(), ...fields })
       message.success('已更新')
     } else {
-      await blogApi.post({ content: editor.current.getValue(), ...fields })
+      await request.blog.post({ content: editor.current.getValue(), ...fields })
+      navigate(-1)
       message.success('已创建')
     }
     setLoading(false)
@@ -27,9 +27,9 @@ const BlogEditor = () => {
 
   useEffect(() => {
     if (id) {
-      blogApi.getById(id).then((res) => {
-        editor.current.setValue(res.data.content)
-        form.setFieldsValue(res.data)
+      request.blog.getById(id).then((res) => {
+        editor.current.setValue(res.content)
+        form.setFieldsValue(res)
       })
     }
   }, [id])

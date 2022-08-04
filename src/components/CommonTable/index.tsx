@@ -55,7 +55,7 @@ function CommonTable(props: TableProps<any> & IProps, ref) {
         delete fields[item.name]
       }
     })
-    return request.getList({ ...pageInfo, ...fields })
+    return request.get({ ...pageInfo, ...fields })
   })
 
   useImperativeHandle<unknown, CommonTableInstance>(ref, () => {

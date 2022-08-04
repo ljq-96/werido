@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Form, Button, Input, Card, message, Row, Col } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { basicApi } from '../../api'
+import { request } from '../../api'
 import { UserType } from '../../../server/types'
 import Logo from '../../components/Logo'
 import Space from '../../components/Canvas/Space'
@@ -20,12 +20,12 @@ const Login = (props) => {
   const onFinish = (fields: UserType & { password_c?: string }) => {
     const { username, password, password_c } = fields
     if (isLogin) {
-      basicApi.login({ username, password }).then((res) => {
+      request.login.post({ username, password }).then((res) => {
         message.success(res.msg)
         navigator('/home')
       })
     } else {
-      basicApi.register({ username, password }).then((res) => {
+      request.register.post({ username, password }).then((res) => {
         message.success('注册成功，请登录！')
         setIsLogin(true)
         form.setFields([

@@ -1,20 +1,26 @@
-import { controller, POST, PUT, unifyUse } from '../decorator'
+import { controller, POST, PUT, GET, unifyUse } from '../decorator'
 import { RouterCtx } from '../types'
 import { validateToken } from '../middlewares'
 import { BookmarkModel } from '../model'
+import { formatTree } from '../utils/common'
 
 @controller('/api/bookmark')
 @unifyUse(validateToken)
-class BookmarkRoute {
+export class BookmarkRoute {
+  @GET()
+  async getMyBookmarks(ctx: RouterCtx) {
+    const { _id } = ctx.app.context.user
+    const data = await BookmarkModel.find({ creator: _id }).populate('items.icon')
+
+    ctx.body = formatTree(data)
+  }
+
   @PUT()
   async updateBookmark(ctx: RouterCtx) {
     const { _id, ...reset } = ctx.request.body
-    await BookmarkModel.updateOne({ _id }, { ...reset })
+    const blog = await BookmarkModel.updateOne({ _id }, { ...reset })
 
-    ctx.body = {
-      code: 0,
-      msg: 'success',
-    }
+    ctx.body = blog
   }
 
   @POST()
@@ -42,9 +48,6 @@ class BookmarkRoute {
       })
     }
 
-    ctx.body = {
-      msg: 'success',
-      data: bookmark as any,
-    }
+    ctx.body = bookmark
   }
 }

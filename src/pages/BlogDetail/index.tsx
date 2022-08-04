@@ -3,7 +3,7 @@ import { Affix, Button, Card, Col, PageHeader, Row, Space, Spin, Tag } from 'ant
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { BlogType } from '../../../server/types'
-import { blogApi } from '../../api'
+import { request } from '../../api'
 import MarkdownEditor, { EditorIntance } from '../../components/MarkdownEditor'
 import { formatTime } from '../../utils/common'
 
@@ -17,11 +17,11 @@ function BlogDetail() {
 
   useEffect(() => {
     setLoading(true)
-    blogApi
+    request.blog
       .getById(id)
       .then((res) => {
-        editor.current.setValue(res.data.content)
-        setDetail(res.data)
+        editor.current.setValue(res.content)
+        setDetail(res)
       })
       .finally(() => {
         setLoading(false)

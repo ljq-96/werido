@@ -1,4 +1,3 @@
-import { UserModal } from '../model'
 import { RouterCtx } from '../types'
 import jwt from 'jsonwebtoken'
 import { UserStatus } from '../types/enum'

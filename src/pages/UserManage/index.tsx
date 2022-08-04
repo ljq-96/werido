@@ -4,7 +4,7 @@ import { ColumnsType } from 'antd/lib/table'
 import { Fragment, useRef, useState } from 'react'
 import { UserType } from '../../../server/types'
 import { UserStatus } from '../../../server/types/enum'
-import { userApi } from '../../api'
+import { request } from '../../api'
 import CommonTable, { CommonTableInstance, ToolItem } from '../../components/CommonTable'
 import { formatTime } from '../../utils/common'
 
@@ -34,7 +34,7 @@ function UsersManage() {
       content: '确定要删除此用户吗？',
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
-        return userApi.delete(id).then(() => {
+        return request.user.delete(id).then(() => {
           setShowModal(false)
           message.success('删除成功')
           tableRef.current.fetchData()
@@ -46,11 +46,10 @@ function UsersManage() {
   const handleSubmit = async (fields: Partial<UserType>) => {
     if (typeof showModal === 'boolean') {
       const { username, password } = fields
-      await userApi.post({ username, password })
+      await request.user.post({ username, password })
       message.success('新增成功')
     } else {
-      const { _id, ...reset } = fields
-      await userApi.put(_id, { ...reset })
+      await request.user.put(fields)
       message.success('修改成功')
     }
     setShowModal(false)
@@ -99,7 +98,7 @@ function UsersManage() {
     <Fragment>
       <CommonTable
         ref={tableRef}
-        request={userApi}
+        request={request.user}
         title={() => '用户管理'}
         extra={
           <Button type='primary' onClick={() => setShowModal(true)}>

@@ -1,11 +1,11 @@
-export const formateTree = (arr: any[]) => {
+export const formatTree = (arr: any[]) => {
   arr.forEach((item) => {
     if (item.children?.length > 0) {
-      item.children = formateTree(item.children)
+      item.children = formatTree(item.children)
     }
   })
 
-  const res = []
+  const res: any[] = []
   let current = arr.find((item) => !item.prev)
   if (current) {
     res.push(current)
