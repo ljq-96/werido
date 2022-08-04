@@ -24,37 +24,37 @@ export async function Fetch<F = any, T = any>({ url, method = 'GET', body, query
   throw errMsg
 }
 export class BaseRequest {
-  baseUrl: string = ''
-  constructor(baseUrl) {
-    this.baseUrl = baseUrl
+  url: string = ''
+  constructor(url) {
+    this.url = url
   }
 
   get(query?) {
     return Fetch({
-      url: `${this.baseUrl}`,
+      url: `${this.url}`,
       method: 'GET',
       query,
     })
   }
 
   getById(id: string) {
-    Fetch({
-      url: `${this.baseUrl}/${id}`,
+    return Fetch({
+      url: `${this.url}/${id}`,
       method: 'GET',
     })
   }
 
   post(body?) {
-    Fetch({
-      url: this.baseUrl,
+    return Fetch({
+      url: this.url,
       method: 'POST',
       body,
     })
   }
 
   delete(id: string) {
-    Fetch({
-      url: `${this.baseUrl}/${id}`,
+    return Fetch({
+      url: `${this.url}/${id}`,
       method: 'DELETE',
     })
   }
@@ -62,7 +62,7 @@ export class BaseRequest {
   put(body) {
     const { _id, ...reset } = body
     return Fetch({
-      url: `${this.baseUrl}/${_id}`,
+      url: `${this.url}/${_id}`,
       method: 'PUT',
       body: reset,
     })
