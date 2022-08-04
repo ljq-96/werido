@@ -2,12 +2,12 @@ import { Space, Button, Card, TableProps, Row, Col, Table, Form, Input, DatePick
 import { SorterResult } from 'antd/lib/table/interface'
 import moment from 'moment'
 import { CSSProperties, forwardRef, Fragment, ReactElement, useEffect, useImperativeHandle, useState } from 'react'
-import { BaseApi } from '../../api/utils'
+import { BaseRequest } from '../../api/utils'
 import useRequest from '../../hooks/useRequest'
 import { formatTime } from '../../utils/common'
 
 interface IProps {
-  request: BaseApi
+  request: BaseRequest
   extra?: ReactElement
   toolList?: ToolItem[]
   toolLabelWidth?: number | string
