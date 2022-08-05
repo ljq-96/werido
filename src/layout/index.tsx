@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import ProLayout, { DefaultFooter } from '@ant-design/pro-layout'
-import { BgColorsOutlined, SettingFilled, UserOutlined } from '@ant-design/icons'
+import { UserOutlined } from '@ant-design/icons'
 import { ConfigProvider, Menu, Layout, Space, Button, Avatar, Dropdown, Drawer, Segmented, Card, message } from 'antd'
 import { Link, Outlet, useNavigate, useLocation, useMatch } from 'react-router-dom'
 import Logo from '../components/Logo'
@@ -12,6 +12,7 @@ import { basicUserView } from '../contexts/useUser/actions'
 import '../assets/css/index.less'
 import { RouteProps } from '../../server/types'
 import Loading from '../components/Loading'
+import * as colors from '@ant-design/colors'
 
 export default () => {
   const { pathname } = useLocation()
@@ -143,24 +144,18 @@ export default () => {
         style={{ top: 16, zIndex: 18 }}>
         <CirclePicker
           colors={[
-            '#f44336',
-            '#e91e63',
-            '#9c27b0',
-            '#673ab7',
-            '#3f51b5',
-            '#2196f3',
-            '#0288d1',
-            '#0097a7',
-            '#00796b',
-            '#388e3c',
-            '#689f38',
-            '#afb42b',
-            '#ffa000',
-            '#f57c00',
-            '#e64a19',
-            '#795548',
-            '#607d8b',
-            '#969696',
+            colors.red.primary,
+            colors.volcano.primary,
+            colors.orange.primary,
+            colors.gold.primary,
+            colors.yellow.primary,
+            colors.lime.primary,
+            colors.green.primary,
+            colors.cyan.primary,
+            colors.blue.primary,
+            colors.geekblue.primary,
+            colors.purple.primary,
+            colors.magenta.primary,
           ]}
           color={loginUser?.themeColor}
           onChange={changeColor}
