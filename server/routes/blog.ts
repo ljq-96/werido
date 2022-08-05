@@ -1,5 +1,5 @@
 import { RouterContext } from 'koa-router'
-import { controller, GET, POST, PUT, unifyUse } from '../decorator'
+import { controller, DELETE, GET, POST, PUT, unifyUse } from '../decorator'
 import { RouterCtx } from '../types'
 import { validateToken } from '../middlewares'
 import { BlogModel } from '../model'
@@ -7,11 +7,28 @@ import { BlogModel } from '../model'
 @controller('/api/blog')
 @unifyUse(validateToken)
 export class BlogRoute {
+  @GET('/tag')
+  async getBlogTags(ctx: RouterCtx) {
+    const { user } = ctx.app.context
+    const list = await BlogModel.find({ creator: user._id })
+    const tagMap: { [key: string]: number } = {}
+    list.forEach((i) => {
+      i.tags?.forEach((j) => {
+        const value = tagMap[j]
+        tagMap[j] = value === undefined ? 1 : value + 1
+      })
+    })
+    const data = Object.entries(tagMap)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+    ctx.body = data
+  }
+
   @GET()
   async getBlogs(ctx: RouterCtx) {
     const { page, size } = ctx.request.query
     const { user } = ctx.app.context
-    const list = await BlogModel.find({ creator: user.id })
+    const list = await BlogModel.find({ creator: user._id })
       .skip((page - 1) * size)
       .limit(size)
     const total = await BlogModel.find({ creator: user._id }).countDocuments()
@@ -30,13 +47,11 @@ export class BlogRoute {
     const { body } = ctx.request
     const { user } = ctx.app.context
     const { content } = body
-    console.log(content)
 
-    // const description = content.re
     const blog = await BlogModel.create({
       creator: user._id,
       words: content.length,
-      description: '123',
+      description: content?.match(/^([\w\W]*?)\n\n\*\*\*\n\n/)?.[1],
       ...body,
     })
 
@@ -54,6 +69,13 @@ export class BlogRoute {
     }
     const blog = await BlogModel.updateOne({ _id: id }, data)
 
+    ctx.body = blog
+  }
+
+  @DELETE('/:id')
+  async deleteBlog(ctx: RouterCtx) {
+    const { id } = ctx.request.params
+    const blog = await BlogModel.deleteOne({ _id: id })
     ctx.body = blog
   }
 }

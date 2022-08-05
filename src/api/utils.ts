@@ -62,7 +62,7 @@ export class BaseRequest {
   put(body) {
     const { _id, ...reset } = body
     return Fetch({
-      url: `${this.url}/${_id}`,
+      url: `${this.url}/${_id ?? ''}`,
       method: 'PUT',
       body: reset,
     })

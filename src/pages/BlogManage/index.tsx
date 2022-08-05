@@ -41,9 +41,10 @@ function BlogManage() {
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
         return request.blog.delete(id).then(() => {
-          setShowModal(false)
+          // setShowModal(false)
           message.success('删除成功')
           tableRef.current.fetchData()
+          return Promise.resolve()
         })
       },
     })

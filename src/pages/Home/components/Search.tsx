@@ -5,6 +5,8 @@ import Space from '../../../components/Canvas/Space'
 import moment from 'moment'
 import { debounce } from '../../../utils/common'
 import { useUser } from '../../../contexts/useUser'
+import LandScape1 from '../../../components/Wallpaper/LandScape1'
+import { useWindowScroll } from 'react-use'
 
 declare global {
   interface Window {
@@ -74,34 +76,10 @@ const Search = (props) => {
         style={{
           position: 'relative',
           borderRadius: 4,
-          paddingTop: '30%',
+          paddingTop: '46%',
           overflow: 'hidden',
         }}>
-        {useMemo(
-          () => (
-            <Space
-              animate
-              color={loginUser?.themeColor}
-              sunColor={'rgb(250,173,20)'}
-              starColors={[
-                '#f5222d',
-                '#fa541c',
-                '#fa8c16',
-                '#faad14',
-                '#fadb14',
-                '#a0d911',
-                '#52c41a',
-                '#13c2c2',
-                '#1890ff',
-                '#2f54eb',
-                '#722ed1',
-                '#eb2f96',
-              ]}
-            />
-          ),
-          [loginUser],
-        )}
-        {/* <div className="time">{time}</div> */}
+        <LandScape1 color={loginUser?.themeColor} style={{ position: 'absolute', bottom: '-10%', width: '100%' }} />
         <div className={`search ${isOnSearch ? 'onsearch' : ''}`} style={{ height: height }}>
           <input
             type='text'

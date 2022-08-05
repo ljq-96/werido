@@ -9,7 +9,7 @@ class Icon {
   @prop({ type: String })
   name?: string
 
-  @prop({ ref: () => User })
+  @prop({ type: String, ref: () => User })
   creator?: Ref<User>
 
   @prop({ type: String, default: moment().format() })

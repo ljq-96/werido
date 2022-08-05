@@ -21,6 +21,9 @@ const BlogList = () => {
 
   useEffect(() => {
     getBlogList()
+    request.tags.get().then((res) => {
+      console.log(res)
+    })
   }, [])
 
   return (

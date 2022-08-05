@@ -7,6 +7,7 @@ const apiList = {
   myProfile: '/api/myProfile',
   user: '/api/admin/user',
   blog: '/api/blog',
+  tags: '/api/blog/tag',
   bookmark: '/api/bookmark',
   icon: '/api/icon',
 }

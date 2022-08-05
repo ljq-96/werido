@@ -26,9 +26,9 @@ export class AdminRoute {
   @DELETE('/user/:id')
   async deleteUser(ctx: RouterCtx) {
     const { id } = ctx.request.params
-    await UserModel.deleteOne({ _id: id })
+    const user = await UserModel.deleteOne({ _id: id })
     await BookmarkModel.deleteMany({ creator: id })
     await IconModel.deleteMany({ creator: id })
-    ctx.body = { _id: id }
+    ctx.body = user
   }
 }
