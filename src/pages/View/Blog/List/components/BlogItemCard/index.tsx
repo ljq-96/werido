@@ -15,7 +15,7 @@ const BlogItemCard = ({ item }: { item: BlogType }) => {
       <div
         className={clsx('werido-title', style.title)}
         style={{ margin: '0 -16px' }}
-        onClick={() => navigate(`/blog/${_id}`)}
+        onClick={() => navigate(`/view/blog/${_id}`)}
       >
         {title}
       </div>

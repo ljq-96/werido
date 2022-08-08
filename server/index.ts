@@ -17,7 +17,7 @@ app.use(json())
 useRoutes(app)
 app.use(router.routes())
 
-mongoose.connect(`mongodb://jiaqi:@8.140.187.127/werido`).then(
+mongoose.connect(`mongodb://jiaqi:lyp82nlf@8.140.187.127/werido`).then(
   () => {
     console.log('mongoDB connect')
     app.listen(3606)

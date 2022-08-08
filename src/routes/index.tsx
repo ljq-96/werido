@@ -33,7 +33,7 @@ const routes: RouteProps[] = [
     component: Layout,
     routes: [
       {
-        path: '/view',
+        path: '/view/home',
         name: '首页',
         icon: <HomeOutlined />,
         component: lazy(() => import('../pages/View/Home')),
@@ -72,7 +72,7 @@ const routes: RouteProps[] = [
         path: '/manage/to_home',
         name: '返回首页',
         icon: <RollbackOutlined />,
-        component: () => <Redirect to='/home' />,
+        component: () => <Redirect to='/view/home' />,
       },
       {
         path: '/manage/overview',
@@ -103,7 +103,7 @@ const routes: RouteProps[] = [
   {
     path: '/',
     name: '首页',
-    component: () => <Redirect to='/home' />,
+    component: () => <Redirect to='/view/home' />,
   },
 ]
 
