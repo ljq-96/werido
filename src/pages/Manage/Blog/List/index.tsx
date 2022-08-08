@@ -3,10 +3,10 @@ import { Button, Form, Input, message, Modal, Segmented, Space, Tag } from 'antd
 import { ColumnsType } from 'antd/lib/table'
 import { Fragment, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BlogType, UserType } from '../../../server/types'
-import { request } from '../../api'
-import CommonTable, { CommonTableInstance, ToolItem } from '../../components/CommonTable'
-import { formatTime } from '../../utils/common'
+import { BlogType, UserType } from '../../../../../server/types'
+import { request } from '../../../../api'
+import CommonTable, { CommonTableInstance, ToolItem } from '../../../../components/CommonTable'
+import { formatTime } from '../../../../utils/common'
 
 const toolList: ToolItem[] = [
   {
@@ -62,7 +62,7 @@ function BlogManage() {
       dataIndex: 'tags',
       render: (val: string[]) =>
         val?.length
-          ? val.map((item) => (
+          ? val.map(item => (
               <Tag className='werido-tag' key={item}>
                 {item}
               </Tag>
@@ -78,7 +78,7 @@ function BlogManage() {
     {
       title: '创建时间',
       dataIndex: 'createTime',
-      render: (val) => formatTime(val),
+      render: val => formatTime(val),
     },
     {
       title: '操作',
@@ -135,7 +135,8 @@ function BlogManage() {
         onCancel={() => {
           setShowModal(false)
           form.resetFields()
-        }}>
+        }}
+      >
         <Form form={form} labelCol={{ style: { width: 70 } }} onFinish={handleSubmit}>
           <Form.Item label='用户名' name='username' rules={[{ required: true, message: '请输入用户名！' }]}>
             <Input placeholder='请输入用户名' />

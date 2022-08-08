@@ -27,7 +27,7 @@ export default () => {
       if (routes) {
         return {
           ...item,
-          routes: routes.filter((item) => !item.hide).map((item) => parseRoute(item)),
+          routes: routes.filter(item => !item.hide).map(item => parseRoute(item)),
         }
       }
       return item
@@ -35,7 +35,7 @@ export default () => {
 
     let route: RouteProps
     for (let i = 0; i < routes.length; i++) {
-      if (routes[i].path === pathname || routes[i]?.routes?.find((item) => pathname.startsWith(item.path))) {
+      if (routes[i].path === pathname || routes[i]?.routes?.find(item => pathname.startsWith(item.path))) {
         route = routes[i]
       }
     }
@@ -48,7 +48,7 @@ export default () => {
   )
 
   const getMyProfile = () => {
-    request.myProfile.get().then((res) => {
+    request.myProfile.get().then(res => {
       userDispatch(basicUserView.update.actions(res))
       ConfigProvider.config({
         theme: {
@@ -59,7 +59,7 @@ export default () => {
   }
 
   const logout = () => {
-    request.logout.get().then((res) => {
+    request.logout.get().then(res => {
       navigate('/login')
       message.success(res.msg)
       userDispatch(basicUserView.destroy.actions())
@@ -113,14 +113,16 @@ export default () => {
                 <Menu.Divider />
                 <Menu.Item onClick={logout}>退出</Menu.Item>
               </Menu>
-            }>
+            }
+          >
             <Button type='text'>
               <Avatar shape='square' size='small' icon={<UserOutlined />} style={{ marginRight: 10 }} />
               {loginUser?.username}
             </Button>
           </Dropdown>
         </Space>
-      )}>
+      )}
+    >
       <Layout.Content
         id='content'
         style={{
@@ -129,7 +131,8 @@ export default () => {
           padding: 16,
           overflowY: 'auto',
           overflowX: 'hidden',
-        }}>
+        }}
+      >
         <Suspense fallback={<Loading />}>
           {loginUser?._id && <Outlet />}
           <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
@@ -141,7 +144,8 @@ export default () => {
         mask={false}
         onClose={handleDrawer}
         closeIcon={null}
-        style={{ top: 16, zIndex: 18 }}>
+        style={{ top: 16, zIndex: 18 }}
+      >
         <CirclePicker
           colors={[
             colors.red.primary,
@@ -185,7 +189,8 @@ export default () => {
                 label: '顶栏',
                 value: 'top',
               },
-            ]}></Segmented>
+            ]}
+          ></Segmented>
         </div>
         <div>
           后台管理：
@@ -201,7 +206,8 @@ export default () => {
                 label: '顶栏',
                 value: 'top',
               },
-            ]}></Segmented>
+            ]}
+          ></Segmented>
         </div>
 
         <Space style={{ marginTop: 24 }}>
@@ -209,7 +215,8 @@ export default () => {
             onClick={() => {
               setShowColorDrawer(false)
               getMyProfile()
-            }}>
+            }}
+          >
             取消
           </Button>
           <Button onClick={handleDrawer} type='primary'>

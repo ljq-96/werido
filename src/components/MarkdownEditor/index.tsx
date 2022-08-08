@@ -72,9 +72,9 @@ const MilkdownEditor = (props: IProps, ref) => {
   const theme = useTheme()
 
   const { editor, getInstance, getDom, loading } = useEditor(
-    (root) =>
+    root =>
       Editor.make()
-        .config((ctx) => {
+        .config(ctx => {
           ctx.set(rootCtx, root)
           ctx.set(editorViewOptionsCtx, { editable: () => !readonly })
           ctx.get(listenerCtx).markdownUpdated((ctx, markdown, prevMarkdown) => {
@@ -110,7 +110,7 @@ const MilkdownEditor = (props: IProps, ref) => {
         .use(iframePlugin)
         .use(
           slash.configure(slashPlugin, {
-            config: (ctx) => {
+            config: ctx => {
               return ({ content, isTopLevel }) => {
                 if (!content) {
                   return { placeholder: '请输入...' }
@@ -132,7 +132,7 @@ const MilkdownEditor = (props: IProps, ref) => {
   const control = useControls({ editor: getInstance(), dom: getDom() })
 
   const getValue = () =>
-    getInstance().action((ctx) => {
+    getInstance().action(ctx => {
       const editorView = ctx.get(editorViewCtx)
       const serializer = ctx.get(serializerCtx)
       return serializer(editorView.state.doc)
@@ -152,11 +152,11 @@ const MilkdownEditor = (props: IProps, ref) => {
   useImperativeHandle<any, EditorIntance>(ref, () => {
     return {
       getValue: getValue,
-      setValue: (value) => {
+      setValue: value => {
         const ctx = getInstance().ctx
         replaceAll(value)(ctx)
         setCatalog(outline()(ctx))
-        editor.editor.current.action((ctx) => {
+        editor.editor.current.action(ctx => {
           replaceAll(value)(ctx)
           setCatalog(outline()(ctx))
         })
@@ -183,7 +183,8 @@ const MilkdownEditor = (props: IProps, ref) => {
       )}
       <div
         className={clsx(style.content, !showCatalog && style.hide)}
-        style={{ height: typeof height === 'number' ? height + 'px' : height }}>
+        style={{ height: typeof height === 'number' ? height + 'px' : height }}
+      >
         <div className={style.container}>
           <ReactEditor editor={editor} />
         </div>
@@ -201,8 +202,9 @@ const MilkdownEditor = (props: IProps, ref) => {
             <div className={style.catalogTitle}>大纲</div>
             <Anchor
               affix={true}
-              onClick={(e) => e.preventDefault()}
-              getContainer={() => document.getElementById('content')}>
+              onClick={e => e.preventDefault()}
+              getContainer={() => document.getElementById('content')}
+            >
               {formatAnchor(arrToTree(catalog))}
             </Anchor>
           </div>
@@ -215,7 +217,7 @@ const MilkdownEditor = (props: IProps, ref) => {
 function formatAnchor(tree: any[]) {
   return (
     <Fragment>
-      {tree.map((item) => (
+      {tree.map(item => (
         <Anchor.Link key={item.title} href={'#' + item.title} title={item.title}>
           {item.children && formatAnchor(item.children)}
         </Anchor.Link>
@@ -232,7 +234,7 @@ export function Render({ value }: { value: string }) {
   useEffect(() => {
     setTimeout(() => {
       Editor.make()
-        .config((ctx) => {
+        .config(ctx => {
           ctx.set(rootCtx, dom.current)
           ctx.set(defaultValueCtx, value)
           ctx.set(editorViewOptionsCtx, { editable: () => false })

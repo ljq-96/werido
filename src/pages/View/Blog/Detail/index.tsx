@@ -2,10 +2,10 @@ import { FieldTimeOutlined, FileTextOutlined } from '@ant-design/icons'
 import { Affix, Button, Card, Col, PageHeader, Row, Space, Spin, Tag } from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { BlogType } from '../../../server/types'
-import { request } from '../../api'
-import MarkdownEditor, { EditorIntance } from '../../components/MarkdownEditor'
-import { formatTime } from '../../utils/common'
+import { BlogType } from '../../../../../server/types'
+import { request } from '../../../../api'
+import MarkdownEditor, { EditorIntance } from '../../../../components/MarkdownEditor'
+import { formatTime } from '../../../../utils/common'
 
 function BlogDetail() {
   const [onEdit, setOnEdit] = useState(false)
@@ -18,8 +18,8 @@ function BlogDetail() {
   useEffect(() => {
     setLoading(true)
     request.blog
-      .getById(id)
-      .then((res) => {
+      .get(id)
+      .then(res => {
         editor.current.setValue(res.content)
         setDetail(res)
       })
@@ -36,7 +36,7 @@ function BlogDetail() {
           ghost={false}
           style={{ margin: '-16px -16px 16px' }}
           onBack={() => navigate(-1)}
-          tags={detail?.tags?.map((item) => (
+          tags={detail?.tags?.map(item => (
             <Tag className='werido-tag' key={item} onClick={() => {}}>
               {item}
             </Tag>
@@ -45,7 +45,8 @@ function BlogDetail() {
             <Button type='primary' onClick={() => setOnEdit(!onEdit)}>
               编辑
             </Button>,
-          ]}>
+          ]}
+        >
           <Space size='large' style={{ color: '#aaa' }}>
             <Space size='small'>
               <FieldTimeOutlined />

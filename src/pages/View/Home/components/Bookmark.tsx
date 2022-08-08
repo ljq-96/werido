@@ -17,9 +17,9 @@ import {
   Dropdown,
   Menu,
 } from 'antd'
-import Sortable from '../../../components/Sortable'
-import { request } from '../../../api'
-import { BookmarkType, IconType } from '../../../../server/types'
+import Sortable from '../../../../components/Sortable'
+import { request } from '../../../../api'
+import { BookmarkType, IconType } from '../../../../../server/types'
 import {
   ApiFilled,
   BackwardOutlined,
@@ -29,7 +29,7 @@ import {
   PlusOutlined,
   UndoOutlined,
 } from '@ant-design/icons'
-import IconModal from '../../../components/Modal/IconModal'
+import IconModal from '../../../../components/Modal/IconModal'
 
 interface IProps {}
 
@@ -48,7 +48,7 @@ export default (props: IProps) => {
   const getBookmarks = () => {
     request.bookmark
       .get()
-      .then((res) => {
+      .then(res => {
         setBookmarkList(res)
         bookMarkCache.current = JSON.parse(JSON.stringify(res))
       })
@@ -65,7 +65,7 @@ export default (props: IProps) => {
   const changeEdit = () => {
     if (onEdit) {
       const changed = bookmarkList.filter(
-        (i) => JSON.stringify(i) !== JSON.stringify(bookMarkCache.current.find((j) => j._id === i._id)),
+        i => JSON.stringify(i) !== JSON.stringify(bookMarkCache.current.find(j => j._id === i._id)),
       )
       setLoading(
         changed.reduce((a, b) => {
@@ -74,17 +74,17 @@ export default (props: IProps) => {
         }, {}),
       )
       Promise.all(
-        changed.map((i) =>
+        changed.map(i =>
           request.bookmark.put({
             _id: i._id,
             label: i.label,
-            items: i.items.map((j) => ({ ...j, icon: (j.icon as IconType)._id })),
+            items: i.items.map(j => ({ ...j, icon: (j.icon as IconType)._id })),
             prev: i.prev,
             next: i.next,
           }),
         ),
       )
-        .then((res) => {
+        .then(res => {
           getBookmarks()
         })
         .finally(() => {
@@ -102,8 +102,8 @@ export default (props: IProps) => {
   }
 
   /** 添加标签组 */
-  const createBookmark = (values) => {
-    request.bookmark.post(values).then((res) => {
+  const createBookmark = values => {
+    request.bookmark.post(values).then(res => {
       setBookmarkList([...bookmarkList, res.data])
       setShowCreateBookmark(false)
       message.success('创建成功')
@@ -140,14 +140,15 @@ export default (props: IProps) => {
               </Tooltip>
             </Space>
           )
-        }>
+        }
+      >
         <Sortable
           value={bookmarkList}
           axis='xy'
           lockAxis='xy'
           distance={10}
           disabled={!onEdit}
-          onSortEnd={(values) => {
+          onSortEnd={values => {
             for (let i = 0; i < values.length; i++) {
               values[i].prev = values[i - 1]?._id || null
               values[i].next = values[i + 1]?._id || null
@@ -161,13 +162,14 @@ export default (props: IProps) => {
                 key={i.label}
                 extra={
                   onEdit && (
-                    <span onClick={(e) => e.stopPropagation()}>
+                    <span onClick={e => e.stopPropagation()}>
                       <Popconfirm title='确定删除此书签吗？' placement='bottom'>
-                        <Button danger type='link' icon={<DeleteOutlined />} onClick={(e) => e.stopPropagation()} />
+                        <Button danger type='link' icon={<DeleteOutlined />} onClick={e => e.stopPropagation()} />
                       </Popconfirm>
                     </span>
                   )
-                }>
+                }
+              >
                 <Spin spinning={!!loading[i._id]}>
                   {i.items?.length > 0 ? (
                     <Sortable
@@ -177,7 +179,7 @@ export default (props: IProps) => {
                       value={i.items}
                       disabled={!onEdit}
                       style={{ margin: '0px -8px', display: 'flex', flexWrap: 'wrap', rowGap: 16 }}
-                      onSortEnd={(value) => {
+                      onSortEnd={value => {
                         const current = { ...bookmarkList[idx] }
                         bookmarkList[idx] = {
                           ...current,
@@ -197,16 +199,19 @@ export default (props: IProps) => {
                                     onClick={() => {
                                       i.items.splice(jdx, 1)
                                       setBookmarkList([...bookmarkList])
-                                    }}>
+                                    }}
+                                  >
                                     删除
                                   </Menu.Item>
                                 </Menu>
-                              }>
+                              }
+                            >
                               <div
                                 key={`${j.title}`}
                                 className={`duration-300 p-5 rounded border-opacity-0 border-gray-200 text-center border-2 hover:bg-gray-50 hover:border-opacity-100 cursor-pointer ${
                                   onEdit ? 'hover:bg-white' : ''
-                                }`}>
+                                }`}
+                              >
                                 <img
                                   className='block mx-auto'
                                   style={{ width: '100%', marginBottom: 10 }}
@@ -225,7 +230,8 @@ export default (props: IProps) => {
                               xl={3}
                               key={'@add'}
                               className='border border-solid border-gray-100 rounded-sm hover:bg-gray-50 flex justify-center items-center'
-                              onClick={() => setModalState([idx])}>
+                              onClick={() => setModalState([idx])}
+                            >
                               <PlusOutlined style={{ fontSize: 30 }} />
                             </Col>
                           )}
@@ -241,7 +247,8 @@ export default (props: IProps) => {
                       xl={3}
                       key={'@add'}
                       className='h-40 border border-solid border-gray-100 rounded-sm hover:bg-gray-50 flex justify-center items-center'
-                      onClick={() => setModalState([idx])}>
+                      onClick={() => setModalState([idx])}
+                    >
                       <PlusOutlined style={{ fontSize: 30 }} />
                     </Col>
                   ) : (
@@ -262,7 +269,7 @@ export default (props: IProps) => {
         onCancel={() => {
           setModalState(null)
         }}
-        onOk={(values) => {
+        onOk={values => {
           const [i, j] = modalState
           if (onEditIcon) {
             bookmarkList[i].items[j] = values
@@ -279,7 +286,8 @@ export default (props: IProps) => {
         onCancel={() => {
           bookmarkForm.resetFields()
           setShowCreateBookmark(false)
-        }}>
+        }}
+      >
         <Form form={bookmarkForm} onFinish={createBookmark}>
           <Form.Item label='分组名称' name='label' rules={[{ required: true, message: '请输入分组名称' }]}>
             <Input placeholder='请输入分组名称' />

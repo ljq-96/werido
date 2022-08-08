@@ -47,7 +47,7 @@ function CommonTable(props: TableProps<any> & IProps, ref) {
   const [form] = Form.useForm()
   const { loading, data, execute } = useRequest(() => {
     const fields = form.getFieldsValue()
-    toolList?.forEach((item) => {
+    toolList?.forEach(item => {
       const value = fields[item.name]
       if (item.type === 'date' && value) {
         fields[`${item.name}Min`] = formatTime(value[0], 'yyyy-MMM-DD 00:00:00')
@@ -86,7 +86,7 @@ function CommonTable(props: TableProps<any> & IProps, ref) {
             <Card bodyStyle={{ paddingBottom: 0 }}>
               <Form form={form} onFinish={execute} labelWrap labelCol={{ style: { width: toolLabelWidth } }}>
                 <Row gutter={16}>
-                  {toolList.map((item) => (
+                  {toolList.map(item => (
                     <Col key={item.name} xxl={6} xl={8} lg={8} md={12} sm={24}>
                       <Form.Item label={item.label} name={item.name}>
                         {getToolItem(item)}
@@ -103,7 +103,8 @@ function CommonTable(props: TableProps<any> & IProps, ref) {
                           onClick={() => {
                             form.resetFields()
                             form.submit()
-                          }}>
+                          }}
+                        >
                           重置
                         </Button>
                       </Space>
@@ -141,7 +142,7 @@ function CommonTable(props: TableProps<any> & IProps, ref) {
                 total: data?.total || 0,
                 pageSize: pageInfo.size,
                 current: pageInfo.page,
-                showTotal: (total) => `共${total}条记录 第${pageInfo.page}/${Math.ceil(total / pageInfo.size)}页`,
+                showTotal: total => `共${total}条记录 第${pageInfo.page}/${Math.ceil(total / pageInfo.size)}页`,
               }}
             />
           </Card>

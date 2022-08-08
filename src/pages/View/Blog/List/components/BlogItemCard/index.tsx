@@ -3,8 +3,8 @@ import { Card, Space } from 'antd'
 import clsx from 'clsx'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
-import { BlogType } from '../../../../../server/types'
-import { Render } from '../../../../components/MarkdownEditor'
+import { BlogType } from '../../../../../../../server/types'
+import { Render } from '../../../../../../components/MarkdownEditor'
 import style from './style.module.less'
 
 const BlogItemCard = ({ item }: { item: BlogType }) => {
@@ -12,7 +12,11 @@ const BlogItemCard = ({ item }: { item: BlogType }) => {
   const navigate = useNavigate()
   return (
     <div className={style.blogItem}>
-      <div className={style.title} onClick={() => navigate(`/blog/${_id}`)}>
+      <div
+        className={clsx('werido-title', style.title)}
+        style={{ margin: '0 -16px' }}
+        onClick={() => navigate(`/blog/${_id}`)}
+      >
         {title}
       </div>
       <div className={style.description}>

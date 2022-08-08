@@ -87,77 +87,77 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
   const controls = useMemo<{ [key in Controls]: { action?: (params: any) => void; element: ReactElement } }>(() => {
     /** 撤回 */
     const undo = () => {
-      editor.action((ctx) => ctx.get(commandsCtx).call(Undo))
+      editor.action(ctx => ctx.get(commandsCtx).call(Undo))
     }
     /** 加粗 */
     const toggleBold = () => {
       handleActive('strong')
-      editor.action((ctx) => ctx.get(commandsCtx).call(commands.ToggleBold))
+      editor.action(ctx => ctx.get(commandsCtx).call(commands.ToggleBold))
     }
     /** 倾斜 */
     const toggleItalic = () => {
       handleActive('em')
-      editor.action((ctx) => ctx.get(commandsCtx).call(commands.ToggleItalic))
+      editor.action(ctx => ctx.get(commandsCtx).call(commands.ToggleItalic))
     }
     /** 删除线 */
     const toggleStrikeThrough = () => {
-      editor.action((ctx) => ctx.get(commandsCtx).call(commands.ToggleStrikeThrough))
+      editor.action(ctx => ctx.get(commandsCtx).call(commands.ToggleStrikeThrough))
     }
 
     /** 链接 */
     const toggleLink = () => {
       handleActive('link')
-      editor.action((ctx) => ctx.get(commandsCtx).call(commands.ToggleLink))
+      editor.action(ctx => ctx.get(commandsCtx).call(commands.ToggleLink))
     }
 
     /** 图片 */
     const insertImage = (url: string) => {
-      editor.action((ctx) => ctx.get(commandsCtx).call(commands.InsertImage, url))
+      editor.action(ctx => ctx.get(commandsCtx).call(commands.InsertImage, url))
     }
 
     /** 行内代码 */
     const toggleInlineCode = () => {
       handleActive('code_inline')
-      editor.action((ctx) => ctx.get(commandsCtx).call(commands.ToggleInlineCode))
+      editor.action(ctx => ctx.get(commandsCtx).call(commands.ToggleInlineCode))
     }
 
     /** 引用 */
     const wrapInBlockquote = () => {
-      editor.action((ctx) => ctx.get(commandsCtx).call(commands.WrapInBlockquote))
+      editor.action(ctx => ctx.get(commandsCtx).call(commands.WrapInBlockquote))
     }
 
     /** 列表 */
     const wrapInBulletList = () => {
-      editor.action((ctx) => ctx.get(commandsCtx).call(commands.WrapInBulletList))
+      editor.action(ctx => ctx.get(commandsCtx).call(commands.WrapInBulletList))
     }
 
     /** 有序列表 */
     const wrapInOrderedList = () => {
-      editor.action((ctx) => ctx.get(commandsCtx).call(commands.WrapInOrderedList))
+      editor.action(ctx => ctx.get(commandsCtx).call(commands.WrapInOrderedList))
     }
 
     /** 任务列表 */
     const turnIntoTaskList = () => {
-      editor.action((ctx) => ctx.get(commandsCtx).call(commands.TurnIntoTaskList))
+      editor.action(ctx => ctx.get(commandsCtx).call(commands.TurnIntoTaskList))
     }
 
     /** 代码块 */
     const turnIntoCodeFence = () => {
-      editor.action((ctx) => ctx.get(commandsCtx).call(commands.TurnIntoCodeFence, 2))
+      editor.action(ctx => ctx.get(commandsCtx).call(commands.TurnIntoCodeFence, 2))
     }
 
     /** 文本 */
     const toggleText = (level: number) => {
       if (level === 0) {
-        editor.action((ctx) => ctx.get(commandsCtx).call(commands.TurnIntoText))
+        editor.action(ctx => ctx.get(commandsCtx).call(commands.TurnIntoText))
       } else {
-        editor.action((ctx) => ctx.get(commandsCtx).call(commands.TurnIntoHeading, level))
+        editor.action(ctx => ctx.get(commandsCtx).call(commands.TurnIntoHeading, level))
       }
     }
 
     /** 分割线 */
     const insertHr = () => {
-      editor.action((ctx) => ctx.get(commandsCtx).call(commands.InsertHr))
+      editor.action(ctx => ctx.get(commandsCtx).call(commands.InsertHr))
     }
 
     /** iframe */
@@ -165,7 +165,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
       setShowIframe(true)
     }
 
-    const setValue = (value) => {
+    const setValue = value => {
       editor?.action(replaceAll(value))
     }
 
@@ -188,7 +188,8 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
                 <div>Ctrl + B</div>
               </>
             }
-            placement='bottom'>
+            placement='bottom'
+          >
             <Button
               type='text'
               onClick={toggleBold}
@@ -302,10 +303,11 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
             arrow
             overlay={
               <Menu
-                onClick={(e) => {
+                onClick={e => {
                   const { key } = e
                   toggleText(Number(key))
-                }}>
+                }}
+              >
                 <Menu.Item key='0'>
                   <span style={{ marginRight: 16 }}>正文</span>
                   <Text type='secondary' style={{ fontSize: 12 }}>
@@ -343,7 +345,8 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
                   </Text>
                 </Menu.Item>
               </Menu>
-            }>
+            }
+          >
             <Button type='text' icon={<BorderlessTableOutlined />}>
               文本
             </Button>
@@ -362,14 +365,15 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
         element: <Divider type='vertical' />,
       },
       clear: {
-        action: (value) => setValue(value),
+        action: value => setValue(value),
         element: (
           <Popconfirm
             title='此操作会清空所有内容'
             onConfirm={() => setValue('')}
             placement='bottom'
             okButtonProps={{ danger: true }}
-            zIndex={10000}>
+            zIndex={10000}
+          >
             <Tooltip title='清空' placement='bottom'>
               <Button type='text' icon={<DeleteOutlined />} />
             </Tooltip>
@@ -391,14 +395,16 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
                 setShowIframe(false)
                 iframeForm.resetFields()
               }}
-              onOk={iframeForm.submit}>
+              onOk={iframeForm.submit}
+            >
               <Form
                 form={iframeForm}
                 onFinish={({ src, height }) => {
                   editor.action(insert(`:iframe{src="${src}" height="${height ?? 200}"}`))
                   iframeForm.resetFields()
                   setShowIframe(false)
-                }}>
+                }}
+              >
                 <Form.Item label='地址' name='src' rules={[{ required: true, message: '请输入地址！' }]}>
                   <Input placeholder='请输入地址' />
                 </Form.Item>
@@ -415,10 +421,10 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
 
   useEffect(() => {
     const getState = () => {
-      editor.action((ctx) => {
+      editor.action(ctx => {
         const _activeBtns = new Set<ActivedButton>()
         const { state } = ctx.get(editorViewCtx)
-        Object.keys(state.schema.marks).forEach((k) => {
+        Object.keys(state.schema.marks).forEach(k => {
           if (hasMark(state, state.schema.marks[k])) {
             console.log(k)
 

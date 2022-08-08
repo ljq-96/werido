@@ -19,7 +19,8 @@ function LandScape1(props: IProps) {
       x='0px'
       y='0px'
       viewBox='0 0 2850 1800'
-      enable-background='new 0 0 2850 1800'>
+      enable-background='new 0 0 2850 1800'
+    >
       <g id='Layer_1_1_'>
         <linearGradient id='SVGID_1_' gradientUnits='userSpaceOnUse' x1='1425' y1='-9.1617' x2='1425' y2='835.5475'>
           <stop offset='0.0051' style={{ stopColor: c4 }} />

@@ -7,19 +7,12 @@ import {
   AreaChartOutlined,
   ReadOutlined,
   UserOutlined,
+  TagsOutlined,
 } from '@ant-design/icons'
-import { useNavigate, Navigator, Outlet } from 'react-router-dom'
+import { useNavigate, Outlet } from 'react-router-dom'
 import Layout from '../layout'
 import { Result } from 'antd'
 import { RouteProps } from '../../server/types'
-import BlogDetail from '../pages/BlogDetail'
-
-const Login = lazy(() => import('../pages/Login'))
-const Home = lazy(() => import('../pages/Home'))
-const BlogList = lazy(() => import('../pages/BlogList'))
-const UserManage = lazy(() => import('../pages/UserManage'))
-const BlogManage = lazy(() => import('../pages/BlogManage'))
-const BlogEditor = lazy(() => import('../pages/BlogManage/BlogEditor'))
 
 function Redirect({ to }) {
   let navigate = useNavigate()
@@ -33,32 +26,38 @@ const routes: RouteProps[] = [
   {
     path: '/login',
     name: '登陆',
-    component: Login,
+    component: lazy(() => import('../pages/Login')),
   },
   {
-    path: '/',
+    path: '/view',
     component: Layout,
     routes: [
       {
-        path: '/home',
+        path: '/view',
         name: '首页',
         icon: <HomeOutlined />,
-        component: Home,
+        component: lazy(() => import('../pages/View/Home')),
       },
       {
-        path: '/blog',
+        path: '/view/bookmark',
+        name: '收藏夹',
+        icon: <TagsOutlined />,
+        component: Result,
+      },
+      {
+        path: '/view/blog',
         name: '文章列表',
         icon: <ReadOutlined />,
-        component: BlogList,
+        component: lazy(() => import('../pages/View/Blog/List')),
       },
       {
-        path: '/blog/:id',
+        path: '/view/blog/:id',
         name: '文章详情',
         hide: true,
-        component: BlogDetail,
+        component: lazy(() => import('../pages/View/Blog/Detail')),
       },
       {
-        path: '/to_manage',
+        path: '/view/to_manage',
         name: '管理系统',
         icon: <LaptopOutlined />,
         component: () => <Redirect to='/manage/overview' />,
@@ -79,34 +78,25 @@ const routes: RouteProps[] = [
         path: '/manage/overview',
         name: '总览',
         icon: <AreaChartOutlined />,
-        component: Result,
+        component: lazy(() => import('../pages/Manage/Overview')),
       },
       {
         path: '/manage/blog',
         name: '文章管理',
         icon: <FileTextOutlined />,
-        component: Outlet,
-        routes: [
-          {
-            path: '/manage/blog/list',
-            name: '文章列表',
-            icon: <AreaChartOutlined />,
-            component: BlogManage,
-          },
-          {
-            path: '/manage/blog/editor',
-            name: '新建文章',
-            hide: true,
-            icon: <FileTextOutlined />,
-            component: BlogEditor,
-          },
-        ],
+        component: lazy(() => import('../pages/Manage/Blog/List')),
+      },
+      {
+        path: '/manage/blog/editor',
+        name: '新建文章',
+        hide: true,
+        component: lazy(() => import('../pages/Manage/Blog/Editor')),
       },
       {
         path: '/manage/users',
         name: '用户管理',
         icon: <UserOutlined />,
-        component: UserManage,
+        component: lazy(() => import('../pages/Manage/User')),
       },
     ],
   },

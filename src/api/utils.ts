@@ -30,17 +30,11 @@ export class BaseRequest {
   }
 
   get(query?) {
+    const f = typeof query === 'string'
     return Fetch({
-      url: `${this.url}`,
+      url: `${this.url}${f ? '/' + query : ''}`,
       method: 'GET',
-      query,
-    })
-  }
-
-  getById(id: string) {
-    return Fetch({
-      url: `${this.url}/${id}`,
-      method: 'GET',
+      query: !f && query,
     })
   }
 

@@ -3,18 +3,22 @@
   padding: 16px;
   border: 1px solid #f0f0f0;
   background-color: #fff;
+  transition: 0.4s;
   &:not(:last-child) {
     margin-bottom: 16px;
+  }
+  &:hover {
+    background-color: #f5f5f5;
+    // box-shadow: 0 1px 2px -2px #00000029, 0 3px 6px #0000001f, 0 5px 12px 4px #00000017;
   }
   .title {
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.4s;
+    transition: 0.2s;
     // margin: 0 -16px;
     &:hover {
       color: var(--ant-primary-color);
-      text-decoration: underline;
     }
   }
   .description {

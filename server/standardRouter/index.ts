@@ -7,7 +7,7 @@ type RouterFile = {
 }
 
 const useRoutes = (app: Koa) => {
-  fs.readdirSync(__dirname).forEach((file) => {
+  fs.readdirSync(__dirname).forEach(file => {
     console.log(__dirname, file)
 
     if (file.indexOf('index') === 0) return
@@ -16,7 +16,7 @@ const useRoutes = (app: Koa) => {
         const router = res.default
         app.use(router.routes())
       })
-      .catch((e) => {
+      .catch(e => {
         console.error(e)
       })
   })

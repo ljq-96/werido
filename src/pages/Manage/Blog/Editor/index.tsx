@@ -2,17 +2,18 @@ import { Button, Form, Input, message, PageHeader, Select } from 'antd'
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSearchParam } from 'react-use'
-import { request } from '../../../api'
-import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
+import { request } from '../../../../api'
+import MarkdownEditor, { EditorIntance } from '../../../../components/MarkdownEditor'
 
 const BlogEditor = () => {
   const [loading, setLoading] = useState(false)
+  const [tagOptions, setTagOptions] = useState<{ label: string; value: string }[]>([])
   const id = useSearchParam('id')
   const editor = useRef<EditorIntance>(null)
   const navigate = useNavigate()
   const [form] = Form.useForm()
 
-  const handleFinish = async (fields) => {
+  const handleFinish = async fields => {
     setLoading(true)
     if (id) {
       await request.blog.put({ _id: id, content: editor.current.getValue(), ...fields })
@@ -27,11 +28,14 @@ const BlogEditor = () => {
 
   useEffect(() => {
     if (id) {
-      request.blog.getById(id).then((res) => {
+      request.blog.get(id).then(res => {
         editor.current.setValue(res.content)
         form.setFieldsValue(res)
       })
     }
+    request.statistics.get('tag').then(res => {
+      setTagOptions(res.map(item => ({ label: item.name, value: item.name })))
+    })
   }, [id])
 
   return (
@@ -49,6 +53,7 @@ const BlogEditor = () => {
                   placeholder='请选择标签'
                   maxTagCount='responsive'
                   style={{ width: 256 }}
+                  options={tagOptions}
                   allowClear
                 />
               </Form.Item>

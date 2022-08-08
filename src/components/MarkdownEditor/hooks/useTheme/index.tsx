@@ -53,7 +53,7 @@ function useTheme() {
         }
       })
 
-      manager.set(ThemeSize, (key) => {
+      manager.set(ThemeSize, key => {
         if (!key) return
         return size[key]
       })
@@ -100,7 +100,7 @@ function useTheme() {
         `
       })
 
-      manager.set(ThemeBorder, (direction) => {
+      manager.set(ThemeBorder, direction => {
         const lineWidth = manager.get(ThemeSize, 'lineWidth')
         const line = manager.get(ThemeColor, ['line'])
         if (!direction) {
@@ -113,7 +113,7 @@ function useTheme() {
         `
       })
 
-      manager.set(ThemeIcon, (key) => {
+      manager.set(ThemeIcon, key => {
         const icon = iconMapping[key]
         if (!icon) {
           return
@@ -131,7 +131,7 @@ function useTheme() {
         getStyle(manager, emotion)
       })
 
-      manager.set(ThemeFont, (key) => {
+      manager.set(ThemeFont, key => {
         if (key === 'typography') return 'Roboto, arial, sans-serif'
         return 'code'
       })

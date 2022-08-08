@@ -7,7 +7,7 @@ import Logo from '../../components/Logo'
 import Space from '../../components/Canvas/Space'
 import './index.less'
 
-const Login = (props) => {
+const Login = props => {
   const [isLogin, setIsLogin] = useState(true)
   const [form] = Form.useForm()
   const navigator = useNavigate()
@@ -20,12 +20,12 @@ const Login = (props) => {
   const onFinish = (fields: UserType & { password_c?: string }) => {
     const { username, password, password_c } = fields
     if (isLogin) {
-      request.login.post({ username, password }).then((res) => {
+      request.login.post({ username, password }).then(res => {
         message.success(res.msg)
         navigator('/home')
       })
     } else {
-      request.register.post({ username, password }).then((res) => {
+      request.register.post({ username, password }).then(res => {
         message.success('注册成功，请登录！')
         setIsLogin(true)
         form.setFields([
@@ -68,7 +68,8 @@ const Login = (props) => {
                       return Promise.reject('两次密码不一致，请重新输入')
                     },
                   }),
-                ]}>
+                ]}
+              >
                 <Input.Password placeholder='请确认密码' />
               </Form.Item>
             )}

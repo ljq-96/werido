@@ -2,11 +2,11 @@ import { InfoCircleOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message, Modal, Space } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { Fragment, useRef, useState } from 'react'
-import { UserType } from '../../../server/types'
-import { UserStatus } from '../../../server/types/enum'
-import { request } from '../../api'
-import CommonTable, { CommonTableInstance, ToolItem } from '../../components/CommonTable'
-import { formatTime } from '../../utils/common'
+import { UserType } from '../../../../server/types'
+import { UserStatus } from '../../../../server/types/enum'
+import { request } from '../../../api'
+import CommonTable, { CommonTableInstance, ToolItem } from '../../../components/CommonTable'
+import { formatTime } from '../../../utils/common'
 
 const toolList: ToolItem[] = [
   {
@@ -64,12 +64,12 @@ function UsersManage() {
     {
       title: '状态',
       dataIndex: 'status',
-      render: (val) => UserStatus[val],
+      render: val => UserStatus[val],
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
-      render: (val) => formatTime(val),
+      render: val => formatTime(val),
     },
     {
       title: '操作',
@@ -82,7 +82,8 @@ function UsersManage() {
               onClick={() => {
                 setShowModal(record)
                 form.setFieldsValue(record)
-              }}>
+              }}
+            >
               编辑
             </Button>
             <Button type='link' danger onClick={() => handleDelete(record._id)}>
@@ -116,7 +117,8 @@ function UsersManage() {
         onCancel={() => {
           setShowModal(false)
           form.resetFields()
-        }}>
+        }}
+      >
         <Form form={form} labelCol={{ style: { width: 70 } }} onFinish={handleSubmit}>
           <Form.Item label='用户名' name='username' rules={[{ required: true, message: '请输入用户名！' }]}>
             <Input placeholder='请输入用户名' />

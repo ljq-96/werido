@@ -7,23 +7,6 @@ import { BlogModel } from '../model'
 @controller('/api/blog')
 @unifyUse(validateToken)
 export class BlogRoute {
-  @GET('/tag')
-  async getBlogTags(ctx: RouterCtx) {
-    const { user } = ctx.app.context
-    const list = await BlogModel.find({ creator: user._id })
-    const tagMap: { [key: string]: number } = {}
-    list.forEach((i) => {
-      i.tags?.forEach((j) => {
-        const value = tagMap[j]
-        tagMap[j] = value === undefined ? 1 : value + 1
-      })
-    })
-    const data = Object.entries(tagMap)
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value)
-    ctx.body = data
-  }
-
   @GET()
   async getBlogs(ctx: RouterCtx) {
     const { page, size } = ctx.request.query

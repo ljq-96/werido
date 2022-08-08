@@ -12,8 +12,8 @@ export function unifyUse<T extends string>(
   inLast = false,
 ) {
   return function (target: new (...args: any[]) => any) {
-    const handlerKeys = Object.getOwnPropertyNames(target.prototype).filter((key) => key !== 'constructor')
-    handlerKeys.forEach((key) => {
+    const handlerKeys = Object.getOwnPropertyNames(target.prototype).filter(key => key !== 'constructor')
+    handlerKeys.forEach(key => {
       if (!excludes.includes(key as T)) {
         const middlewares = Reflect.getMetadata('middlewares', target.prototype, key) || []
         if (inLast) {

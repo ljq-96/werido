@@ -18,7 +18,7 @@ export const querystring = {
   },
   stringify: (obj: { [k: string]: any }) => {
     let result = []
-    Object.keys(obj).forEach((key) => {
+    Object.keys(obj).forEach(key => {
       const value = obj[key]
       if (null === value || undefined === value) {
         return
@@ -72,7 +72,7 @@ export const isSameSet = (s1: Set<any>, s2: Set<any>) => {
 export function arrToTree(arr: { text: string; level: number }[]) {
   const root = { children: [] }
   let current: any = root
-  arr.forEach((item) => {
+  arr.forEach(item => {
     const { text, level } = item
     const obj = { title: text, level, key: text, children: [], parent: undefined }
     while (current !== root && current.level - obj.level !== -1) {

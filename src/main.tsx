@@ -6,11 +6,12 @@ import routes from './routes'
 import { ConfigProvider } from 'antd'
 import UserProvider from './contexts/useUser'
 import zhCN from 'antd/lib/locale/zh_CN'
+import '@ant-design/flowchart/dist/index.css'
 
-const parseRoute = (route) => {
+const parseRoute = route => {
   return (
     <Route key={route.path} path={route.path} element={<route.component />}>
-      {route?.routes?.map((item) => parseRoute(item))}
+      {route?.routes?.map(item => parseRoute(item))}
     </Route>
   )
 }
@@ -20,7 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <UserProvider>
     <ConfigProvider locale={zhCN}>
       <BrowserRouter>
-        <Routes>{routes.map((r) => parseRoute(r))}</Routes>
+        <Routes>{routes.map(r => parseRoute(r))}</Routes>
       </BrowserRouter>
     </ConfigProvider>
   </UserProvider>,

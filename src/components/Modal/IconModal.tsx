@@ -52,7 +52,8 @@ const VirtualGrid = (props: VProps) => {
               gridRef.current?._outerRef?.scrollTo(0, scrollTop.current)
             })
         }
-      }}>
+      }}
+    >
       {({ columnIndex, rowIndex, style }: { columnIndex: number; rowIndex: number; style: React.CSSProperties }) => (
         <div
           key={`${rowIndex}-${columnIndex}`}
@@ -62,11 +63,13 @@ const VirtualGrid = (props: VProps) => {
             alignItems: 'center',
             justifyContent: 'center',
             padding: 5,
-          }}>
+          }}
+        >
           <div
             className='hover-bg'
             style={{ padding: 5, borderRadius: 2, cursor: 'pointer' }}
-            onClick={() => onChange(list[rowIndex * 6 + columnIndex])}>
+            onClick={() => onChange(list[rowIndex * 6 + columnIndex])}
+          >
             <Image preview={false} style={{ width: '100%' }} src={list[rowIndex * 6 + columnIndex]?.icon} />
           </div>
         </div>
@@ -107,7 +110,7 @@ export default (props: IProps) => {
     }
   }, [icons, iconType])
 
-  const onFinish = (values) => {
+  const onFinish = values => {
     onOk({
       ...values,
       icon: selectedIcon,
@@ -117,11 +120,11 @@ export default (props: IProps) => {
     setSelectedIcon(null)
   }
 
-  const getIcons = (pageInfo) => {
+  const getIcons = pageInfo => {
     setLoading(true)
     return request.icon
       .get(pageInfo)
-      .then((res) => {
+      .then(res => {
         if (res.code === 0) {
           if (icons) {
             const { customIcons, presetIcons } = icons
@@ -165,12 +168,13 @@ export default (props: IProps) => {
       title={title}
       visible={visible}
       width={530}
-      onCancel={(e) => {
+      onCancel={e => {
         onCancel()
         form.resetFields()
         setSelectedIcon(null)
       }}
-      onOk={form.submit}>
+      onOk={form.submit}
+    >
       <Form form={form} onFinish={onFinish}>
         <Form.Item label='标题' name='title' rules={[{ required: true, message: '请输入标题' }]}>
           <Input placeholder='请输入书签的名称' />
@@ -196,7 +200,7 @@ export default (props: IProps) => {
                   {iconList && iconList.length > 0 ? (
                     <VirtualGrid
                       list={iconList}
-                      onChange={(icon) => {
+                      onChange={icon => {
                         setMenuDropVisible(false)
                         form.setFields([{ name: 'icon', value: icon._id }])
                         setSelectedIcon(icon)
@@ -212,7 +216,8 @@ export default (props: IProps) => {
                   )}
                 </Spin>
               </Menu>
-            }>
+            }
+          >
             <div
               className='hover-bg'
               style={{
@@ -228,7 +233,8 @@ export default (props: IProps) => {
                 cursor: 'pointer',
                 userSelect: 'none',
                 color: '#8c8c8c',
-              }}>
+              }}
+            >
               {selectedIcon ? (
                 <Image preview={false} src={selectedIcon.icon} />
               ) : (
