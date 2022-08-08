@@ -76,7 +76,7 @@ const Search = (props) => {
         style={{
           position: 'relative',
           borderRadius: 4,
-          paddingTop: '46%',
+          paddingTop: '56%',
           overflow: 'hidden',
         }}>
         <LandScape1 color={loginUser?.themeColor} style={{ position: 'absolute', bottom: '-10%', width: '100%' }} />
