@@ -21,7 +21,7 @@ export default (props: IProps) => {
         </Card>
       </Col>
       <Col xxl={18} xl={18} lg={16} md={12} sm={24} xs={24}>
-        <Bookmark />
+        {/* <Bookmark /> */}
       </Col>
     </Row>
   )

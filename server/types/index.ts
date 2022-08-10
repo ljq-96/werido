@@ -69,17 +69,16 @@ export interface IconType {
 
 export interface BookmarkType {
   _id: string
-  label: string
+  title: string
+  icon?: string
+  url?: string
   creator: string
   prev?: string
+  parent?: string
   next?: string
   createTime?: number
   updateTime?: number
-  items: {
-    title: string
-    url: string
-    icon: unknown
-  }[]
+  children: BookmarkType[]
 }
 
 export interface BlogType {

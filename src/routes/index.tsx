@@ -42,7 +42,7 @@ const routes: RouteProps[] = [
         path: '/view/bookmark',
         name: '收藏夹',
         icon: <TagsOutlined />,
-        component: Result,
+        component: lazy(() => import('../pages/View/Bookmark')),
       },
       {
         path: '/view/blog',

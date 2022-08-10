@@ -3,6 +3,7 @@ import { RouterCtx } from '../types'
 import { validateToken } from '../middlewares'
 import { BookmarkModel } from '../model'
 import { formatTree } from '../utils/common'
+import { DocType } from '../types/enum'
 
 @controller('/api/bookmark')
 @unifyUse(validateToken)
@@ -10,9 +11,8 @@ export class BookmarkRoute {
   @GET()
   async getMyBookmarks(ctx: RouterCtx) {
     const { _id } = ctx.app.context.user
-    const data = await BookmarkModel.find({ creator: _id }).populate('items.icon')
-
-    ctx.body = formatTree(data)
+    const data = await BookmarkModel.find({ creator: _id })
+    ctx.body = formatTree(JSON.parse(JSON.stringify(data)))
   }
 
   @PUT()
@@ -27,27 +27,45 @@ export class BookmarkRoute {
   async createBookmark(ctx: RouterCtx) {
     const { body } = ctx.request
     const { user } = ctx.app.context
-    const prevBookmark = await BookmarkModel.findOne({ creator: user._id, next: null })
+    const { parent, ...reset } = body
     let bookmark
-    if (prevBookmark) {
-      bookmark = await BookmarkModel.create({
-        label: body.label,
+    const groupDoc = await BookmarkModel.findOne({ creator: user._id, title: parent, type: DocType.分组 })
+    if (groupDoc) {
+      const prevDoc = await BookmarkModel.findOne({
         creator: user._id,
-        prev: prevBookmark._id,
+        parent: groupDoc._id,
         next: null,
-        children: [],
+        type: DocType.文档,
       })
-      await BookmarkModel.updateOne({ _id: prevBookmark._id }, { next: bookmark._id })
-    } else {
       bookmark = await BookmarkModel.create({
-        label: body.label,
         creator: user._id,
-        prev: null,
         next: null,
-        children: [],
+        prev: prevDoc?._id || null,
+        parent: groupDoc._id,
+        type: DocType.文档,
+        ...reset,
+      })
+      prevDoc && (await BookmarkModel.updateOne({ _id: prevDoc._id }, { next: bookmark._id }))
+    } else {
+      const prevGroup = await BookmarkModel.findOne({ creator: user._id, next: null, type: DocType.分组 })
+      const groupDoc = await BookmarkModel.create({
+        creator: user._id,
+        title: parent,
+        next: null,
+        prev: prevGroup?._id || null,
+        parent: null,
+        type: DocType.分组,
+      })
+      prevGroup && (await BookmarkModel.updateOne({ _id: prevGroup._id }, { next: groupDoc._id }))
+      bookmark = await BookmarkModel.create({
+        creator: user._id,
+        next: null,
+        prev: null,
+        parent: groupDoc._id,
+        type: DocType.文档,
+        ...reset,
       })
     }
-
     ctx.body = bookmark
   }
 }
