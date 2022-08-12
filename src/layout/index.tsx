@@ -116,7 +116,13 @@ export default () => {
             }
           >
             <Button type='text'>
-              <Avatar shape='square' size='small' icon={<UserOutlined />} style={{ marginRight: 10 }} />
+              <Avatar
+                shape='circle'
+                size='small'
+                src='https://joeschmoe.io/api/v1/random'
+                icon={<UserOutlined />}
+                style={{ marginRight: 10 }}
+              />
               {loginUser?.username}
             </Button>
           </Dropdown>

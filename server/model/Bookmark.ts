@@ -25,23 +25,8 @@ export class Bookmark {
   @prop({ type: String, default: moment().format() })
   updateTime?: string
 
-  @prop({ ref: () => Bookmark })
-  prev?: Ref<Bookmark>
-
-  @prop({ ref: () => Bookmark })
-  next?: Ref<Bookmark>
-
-  @prop({ ref: () => Bookmark })
-  parent?: Ref<Bookmark>
-
   @prop({ type: Boolean })
   pin?: boolean
-
-  @prop({ ref: () => Bookmark })
-  pinPrev?: Ref<Bookmark>
-
-  @prop({ ref: () => Bookmark })
-  pinNext?: Ref<Bookmark>
 }
 
 export const BookmarkModel = getModelForClass(Bookmark)

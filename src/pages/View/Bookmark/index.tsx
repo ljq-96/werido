@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Col, Empty, Row, Spin } from 'antd'
+import { Avatar, Button, Card, Col, Dropdown, Empty, Menu, Row, Spin } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { BookmarkType } from '../../../../server/types'
 import { request } from '../../../api'
@@ -9,9 +9,10 @@ import SortableContainer from '../../../components/Sortable/SortableContainer'
 import SortableMultiple from '../../../components/Sortable/SortableMultiple'
 import { rectSortingStrategy } from '@dnd-kit/sortable'
 import './style.less'
+import { DeleteOutlined, EditOutlined, PushpinOutlined } from '@ant-design/icons'
 
 function Bookmark() {
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState<BookmarkType | boolean>(null)
   const [loading, setLoading] = useState(false)
   const [bookmarks, setBookmarks] = useState<BookmarkType[]>([])
 
@@ -31,6 +32,20 @@ function Bookmark() {
     setShowModal(true)
   }
 
+  const handleMenuClick = (key, value) => {
+    switch (key) {
+      case 'pin':
+        break
+
+      case 'edit':
+        console.log(value)
+
+        setShowModal(value)
+        break
+      case 'delete':
+    }
+  }
+
   useEffect(() => {
     getBookmark()
   }, [])
@@ -41,7 +56,7 @@ function Bookmark() {
         <Col span={18}>
           <Card
             title='我的书签'
-            bodyStyle={{ padding: 8 }}
+            bodyStyle={{ padding: 12 }}
             extra={
               <Button type='primary' onClick={handleCreate}>
                 添加书签
@@ -50,90 +65,27 @@ function Bookmark() {
           >
             <Spin spinning={loading}>
               {bookmarks.length > 0 ? (
-                <>
-                  <MultipleContainers
-                    // disabled
-                    value={bookmarks}
-                    columns={6}
-                    itemCount={5}
-                    strategy={rectSortingStrategy}
-                    renderItem={value => <BookmarkItem item={value} />}
-                    vertical
-                  />
-                </>
+                <MultipleContainers
+                  // disabled
+                  value={bookmarks}
+                  columns={6}
+                  strategy={rectSortingStrategy}
+                  renderItem={value => (
+                    <BookmarkItem
+                      item={value}
+                      onMenu={action => {
+                        switch (action) {
+                          case 'edit':
+                            setShowModal(value)
+                            break
+                        }
+                      }}
+                    />
+                  )}
+                  vertical
+                />
               ) : (
-                // bookmarks.map((k, kIdx) => (
-                //   <div className='bookmark-group' key={k._id}>
-                //     <div className='bookmark-group-title werido-title'>{k.title}</div>
-                //     <Row gutter={[16, 16]}>
-                //       <SortableContainer
-                //         value={k.children}
-                //         renderItem={(item, index, attrs) => (
-                //           <Col xxl={3} md={4} sm={6} {...attrs}>
-                //             <BookmarkItem item={item} key={item._id} />
-                //           </Col>
-                //         )}
-                //         onChange={items => {
-                //           bookmarks[kIdx].children = items
-                //           setBookmarks([...bookmarks])
-                //         }}
-                //       />
-                //     </Row>
-                //     {/* <Row gutter={[16, 16]}>
-                //       {k.children.map(v => (
-                //         <Col xxl={3} md={4} sm={6}>
-                //           <BookmarkItem item={v} />
-                //         </Col>
-                //       ))}
-                //     </Row> */}
-                //   </div>
-                // ))
-                // <SortableMultiple
-                //   value={bookmarks}
-                //   renderItem={(item, index) => <BookmarkItem item={item} key={item._id} />}
-                //   onChange={items => {}}
-                // />
-                // bookmarks.map((k, kIdx) => (
-                //   <div className='bookmark-group' key={k._id}>
-                //     <div className='bookmark-group-title werido-title'>{k.title}</div>
-                //     <SortableContainer
-                //       value={k.children}
-                //       renderItem={(item, index) => <BookmarkItem item={item} key={item._id} />}
-                //       onChange={items => {
-                //         bookmarks[kIdx].children = items
-                //         setBookmarks([...bookmarks])
-                //       }}
-                //     />
-                //     {/* <Row gutter={[16, 16]}>
-                //       {k.children.map(v => (
-                //         <Col xxl={3} md={4} sm={6}>
-                //           <BookmarkItem item={v} />
-                //         </Col>
-                //       ))}
-                //     </Row> */}
-                //   </div>
-                // ))
-                // {bookmarks.map((k, kIdx) => (
-                //   <div className='bookmark-group' key={k._id}>
-                //     <div className='bookmark-group-title werido-title'>{k.title}</div>
-                //     {/* <SortableContainer
-                //       value={k.children}
-                //       renderItem={(item, index) => <BookmarkItem item={item} key={item._id} />}
-                //       onChange={items => {
-                //         bookmarks[kIdx].children = items
-                //         setBookmarks([...bookmarks])
-                //       }}
-                //     /> */}
-                //     <Row gutter={[16, 16]}>
-                //       {k.children.map(v => (
-                //         <Col xxl={3} md={4} sm={6}>
-                //           <BookmarkItem item={v} />
-                //         </Col>
-                //       ))}
-                //     </Row>
-                //   </div>
-                // ))}
-                <Empty />
+                <Empty style={{ padding: 24 }} />
               )}
             </Spin>
           </Card>

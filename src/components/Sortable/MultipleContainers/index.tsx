@@ -134,17 +134,12 @@ interface Props {
   vertical?: boolean
 }
 
-const empty: UniqueIdentifier[] = []
-
 export function MultipleContainers({
   value,
   disabled,
   adjustScale = false,
-  itemCount = 3,
-  cancelDrop,
   columns,
   handle = false,
-  items: initialItems,
   containerStyle,
   coordinateGetter = multipleContainersCoordinateGetter,
   getItemStyles = () => ({}),
@@ -153,7 +148,6 @@ export function MultipleContainers({
   modifiers,
   renderItem,
   strategy = verticalListSortingStrategy,
-  trashable = false,
   vertical = false,
   scrollable,
 }: Props) {
@@ -188,22 +182,14 @@ export function MultipleContainers({
         })
       }
 
-      // Start by finding any intersecting droppable
       const pointerIntersections = pointerWithin(args)
-      const intersections =
-        pointerIntersections.length > 0
-          ? // If there are droppables intersecting with the pointer, return those
-            pointerIntersections
-          : rectIntersection(args)
+      const intersections = pointerIntersections.length > 0 ? pointerIntersections : rectIntersection(args)
       let overId = getFirstCollision(intersections, 'id')
 
       if (overId != null) {
         if (overId in items) {
           const containerItems = items[overId]
-
-          // If a container is matched and it contains items (columns 'A', 'B', 'C')
           if (containerItems.length > 0) {
-            // Return the closest droppable within that container
             overId = closestCenter({
               ...args,
               droppableContainers: args.droppableContainers.filter(
@@ -217,16 +203,9 @@ export function MultipleContainers({
 
         return [{ id: overId }]
       }
-
-      // When a draggable item moves to a new container, the layout may shift
-      // and the `overId` may become `null`. We manually set the cached `lastOverId`
-      // to the id of the draggable item that was moved to the new container, otherwise
-      // the previous `overId` will be returned which can cause items to incorrectly shift positions
       if (recentlyMovedToNewContainer.current) {
         lastOverId.current = activeId
       }
-
-      // If no droppable is matched, return the last match
       return lastOverId.current ? [{ id: lastOverId.current }] : []
     },
     [activeId, items],
@@ -269,8 +248,6 @@ export function MultipleContainers({
 
   const onDragCancel = () => {
     if (clonedItems) {
-      // Reset items to their original state in case items have been
-      // Dragged across containers
       setItems(clonedItems)
     }
 
@@ -387,8 +364,8 @@ export function MultipleContainers({
 
         setActiveId(null)
       }}
-      cancelDrop={cancelDrop}
-      onDragCancel={onDragCancel}
+      // cancelDrop={cancelDrop}
+      // onDragCancel={onDragCancel}
       modifiers={modifiers}
     >
       <div
@@ -413,7 +390,6 @@ export function MultipleContainers({
               scrollable={scrollable}
               style={containerStyle}
               unstyled={minimal}
-              onRemove={() => handleRemove(containerId)}
             >
               <SortableContext items={items[containerId]} strategy={strategy}>
                 {items[containerId].map((value, index) => {
@@ -465,7 +441,6 @@ export function MultipleContainers({
           isDragging: true,
           isDragOverlay: true,
         })}
-        color={getColor(id)}
         wrapperStyle={wrapperStyle({ index: 0 })}
         renderItem={renderItem}
         dragOverlay
@@ -498,7 +473,6 @@ export function MultipleContainers({
               isSorting: false,
               isDragOverlay: false,
             })}
-            color={getColor(item)}
             wrapperStyle={wrapperStyle({ index })}
             renderItem={renderItem}
           />
@@ -507,71 +481,12 @@ export function MultipleContainers({
     )
   }
 
-  function handleRemove(containerID: UniqueIdentifier) {
-    setContainers(containers => containers.filter(id => id !== containerID))
-  }
-
-  function handleAddColumn() {
-    const newContainerId = getNextContainerId()
-
-    unstable_batchedUpdates(() => {
-      setContainers(containers => [...containers, newContainerId])
-      setItems(items => ({
-        ...items,
-        [newContainerId]: [],
-      }))
-    })
-  }
-
   function getNextContainerId() {
     const containerIds = Object.keys(items)
     const lastContainerId = containerIds[containerIds.length - 1]
 
     return String.fromCharCode(lastContainerId.charCodeAt(0) + 1)
   }
-}
-
-function getColor(id: UniqueIdentifier) {
-  switch (String(id)[0]) {
-    case 'A':
-      return '#7193f1'
-    case 'B':
-      return '#ffda6c'
-    case 'C':
-      return '#00bcd4'
-    case 'D':
-      return '#ef769f'
-  }
-
-  return undefined
-}
-
-function Trash({ id }: { id: UniqueIdentifier }) {
-  const { setNodeRef, isOver } = useDroppable({
-    id,
-  })
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'fixed',
-        left: '50%',
-        marginLeft: -150,
-        bottom: 20,
-        width: 300,
-        height: 60,
-        borderRadius: 5,
-        border: '1px solid',
-        borderColor: isOver ? 'red' : '#DDD',
-      }}
-    >
-      Drop here to delete
-    </div>
-  )
 }
 
 interface SortableItemProps {
@@ -624,7 +539,6 @@ function SortableItem({
         overIndex: over ? getIndex(over.id) : overIndex,
         containerId,
       })}
-      color={getColor(id)}
       transition={transition}
       transform={transform}
       fadeIn={mountedWhileDragging}

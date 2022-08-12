@@ -1,9 +1,10 @@
 import { controller, POST, PUT, GET, unifyUse } from '../decorator'
 import { RouterCtx } from '../types'
 import { validateToken } from '../middlewares'
-import { BookmarkModel } from '../model'
-import { formatTree } from '../utils/common'
-import { DocType } from '../types/enum'
+import { BookmarkModel, DocIndexModel } from '../model'
+import { DocIndexType, DocType } from '../types/enum'
+import { getDocIndex, merge } from '../utils/DocIndex'
+import { getFavicon } from '../utils/favicon'
 
 @controller('/api/bookmark')
 @unifyUse(validateToken)
@@ -12,13 +13,14 @@ export class BookmarkRoute {
   async getMyBookmarks(ctx: RouterCtx) {
     const { _id } = ctx.app.context.user
     const data = await BookmarkModel.find({ creator: _id })
-    ctx.body = formatTree(JSON.parse(JSON.stringify(data)))
+    const docIndex = await getDocIndex(_id, DocIndexType.书签)
+    ctx.body = merge(docIndex, data)
   }
 
-  @PUT()
+  @PUT('/:id')
   async updateBookmark(ctx: RouterCtx) {
-    const { _id, ...reset } = ctx.request.body
-    const blog = await BookmarkModel.updateOne({ _id }, { ...reset })
+    const { id } = ctx.request.params
+    const blog = await BookmarkModel.findOneAndUpdate({ _id: id }, ctx.request.body)
 
     ctx.body = blog
   }
@@ -28,44 +30,44 @@ export class BookmarkRoute {
     const { body } = ctx.request
     const { user } = ctx.app.context
     const { parent, ...reset } = body
-    let bookmark
+    if (!reset.icon) {
+      const icon = await getFavicon(reset.url)
+      reset.icon = icon
+    }
+    let bookmark = await BookmarkModel.create({
+      creator: user._id,
+      type: DocType.文档,
+      ...reset,
+    })
+    const docIndex = await getDocIndex(user._id, DocIndexType.书签)
     const groupDoc = await BookmarkModel.findOne({ creator: user._id, title: parent, type: DocType.分组 })
     if (groupDoc) {
-      const prevDoc = await BookmarkModel.findOne({
-        creator: user._id,
-        parent: groupDoc._id,
-        next: null,
-        type: DocType.文档,
+      docIndex.forEach(item => {
+        if (item._id === groupDoc._id.toString()) {
+          item.children.push({ _id: bookmark._id, children: [] })
+        }
       })
-      bookmark = await BookmarkModel.create({
-        creator: user._id,
-        next: null,
-        prev: prevDoc?._id || null,
-        parent: groupDoc._id,
-        type: DocType.文档,
-        ...reset,
-      })
-      prevDoc && (await BookmarkModel.updateOne({ _id: prevDoc._id }, { next: bookmark._id }))
     } else {
-      const prevGroup = await BookmarkModel.findOne({ creator: user._id, next: null, type: DocType.分组 })
       const groupDoc = await BookmarkModel.create({
         creator: user._id,
         title: parent,
-        next: null,
-        prev: prevGroup?._id || null,
-        parent: null,
         type: DocType.分组,
       })
-      prevGroup && (await BookmarkModel.updateOne({ _id: prevGroup._id }, { next: groupDoc._id }))
-      bookmark = await BookmarkModel.create({
-        creator: user._id,
-        next: null,
-        prev: null,
-        parent: groupDoc._id,
-        type: DocType.文档,
-        ...reset,
+      docIndex.push({
+        _id: groupDoc._id,
+        children: [
+          {
+            _id: bookmark._id,
+            children: [],
+          },
+        ],
       })
     }
+    await DocIndexModel.findOneAndUpdate(
+      { creator: user._id, type: DocIndexType.书签 },
+      { content: JSON.stringify(docIndex) },
+      { upsert: true, new: true },
+    )
     ctx.body = bookmark
   }
 }

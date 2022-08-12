@@ -8,3 +8,9 @@ export enum DocType {
   分组,
   文档,
 }
+
+export enum DocIndexType {
+  首页书签,
+  书签,
+  文章,
+}
