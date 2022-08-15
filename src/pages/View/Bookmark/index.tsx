@@ -1,15 +1,15 @@
-import { Avatar, Button, Card, Col, Dropdown, Empty, Menu, Row, Spin } from 'antd'
+import { Button, Card, Col, Empty, Row, Segmented, Space, Spin } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { BookmarkType } from '../../../../server/types'
 import { request } from '../../../api'
 import BookmarkItem from '../../../components/BookmarkItem'
 import BookmarkModal from '../../../components/Modal/BookmarkModal'
 import { MultipleContainers } from '../../../components/Sortable/MultipleContainers'
-import SortableContainer from '../../../components/Sortable/SortableContainer'
-import SortableMultiple from '../../../components/Sortable/SortableMultiple'
 import { rectSortingStrategy } from '@dnd-kit/sortable'
 import './style.less'
-import { DeleteOutlined, EditOutlined, PushpinOutlined } from '@ant-design/icons'
+import { DocIndexType } from '../../../../server/types/enum'
+import { extract } from '../../../utils/common'
+import Tops from '../../../components/Tops'
 
 function Bookmark() {
   const [showModal, setShowModal] = useState<BookmarkType | boolean>(null)
@@ -32,20 +32,6 @@ function Bookmark() {
     setShowModal(true)
   }
 
-  const handleMenuClick = (key, value) => {
-    switch (key) {
-      case 'pin':
-        break
-
-      case 'edit':
-        console.log(value)
-
-        setShowModal(value)
-        break
-      case 'delete':
-    }
-  }
-
   useEffect(() => {
     getBookmark()
   }, [])
@@ -66,9 +52,13 @@ function Bookmark() {
             <Spin spinning={loading}>
               {bookmarks.length > 0 ? (
                 <MultipleContainers
-                  // disabled
+                  vertical
                   value={bookmarks}
-                  columns={6}
+                  onChange={value => {
+                    setBookmarks(value)
+                    request.docIndex.put({ _id: DocIndexType.书签, content: JSON.stringify(extract(value)) })
+                  }}
+                  columns={8}
                   strategy={rectSortingStrategy}
                   renderItem={value => (
                     <BookmarkItem
@@ -82,7 +72,6 @@ function Bookmark() {
                       }}
                     />
                   )}
-                  vertical
                 />
               ) : (
                 <Empty style={{ padding: 24 }} />
@@ -91,7 +80,7 @@ function Bookmark() {
           </Card>
         </Col>
         <Col span={6}>
-          <Card></Card>
+          <Tops />
         </Col>
       </Row>
 

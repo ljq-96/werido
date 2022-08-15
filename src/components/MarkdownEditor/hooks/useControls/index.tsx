@@ -426,8 +426,6 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
         const { state } = ctx.get(editorViewCtx)
         Object.keys(state.schema.marks).forEach(k => {
           if (hasMark(state, state.schema.marks[k])) {
-            console.log(k)
-
             _activeBtns.add(k as ActivedButton)
           }
         })

@@ -1,8 +1,9 @@
 import './index.less'
 import { useState, useEffect } from 'react'
-import { Row, Col, Calendar, Card, Collapse, Button } from 'antd'
+import { Row, Col, Calendar, Card, Collapse, Button, Affix } from 'antd'
 import Bookmark from './components/Bookmark'
 import Search from './components/Search'
+import Tops from '../../../components/Tops'
 
 interface IProps {}
 
@@ -13,15 +14,24 @@ export default (props: IProps) => {
         <Search />
       </Col>
       <Col span={6}>
-        <Card size='small'>
-          <Calendar fullscreen={false} />
-          <Button block type='dashed'>
-            添加日程
-          </Button>
-        </Card>
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <Card size='small'>
+              <Calendar fullscreen={false} />
+              <Button block type='dashed'>
+                添加日程
+              </Button>
+            </Card>
+          </Col>
+          <Col span={24}>
+            <Affix target={() => document.getElementById('content')} offsetTop={16}>
+              <Tops />
+            </Affix>
+          </Col>
+        </Row>
       </Col>
       <Col xxl={18} xl={18} lg={16} md={12} sm={24} xs={24}>
-        {/* <Bookmark /> */}
+        <Bookmark />
       </Col>
     </Row>
   )

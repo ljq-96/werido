@@ -59,7 +59,7 @@ export default () => {
   }
 
   const logout = () => {
-    request.logout.get().then(res => {
+    request.logout.post().then(res => {
       navigate('/login')
       message.success(res.msg)
       userDispatch(basicUserView.destroy.actions())

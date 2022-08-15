@@ -1,5 +1,5 @@
 import { DocIndexModel } from '../model'
-import { DocIndexType } from '../types/enum'
+import { DocIndexType, DocType } from '../types/enum'
 
 type Doc = {
   _id: string
@@ -28,4 +28,3 @@ export const merge = (docIndex: Doc, doc: any) => {
   })
   return docIndex
 }
-export const extract = () => {}

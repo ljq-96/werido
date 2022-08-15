@@ -30,20 +30,6 @@ export class BasicRoute {
       password,
       createTime: Date.now(),
     })
-    const addedBookmark = await BookmarkModel.create({
-      label: '书签',
-      creator: addedUser._id,
-      prev: null,
-      next: null,
-      items: [
-        {
-          title: '百度',
-          url: 'https://www.baidu.com',
-          icon: '6248010ea4f526b4106dbdc2',
-        },
-      ],
-    })
-    await UserModel.findByIdAndUpdate(addedUser, { bookmarks: [addedBookmark._id] })
     ctx.body = addedUser
   }
 

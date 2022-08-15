@@ -10,6 +10,7 @@ const apiList = {
   bookmark: '/api/bookmark',
   icon: '/api/icon',
   statistics: '/api/statistics',
+  docIndex: '/api/docIndex',
 }
 
 const request = paseRequest(apiList)

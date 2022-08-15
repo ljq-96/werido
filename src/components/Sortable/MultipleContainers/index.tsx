@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { createPortal, unstable_batchedUpdates } from 'react-dom'
+import { createPortal } from 'react-dom'
 import {
   CancelDrop,
   closestCenter,
@@ -14,7 +14,6 @@ import {
   MouseSensor,
   TouchSensor,
   Modifiers,
-  useDroppable,
   UniqueIdentifier,
   useSensors,
   useSensor,
@@ -106,6 +105,7 @@ type Items = Record<UniqueIdentifier, UniqueIdentifier[]>
 
 interface Props {
   value: BookmarkType[]
+  onChange: (value: BookmarkType[]) => void
   disabled?: boolean
   adjustScale?: boolean
   cancelDrop?: CancelDrop
@@ -136,6 +136,7 @@ interface Props {
 
 export function MultipleContainers({
   value,
+  onChange,
   disabled,
   adjustScale = false,
   columns,
@@ -151,12 +152,15 @@ export function MultipleContainers({
   vertical = false,
   scrollable,
 }: Props) {
-  const [items, setItems] = useState<Items>(() =>
-    value.reduce((prev, next) => {
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
+  const lastOverId = useRef<UniqueIdentifier | null>(null)
+  const recentlyMovedToNewContainer = useRef(false)
+  const items = useMemo<{ [key: UniqueIdentifier]: UniqueIdentifier[] }>(() => {
+    return value.reduce((prev, next) => {
       prev[next._id] = next.children.map(item => item._id)
       return prev
-    }, {}),
-  )
+    }, {})
+  }, [value])
 
   const itemMap = useMemo(() => {
     const res: any = {}
@@ -167,10 +171,7 @@ export function MultipleContainers({
     return res
   }, [value])
 
-  const [containers, setContainers] = useState(Object.keys(items) as UniqueIdentifier[])
-  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
-  const lastOverId = useRef<UniqueIdentifier | null>(null)
-  const recentlyMovedToNewContainer = useRef(false)
+  const containers = useMemo(() => Object.keys(items) as UniqueIdentifier[], [items])
   const isSortingContainer = activeId ? containers.includes(activeId) : false
 
   const collisionDetectionStrategy: CollisionDetection = useCallback(
@@ -246,15 +247,6 @@ export function MultipleContainers({
     return index
   }
 
-  const onDragCancel = () => {
-    if (clonedItems) {
-      setItems(clonedItems)
-    }
-
-    setActiveId(null)
-    setClonedItems(null)
-  }
-
   useEffect(() => {
     requestAnimationFrame(() => {
       recentlyMovedToNewContainer.current = false
@@ -289,49 +281,65 @@ export function MultipleContainers({
         }
 
         if (activeContainer !== overContainer) {
-          setItems(items => {
-            const activeItems = items[activeContainer]
-            const overItems = items[overContainer]
-            const overIndex = overItems.indexOf(overId)
-            const activeIndex = activeItems.indexOf(active.id)
+          const activeItems = items[activeContainer]
+          const overItems = items[overContainer]
+          const overIndex = overItems.indexOf(overId)
+          const activeIndex = activeItems.indexOf(active.id)
 
-            let newIndex: number
+          let newIndex: number
 
-            if (overId in items) {
-              newIndex = overItems.length + 1
-            } else {
-              const isBelowOverItem =
-                over &&
-                active.rect.current.translated &&
-                active.rect.current.translated.top > over.rect.top + over.rect.height
+          if (overId in items) {
+            newIndex = overItems.length + 1
+          } else {
+            const isBelowOverItem =
+              over &&
+              active.rect.current.translated &&
+              active.rect.current.translated.top > over.rect.top + over.rect.height
 
-              const modifier = isBelowOverItem ? 1 : 0
+            const modifier = isBelowOverItem ? 1 : 0
 
-              newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1
-            }
+            newIndex = overIndex >= 0 ? overIndex + modifier : overItems.length + 1
+          }
 
-            recentlyMovedToNewContainer.current = true
-
-            return {
-              ...items,
-              [activeContainer]: items[activeContainer].filter(item => item !== active.id),
-              [overContainer]: [
-                ...items[overContainer].slice(0, newIndex),
-                items[activeContainer][activeIndex],
-                ...items[overContainer].slice(newIndex, items[overContainer].length),
-              ],
-            }
-          })
+          recentlyMovedToNewContainer.current = true
+          onChange(
+            containers.map(k => {
+              if (k === activeContainer) {
+                return {
+                  ...itemMap[k],
+                  children: items[activeContainer].filter(item => item !== active.id).map(v => itemMap[v]),
+                }
+              } else if (k === overContainer) {
+                return {
+                  ...itemMap[k],
+                  children: [
+                    ...items[overContainer].slice(0, newIndex),
+                    items[activeContainer][activeIndex],
+                    ...items[overContainer].slice(newIndex, items[overContainer].length),
+                  ].map(v => itemMap[v]),
+                }
+              } else {
+                return {
+                  ...itemMap[k],
+                  children: items[k].map(v => itemMap[v]),
+                }
+              }
+            }),
+          )
         }
       }}
       onDragEnd={({ active, over }) => {
         if (active.id in items && over?.id) {
-          setContainers(containers => {
-            const activeIndex = containers.indexOf(active.id)
-            const overIndex = containers.indexOf(over.id)
+          const activeIndex = containers.indexOf(active.id)
+          const overIndex = containers.indexOf(over.id)
 
-            return arrayMove(containers, activeIndex, overIndex)
-          })
+          const _containers = arrayMove(containers, activeIndex, overIndex)
+          onChange(
+            _containers.map(k => ({
+              ...itemMap[k],
+              children: items[k].map(v => itemMap[v]),
+            })),
+          )
         }
 
         const activeContainer = findContainer(active.id)
@@ -355,10 +363,21 @@ export function MultipleContainers({
           const overIndex = items[overContainer].indexOf(overId)
 
           if (activeIndex !== overIndex) {
-            setItems(items => ({
-              ...items,
-              [overContainer]: arrayMove(items[overContainer], activeIndex, overIndex),
-            }))
+            onChange(
+              containers.map(k => {
+                if (k === overContainer) {
+                  return {
+                    ...itemMap[k],
+                    children: arrayMove(items[overContainer], activeIndex, overIndex).map(v => itemMap[v]),
+                  }
+                } else {
+                  return {
+                    ...itemMap[k],
+                    children: items[k].map(v => itemMap[v]),
+                  }
+                }
+              }),
+            )
           }
         }
 

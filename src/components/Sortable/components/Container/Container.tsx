@@ -1,9 +1,9 @@
 import React, { forwardRef } from 'react'
 import classNames from 'classnames'
 
-import { Handle, Remove } from '../Item'
-
 import styles from './Container.module.less'
+import { Button } from 'antd'
+import { HolderOutlined } from '@ant-design/icons'
 
 export interface Props {
   children: React.ReactNode
@@ -70,8 +70,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
             <div className='werido-title'>{label}</div>
 
             <div className={styles.Actions}>
-              {onRemove ? <Remove onClick={onRemove} /> : undefined}
-              <Handle {...handleProps} />
+              <Button type='text' icon={<HolderOutlined />} {...handleProps} />
             </div>
           </div>
         ) : null}
