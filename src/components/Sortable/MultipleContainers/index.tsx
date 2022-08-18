@@ -46,7 +46,6 @@ const animateLayoutChanges: AnimateLayoutChanges = args => defaultAnimateLayoutC
 function DroppableContainer({
   children,
   columns = 1,
-  disabled,
   id,
   items,
   style,
@@ -71,7 +70,7 @@ function DroppableContainer({
 
   return (
     <Container
-      ref={disabled ? undefined : setNodeRef}
+      ref={props.disabled ? undefined : setNodeRef}
       style={{
         ...style,
         transition,
@@ -107,6 +106,7 @@ interface Props {
   value: BookmarkType[]
   onChange: (value: BookmarkType[]) => void
   disabled?: boolean
+  containerDisabled?: boolean
   adjustScale?: boolean
   cancelDrop?: CancelDrop
   columns?: number
@@ -122,7 +122,6 @@ interface Props {
     isDragOverlay: boolean
   }): React.CSSProperties
   wrapperStyle?(args: { index: number }): React.CSSProperties
-  itemCount?: number
   items?: Items
   handle?: boolean
   renderItem?: any
@@ -138,6 +137,7 @@ export function MultipleContainers({
   value,
   onChange,
   disabled,
+  containerDisabled,
   adjustScale = false,
   columns,
   handle = false,
@@ -405,6 +405,7 @@ export function MultipleContainers({
               id={containerId}
               label={itemMap[containerId].title}
               columns={columns}
+              disabled={containerDisabled}
               items={items[containerId]}
               scrollable={scrollable}
               style={containerStyle}

@@ -38,9 +38,11 @@ const Search = props => {
   }
 
   const handleBlur = e => {
-    setIsOnSearch(false)
-    e.target.value = ''
-    setSugList([])
+    setTimeout(() => {
+      setIsOnSearch(false)
+      e.target.value = ''
+      setSugList([])
+    }, 200)
   }
 
   const toSearch = value => {

@@ -24,6 +24,15 @@ img {
   src: url('../fonts/ubuntu.woff');
 }
 
+/* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+  font-family: '阿里巴巴普惠体 2.0 55 Regular';
+  font-weight: 400;
+  src: url('//at.alicdn.com/wf/webfont/yZAgfUyE1GhF/ivt1uYGL5ZQox0RahXExE.woff2') format('woff2'),
+    url('//at.alicdn.com/wf/webfont/yZAgfUyE1GhF/kXB0G8jmkruJJWgyFR6SN.woff') format('woff');
+  font-display: swap;
+}
+
 @keyframes translateY {
   from {
     transform: translateY(20%);
@@ -71,6 +80,16 @@ body {
 //   }
 // }
 
+#root {
+  .sc-gisBJw {
+    left: unset;
+    right: -16px;
+    .sw-ui-brand {
+      display: none;
+    }
+  }
+}
+
 .ant-page-header {
   padding: 19px 16px;
   border-bottom: 1px solid #f0f0f0;
@@ -82,8 +101,8 @@ body {
 }
 .ant-pro-sider-light .ant-pro-sider-logo h1 {
   color: var(--ant-primary-color);
-  font-family: code;
-  font-style: italic;
+  font-family: '阿里巴巴普惠体 2.0 55 Regular';
+  // font-style: italic;
 }
 .ant-pro-top-nav-header-logo > a {
   display: flex;

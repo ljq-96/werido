@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, PushpinOutlined } from '@ant-design/icons'
+import { DeleteFilled, EditFilled, PushpinFilled } from '@ant-design/icons'
 import { Avatar, Dropdown, Menu } from 'antd'
 import { Fragment, useState } from 'react'
 import { BookmarkType } from '../../../server/types'
@@ -20,9 +20,9 @@ function BookmarkItem({ item, onMenu }: { item: BookmarkType; onMenu: (action: A
           <Menu
             onClick={e => onMenu(e.key as Action)}
             items={[
-              { label: '收藏', key: 'pin', icon: <PushpinOutlined /> },
-              { label: '编辑', key: 'edit', icon: <EditOutlined /> },
-              { label: '删除', key: 'delete', icon: <DeleteOutlined /> },
+              { label: '收藏', key: 'pin', icon: <PushpinFilled /> },
+              { label: '编辑', key: 'edit', icon: <EditFilled /> },
+              { label: '删除', key: 'delete', icon: <DeleteFilled /> },
             ]}
           />
         }

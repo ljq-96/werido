@@ -9,6 +9,7 @@ export interface Props {
   children: React.ReactNode
   columns?: number
   label?: string
+  disabled?: boolean
   style?: React.CSSProperties
   horizontal?: boolean
   hover?: boolean
@@ -37,6 +38,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
       scrollable,
       shadow,
       unstyled,
+      disabled,
       ...props
     }: Props,
     ref,
@@ -69,9 +71,11 @@ export const Container = forwardRef<HTMLDivElement, Props>(
           <div className={styles.Header}>
             <div className='werido-title'>{label}</div>
 
-            <div className={styles.Actions}>
-              <Button type='text' icon={<HolderOutlined />} {...handleProps} />
-            </div>
+            {!disabled && (
+              <div className={styles.Actions}>
+                <Button type='text' icon={<HolderOutlined />} {...handleProps} />
+              </div>
+            )}
           </div>
         ) : null}
         {placeholder ? children : <ul>{children}</ul>}

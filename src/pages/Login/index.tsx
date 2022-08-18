@@ -1,12 +1,14 @@
-import { useState } from 'react'
-import { Form, Button, Input, Card, message, Row, Col } from 'antd'
+import { useEffect, useState } from 'react'
+import { Form, Button, Input, Card, message, Row, Col, ConfigProvider } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { request } from '../../api'
 import { UserType } from '../../../server/types'
 import Logo from '../../components/Logo'
 import Space from '../../components/Canvas/Space'
 import './index.less'
+import LandScape1 from '../../components/Wallpaper/LandScape1'
 
+const COLOR = '#1890ff'
 const Login = props => {
   const [isLogin, setIsLogin] = useState(true)
   const [form] = Form.useForm()
@@ -22,7 +24,7 @@ const Login = props => {
     if (isLogin) {
       request.login.post({ username, password }).then(res => {
         message.success(res.msg)
-        navigator('/home')
+        navigator('/view/home')
       })
     } else {
       request.register.post({ username, password }).then(res => {
@@ -36,12 +38,20 @@ const Login = props => {
     }
   }
 
+  useEffect(() => {
+    ConfigProvider.config({
+      theme: {
+        primaryColor: COLOR,
+      },
+    })
+  }, [])
+
   return (
     <div style={{ padding: 50 }}>
       <Row className='login'>
         <Col className='login-form' lg={8} sm={24}>
           <div className='login-title'>
-            <Logo style={{ height: 20, marginRight: 10 }} />
+            <Logo color={COLOR} style={{ height: 20, marginRight: 10 }} />
             {isLogin ? '登录' : '注册'}
           </div>
           <Form form={form} layout='vertical' labelCol={{ style: { width: 80 } }} onFinish={onFinish}>
@@ -81,8 +91,9 @@ const Login = props => {
             {isLogin ? '没有账号? 点击注册' : '已有账号, 点击登录'}
           </a>
         </Col>
-        <Col lg={16} sm={0}>
-          <Space
+        <Col lg={16} sm={0} className='login-image'>
+          <LandScape1 color={COLOR} />
+          {/* <Space
             color={'#1890ff'}
             sunColor={'rgb(250,173,20)'}
             starColors={[
@@ -99,7 +110,7 @@ const Login = props => {
               '#722ed1',
               '#eb2f96',
             ]}
-          />
+          /> */}
         </Col>
       </Row>
     </div>

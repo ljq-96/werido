@@ -98,13 +98,15 @@ export default () => {
       onCollapse={setCollapsed}
       collapsed={collapsed}
       breakpoint={false}
-      title={'werido'}
+      title={'Werido'}
       logo={<Logo style={{ width: 32 }} color={loginUser?.themeColor} />}
       route={currentRoutes}
       menuItemRender={(item, dom) => <Link to={item.path}>{dom}</Link>}
       location={{ pathname }}
       rightContentRender={() => (
         <Space>
+          <Button type='text' id='tp-weather-widget'></Button>
+          {/* <div id='tp-weather-widget'></div> */}
           <Dropdown
             overlay={
               <Menu>

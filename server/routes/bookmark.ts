@@ -17,10 +17,34 @@ export class BookmarkRoute {
     ctx.body = merge(docIndex, data)
   }
 
+  @GET('/favorite')
+  async getMyFavBookmarks(ctx: RouterCtx) {
+    const { _id } = ctx.app.context.user
+    const data = await BookmarkModel.find({ creator: _id, sin: true })
+    const docIndex = await getDocIndex(_id, DocIndexType.首页书签)
+    ctx.body = merge(docIndex, data)
+  }
+
   @PUT('/:id')
   async updateBookmark(ctx: RouterCtx) {
+    const { _id } = ctx.app.context.user
     const { id } = ctx.request.params
+    const { pin } = ctx.request.body
     const blog = await BookmarkModel.findOneAndUpdate({ _id: id }, ctx.request.body)
+    if (pin !== undefined) {
+      const docIndex = await getDocIndex(_id, DocIndexType.首页书签)
+      const index = docIndex.findIndex(item => item._id === id)
+      if (index >= 0 && pin === false) {
+        docIndex.splice(index, 1)
+      } else if (index === -1 && pin === true) {
+        docIndex.push({ _id: id, children: [] })
+      }
+      await DocIndexModel.findOneAndUpdate(
+        { type: DocIndexType.首页书签, creator: _id },
+        { content: JSON.stringify(docIndex) },
+        { upsert: true, new: true },
+      )
+    }
 
     ctx.body = blog
   }

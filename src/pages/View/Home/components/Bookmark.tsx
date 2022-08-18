@@ -1,299 +1,83 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react'
-import {
-  Col,
-  Card,
-  Collapse,
-  Image,
-  Button,
-  message,
-  Space,
-  Spin,
-  Popconfirm,
-  Modal,
-  Form,
-  Input,
-  Empty,
-  Tooltip,
-  Dropdown,
-  Menu,
-} from 'antd'
-import Sortable from '../../../../components/Sortable'
+import { Card, Spin } from 'antd'
+import { Fragment, useEffect, useState } from 'react'
+import { BookmarkType } from '../../../../../server/types'
 import { request } from '../../../../api'
-import { BookmarkType, IconType } from '../../../../../server/types'
-import {
-  ApiFilled,
-  BackwardOutlined,
-  CheckOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  PlusOutlined,
-  UndoOutlined,
-} from '@ant-design/icons'
-import IconModal from '../../../../components/Modal/IconModal'
+import BookmarkItem from '../../../../components/BookmarkItem'
+import { MultipleContainers } from '../../../../components/Sortable/MultipleContainers'
+import { rectSortingStrategy } from '@dnd-kit/sortable'
+import { DocIndexType } from '../../../../../server/types/enum'
+import { extract } from '../../../../utils/common'
+import BookmarkModal from '../../../../components/Modal/BookmarkModal'
 
-interface IProps {}
+function Bookmark() {
+  const [bookmarks, setBookmarks] = useState<BookmarkType[]>([])
+  const [loading, setLoading] = useState(false)
+  const [showModal, setShowModal] = useState<BookmarkType | boolean>(null)
 
-export default (props: IProps) => {
-  const [bookmarkList, setBookmarkList] = useState<BookmarkType[]>([])
-  const [onEdit, setOnEdit] = useState(false)
-  const [loading, setLoading] = useState<{ [key: string]: boolean }>({})
-  const [modalState, setModalState] = useState<[number, number?]>(null) /** 当前编辑的图标坐标 */
-  const bookMarkCache = useRef<BookmarkType[]>(null)
-  const [showCreateBookmark, setShowCreateBookmark] = useState(false)
-  const [bookmarkForm] = Form.useForm()
-
-  /** 当前编辑的图标 */
-  const onEditIcon = useMemo(() => modalState && bookmarkList[modalState[0]]?.items[modalState[1]], [modalState])
-
-  const getBookmarks = () => {
+  const getBookmark = () => {
+    setLoading(true)
     request.bookmark
-      .get()
+      .get('favorite')
       .then(res => {
-        setBookmarkList(res)
-        bookMarkCache.current = JSON.parse(JSON.stringify(res))
+        setBookmarks([
+          {
+            creator: '62cfe23234cd79f07a173f5f',
+            title: '文档',
+            _id: '62fa62c17948b8d29883c3c4',
+            children: res,
+          },
+        ])
       })
-      .finally(() => {
-        setLoading(
-          bookmarkList.reduce((a, b) => {
-            a[b._id] = false
-            return a
-          }, {}),
-        )
-      })
-  }
-
-  const changeEdit = () => {
-    if (onEdit) {
-      const changed = bookmarkList.filter(
-        i => JSON.stringify(i) !== JSON.stringify(bookMarkCache.current.find(j => j._id === i._id)),
-      )
-      setLoading(
-        changed.reduce((a, b) => {
-          a[b._id] = true
-          return a
-        }, {}),
-      )
-      Promise.all(
-        changed.map(i =>
-          request.bookmark.put({
-            _id: i._id,
-            label: i.label,
-            items: i.items.map(j => ({ ...j, icon: (j.icon as IconType)._id })),
-            prev: i.prev,
-            next: i.next,
-          }),
-        ),
-      )
-        .then(res => {
-          getBookmarks()
-        })
-        .finally(() => {
-          setOnEdit(false)
-        })
-    } else {
-      message.info('正在编辑')
-      setOnEdit(true)
-    }
-  }
-
-  const onCancel = () => {
-    setBookmarkList([...bookMarkCache.current])
-    setOnEdit(false)
-  }
-
-  /** 添加标签组 */
-  const createBookmark = values => {
-    request.bookmark.post(values).then(res => {
-      setBookmarkList([...bookmarkList, res.data])
-      setShowCreateBookmark(false)
-      message.success('创建成功')
-    })
+      .finally(() => setLoading(false))
   }
 
   useEffect(() => {
-    getBookmarks()
+    getBookmark()
   }, [])
 
   return (
-    <React.Fragment>
-      <Card
-        size='small'
-        title='网址导航'
-        bodyStyle={{ padding: 8 }}
-        extra={
-          onEdit ? (
-            <Space>
-              <Tooltip title='取消' placement='bottom'>
-                <Button type='text' onClick={onCancel} icon={<UndoOutlined />} />
-              </Tooltip>
-              <Tooltip title='确定' placement='bottom'>
-                <Button type='text' onClick={changeEdit} icon={<CheckOutlined />} />
-              </Tooltip>
-            </Space>
-          ) : (
-            <Space>
-              <Tooltip title='编辑' placement='bottom'>
-                <Button type='text' onClick={changeEdit} icon={<EditOutlined />} />
-              </Tooltip>
-              <Tooltip title='添加' placement='bottom'>
-                <Button type='text' onClick={() => setShowCreateBookmark(true)} icon={<PlusOutlined />} />
-              </Tooltip>
-            </Space>
-          )
-        }
-      >
-        <Sortable
-          value={bookmarkList}
-          axis='xy'
-          lockAxis='xy'
-          distance={10}
-          disabled={!onEdit}
-          onSortEnd={values => {
-            for (let i = 0; i < values.length; i++) {
-              values[i].prev = values[i - 1]?._id || null
-              values[i].next = values[i + 1]?._id || null
-            }
-            setBookmarkList(values)
-          }}
-          renderItem={(i, idx) => (
-            <Collapse ghost className='bookmark' expandIconPosition='left' defaultActiveKey={i.label}>
-              <Collapse.Panel
-                header={i.label}
-                key={i.label}
-                extra={
-                  onEdit && (
-                    <span onClick={e => e.stopPropagation()}>
-                      <Popconfirm title='确定删除此书签吗？' placement='bottom'>
-                        <Button danger type='link' icon={<DeleteOutlined />} onClick={e => e.stopPropagation()} />
-                      </Popconfirm>
-                    </span>
-                  )
-                }
-              >
-                <Spin spinning={!!loading[i._id]}>
-                  {i.items?.length > 0 ? (
-                    <Sortable
-                      axis='xy'
-                      lockAxis='xy'
-                      distance={10}
-                      value={i.items}
-                      disabled={!onEdit}
-                      style={{ margin: '0px -8px', display: 'flex', flexWrap: 'wrap', rowGap: 16 }}
-                      onSortEnd={value => {
-                        const current = { ...bookmarkList[idx] }
-                        bookmarkList[idx] = {
-                          ...current,
-                          items: value,
-                        }
-                        setBookmarkList([...bookmarkList])
-                      }}
-                      renderItem={(j, jdx) => (
-                        <>
-                          <Col xs={6} sm={6} md={6} lg={3} xl={3} key={`item-${(j.icon as IconType)?._id}-${jdx}`}>
-                            <Dropdown
-                              trigger={onEdit ? ['contextMenu'] : []}
-                              overlay={
-                                <Menu>
-                                  <Menu.Item onClick={() => setModalState([idx, jdx])}>编辑</Menu.Item>
-                                  <Menu.Item
-                                    onClick={() => {
-                                      i.items.splice(jdx, 1)
-                                      setBookmarkList([...bookmarkList])
-                                    }}
-                                  >
-                                    删除
-                                  </Menu.Item>
-                                </Menu>
-                              }
-                            >
-                              <div
-                                key={`${j.title}`}
-                                className={`duration-300 p-5 rounded border-opacity-0 border-gray-200 text-center border-2 hover:bg-gray-50 hover:border-opacity-100 cursor-pointer ${
-                                  onEdit ? 'hover:bg-white' : ''
-                                }`}
-                              >
-                                <img
-                                  className='block mx-auto'
-                                  style={{ width: '100%', marginBottom: 10 }}
-                                  src={(j.icon as IconType)?.icon}
-                                />
-                                <div className='bookmark-item-title'>{j.title}</div>
-                              </div>
-                            </Dropdown>
-                          </Col>
-                          {onEdit && jdx == i.items.length - 1 && (
-                            <Col
-                              xs={6}
-                              sm={6}
-                              md={6}
-                              lg={3}
-                              xl={3}
-                              key={'@add'}
-                              className='border border-solid border-gray-100 rounded-sm hover:bg-gray-50 flex justify-center items-center'
-                              onClick={() => setModalState([idx])}
-                            >
-                              <PlusOutlined style={{ fontSize: 30 }} />
-                            </Col>
-                          )}
-                        </>
-                      )}
-                    />
-                  ) : onEdit ? (
-                    <Col
-                      xs={6}
-                      sm={6}
-                      md={6}
-                      lg={3}
-                      xl={3}
-                      key={'@add'}
-                      className='h-40 border border-solid border-gray-100 rounded-sm hover:bg-gray-50 flex justify-center items-center'
-                      onClick={() => setModalState([idx])}
-                    >
-                      <PlusOutlined style={{ fontSize: 30 }} />
-                    </Col>
-                  ) : (
-                    <div className='border border-dashed border-gray-200'>
-                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                    </div>
-                  )}
-                </Spin>
-              </Collapse.Panel>
-            </Collapse>
-          )}
-        />
+    <Fragment>
+      <Card size='small'>
+        <Spin spinning={loading}>
+          <MultipleContainers
+            vertical
+            containerDisabled
+            value={bookmarks}
+            onChange={value => {
+              setBookmarks(value)
+              request.docIndex.put({ _id: DocIndexType.首页书签, content: JSON.stringify(extract(value[0].children)) })
+            }}
+            columns={8}
+            strategy={rectSortingStrategy}
+            renderItem={value => (
+              <BookmarkItem
+                item={value}
+                onMenu={action => {
+                  switch (action) {
+                    case 'edit':
+                      setShowModal(value)
+                      break
+                    case 'pin':
+                      request.bookmark.put({ _id: value._id, pin: !value.pin })
+                  }
+                }}
+              />
+            )}
+          />
+        </Spin>
       </Card>
-      <IconModal
-        title={!!onEditIcon ? '编辑' : '新增'}
-        visible={!!modalState}
-        initialValue={onEditIcon}
-        onCancel={() => {
-          setModalState(null)
-        }}
-        onOk={values => {
-          const [i, j] = modalState
-          if (onEditIcon) {
-            bookmarkList[i].items[j] = values
-          } else {
-            bookmarkList[i].items.push(values)
-          }
-          setBookmarkList([...bookmarkList])
+
+      <BookmarkModal
+        visible={showModal}
+        onCancle={() => setShowModal(false)}
+        groups={bookmarks.map(item => ({ label: item.title, value: item.title }))}
+        onOk={() => {
+          setShowModal(false)
+          getBookmark()
         }}
       />
-      <Modal
-        title='添加标签组'
-        visible={showCreateBookmark}
-        onOk={bookmarkForm.submit}
-        onCancel={() => {
-          bookmarkForm.resetFields()
-          setShowCreateBookmark(false)
-        }}
-      >
-        <Form form={bookmarkForm} onFinish={createBookmark}>
-          <Form.Item label='分组名称' name='label' rules={[{ required: true, message: '请输入分组名称' }]}>
-            <Input placeholder='请输入分组名称' />
-          </Form.Item>
-        </Form>
-      </Modal>
-    </React.Fragment>
+    </Fragment>
   )
 }
+
+export default Bookmark
