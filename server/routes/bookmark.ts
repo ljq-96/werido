@@ -3,7 +3,7 @@ import { RouterCtx } from '../types'
 import { validateToken } from '../middlewares'
 import { BookmarkModel, DocIndexModel } from '../model'
 import { DocIndexType, DocType } from '../types/enum'
-import { getDocIndex, merge } from '../utils/DocIndex'
+import { getDocIndex, merge } from '../utils/docIndex'
 import { getFavicon } from '../utils/favicon'
 
 @controller('/api/bookmark')
@@ -55,8 +55,10 @@ export class BookmarkRoute {
     const { user } = ctx.app.context
     const { parent, ...reset } = body
     if (!reset.icon) {
-      const icon = await getFavicon(reset.url)
-      reset.icon = icon
+      try {
+        const icon = await getFavicon(reset.url)
+        reset.icon = icon
+      } catch {}
     }
     let bookmark = await BookmarkModel.create({
       creator: user._id,

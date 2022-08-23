@@ -1,14 +1,14 @@
 import { DeleteFilled, EditFilled, PushpinFilled } from '@ant-design/icons'
 import { Avatar, Dropdown, Menu } from 'antd'
 import { Fragment, useState } from 'react'
-import { BookmarkType } from '../../../server/types'
+import { IBookmark } from '../../../server/types'
 import { useUser } from '../../contexts/useUser'
 import BookmarkModal from '../Modal/BookmarkModal'
 import style from './style.module.less'
 
 type Action = 'pin' | 'edit' | 'delete'
 
-function BookmarkItem({ item, onMenu }: { item: BookmarkType; onMenu: (action: Action) => void }) {
+function BookmarkItem({ item, onMenu }: { item: IBookmark; onMenu: (action: Action) => void }) {
   const { title, icon, url } = item
   const [{ themeColor }] = useUser()
 

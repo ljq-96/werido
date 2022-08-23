@@ -10,6 +10,8 @@ export class BasicRoute {
   async login(ctx: RouterCtx) {
     const body = ctx.request?.body || {}
     const { username, password } = body
+    console.log(body)
+
     ctx.assert(username && password, 400, '用户名或密码不能为空')
     const user = await UserModel.findOne({ username, password })
     ctx.assert(user, 404, '用户名或密码错误')

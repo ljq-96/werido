@@ -30,7 +30,7 @@ export class BaseRequest {
   }
 
   get(query?) {
-    const f = typeof query === 'string'
+    const f = typeof query === 'string' || typeof query === 'number'
     return Fetch({
       url: `${this.url}${f ? '/' + query : ''}`,
       method: 'GET',

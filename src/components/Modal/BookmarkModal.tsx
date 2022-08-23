@@ -2,11 +2,11 @@ import { Button, Dropdown, Form, Input, Menu, message, Modal, Popover, Select, T
 import ImgCrop from 'antd-img-crop'
 import Upload, { RcFile, UploadFile } from 'antd/lib/upload'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { BookmarkType } from '../../../server/types'
+import { IBookmark } from '../../../server/types'
 import { request } from '../../api'
 
 interface IProps {
-  visible: boolean | BookmarkType
+  visible: boolean | IBookmark
   onCancle: () => void
   onOk: () => void
   groups?: { label: string; value: string }[]

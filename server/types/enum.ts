@@ -14,3 +14,8 @@ export enum DocIndexType {
   书签,
   文章,
 }
+
+export enum TopsType {
+  知乎 = 'zhihu',
+  微博 = 'weibo',
+}

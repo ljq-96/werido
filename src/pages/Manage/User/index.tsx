@@ -2,7 +2,7 @@ import { InfoCircleOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message, Modal, Space } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { Fragment, useRef, useState } from 'react'
-import { UserType } from '../../../../server/types'
+import { IUser } from '../../../../server/types'
 import { UserStatus } from '../../../../server/types/enum'
 import { request } from '../../../api'
 import CommonTable, { CommonTableInstance, ToolItem } from '../../../components/CommonTable'
@@ -22,7 +22,7 @@ const toolList: ToolItem[] = [
 ]
 
 function UsersManage() {
-  const [showModal, setShowModal] = useState<boolean | UserType>(false)
+  const [showModal, setShowModal] = useState<boolean | IUser>(false)
   const [form] = Form.useForm()
   const tableRef = useRef<CommonTableInstance>(null)
 
@@ -43,7 +43,7 @@ function UsersManage() {
     })
   }
 
-  const handleSubmit = async (fields: Partial<UserType>) => {
+  const handleSubmit = async (fields: Partial<IUser>) => {
     if (typeof showModal === 'boolean') {
       const { username, password } = fields
       await request.user.post({ username, password })
@@ -56,7 +56,7 @@ function UsersManage() {
     tableRef.current.fetchData()
   }
 
-  const columns: ColumnsType<UserType> = [
+  const columns: ColumnsType<IUser> = [
     {
       title: '用户名',
       dataIndex: 'username',

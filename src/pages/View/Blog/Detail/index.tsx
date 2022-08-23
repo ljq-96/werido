@@ -2,7 +2,7 @@ import { FieldTimeOutlined, FileTextOutlined } from '@ant-design/icons'
 import { Affix, Button, Card, Col, PageHeader, Row, Space, Spin, Tag } from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { BlogType } from '../../../../../server/types'
+import { IBlog } from '../../../../../server/types'
 import { request } from '../../../../api'
 import MarkdownEditor, { EditorIntance } from '../../../../components/MarkdownEditor'
 import { formatTime } from '../../../../utils/common'
@@ -10,7 +10,7 @@ import { formatTime } from '../../../../utils/common'
 function BlogDetail() {
   const [onEdit, setOnEdit] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [detail, setDetail] = useState<BlogType>(null)
+  const [detail, setDetail] = useState<IBlog>(null)
   const { id } = useParams()
   const editor = useRef<EditorIntance>()
   const navigate = useNavigate()

@@ -35,7 +35,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { coordinateGetter as multipleContainersCoordinateGetter } from './multipleContainersKeyboardCoordinates'
 
 import { Item, Container, ContainerProps } from '../components'
-import { BookmarkType } from '../../../../server/types'
+import { IBookmark } from '../../../../server/types'
 
 export default {
   title: 'Presets/Sortable/Multiple Containers',
@@ -103,8 +103,8 @@ const dropAnimation: DropAnimation = {
 type Items = Record<UniqueIdentifier, UniqueIdentifier[]>
 
 interface Props {
-  value: BookmarkType[]
-  onChange: (value: BookmarkType[]) => void
+  value: IBookmark[]
+  onChange: (value: IBookmark[]) => void
   disabled?: boolean
   containerDisabled?: boolean
   adjustScale?: boolean

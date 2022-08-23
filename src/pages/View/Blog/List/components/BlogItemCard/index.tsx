@@ -3,11 +3,11 @@ import { Card, Space } from 'antd'
 import clsx from 'clsx'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
-import { BlogType } from '../../../../../../../server/types'
+import { IBlog } from '../../../../../../../server/types'
 import { Render } from '../../../../../../components/MarkdownEditor'
 import style from './style.module.less'
 
-const BlogItemCard = ({ item }: { item: BlogType }) => {
+const BlogItemCard = ({ item }: { item: IBlog }) => {
   const { title, content, description, tags, createTime, words, _id } = item
   const navigate = useNavigate()
   return (

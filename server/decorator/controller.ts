@@ -11,6 +11,8 @@ export function controller(root: string) {
       const middlewares = Reflect.getMetadata('middlewares', target.prototype, key) || []
       if (method) {
         const fullPath = root === '/' ? path : `${root}${path}`
+        // console.log(fullPath, method)
+
         router[method](fullPath, ...middlewares, handler)
       }
     })

@@ -11,7 +11,14 @@ export default (props: IProps) => {
   return (
     <Row className='home' gutter={[16, 16]}>
       <Col span={18}>
-        <Search />
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <Search />
+          </Col>
+          <Col span={24}>
+            <Bookmark />
+          </Col>
+        </Row>
       </Col>
       <Col span={6}>
         <Row gutter={[16, 16]}>
@@ -30,9 +37,6 @@ export default (props: IProps) => {
           </Col>
           <Col></Col>
         </Row>
-      </Col>
-      <Col xxl={18} xl={18} lg={16} md={12} sm={24} xs={24}>
-        <Bookmark />
       </Col>
     </Row>
   )

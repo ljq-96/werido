@@ -11,6 +11,7 @@ const apiList = {
   icon: '/api/icon',
   statistics: '/api/statistics',
   docIndex: '/api/docIndex',
+  tops: '/api/tops',
 }
 
 const request = paseRequest(apiList)

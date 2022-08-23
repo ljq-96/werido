@@ -1,4 +1,4 @@
-import { UserType } from '../../../server/types'
+import { IUser } from '../../../server/types'
 import { basicActions } from '../utils'
 
 enum UserActions {
@@ -13,6 +13,6 @@ export const basicUserView = {
   },
   update: {
     type: UserActions.update,
-    actions: (userInfo: Partial<UserType> | null) => basicActions(UserActions.update, userInfo),
+    actions: (userInfo: Partial<IUser> | null) => basicActions(UserActions.update, userInfo),
   },
 }

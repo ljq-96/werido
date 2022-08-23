@@ -1,6 +1,6 @@
 import { Card, Spin } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
-import { BookmarkType } from '../../../../../server/types'
+import { IBookmark } from '../../../../../server/types'
 import { request } from '../../../../api'
 import BookmarkItem from '../../../../components/BookmarkItem'
 import { MultipleContainers } from '../../../../components/Sortable/MultipleContainers'
@@ -10,9 +10,9 @@ import { extract } from '../../../../utils/common'
 import BookmarkModal from '../../../../components/Modal/BookmarkModal'
 
 function Bookmark() {
-  const [bookmarks, setBookmarks] = useState<BookmarkType[]>([])
+  const [bookmarks, setBookmarks] = useState<IBookmark[]>([])
   const [loading, setLoading] = useState(false)
-  const [showModal, setShowModal] = useState<BookmarkType | boolean>(null)
+  const [showModal, setShowModal] = useState<IBookmark | boolean>(null)
 
   const getBookmark = () => {
     setLoading(true)

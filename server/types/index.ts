@@ -3,7 +3,7 @@ import Koa from 'koa'
 import { ComponentType, LazyExoticComponent, ReactElement } from 'react'
 import { UserStatus } from './enum'
 
-export type Request<ReqBody = any, ReqQuery = any, Locals = { user: UserType }> = express.Request<
+export type Request<ReqBody = any, ReqQuery = any, Locals = { user: IUser }> = express.Request<
   any,
   any,
   ReqBody,
@@ -46,7 +46,7 @@ export interface RouteProps {
   routes?: RouteProps[]
 }
 
-export interface UserType {
+export interface IUser {
   _id: string
   username: string
   password: string
@@ -67,7 +67,7 @@ export interface IconType {
   updateTime: number
 }
 
-export interface BookmarkType {
+export interface IBookmark {
   _id: string
   title: string
   icon?: string
@@ -78,10 +78,10 @@ export interface BookmarkType {
   next?: string
   createTime?: number
   updateTime?: number
-  children: BookmarkType[]
+  children: IBookmark[]
 }
 
-export interface BlogType {
+export interface IBlog {
   _id: string
   prev: string
   next: string
@@ -94,6 +94,16 @@ export interface BlogType {
   description: string
   creator: string
   tags: string[]
+}
+
+export interface ITops {
+  answer?: number
+  date?: string
+  subtitle?: string
+  hotness?: number
+  index?: number
+  title: string
+  url: string
 }
 
 export interface BingWallpaperType {
