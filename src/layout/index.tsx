@@ -13,6 +13,8 @@ import '../assets/css/index.less'
 import { RouteProps } from '../../server/types'
 import Loading from '../components/Loading'
 import * as colors from '@ant-design/colors'
+import TranslateY from '../components/Animation/TranslateY'
+import TranslateX from '../components/Animation/TranslateX'
 
 export default () => {
   const { pathname } = useLocation()
@@ -141,11 +143,14 @@ export default () => {
           overflowX: 'hidden',
         }}
       >
-        <Suspense fallback={<Loading />}>
-          {loginUser?._id && <Outlet />}
-          <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
-        </Suspense>
+        <TranslateX key={pathname}>
+          <Suspense fallback={<></>}>
+            {loginUser?._id && <Outlet />}
+            <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
+          </Suspense>
+        </TranslateX>
       </Layout.Content>
+
       <Drawer
         visible={showColorDrawer}
         width={300}

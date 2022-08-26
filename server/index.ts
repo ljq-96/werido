@@ -11,20 +11,11 @@ import path from 'path'
 
 const app = new Koa()
 app
+  .use(historyApiFallback({ whiteList: ['/api'], index: '/' }))
   .use(koaStatic(path.join(__dirname, './public'), {}) as any)
   .use(json())
-  .use(
-    koaBody({
-      multipart: true,
-    }),
-  )
+  .use(koaBody({ multipart: true }))
   .use(router.routes())
-  .use(
-    historyApiFallback({
-      whiteList: ['/api'],
-      index: '/',
-    }),
-  )
 
 useRoutes(app)
 mongoose.connect(`mongodb://jiaqi:lyp82nlf@8.140.187.127/werido`).then(
