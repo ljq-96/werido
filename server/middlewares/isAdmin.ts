@@ -1,6 +1,6 @@
-import { RouterCtx } from '../types'
+import { RouterCtx } from '../../types'
 import jwt from 'jsonwebtoken'
-import { UserStatus } from '../types/enum'
+import { UserStatus } from '../../types/enum'
 
 export async function isAdmin(ctx: RouterCtx, next) {
   const { user } = ctx.app.context

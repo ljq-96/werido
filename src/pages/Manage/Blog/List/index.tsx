@@ -3,7 +3,7 @@ import { Button, Form, Input, message, Modal, Segmented, Space, Tag } from 'antd
 import { ColumnsType } from 'antd/lib/table'
 import { Fragment, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IBlog, IUser } from '../../../../../server/types'
+import { IBlog, IUser } from '../../../../../types'
 import { request } from '../../../../api'
 import CommonTable, { CommonTableInstance, ToolItem } from '../../../../components/CommonTable'
 import { formatTime } from '../../../../utils/common'

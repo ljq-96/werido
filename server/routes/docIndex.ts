@@ -1,7 +1,7 @@
 import { controller, GET, PUT, unifyUse } from '../decorator'
 import { validateToken } from '../middlewares'
 import { DocIndexModel } from '../model'
-import { RouterCtx } from '../types'
+import { RouterCtx } from '../../types'
 
 @controller('/api/docIndex')
 @unifyUse(validateToken)

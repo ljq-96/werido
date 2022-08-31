@@ -2,7 +2,7 @@ import moment from 'moment'
 import { controller, GET, unifyUse } from '../decorator'
 import { validateToken } from '../middlewares'
 import { BlogModel, BookmarkModel } from '../model'
-import { RouterCtx } from '../types'
+import { RouterCtx } from '../../types'
 
 @controller('/api/statistics')
 @unifyUse(validateToken)

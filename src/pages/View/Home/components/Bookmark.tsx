@@ -1,11 +1,11 @@
 import { Card, Spin } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
-import { IBookmark } from '../../../../../server/types'
+import { IBookmark } from '../../../../../types'
 import { request } from '../../../../api'
 import BookmarkItem from '../../../../components/BookmarkItem'
 import { MultipleContainers } from '../../../../components/Sortable/MultipleContainers'
 import { rectSortingStrategy } from '@dnd-kit/sortable'
-import { DocIndexType } from '../../../../../server/types/enum'
+import { DocIndexType } from '../../../../../types/enum'
 import { extract } from '../../../../utils/common'
 import BookmarkModal from '../../../../components/Modal/BookmarkModal'
 

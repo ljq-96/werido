@@ -2,7 +2,7 @@ import { POST, controller } from '../decorator'
 import { UserModel, BookmarkModel } from '../model'
 import md5 from 'md5'
 import { sign } from 'jsonwebtoken'
-import { RouterCtx } from '../types'
+import { RouterCtx } from '../../types'
 
 @controller('/api')
 export class BasicRoute {

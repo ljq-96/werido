@@ -1,8 +1,8 @@
 import { WeiboOutlined, ZhihuOutlined } from '@ant-design/icons'
 import { Avatar, Card, List, Segmented, Skeleton } from 'antd'
 import { useEffect, useState } from 'react'
-import { ITops } from '../../../server/types'
-import { TopsType } from '../../../server/types/enum'
+import { ITops } from '../../../types'
+import { TopsType } from '../../../types/enum'
 import { request } from '../../api'
 import './style.less'
 

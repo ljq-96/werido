@@ -1,20 +1,16 @@
 {
   "name": "werido",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
-    "dev": "concurrently \"yarn dev:server\" \"yarn dev:client\"",
-    "dev:client": "vite",
-    "dev:server": "tsnd --respawn --project ./tsconfig.server.json ./server/index.ts",
-    "build": "yarn build:client && yarn build:server",
-    "build:client": "vite build",
-    "build:server": "tsc --project tsconfig.server.json",
-    "preview": "vite preview",
+    "dev": "NODE_ENV=development tsnd --respawn --project ./tsconfig.server.json app.ts",
+    "build": "vite build && tsc --project tsconfig.server.json",
     "commit": "git-cz"
   },
   "dependencies": {
     "axios": "^0.27.2",
     "cheerio": "^1.0.0-rc.10",
+    "dotenv": "^16.0.2",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.4",
     "koa-body": "^5.0.0",
@@ -67,6 +63,7 @@
     "antd-img-crop": "^4.2.4",
     "clsx": "^1.2.1",
     "concurrently": "^7.2.0",
+    "koa-connect": "^2.1.0",
     "less": "^4.1.2",
     "less-loader": "^11.0.0",
     "react": "^18.2.0",

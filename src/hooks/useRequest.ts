@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { IResponse } from '../../server/types'
+import { IResponse } from '../../types'
 
 const useRequest = <DataType>(asnycFunction: () => Promise<DataType>, resetData?: boolean) => {
   const [data, setData] = useState<DataType | null>(null)
@@ -9,11 +9,11 @@ const useRequest = <DataType>(asnycFunction: () => Promise<DataType>, resetData?
     resetData && setData(null)
     setLoading(true)
     return asnycFunction()
-      .then((res) => {
+      .then(res => {
         setData(res)
         return res
       })
-      .catch((e) => Promise.reject(e))
+      .catch(e => Promise.reject(e))
       .finally(() => setLoading(false))
   }, [asnycFunction])
 

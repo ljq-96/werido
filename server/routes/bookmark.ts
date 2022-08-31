@@ -1,8 +1,8 @@
 import { controller, POST, PUT, GET, unifyUse } from '../decorator'
-import { RouterCtx } from '../types'
+import { RouterCtx } from '../../types'
 import { validateToken } from '../middlewares'
 import { BookmarkModel, DocIndexModel } from '../model'
-import { DocIndexType, DocType } from '../types/enum'
+import { DocIndexType, DocType } from '../../types/enum'
 import { getDocIndex, merge } from '../utils/docIndex'
 import { getFavicon } from '../utils/favicon'
 

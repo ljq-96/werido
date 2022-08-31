@@ -18,7 +18,7 @@ import {
 import { PlusOutlined } from '@ant-design/icons'
 import { VariableSizeGrid as Grid } from 'react-window'
 import { request } from '../../api'
-import { IconType } from '../../../server/types'
+import { IconType } from '../../../types'
 
 interface VProps {
   list: IconType[]

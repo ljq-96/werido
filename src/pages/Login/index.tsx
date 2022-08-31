@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Form, Button, Input, Card, message, Row, Col, ConfigProvider } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { request } from '../../api'
-import { IUser } from '../../../server/types'
+import { IUser } from '../../../types'
 import Logo from '../../components/Logo'
 import Space from '../../components/Canvas/Space'
 import './index.less'
@@ -23,7 +23,6 @@ const Login = props => {
     const { username, password, password_c } = fields
     if (isLogin) {
       request.login.post({ username, password }).then(res => {
-        message.success(res.msg)
         navigator('/view/home')
       })
     } else {
@@ -52,7 +51,7 @@ const Login = props => {
         <Col className='login-form' lg={8} sm={24}>
           <div className='login-title'>
             <Logo color={COLOR} style={{ height: 20, marginRight: 10 }} />
-            {isLogin ? '登录' : '注册'}
+            <span>Werido</span>
           </div>
           <Form form={form} layout='vertical' labelCol={{ style: { width: 80 } }} onFinish={onFinish}>
             <Form.Item name='username' label='用户名' rules={[{ required: true, message: '请输入用户名' }]}>

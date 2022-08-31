@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useReducer, Dispatch } from 'react'
-import { IUser } from '../../../server/types'
+import { IUser } from '../../../types'
 import { basicUserView } from './actions'
 import { useLocalStorage } from 'react-use'
 

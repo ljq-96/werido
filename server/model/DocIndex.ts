@@ -1,6 +1,6 @@
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose'
 import moment from 'moment'
-import { DocIndexType } from '../types/enum'
+import { DocIndexType } from '../../types/enum'
 import { User } from './User'
 
 export class DocIndex {

@@ -1,5 +1,5 @@
 import { prop, getModelForClass } from '@typegoose/typegoose'
-import { UserStatus } from '../types/enum'
+import { UserStatus } from '../../types/enum'
 import moment from 'moment'
 
 export class User {

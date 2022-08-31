@@ -1,5 +1,5 @@
 import { DocIndexModel } from '../model'
-import { DocIndexType, DocType } from '../types/enum'
+import { DocIndexType, DocType } from '../../types/enum'
 
 type Doc = {
   _id: string

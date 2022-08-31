@@ -11,8 +11,7 @@ import {
 } from '@ant-design/icons'
 import { useNavigate, Outlet } from 'react-router-dom'
 import Layout from '../layout'
-import { Result } from 'antd'
-import { RouteProps } from '../../server/types'
+import { RouteProps } from '../../types'
 
 function Redirect({ to }) {
   let navigate = useNavigate()

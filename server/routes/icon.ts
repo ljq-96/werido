@@ -1,7 +1,7 @@
 import { controller, GET, unifyUse } from '../decorator'
 import { validateToken } from '../middlewares'
 import { IconModel } from '../model'
-import { RouterCtx } from '../types'
+import { RouterCtx } from '../../types'
 
 @controller('/api/icon')
 @unifyUse(validateToken)

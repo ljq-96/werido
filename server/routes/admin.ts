@@ -1,7 +1,7 @@
 import { controller, DELETE, GET, POST, PUT, unifyUse } from '../decorator'
 import { validateToken, isAdmin } from '../middlewares'
 import { BookmarkModel, IconModel, UserModel } from '../model'
-import { RouterCtx } from '../types'
+import { RouterCtx } from '../../types'
 import basicRoute from './basic'
 
 @controller('/api/admin')

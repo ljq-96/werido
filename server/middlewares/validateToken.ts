@@ -1,5 +1,5 @@
 import { UserModel } from '../model'
-import { RouterCtx } from '../types'
+import { RouterCtx } from '../../types'
 import jwt from 'jsonwebtoken'
 
 export async function validateToken(ctx: RouterCtx, next) {

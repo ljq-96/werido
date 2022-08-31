@@ -31,9 +31,9 @@ export default (props: IProps) => {
             </Card>
           </Col>
           <Col span={24}>
-            <Affix target={() => document.getElementById('content')} offsetTop={16}>
-              <Tops />
-            </Affix>
+            {/* <Affix target={() => document.getElementById('content')} offsetTop={16}> */}
+            <Tops />
+            {/* </Affix> */}
           </Col>
           <Col></Col>
         </Row>

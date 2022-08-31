@@ -3214,6 +3214,11 @@ domutils@^3.0.1:
     domelementtype "^2.3.0"
     domhandler "^5.0.1"
 
+dotenv@^16.0.2:
+  version "16.0.2"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.2.tgz#0b0f8652c016a3858ef795024508cddc4bffc5bf"
+  integrity sha512-JvpYKUmzQhYoIFgK2MOnF3bciIZoItIIoryihy0rIA+H4Jy0FmgyKYAHCTN98P5ybGSJcIFbh6QKeJdtZd1qhA==
+
 dotignore@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/dotignore/-/dotignore-0.1.2.tgz#f942f2200d28c3a76fbdd6f0ee9f3257c8a2e905"
@@ -4370,6 +4375,11 @@ koa-compose@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/koa-compose/-/koa-compose-4.1.0.tgz#507306b9371901db41121c812e923d0d67d3e877"
   integrity sha512-8ODW8TrDuMYvXRwra/Kh7/rJo9BtOfPc6qO8eAfC80CnCvSjSl0bkRM24X6/XBBEyj0v1nRUQ1LyOy3dbqOWXw==
+
+koa-connect@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/koa-connect/-/koa-connect-2.1.0.tgz#16bce0a917c4cb24233aaac83fbc5b83804b4a1c"
+  integrity sha512-O9pcFafHk0oQsBevlbTBlB9co+2RUQJ4zCzu3qJPmGlGoeEZkne+7gWDkecqDPSbCtED6LmhlQladxs6NjOnMQ==
 
 koa-convert@^2.0.0:
   version "2.0.0"

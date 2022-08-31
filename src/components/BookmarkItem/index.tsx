@@ -1,7 +1,15 @@
-import { DeleteFilled, EditFilled, PushpinFilled } from '@ant-design/icons'
+import {
+  DeleteFilled,
+  DeleteOutlined,
+  EditFilled,
+  EditOutlined,
+  EditTwoTone,
+  PushpinFilled,
+  PushpinOutlined,
+} from '@ant-design/icons'
 import { Avatar, Dropdown, Menu } from 'antd'
 import { Fragment, useState } from 'react'
-import { IBookmark } from '../../../server/types'
+import { IBookmark } from '../../../types'
 import { useUser } from '../../contexts/useUser'
 import BookmarkModal from '../Modal/BookmarkModal'
 import style from './style.module.less'
@@ -20,9 +28,9 @@ function BookmarkItem({ item, onMenu }: { item: IBookmark; onMenu: (action: Acti
           <Menu
             onClick={e => onMenu(e.key as Action)}
             items={[
-              { label: '收藏', key: 'pin', icon: <PushpinFilled /> },
-              { label: '编辑', key: 'edit', icon: <EditFilled /> },
-              { label: '删除', key: 'delete', icon: <DeleteFilled /> },
+              { label: item.pin ? '从开始屏幕移除' : '添加到开始屏幕', key: 'pin', icon: <PushpinOutlined /> },
+              { label: '编辑', key: 'edit', icon: <EditOutlined /> },
+              { label: '删除', key: 'delete', icon: <DeleteOutlined /> },
             ]}
           />
         }

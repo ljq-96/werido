@@ -1,4 +1,4 @@
-import { IUser } from '../../../server/types'
+import { IUser } from '../../../types'
 import { basicActions } from '../utils'
 
 enum UserActions {

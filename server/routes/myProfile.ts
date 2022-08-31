@@ -1,5 +1,5 @@
-import { controller, GET, PUT, POST, unifyUse, use } from '../decorator'
-import { RouterCtx } from '../types'
+import { controller, GET, PUT, unifyUse } from '../decorator'
+import { RouterCtx } from '../../types'
 import { validateToken } from '../middlewares'
 import { UserModel } from '../model'
 

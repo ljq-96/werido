@@ -1,7 +1,20 @@
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import ProLayout, { DefaultFooter } from '@ant-design/pro-layout'
 import { UserOutlined } from '@ant-design/icons'
-import { ConfigProvider, Menu, Layout, Space, Button, Avatar, Dropdown, Drawer, Segmented, Card, message } from 'antd'
+import {
+  ConfigProvider,
+  Menu,
+  Layout,
+  Space,
+  Button,
+  Avatar,
+  Dropdown,
+  Drawer,
+  Segmented,
+  Card,
+  message,
+  Spin,
+} from 'antd'
 import { Link, Outlet, useNavigate, useLocation, useMatch } from 'react-router-dom'
 import Logo from '../components/Logo'
 import routes from '../routes'
@@ -10,11 +23,12 @@ import { request } from '../api'
 import { CirclePicker, MaterialPicker, SliderPicker } from 'react-color'
 import { basicUserView } from '../contexts/useUser/actions'
 import '../assets/css/index.less'
-import { RouteProps } from '../../server/types'
+import { RouteProps } from '../../types'
 import Loading from '../components/Loading'
 import * as colors from '@ant-design/colors'
 import TranslateY from '../components/Animation/TranslateY'
 import TranslateX from '../components/Animation/TranslateX'
+import './style.less'
 
 export default () => {
   const { pathname } = useLocation()
@@ -89,6 +103,7 @@ export default () => {
 
   return (
     <ProLayout
+      className='layout'
       disableContentMargin
       fixSiderbar={true}
       navTheme='light'
@@ -136,15 +151,15 @@ export default () => {
       <Layout.Content
         id='content'
         style={{
-          position: 'relative',
-          height: 'calc(100vh - 48px)',
+          // position: 'relative',
+          // height: 'calc(100vh - 48px)',
           padding: 16,
-          overflowY: 'auto',
-          overflowX: 'hidden',
+          // overflowY: 'auto',
+          // overflowX: 'hidden',
         }}
       >
         <TranslateX key={pathname}>
-          <Suspense fallback={<></>}>
+          <Suspense fallback={<Loading />}>
             {loginUser?._id && <Outlet />}
             <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
           </Suspense>

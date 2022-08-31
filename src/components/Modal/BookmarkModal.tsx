@@ -2,7 +2,7 @@ import { Button, Dropdown, Form, Input, Menu, message, Modal, Popover, Select, T
 import ImgCrop from 'antd-img-crop'
 import Upload, { RcFile, UploadFile } from 'antd/lib/upload'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { IBookmark } from '../../../server/types'
+import { IBookmark } from '../../../types'
 import { request } from '../../api'
 
 interface IProps {
