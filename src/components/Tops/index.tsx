@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { ITops } from '../../../types'
 import { TopsType } from '../../../types/enum'
 import { request } from '../../api'
+import TranslateX from '../Animation/TranslateX'
+import TranslateY from '../Animation/TranslateY'
 import './style.less'
 
 function Tops() {
@@ -44,13 +46,17 @@ function Tops() {
         loading={loading}
         dataSource={list}
         renderItem={(item, index) => (
-          <List.Item>
-            <List.Item.Meta
-              avatar={<Avatar size={'small'}>{index + 1}</Avatar>}
-              title={<div onClick={() => window.open(item.url)}>{item.title}</div>}
-              description={current === TopsType.知乎 ? <div>回答：{item.answer}</div> : <div>热度：{item.hotness}</div>}
-            />
-          </List.Item>
+          <TranslateY key={item.title} distance={-15 * index}>
+            <List.Item>
+              <List.Item.Meta
+                avatar={<Avatar size={'small'}>{index + 1}</Avatar>}
+                title={<div onClick={() => window.open(item.url)}>{item.title}</div>}
+                description={
+                  current === TopsType.知乎 ? <div>回答：{item.answer}</div> : <div>热度：{item.hotness}</div>
+                }
+              />
+            </List.Item>
+          </TranslateY>
         )}
       ></List>
     </Card>

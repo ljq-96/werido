@@ -27,13 +27,6 @@ async function createServer() {
       .use(k2c(vite.middlewares))
   } else {
     app
-      .use(async (ctx, next) => {
-        if (ctx.request.path === '/') {
-          const html = readFileSync('./public/index.html')
-          ctx.body = html.toString()
-        }
-        await next()
-      })
       .use(historyApiFallback({ whiteList: ['/api'], index: '/' }))
       .use(koaStatic(path.join(__dirname, './public'), {}) as any)
       .use(json())

@@ -79,7 +79,7 @@ export interface IBookmark {
   createTime?: number
   updateTime?: number
   children: IBookmark[]
-  pin: boolean
+  pin?: boolean
 }
 
 export interface IBlog {

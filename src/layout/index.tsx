@@ -110,12 +110,12 @@ export default () => {
       layout={currentLayout}
       contentWidth='Fixed'
       headerHeight={48}
-      fixedHeader={true}
+      fixedHeader={false}
       splitMenus={false}
       onCollapse={setCollapsed}
       collapsed={collapsed}
       breakpoint={false}
-      title={'Werido'}
+      title={(<TranslateX distance={-150}>Werido</TranslateX>) as any}
       logo={<Logo style={{ width: 32 }} color={loginUser?.themeColor} />}
       route={currentRoutes}
       menuItemRender={(item, dom) => <Link to={item.path}>{dom}</Link>}
@@ -151,19 +151,17 @@ export default () => {
       <Layout.Content
         id='content'
         style={{
-          // position: 'relative',
-          // height: 'calc(100vh - 48px)',
+          position: 'relative',
+          height: 'calc(100vh - 48px)',
           padding: 16,
-          // overflowY: 'auto',
-          // overflowX: 'hidden',
+          overflowY: 'auto',
+          overflowX: 'hidden',
         }}
       >
-        <TranslateX key={pathname}>
-          <Suspense fallback={<Loading />}>
-            {loginUser?._id && <Outlet />}
-            <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
-          </Suspense>
-        </TranslateX>
+        <Suspense fallback={<Loading />}>
+          {loginUser?._id && <Outlet />}
+          <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
+        </Suspense>
       </Layout.Content>
 
       <Drawer
