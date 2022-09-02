@@ -22,13 +22,12 @@ import { useUser } from '../contexts/useUser'
 import { request } from '../api'
 import { CirclePicker, MaterialPicker, SliderPicker } from 'react-color'
 import { basicUserView } from '../contexts/useUser/actions'
-import '../assets/css/index.less'
 import { RouteProps } from '../../types'
 import Loading from '../components/Loading'
 import * as colors from '@ant-design/colors'
-import TranslateY from '../components/Animation/TranslateY'
-import TranslateX from '../components/Animation/TranslateX'
+import { TranslateX } from '../components/Animation'
 import './style.less'
+import '../assets/css/index.less'
 
 export default () => {
   const { pathname } = useLocation()
@@ -107,15 +106,24 @@ export default () => {
       disableContentMargin
       fixSiderbar={true}
       navTheme='light'
-      layout={currentLayout}
-      contentWidth='Fixed'
+      headerTheme='light'
       headerHeight={48}
       fixedHeader={false}
       splitMenus={false}
       onCollapse={setCollapsed}
       collapsed={collapsed}
       breakpoint={false}
-      title={(<TranslateX distance={-150}>Werido</TranslateX>) as any}
+      menuHeaderRender={(logo, title) => (
+        <Space>
+          {logo}
+          {!collapsed && (
+            <TranslateX delay={400} distance={-10}>
+              <span style={{ fontSize: 16, fontFamily: 'Tencent', color: loginUser?.themeColor }}>Werido</span>
+            </TranslateX>
+          )}
+        </Space>
+      )}
+      title='Werido'
       logo={<Logo style={{ width: 32 }} color={loginUser?.themeColor} />}
       route={currentRoutes}
       menuItemRender={(item, dom) => <Link to={item.path}>{dom}</Link>}
@@ -123,7 +131,6 @@ export default () => {
       rightContentRender={() => (
         <Space>
           <Button type='text' id='tp-weather-widget'></Button>
-          {/* <div id='tp-weather-widget'></div> */}
           <Dropdown
             overlay={
               <Menu>

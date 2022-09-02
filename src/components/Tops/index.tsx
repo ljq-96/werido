@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react'
 import { ITops } from '../../../types'
 import { TopsType } from '../../../types/enum'
 import { request } from '../../api'
-import TranslateX from '../Animation/TranslateX'
-import TranslateY from '../Animation/TranslateY'
+import { TranslateY } from '../Animation'
 import './style.less'
 
 function Tops() {
@@ -46,7 +45,7 @@ function Tops() {
         loading={loading}
         dataSource={list}
         renderItem={(item, index) => (
-          <TranslateY key={item.title} distance={-15 * index}>
+          <TranslateY key={item.title} delay={index * 100}>
             <List.Item>
               <List.Item.Meta
                 avatar={<Avatar size={'small'}>{index + 1}</Avatar>}

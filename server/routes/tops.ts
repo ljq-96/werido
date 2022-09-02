@@ -13,11 +13,11 @@ class TopsRoute {
     switch (type) {
       case TopsType.知乎:
         const zhihu = await axios.get('https://quark.sm.cn/api/rest?method=Newstoplist.zhihu')
-        ctx.body = zhihu.data.data.slice(0, 10)
+        ctx.body = zhihu.data.data
         break
       case TopsType.微博:
         const weibo = await axios.get('https://quark.sm.cn/api/rest?method=newstoplist.weibo')
-        ctx.body = weibo.data.data.slice(0, 10)
+        ctx.body = weibo.data.data
         break
     }
   }

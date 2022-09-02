@@ -2,8 +2,9 @@ import { CloseOutlined } from '@ant-design/icons'
 import { Col, Row, Card, Spin, Affix, Tag, Divider, Pagination, Button } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { IBlog } from '../../../../../types'
+import { IBlog, IBookmark, Pager } from '../../../../../types'
 import { request } from '../../../../api'
+import { TranslateY } from '../../../../components/Animation'
 import { useUser } from '../../../../contexts/useUser'
 import useRequest from '../../../../hooks/useRequest'
 import BlogItemCard from './components/BlogItemCard'
@@ -21,7 +22,7 @@ const BlogList = () => {
     loading,
     data: blogList,
     execute: getBlogList,
-  } = useRequest(() =>
+  } = useRequest<Pager<IBlog>>(() =>
     request.blog.get({
       page: page,
       size: SIZE,
@@ -44,8 +45,10 @@ const BlogList = () => {
         <Col flex='auto'>
           <Spin spinning={loading}>
             <Card title='文章'>
-              {blogList?.list?.map(item => (
-                <BlogItemCard key={item._id} item={item} />
+              {blogList?.list?.map((item, index) => (
+                <TranslateY delay={index * 200}>
+                  <BlogItemCard key={item._id} item={item} />
+                </TranslateY>
               ))}
               <Pagination pageSize={SIZE} current={page} total={total} />
             </Card>
@@ -57,7 +60,7 @@ const BlogList = () => {
               title='标签'
               extra={
                 tag && (
-                  <Button type='link' size='small' onClick={() => navigate('/blog', { replace: true })}>
+                  <Button type='link' size='small' onClick={() => navigate('/view/blog', { replace: true })}>
                     全部
                   </Button>
                 )
@@ -70,7 +73,7 @@ const BlogList = () => {
                   style={{ marginBottom: 8 }}
                   color={tag === item.name ? themeColor : undefined}
                   onClick={() => {
-                    navigate(`/blog?tag=${item.name}`)
+                    navigate(`/view/blog?tag=${item.name}`)
                   }}
                 >
                   {item.name}

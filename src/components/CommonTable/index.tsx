@@ -5,6 +5,7 @@ import { CSSProperties, forwardRef, Fragment, ReactElement, useEffect, useImpera
 import { BaseRequest } from '../../api/utils'
 import useRequest from '../../hooks/useRequest'
 import { formatTime } from '../../utils/common'
+import { TranslateY } from '../Animation'
 
 interface IProps {
   request: BaseRequest
@@ -83,69 +84,73 @@ function CommonTable(props: TableProps<any> & IProps, ref) {
       <Row gutter={[16, 16]}>
         {toolList && (
           <Col span={24}>
-            <Card bodyStyle={{ paddingBottom: 0 }}>
-              <Form form={form} onFinish={execute} labelWrap labelCol={{ style: { width: toolLabelWidth } }}>
-                <Row gutter={16}>
-                  {toolList.map(item => (
-                    <Col key={item.name} xxl={6} xl={8} lg={8} md={12} sm={24}>
-                      <Form.Item label={item.label} name={item.name}>
-                        {getToolItem(item)}
-                      </Form.Item>
+            <TranslateY>
+              <Card bodyStyle={{ paddingBottom: 0 }}>
+                <Form form={form} onFinish={execute} labelWrap labelCol={{ style: { width: toolLabelWidth } }}>
+                  <Row gutter={16}>
+                    {toolList.map(item => (
+                      <Col key={item.name} xxl={6} xl={8} lg={8} md={12} sm={24}>
+                        <Form.Item label={item.label} name={item.name}>
+                          {getToolItem(item)}
+                        </Form.Item>
+                      </Col>
+                    ))}
+                    <Col flex={'auto'}>
+                      <Row justify='end'>
+                        <Space style={{ marginBottom: 24 }}>
+                          <Button type='primary' onClick={form.submit}>
+                            查询
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              form.resetFields()
+                              form.submit()
+                            }}
+                          >
+                            重置
+                          </Button>
+                        </Space>
+                      </Row>
                     </Col>
-                  ))}
-                  <Col flex={'auto'}>
-                    <Row justify='end'>
-                      <Space style={{ marginBottom: 24 }}>
-                        <Button type='primary' onClick={form.submit}>
-                          查询
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            form.resetFields()
-                            form.submit()
-                          }}
-                        >
-                          重置
-                        </Button>
-                      </Space>
-                    </Row>
-                  </Col>
-                </Row>
-              </Form>
-            </Card>
+                  </Row>
+                </Form>
+              </Card>
+            </TranslateY>
           </Col>
         )}
 
         <Col span={24}>
-          <Card>
-            {(title || extra) && (
-              <Row justify='space-between' align='middle' style={{ marginBottom: 16 }}>
-                <div style={{ fontSize: 16 }}>{title([])}</div>
-                <div>{extra}</div>
-              </Row>
-            )}
-            <Table
-              {...reset}
-              loading={{ spinning: loading, delay: 300 }}
-              dataSource={data?.list || []}
-              onChange={({ pageSize, current }, filter, sorter) => {
-                const { field, order } = sorter as SorterResult<any>
-                if (order) {
-                  setSortInfo([field?.toString(), order === 'ascend' ? 'asc' : 'desc'])
-                } else {
-                  setSortInfo([])
-                }
-                setPageInfo({ page: current || 1, size: pageSize || 10 })
-              }}
-              pagination={{
-                showQuickJumper: true,
-                total: data?.total || 0,
-                pageSize: pageInfo.size,
-                current: pageInfo.page,
-                showTotal: total => `共${total}条记录 第${pageInfo.page}/${Math.ceil(total / pageInfo.size)}页`,
-              }}
-            />
-          </Card>
+          <TranslateY delay={200}>
+            <Card>
+              {(title || extra) && (
+                <Row justify='space-between' align='middle' style={{ marginBottom: 16 }}>
+                  <div style={{ fontSize: 16 }}>{title([])}</div>
+                  <div>{extra}</div>
+                </Row>
+              )}
+              <Table
+                {...reset}
+                loading={{ spinning: loading, delay: 300 }}
+                dataSource={data?.list || []}
+                onChange={({ pageSize, current }, filter, sorter) => {
+                  const { field, order } = sorter as SorterResult<any>
+                  if (order) {
+                    setSortInfo([field?.toString(), order === 'ascend' ? 'asc' : 'desc'])
+                  } else {
+                    setSortInfo([])
+                  }
+                  setPageInfo({ page: current || 1, size: pageSize || 10 })
+                }}
+                pagination={{
+                  showQuickJumper: true,
+                  total: data?.total || 0,
+                  pageSize: pageInfo.size,
+                  current: pageInfo.page,
+                  showTotal: total => `共${total}条记录 第${pageInfo.page}/${Math.ceil(total / pageInfo.size)}页`,
+                }}
+              />
+            </Card>
+          </TranslateY>
         </Col>
       </Row>
     </Fragment>

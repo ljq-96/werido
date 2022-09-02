@@ -1,7 +1,2 @@
-import TranslateX from './TranslateX'
-import TranslateY from './TranslateY'
-
-export default {
-  TranslateX,
-  TranslateY,
-}
+export * from './Translate'
+export * from './Number'

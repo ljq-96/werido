@@ -17,7 +17,7 @@ import { iframePlugin } from './plugin/iframe'
 import {} from '@milkdown/plugin-menu'
 import { nord } from '@milkdown/theme-nord'
 import { EditorRef, ReactEditor, useEditor, useNodeCtx } from '@milkdown/react'
-import { Anchor, Button, Drawer, Space, Tooltip, Tree, TreeNodeProps } from 'antd'
+import { Anchor, Button, Drawer, Space, Spin, Tooltip, Tree, TreeNodeProps } from 'antd'
 import useControls, { Controls } from './hooks/useControls'
 import useTheme from './hooks/useTheme'
 import style from './index.module.less'
@@ -26,6 +26,7 @@ import { RightOutlined, SaveOutlined } from '@ant-design/icons'
 import clsx from 'clsx'
 import { arrToTree } from '../../utils/common'
 import { DataNode } from 'antd/lib/tree'
+import { TranslateX, TranslateY } from '../Animation'
 
 interface IProps {
   height?: number | string
@@ -35,6 +36,7 @@ interface IProps {
   readonly?: boolean
   defaultValue?: string
   onFinish?: (v: string) => void
+  loading?: boolean
 }
 
 export interface EditorIntance {
@@ -65,7 +67,15 @@ const defaultControls: Controls[] = [
 ]
 
 const MilkdownEditor = (props: IProps, ref) => {
-  const { height, onChange, controls, onFinish, defaultValue = '', readonly = false } = props
+  const {
+    height,
+    onChange,
+    controls,
+    onFinish,
+    defaultValue = '',
+    readonly = false,
+    loading: contentLoading = false,
+  } = props
   const [catalog, setCatalog] = useState<{ text: string; level: number }[]>([])
   const [showCatalog, setShowCatalog] = useState(true)
   // const editorRef = useRef<EditorRef>(null)
@@ -165,52 +175,58 @@ const MilkdownEditor = (props: IProps, ref) => {
   })
 
   return (
-    <div className={style.markdownEditor + ' article'}>
-      {!readonly && (
-        <div className={style.toolBar}>
-          <Space wrap>
-            {(controls || defaultControls).map((item, index) => (
-              <Fragment key={index}>{control[item].element}</Fragment>
-            ))}
-            {onFinish && (
-              <Tooltip title='保存' placement='bottom'>
-                <Button type='text' onClick={() => onFinish(getValue())} icon={<SaveOutlined />} />
-              </Tooltip>
-            )}
-          </Space>
-          <div></div>
-        </div>
-      )}
-      <div
-        className={clsx(style.content, !showCatalog && style.hide)}
-        style={{ height: typeof height === 'number' ? height + 'px' : height }}
-      >
-        <div className={style.container}>
-          <ReactEditor editor={editor} />
-        </div>
-        <div className={style.catalogContainer} style={{ top: readonly ? -16 : 32 }}>
-          <Tooltip title={!showCatalog && '展开'} placement='left'>
-            <Button
-              className={style.openCatalog}
-              shape='circle'
-              icon={<RightOutlined />}
-              onClick={() => setShowCatalog(!showCatalog)}
-            />
-          </Tooltip>
-
-          <div className={style.catalogWrapper}>
-            <div className={style.catalogTitle}>大纲</div>
-            <Anchor
-              affix={true}
-              onClick={e => e.preventDefault()}
-              getContainer={() => document.getElementById('content')}
-            >
-              {formatAnchor(arrToTree(catalog))}
-            </Anchor>
+    <Spin spinning={loading || contentLoading} delay={200}>
+      <div className={style.markdownEditor + ' article'}>
+        {!readonly && (
+          <div className={style.toolBar}>
+            <Space wrap>
+              {(controls || defaultControls).map((item, index) => (
+                <TranslateX key={index} delay={index * 30}>
+                  {control[item].element}
+                </TranslateX>
+              ))}
+              {onFinish && (
+                <Tooltip title='保存' placement='bottom'>
+                  <Button type='text' onClick={() => onFinish(getValue())} icon={<SaveOutlined />} />
+                </Tooltip>
+              )}
+            </Space>
+            <div></div>
           </div>
-        </div>
+        )}
+        <TranslateY key={String(readonly)} delay={(controls || defaultControls).length * 30} distance={15}>
+          <div
+            className={clsx(style.content, !showCatalog && style.hide)}
+            style={{ height: typeof height === 'number' ? height + 'px' : height }}
+          >
+            <div className={style.container}>
+              <ReactEditor editor={editor} />
+            </div>
+            <div className={style.catalogContainer} style={{ top: readonly ? -16 : 32 }}>
+              <Tooltip title={!showCatalog && '展开'} placement='left'>
+                <Button
+                  className={style.openCatalog}
+                  shape='circle'
+                  icon={<RightOutlined />}
+                  onClick={() => setShowCatalog(!showCatalog)}
+                />
+              </Tooltip>
+
+              <div className={style.catalogWrapper}>
+                <div className={style.catalogTitle}>大纲</div>
+                <Anchor
+                  affix={true}
+                  onClick={e => e.preventDefault()}
+                  getContainer={() => document.getElementById('content')}
+                >
+                  {formatAnchor(arrToTree(catalog))}
+                </Anchor>
+              </div>
+            </div>
+          </div>
+        </TranslateY>
       </div>
-    </div>
+    </Spin>
   )
 }
 

@@ -1,5 +1,5 @@
 import { InfoCircleOutlined } from '@ant-design/icons'
-import { Button, Form, Input, message, Modal, Segmented, Space, Tag } from 'antd'
+import { Button, Dropdown, Form, Input, Menu, message, Modal, Segmented, Space, Tag } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { Fragment, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -7,6 +7,7 @@ import { IBlog, IUser } from '../../../../../types'
 import { request } from '../../../../api'
 import CommonTable, { CommonTableInstance, ToolItem } from '../../../../components/CommonTable'
 import { formatTime } from '../../../../utils/common'
+import { TranslateX } from '../../../../components/Animation'
 
 const toolList: ToolItem[] = [
   {
@@ -37,7 +38,7 @@ function BlogManage() {
       type: 'error',
       title: '警告',
       icon: <InfoCircleOutlined style={{ color: 'red' }} />,
-      content: '确定要删除此用户吗？',
+      content: '确定要删除此文章吗？',
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
         return request.blog.delete(id).then(() => {
@@ -61,13 +62,19 @@ function BlogManage() {
       title: '标签',
       dataIndex: 'tags',
       render: (val: string[]) =>
-        val?.length
-          ? val.map(item => (
-              <Tag className='werido-tag' key={item}>
-                {item}
-              </Tag>
-            ))
-          : '--',
+        val?.length ? (
+          <Space wrap size={[0, 8]}>
+            {val.map((item, index) => (
+              <TranslateX key={item} delay={index * 100 + 200}>
+                <Tag className='werido-tag' key={item}>
+                  {item}
+                </Tag>
+              </TranslateX>
+            ))}
+          </Space>
+        ) : (
+          '--'
+        ),
     },
     {
       title: '字数',
@@ -86,15 +93,24 @@ function BlogManage() {
       render: (value, record) => {
         return (
           <Space style={{ marginLeft: -16 }}>
-            <Button type='link' onClick={() => {}}>
-              查看
-            </Button>
             <Button type='link' onClick={() => navigate(`/manage/blog/editor?id=${record._id}`)}>
               编辑
             </Button>
-            <Button type='link' danger onClick={() => handleDelete(record._id)}>
+            <Button type='link' onClick={() => handleDelete(record._id)}>
               删除
             </Button>
+            <Dropdown
+              overlay={
+                <Menu
+                  items={[
+                    { label: '查看', key: 'detail' },
+                    { label: '导出', key: 'export' },
+                  ]}
+                ></Menu>
+              }
+            >
+              <Button type='link'>更多</Button>
+            </Dropdown>
           </Space>
         )
       },

@@ -3,7 +3,7 @@ import { Card, Space } from 'antd'
 import clsx from 'clsx'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
-import { IBlog } from '../../../../../../../server/types'
+import { IBlog } from '../../../../../../../types'
 import { Render } from '../../../../../../components/MarkdownEditor'
 import style from './style.module.less'
 

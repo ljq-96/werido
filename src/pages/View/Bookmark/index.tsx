@@ -69,7 +69,7 @@ function Bookmark() {
                             setShowModal(value)
                             break
                           case 'pin':
-                            request.bookmark.put({ _id: value._id, pin: !value.pin })
+                            request.bookmark.put({ _id: value._id, pin: !value.pin }).then(getBookmark)
                         }
                       }}
                     />
