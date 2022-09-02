@@ -1,15 +1,15 @@
 import { Button, Card, Col, Empty, Row, Segmented, Space, Spin } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
-import { IBookmark } from '../../../../types'
-import { request } from '../../../api'
-import BookmarkItem from '../../../components/BookmarkItem'
-import BookmarkModal from '../../../components/Modal/BookmarkModal'
-import { MultipleContainers } from '../../../components/Sortable/MultipleContainers'
+import { IBookmark } from '../../../types'
+import { request } from '../../api'
+import BookmarkItem from '../../components/BookmarkItem'
+import BookmarkModal from '../../components/Modal/BookmarkModal'
+import { MultipleContainers } from '../../components/Sortable/MultipleContainers'
 import { rectSortingStrategy } from '@dnd-kit/sortable'
 import './style.less'
-import { DocIndexType } from '../../../../types/enum'
-import { extract } from '../../../utils/common'
-import Tops from '../../../components/Tops'
+import { DocIndexType } from '../../../types/enum'
+import { extract } from '../../utils/common'
+import Tops from '../../components/Tops'
 
 function Bookmark() {
   const [showModal, setShowModal] = useState<IBookmark | boolean>(null)

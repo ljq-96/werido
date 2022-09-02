@@ -3,8 +3,8 @@ import { Card, Space } from 'antd'
 import clsx from 'clsx'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
-import { IBlog } from '../../../../../../../types'
-import { Render } from '../../../../../../components/MarkdownEditor'
+import { IBlog } from '../../../../../../types'
+import { Render } from '../../../../../components/MarkdownEditor'
 import style from './style.module.less'
 
 const BlogItemCard = ({ item }: { item: IBlog }) => {
@@ -15,7 +15,7 @@ const BlogItemCard = ({ item }: { item: IBlog }) => {
       <div
         className={clsx('werido-title', style.title)}
         style={{ margin: '0 -16px' }}
-        onClick={() => navigate(`/view/blog/${_id}`)}
+        onClick={() => navigate(`/blog/${_id}`)}
       >
         {title}
       </div>

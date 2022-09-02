@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Card, Input, Popover, Tooltip, ConfigProvider } from 'antd'
 import { FieldTimeOutlined, InfoCircleOutlined } from '@ant-design/icons'
-import Space from '../../../../components/Canvas/Space'
+import Space from '../../../components/Canvas/Space'
 import moment from 'moment'
-import { debounce } from '../../../../utils/common'
-import { useUser } from '../../../../contexts/useUser'
-import LandScape1 from '../../../../components/Wallpaper/LandScape1'
+import { debounce } from '../../../utils/common'
+import { useUser } from '../../../contexts/useUser'
+import LandScape1 from '../../../components/Wallpaper/LandScape1'
 import { useWindowScroll } from 'react-use'
 
 declare global {

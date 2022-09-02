@@ -24,11 +24,11 @@ import {
 } from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { IBlog } from '../../../../../types'
-import { request } from '../../../../api'
-import MarkdownEditor, { EditorIntance } from '../../../../components/MarkdownEditor'
-import { useUser } from '../../../../contexts/useUser'
-import { formatTime } from '../../../../utils/common'
+import { IBlog } from '../../../../types'
+import { request } from '../../../api'
+import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
+import { useUser } from '../../../contexts/useUser'
+import { formatTime } from '../../../utils/common'
 
 function BlogDetail() {
   const [onEdit, setOnEdit] = useState(false)

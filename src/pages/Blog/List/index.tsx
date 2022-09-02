@@ -2,11 +2,11 @@ import { CloseOutlined } from '@ant-design/icons'
 import { Col, Row, Card, Spin, Affix, Tag, Divider, Pagination, Button } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { IBlog, IBookmark, Pager } from '../../../../../types'
-import { request } from '../../../../api'
-import { TranslateY } from '../../../../components/Animation'
-import { useUser } from '../../../../contexts/useUser'
-import useRequest from '../../../../hooks/useRequest'
+import { IBlog, IBookmark, Pager } from '../../../../types'
+import { request } from '../../../api'
+import { TranslateY } from '../../../components/Animation'
+import { useUser } from '../../../contexts/useUser'
+import useRequest from '../../../hooks/useRequest'
 import BlogItemCard from './components/BlogItemCard'
 
 const SIZE = 20
@@ -60,7 +60,7 @@ const BlogList = () => {
               title='标签'
               extra={
                 tag && (
-                  <Button type='link' size='small' onClick={() => navigate('/view/blog', { replace: true })}>
+                  <Button type='link' size='small' onClick={() => navigate('/blog', { replace: true })}>
                     全部
                   </Button>
                 )
@@ -73,7 +73,7 @@ const BlogList = () => {
                   style={{ marginBottom: 8 }}
                   color={tag === item.name ? themeColor : undefined}
                   onClick={() => {
-                    navigate(`/view/blog?tag=${item.name}`)
+                    navigate(`/blog?tag=${item.name}`)
                   }}
                 >
                   {item.name}

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { Row, Col, Calendar, Card, Collapse, Button, Affix } from 'antd'
 import Bookmark from './components/Bookmark'
 import Search from './components/Search'
-import Tops from '../../../components/Tops'
+import Tops from '../../components/Tops'
 
 interface IProps {}
 
