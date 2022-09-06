@@ -64,6 +64,7 @@ const defaultControls: Controls[] = [
   'hr',
   'divider',
   'clear',
+  'fullScreen',
 ]
 
 const MilkdownEditor = (props: IProps, ref) => {

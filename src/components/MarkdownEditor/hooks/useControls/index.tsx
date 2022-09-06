@@ -23,6 +23,8 @@ import {
   DeleteOutlined,
   SaveOutlined,
   GatewayOutlined,
+  FullscreenOutlined,
+  FullscreenExitOutlined,
 } from '@ant-design/icons'
 import { Fragment, ReactElement, useCallback, useEffect, useMemo, useState } from 'react'
 import {
@@ -59,6 +61,7 @@ export type Controls =
   | 'divider'
   | 'clear'
   | 'iframe'
+  | 'fullScreen'
 
 type ActivedButton = 'strong' | 'link' | 'em' | 'code_inline'
 
@@ -77,6 +80,7 @@ const hasMark = (state, type): boolean => {
 function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
   const [activeBtns, setActiveBtns] = useState<Set<ActivedButton>>(new Set())
   const [showIframe, setShowIframe] = useState(false)
+  const [isFullScreen, setIsFullScreen] = useState(false)
   const [iframeForm] = Form.useForm()
 
   const handleActive = (k: ActivedButton) => {
@@ -167,6 +171,16 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
 
     const setValue = value => {
       editor?.action(replaceAll(value))
+    }
+
+    const handleFullScreen = () => {
+      if (isFullScreen) {
+        setIsFullScreen(false)
+        document.exitFullscreen()
+      } else {
+        setIsFullScreen(true)
+        document.querySelector('#content').requestFullscreen()
+      }
     }
 
     return {
@@ -416,8 +430,20 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
           </Fragment>
         ),
       },
+      fullScreen: {
+        action: handleFullScreen,
+        element: isFullScreen ? (
+          <Tooltip title='退出全屏' placement='bottom'>
+            <Button type='text' onClick={handleFullScreen} icon={<FullscreenOutlined />} />
+          </Tooltip>
+        ) : (
+          <Tooltip title='全屏' placement='bottom'>
+            <Button type='text' onClick={handleFullScreen} icon={<FullscreenExitOutlined />} />
+          </Tooltip>
+        ),
+      },
     }
-  }, [editor, showIframe])
+  }, [editor, showIframe, isFullScreen, dom])
 
   useEffect(() => {
     const getState = () => {

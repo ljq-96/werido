@@ -46,6 +46,10 @@ export interface RouteProps {
   routes?: RouteProps[]
 }
 
+export interface PageProps {
+  route: RouteProps
+}
+
 export interface IUser {
   _id: string
   username: string
@@ -56,6 +60,8 @@ export interface IUser {
   themeColor: string
   layoutB: 'side' | 'top'
   layoutC: 'side' | 'top'
+  bookmark: number
+  blog: number
 }
 
 export interface IconType {

@@ -12,6 +12,7 @@ const apiList = {
   statistics: '/api/statistics',
   docIndex: '/api/docIndex',
   tops: '/api/tops',
+  detail: '/api/detail',
 }
 
 const request = paseRequest(apiList)

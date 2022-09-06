@@ -17,19 +17,19 @@ import {
 } from 'antd'
 import { Link, Outlet, useNavigate, useLocation, useMatch } from 'react-router-dom'
 import Logo from '../components/Logo'
-import routes from '../routes'
 import { useUser } from '../contexts/useUser'
 import { request } from '../api'
 import { CirclePicker, MaterialPicker, SliderPicker } from 'react-color'
 import { basicUserView } from '../contexts/useUser/actions'
-import { RouteProps } from '../../types'
+import { PageProps, RouteProps } from '../../types'
 import Loading from '../components/Loading'
 import * as colors from '@ant-design/colors'
 import { TranslateX } from '../components/Animation'
 import './style.less'
 import '../assets/css/index.less'
 
-export default () => {
+export default (props: PageProps) => {
+  const { route } = props
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(true)
@@ -48,14 +48,8 @@ export default () => {
       return item
     }
 
-    let route: RouteProps
-    for (let i = 0; i < routes.length; i++) {
-      if (routes[i].path === pathname || routes[i]?.routes?.find(item => pathname.startsWith(item.path))) {
-        route = routes[i]
-      }
-    }
     return parseRoute(route)
-  }, [pathname])
+  }, [pathname, route])
 
   const currentLayout = useMemo(
     () => (currentRoutes.path === '/' ? loginUser.layoutC : loginUser.layoutB),

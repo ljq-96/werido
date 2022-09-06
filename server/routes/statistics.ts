@@ -10,8 +10,12 @@ class StatisticsRoute {
   @GET('/count')
   async getStatisticsCount(ctx: RouterCtx) {
     const { user } = ctx.app.context
-    const blogCount = await BlogModel.find({ creator: user._id }).countDocuments()
-    const bookmarkCount = await BookmarkModel.find({ creator: user._id }).countDocuments()
+    const blog = await BlogModel.find({ creator: user._id }).countDocuments()
+    const bookmark = await BookmarkModel.find({ creator: user._id }).countDocuments()
+    ctx.body = {
+      blog,
+      bookmark,
+    }
   }
 
   @GET('/tag')

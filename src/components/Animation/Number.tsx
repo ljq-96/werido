@@ -6,10 +6,11 @@ interface IProps {
   precision?: number
   render?: (num: Interpolation) => ReactElement
   delay?: number
+  className?: string
 }
 
 export function Number(props: IProps) {
-  const { render, to, precision = 0, delay } = props
+  const { render, to, precision = 0, delay, className } = props
   const { number } = useSpring({
     from: { number: 0 },
     to: { number: to },
@@ -18,7 +19,7 @@ export function Number(props: IProps) {
   })
 
   return (
-    <animated.div>
+    <animated.div className={className}>
       {render ? render(number.to(n => n.toFixed(precision))) : number.to(n => n.toFixed(precision))}
     </animated.div>
   )
