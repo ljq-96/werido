@@ -34,7 +34,7 @@ export default (props: PageProps) => {
   const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(true)
   const [showColorDrawer, setShowColorDrawer] = useState(false)
-  const [loginUser, userDispatch] = useUser()
+  const [loginUser, { dispatch, getUser }] = useUser()
 
   const currentRoutes = useMemo(() => {
     function parseRoute(item: RouteProps) {
@@ -57,21 +57,14 @@ export default (props: PageProps) => {
   )
 
   const getMyProfile = () => {
-    request.myProfile.get().then(res => {
-      userDispatch(basicUserView.update.actions(res))
-      ConfigProvider.config({
-        theme: {
-          primaryColor: res.themeColor,
-        },
-      })
-    })
+    getUser().then(res => ConfigProvider.config({ theme: { primaryColor: res.themeColor } }))
   }
 
   const logout = () => {
     request.logout.post().then(res => {
       navigate('/login')
       message.success(res.msg)
-      userDispatch(basicUserView.destroy.actions())
+      dispatch(basicUserView.destroy.actions())
     })
   }
 
@@ -81,7 +74,7 @@ export default (props: PageProps) => {
         primaryColor: hex,
       },
     })
-    userDispatch(basicUserView.update.actions({ themeColor: hex }))
+    dispatch(basicUserView.update.actions({ themeColor: hex }))
   }
 
   const handleDrawer = () => {
@@ -139,7 +132,7 @@ export default (props: PageProps) => {
               <Avatar
                 shape='circle'
                 size='small'
-                src='https://joeschmoe.io/api/v1/random'
+                src={loginUser?.avatar}
                 icon={<UserOutlined />}
                 style={{ marginRight: 10 }}
               />
@@ -206,7 +199,7 @@ export default (props: PageProps) => {
           前台系统：
           <Segmented
             value={loginUser.layoutC}
-            onChange={(e: any) => userDispatch(basicUserView.update.actions({ layoutC: e }))}
+            onChange={(e: any) => dispatch(basicUserView.update.actions({ layoutC: e }))}
             options={[
               {
                 label: '侧栏',
@@ -223,7 +216,7 @@ export default (props: PageProps) => {
           后台管理：
           <Segmented
             value={loginUser.layoutB}
-            onChange={(e: any) => userDispatch(basicUserView.update.actions({ layoutB: e }))}
+            onChange={(e: any) => dispatch(basicUserView.update.actions({ layoutB: e }))}
             options={[
               {
                 label: '侧栏',

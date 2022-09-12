@@ -6,7 +6,7 @@ import 'reflect-metadata'
  * @param excludes 排除的路由
  * @param inLast 是否添加在最后，默认塞在最前面
  */
-export function unifyUse<T extends string>(
+export function UnifyUse<T extends string>(
   middleware: (ctx, next) => Promise<any>,
   excludes: Array<T> = [],
   inLast = false,

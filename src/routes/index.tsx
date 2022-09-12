@@ -14,6 +14,7 @@ import Layout from '../layout'
 import { RouteProps } from '../../types'
 import UserCenterBlog from '../pages/UserCenter/Blog'
 import UserCenterOverview from '../pages/UserCenter/Overview'
+import UserCenterDetail from '../pages/UserCenter/Detail'
 
 function Redirect({ to }) {
   let navigate = useNavigate()
@@ -65,7 +66,7 @@ const routes: RouteProps[] = [
         routes: [
           {
             path: '/user_center',
-            name: '我的资料',
+            name: '统计',
             component: UserCenterOverview,
             hide: true,
           },
@@ -79,6 +80,12 @@ const routes: RouteProps[] = [
             path: '/user_center/blog',
             name: '我的文章',
             component: UserCenterBlog,
+            hide: true,
+          },
+          {
+            path: '/user_center/detail',
+            name: '我的账号',
+            component: UserCenterDetail,
             hide: true,
           },
         ],

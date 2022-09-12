@@ -1,7 +1,6 @@
-// src/decorator/use.ts
 import 'reflect-metadata'
 
-export function use(middleware: (ctx, next) => Promise<any>, position: 'last' | number = 'last') {
+export function Use(middleware: (ctx, next) => Promise<any>, position: 'last' | number = 'last') {
   return function (target: any, key: string) {
     const middlewares = Reflect.getMetadata('middlewares', target, key) || []
     if (position === 'last') {

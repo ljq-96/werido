@@ -1,13 +1,13 @@
 import { RouterContext } from 'koa-router'
-import { controller, DELETE, GET, POST, PUT, unifyUse } from '../decorator'
+import { Controller, Delete, Get, Post, Put, UnifyUse } from '../decorator'
 import { RouterCtx } from '../../types'
 import { validateToken } from '../middlewares'
 import { BlogModel } from '../model'
 
-@controller('/api/blog')
-@unifyUse(validateToken)
+@Controller('/api/blog')
+@UnifyUse(validateToken)
 export class BlogRoute {
-  @GET()
+  @Get()
   async getBlogs(ctx: RouterCtx) {
     const { page, size } = ctx.request.query
     const { user } = ctx.app.context
@@ -18,14 +18,14 @@ export class BlogRoute {
     ctx.body = { list, total, page: Number(page), size: Number(size) }
   }
 
-  @GET('/:id')
+  @Get('/:id')
   async getBlogById(ctx: RouterCtx) {
     const { id } = ctx.request.params
     const data = await BlogModel.findById(id)
     ctx.body = data
   }
 
-  @POST()
+  @Post()
   async createBlog(ctx: RouterCtx) {
     const { body } = ctx.request
     const { user } = ctx.app.context
@@ -41,7 +41,7 @@ export class BlogRoute {
     ctx.body = blog
   }
 
-  @PUT('/:id')
+  @Put('/:id')
   async updateBlog(ctx: RouterCtx) {
     const { id } = ctx.request.params
     const data = { ...ctx.request.body }
@@ -55,7 +55,7 @@ export class BlogRoute {
     ctx.body = blog
   }
 
-  @DELETE('/:id')
+  @Delete('/:id')
   async deleteBlog(ctx: RouterCtx) {
     const { id } = ctx.request.params
     const blog = await BlogModel.deleteOne({ _id: id })

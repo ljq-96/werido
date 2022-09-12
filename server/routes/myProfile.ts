@@ -1,24 +1,25 @@
-import { controller, GET, PUT, unifyUse, use } from '../decorator'
+import { Controller, Get, Put, Use } from '../decorator'
 import { RouterCtx } from '../../types'
 import { validateToken } from '../middlewares'
 import { UserModel } from '../model'
 
-@controller('/api/myProfile')
+@Controller('/api/myProfile')
 export class MyProfile {
-  @GET()
-  @use(validateToken)
+  @Get()
+  @Use(validateToken)
   async getMyProfile(ctx: RouterCtx) {
     const { user } = ctx.app.context
-    const { _id, username, createTime, updateTime, status, themeColor } = user
 
-    ctx.body = { _id, username, createTime, updateTime, status, themeColor }
+    ctx.body = user
   }
 
-  @PUT()
-  @use(validateToken)
+  @Put()
+  @Use(validateToken)
   async setMyProfile(ctx: RouterCtx) {
     const { user } = ctx.app.context
-    await UserModel.updateOne({ _id: user._id }, ctx.request.body)
-    ctx.body = {}
+    const { currentPassword, newPassword, ...reset } = ctx.request.body
+    ctx.assert(user.password === currentPassword, 403, '密码错误，请重试')
+    const _user = await UserModel.findOneAndUpdate({ _id: user._id }, { ...reset, password: newPassword })
+    ctx.body = _user
   }
 }

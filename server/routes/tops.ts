@@ -1,13 +1,11 @@
 import axios from 'axios'
-import { controller, GET, unifyUse } from '../decorator'
-import { validateToken } from '../middlewares'
+import { Controller, Get } from '../decorator'
 import { RouterCtx } from '../../types'
 import { TopsType } from '../../types/enum'
 
-@controller('/api/tops')
-@unifyUse(validateToken)
+@Controller('/api/tops')
 class TopsRoute {
-  @GET('/:type')
+  @Get('/:type')
   async getNews(ctx: RouterCtx) {
     const { type } = ctx.request.params
     switch (type) {

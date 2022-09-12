@@ -23,7 +23,7 @@ const Login = props => {
     const { username, password, password_c } = fields
     if (isLogin) {
       request.login.post({ username, password }).then(res => {
-        navigator('/view/home')
+        navigator('/home')
       })
     } else {
       request.register.post({ username, password }).then(res => {

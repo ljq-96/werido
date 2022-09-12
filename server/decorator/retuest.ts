@@ -9,7 +9,7 @@ function genRequestDecorator(type: string) {
   }
 }
 
-export const GET = genRequestDecorator('get')
-export const POST = genRequestDecorator('post')
-export const PUT = genRequestDecorator('put')
-export const DELETE = genRequestDecorator('delete')
+export const Get = genRequestDecorator('get')
+export const Post = genRequestDecorator('post')
+export const Put = genRequestDecorator('put')
+export const Delete = genRequestDecorator('delete')

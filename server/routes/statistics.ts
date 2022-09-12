@@ -1,13 +1,13 @@
 import moment from 'moment'
-import { controller, GET, unifyUse } from '../decorator'
+import { Controller, Get, UnifyUse } from '../decorator'
 import { validateToken } from '../middlewares'
 import { BlogModel, BookmarkModel } from '../model'
 import { RouterCtx } from '../../types'
 
-@controller('/api/statistics')
-@unifyUse(validateToken)
+@Controller('/api/statistics')
+@UnifyUse(validateToken)
 class StatisticsRoute {
-  @GET('/count')
+  @Get('/count')
   async getStatisticsCount(ctx: RouterCtx) {
     const { user } = ctx.app.context
     const blog = await BlogModel.find({ creator: user._id }).countDocuments()
@@ -18,7 +18,7 @@ class StatisticsRoute {
     }
   }
 
-  @GET('/tag')
+  @Get('/tag')
   async getBlogTags(ctx: RouterCtx) {
     const { user } = ctx.app.context
     const list = await BlogModel.find({ creator: user._id })
@@ -35,7 +35,7 @@ class StatisticsRoute {
     ctx.body = data
   }
 
-  @GET('/time')
+  @Get('/time')
   async getBlogTime(ctx: RouterCtx) {
     const { user } = ctx.app.context
     const list = await BlogModel.find({ creator: user._id })

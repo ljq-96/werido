@@ -9,6 +9,15 @@ export class User {
   @prop({ type: String })
   password?: string
 
+  @prop({ type: String })
+  desc?: string
+
+  @prop({ type: String })
+  avatar?: string
+
+  @prop({ type: String })
+  location?: string
+
   @prop({ type: Number, enum: UserStatus, default: UserStatus.普通用户 })
   status?: UserStatus
 

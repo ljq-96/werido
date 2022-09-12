@@ -64,13 +64,13 @@ function UserCenterBlog(props) {
       render: (val: string[]) =>
         val?.length ? (
           <Space wrap size={[0, 8]}>
-            {val.map((item, index) => (
-              <TranslateX key={item} delay={index * 100 + 200}>
+            <TranslateX.List>
+              {val.map((item, index) => (
                 <Tag className='werido-tag' key={item}>
                   {item}
                 </Tag>
-              </TranslateX>
-            ))}
+              ))}
+            </TranslateX.List>
           </Space>
         ) : (
           '--'
@@ -122,17 +122,6 @@ function UserCenterBlog(props) {
       <CommonTable
         ref={tableRef}
         request={request.blog}
-        title={() => (
-          <Space>
-            文章管理
-            <Segmented
-              options={[
-                { label: '管理员', value: 'admin' },
-                { label: '自己', value: 'mine' },
-              ]}
-            />
-          </Space>
-        )}
         extra={
           <Space>
             <Button></Button>

@@ -1,14 +1,14 @@
-import { controller, DELETE, GET, POST, PUT, unifyUse } from '../decorator'
+import { Controller, Delete, Get, Post, Put, UnifyUse } from '../decorator'
 import { validateToken, isAdmin } from '../middlewares'
 import { BookmarkModel, IconModel, UserModel } from '../model'
 import { RouterCtx } from '../../types'
 import basicRoute from './basic'
 
-@controller('/api/admin')
-@unifyUse(validateToken)
-@unifyUse(isAdmin)
+@Controller('/api/admin')
+@UnifyUse(validateToken)
+@UnifyUse(isAdmin)
 export class AdminRoute {
-  @GET('/user')
+  @Get('/user')
   async getUserList(ctx: RouterCtx) {
     const { page = 1, size = 1000, ...reset } = ctx.request.query
     const list = await UserModel.find({ ...reset })
@@ -18,12 +18,12 @@ export class AdminRoute {
     ctx.body = { list, page, size, total }
   }
 
-  @POST('/user')
+  @Post('/user')
   async createUser(ctx: RouterCtx) {
     basicRoute.register(ctx)
   }
 
-  @DELETE('/user/:id')
+  @Delete('/user/:id')
   async deleteUser(ctx: RouterCtx) {
     const { id } = ctx.request.params
     const user = await UserModel.deleteOne({ _id: id })

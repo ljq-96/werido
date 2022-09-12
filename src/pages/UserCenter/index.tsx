@@ -3,7 +3,7 @@ import { Fragment, memo, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { PageProps } from '../../../types'
 import { request } from '../../api'
-import { TranslateX } from '../../components/Animation'
+import { TranslateX, TranslateY } from '../../components/Animation'
 import UserCard from '../../components/UserCard'
 import { useUser } from '../../contexts/useUser'
 import './style.less'
@@ -24,25 +24,29 @@ function UserCenterLayout(props: PageProps) {
       <Row gutter={[16, 16]} className='user-center'>
         <Col span={6}>
           <Affix target={() => document.getElementById('content')} offsetTop={16}>
-            <TranslateX>
-              <UserCard id={user?._id}>
-                <Button type='primary' block shape='round'>
-                  我的主页
-                </Button>
-              </UserCard>
-            </TranslateX>
+            <div>
+              <TranslateX delay={200}>
+                <UserCard id={user?._id}>
+                  <Button type='primary' block shape='round'>
+                    我的主页
+                  </Button>
+                </UserCard>
+              </TranslateX>
+            </div>
           </Affix>
         </Col>
         <Col span={18}>
-          <Card style={{ marginBottom: 16 }} bodyStyle={{ padding: '16px 16px 0' }}>
-            <Tabs destroyInactiveTabPane onChange={navigate} activeKey={pathname}>
-              {route.routes.map(item => (
-                <Tabs.TabPane tab={item.name} tabKey={item.path} key={item.path}>
-                  {<item.component />}
-                </Tabs.TabPane>
-              ))}
-            </Tabs>
-          </Card>
+          <TranslateY>
+            <Card style={{ marginBottom: 16 }} bodyStyle={{ padding: '16px 16px 0' }}>
+              <Tabs destroyInactiveTabPane onChange={navigate} activeKey={pathname}>
+                {route.routes.map(item => (
+                  <Tabs.TabPane tab={item.name} tabKey={item.path} key={item.path}>
+                    {<item.component />}
+                  </Tabs.TabPane>
+                ))}
+              </Tabs>
+            </Card>
+          </TranslateY>
         </Col>
       </Row>
     </Fragment>

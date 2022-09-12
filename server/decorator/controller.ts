@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import router from '../routerInstance'
 
-export function controller(root: string) {
+export function Controller(root: string) {
   return function (target: new (...args: any[]) => any) {
     const handlerKeys = Object.getOwnPropertyNames(target.prototype).filter(key => key !== 'constructor')
     handlerKeys.forEach(key => {

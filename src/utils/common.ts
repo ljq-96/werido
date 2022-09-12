@@ -1,4 +1,5 @@
 import { createFromIconfontCN } from '@ant-design/icons'
+import { RcFile } from 'antd/lib/upload'
 import moment, { Moment } from 'moment'
 
 /** 自定义图标 */
@@ -92,3 +93,12 @@ export const extract = (doc: any) => {
     children: extract(k.children || []),
   }))
 }
+
+export const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    if (!file) resolve(null)
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = error => reject(error)
+  })

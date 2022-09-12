@@ -124,7 +124,7 @@ function CommonTable(props: TableProps<any> & IProps, ref) {
             <Card>
               {(title || extra) && (
                 <Row justify='space-between' align='middle' style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: 16 }}>{title([])}</div>
+                  <div style={{ fontSize: 16 }}>{title?.([])}</div>
                   <div>{extra}</div>
                 </Row>
               )}

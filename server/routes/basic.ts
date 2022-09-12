@@ -1,12 +1,12 @@
-import { POST, controller } from '../decorator'
+import { Post, Controller } from '../decorator'
 import { UserModel, BookmarkModel } from '../model'
 import md5 from 'md5'
 import { sign } from 'jsonwebtoken'
 import { RouterCtx } from '../../types'
 
-@controller('/api')
+@Controller('/api')
 export class BasicRoute {
-  @POST('/login')
+  @Post('/login')
   async login(ctx: RouterCtx) {
     const body = ctx.request?.body || {}
     const { username, password } = body
@@ -18,7 +18,7 @@ export class BasicRoute {
     ctx.body = user
   }
 
-  @POST('/register')
+  @Post('/register')
   async register(ctx: RouterCtx) {
     const { body } = ctx.request
     const { username, password } = body
@@ -32,7 +32,7 @@ export class BasicRoute {
     ctx.body = addedUser
   }
 
-  @POST('/logout')
+  @Post('/logout')
   async logout(ctx: RouterCtx) {
     ctx.cookies.set('token', '')
     ctx.body = {}

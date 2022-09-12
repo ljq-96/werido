@@ -1,4 +1,4 @@
-import { controller, POST, PUT, GET, unifyUse } from '../decorator'
+import { Controller, Get, Post, Put, UnifyUse } from '../decorator'
 import { RouterCtx } from '../../types'
 import { validateToken } from '../middlewares'
 import { BookmarkModel, DocIndexModel } from '../model'
@@ -6,10 +6,10 @@ import { DocIndexType, DocType } from '../../types/enum'
 import { getDocIndex, merge } from '../utils/docIndex'
 import { getFavicon } from '../utils/favicon'
 
-@controller('/api/bookmark')
-@unifyUse(validateToken)
+@Controller('/api/bookmark')
+@UnifyUse(validateToken)
 export class BookmarkRoute {
-  @GET()
+  @Get()
   async getMyBookmarks(ctx: RouterCtx) {
     const { _id } = ctx.app.context.user
     const data = await BookmarkModel.find({ creator: _id })
@@ -17,7 +17,7 @@ export class BookmarkRoute {
     ctx.body = merge(docIndex, data)
   }
 
-  @GET('/favorite')
+  @Get('/favorite')
   async getMyFavBookmarks(ctx: RouterCtx) {
     const { _id } = ctx.app.context.user
     const data = await BookmarkModel.find({ creator: _id, sin: true })
@@ -25,7 +25,7 @@ export class BookmarkRoute {
     ctx.body = merge(docIndex, data)
   }
 
-  @PUT('/:id')
+  @Put('/:id')
   async updateBookmark(ctx: RouterCtx) {
     const { _id } = ctx.app.context.user
     const { id } = ctx.request.params
@@ -49,7 +49,7 @@ export class BookmarkRoute {
     ctx.body = blog
   }
 
-  @POST()
+  @Post()
   async createBookmark(ctx: RouterCtx) {
     const { body } = ctx.request
     const { user } = ctx.app.context

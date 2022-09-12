@@ -1,12 +1,12 @@
-import { controller, GET, PUT, unifyUse } from '../decorator'
+import { Controller, Get, Put, UnifyUse } from '../decorator'
 import { validateToken } from '../middlewares'
 import { DocIndexModel } from '../model'
 import { RouterCtx } from '../../types'
 
-@controller('/api/docIndex')
-@unifyUse(validateToken)
+@Controller('/api/docIndex')
+@UnifyUse(validateToken)
 class DocIndex {
-  @GET('/:type')
+  @Get('/:type')
   async getDocIndex(ctx: RouterCtx) {
     const { _id } = ctx.app.context.user
     const { type } = ctx.request.params
@@ -14,7 +14,7 @@ class DocIndex {
     ctx.body = data
   }
 
-  @PUT('/:type')
+  @Put('/:type')
   async putDocIndex(ctx: RouterCtx) {
     const { _id } = ctx.app.context.user
     const { type } = ctx.request.params

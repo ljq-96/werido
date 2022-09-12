@@ -2,6 +2,14 @@ import * as express from 'express'
 import Koa from 'koa'
 import { ComponentType, LazyExoticComponent, ReactElement } from 'react'
 import { UserStatus } from './enum'
+import 'react'
+
+declare module 'react' {
+  interface StyleHTMLAttributes<T> extends React.HTMLAttributes<T> {
+    jsx?: boolean
+    global?: boolean
+  }
+}
 
 export type Request<ReqBody = any, ReqQuery = any, Locals = { user: IUser }> = express.Request<
   any,
@@ -62,6 +70,9 @@ export interface IUser {
   layoutC: 'side' | 'top'
   bookmark: number
   blog: number
+  avatar: string
+  desc: string
+  location: string
 }
 
 export interface IconType {
