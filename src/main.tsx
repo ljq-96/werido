@@ -6,6 +6,7 @@ import routes from './routes'
 import { ConfigProvider } from 'antd'
 import UserProvider from './contexts/useUser'
 import zhCN from 'antd/lib/locale/zh_CN'
+import 'moment/dist/locale/zh-cn'
 import '@ant-design/flowchart/dist/index.css'
 
 const parseRoute = route => {
