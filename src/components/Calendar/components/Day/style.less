@@ -3,26 +3,41 @@
   user-select: none;
   .calendar-day-head {
     display: flex;
-    margin: 16px 16px 0;
+    justify-content: space-between;
+    margin: 16px 8px 0;
 
     .calendar-day-head-item {
-      flex-grow: 1;
-      text-align: center;
-      padding: 4px 0;
-      margin: 0 2px;
-      border-radius: 2px;
-      border: 1px solid transparent;
-      transition: 0.4s;
+      position: relative;
+      padding: 0 8px;
       cursor: pointer;
+      z-index: 13;
+      .calendar-day-head-item-dot {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        bottom: -12px;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background-color: #7a7a7a;
+        transition: 0.4s;
+      }
       &:hover {
         color: var(--ant-primary-color);
       }
       &.active {
-        border-color: var(--ant-primary-color);
+        color: var(--ant-primary-color);
+        .calendar-day-head-item-dot {
+          background-color: var(--ant-primary-color);
+        }
       }
       &.current {
-        color: #fff;
-        background-color: var(--ant-primary-color);
+        .calendar-day-head-item-dot {
+          bottom: -6px;
+          width: 6px;
+          height: 6px;
+        }
       }
     }
   }

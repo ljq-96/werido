@@ -1,0 +1,44 @@
+.calendar-month {
+  .ant-picker-calendar .ant-picker-panel {
+    border-top: none;
+  }
+  .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content {
+    height: 60px;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+  }
+  .calendar-month-todo-list {
+    .calendar-month-todo-item {
+      margin-bottom: 4px;
+      padding: 2px 4px;
+      font-size: 12px;
+      color: #fff;
+      background-color: var(--ant-primary-color);
+      border-radius: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  .calendar-month-detail-list {
+    max-width: 300px;
+    max-height: 600px;
+    overflow: auto;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+    .calendar-month-detail-item {
+      & > div:nth-child(1) {
+        color: #7a7a7a;
+        font-size: 12px;
+      }
+      & > div:nth-child(2) {
+        margin: 4px 0;
+      }
+      & > div:nth-child(3) {
+        margin-left: -7px;
+      }
+    }
+  }
+}

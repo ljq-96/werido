@@ -6,6 +6,8 @@ import Search from './components/Search'
 import Tops from '../../components/Tops'
 import { Gutter } from 'antd/lib/grid/row'
 import HomeCalendar from './components/HomeCalendar'
+import Shortcuts from './components/Shortcuts'
+import { TranslateX, TranslateY } from '../../components/Animation'
 
 interface IProps {}
 
@@ -13,32 +15,40 @@ const GUTTER: [Gutter, Gutter] = [16, 16]
 export default (props: IProps) => {
   return (
     <Row className='home' gutter={GUTTER}>
-      <Col span={18}>
+      <Col span={6}>
         <Row gutter={GUTTER}>
           <Col span={24}>
-            <Row gutter={GUTTER}>
-              <Col span={8}>
-                <Card />
-              </Col>
-              <Col span={16}>
-                <Search />
-              </Col>
-            </Row>
+            <TranslateX delay={400}>
+              <Shortcuts />
+            </TranslateX>
+          </Col>
+        </Row>
+      </Col>
+      <Col span={12}>
+        <Row gutter={GUTTER}>
+          <Col span={24}>
+            <TranslateY>
+              <Search />
+            </TranslateY>
           </Col>
           <Col span={24}>
-            <Bookmark />
+            <TranslateY delay={200}>
+              <Bookmark />
+            </TranslateY>
           </Col>
         </Row>
       </Col>
       <Col span={6}>
         <Row gutter={GUTTER}>
           <Col span={24}>
-            <HomeCalendar />
+            <TranslateX distance={20} delay={400}>
+              <HomeCalendar />
+            </TranslateX>
           </Col>
           <Col span={24}>
-            <Affix target={() => document.getElementById('content')} offsetTop={16}>
+            <TranslateX distance={20} delay={600}>
               <Tops />
-            </Affix>
+            </TranslateX>
           </Col>
           <Col></Col>
         </Row>

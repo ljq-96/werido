@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export function TranslateX(props: IProps) {
-  const { children, distance = -15, delay = 0, className } = props
+  const { children, distance = -20, delay = 0, className } = props
   const style = useSpring({
     to: { opacity: 1, transform: 'translateX(0)' },
     from: { opacity: 0, transform: `translateX(${distance}px)` },
@@ -38,7 +38,7 @@ TranslateX.List = function (props: IProps & { interval?: number }) {
 }
 
 export function TranslateY(props: IProps) {
-  const { children, distance = -15, delay = 0, className } = props
+  const { children, distance = -20, delay = 0, className } = props
   const style = useSpring({
     to: { opacity: 1, transform: 'translateY(0)' },
     from: { opacity: 0, transform: `translateY(${distance}px)` },

@@ -1,4 +1,4 @@
-import { Button, Dropdown, Form, Input, Menu, message, Modal, Popover, Select, Tooltip } from 'antd'
+import { AutoComplete, Button, Dropdown, Form, Input, Menu, message, Modal, Popover, Select, Tooltip } from 'antd'
 import ImgCrop from 'antd-img-crop'
 import Upload, { RcFile, UploadFile } from 'antd/lib/upload'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -80,7 +80,16 @@ function BookmarkModal(props: IProps) {
       <Form form={form} onFinish={handleCreate} labelCol={{ style: { width: 60 } }}>
         {typeof visible === 'boolean' && (
           <Form.Item label='分组' name='parent' rules={[{ required: true, message: '请选择分组' }]}>
-            <Select
+            <AutoComplete
+              placeholder='请选择分组'
+              options={groups}
+              onChange={e => {
+                if (e.length) {
+                  form.setFieldsValue({ parent: [e.pop()] })
+                }
+              }}
+            />
+            {/* <Select
               ref={select}
               mode='tags'
               placeholder='请选择分组'
@@ -91,7 +100,7 @@ function BookmarkModal(props: IProps) {
                   select.current?.blur()
                 }
               }}
-            />
+            /> */}
           </Form.Item>
         )}
         <Form.Item label='标题' name='title' rules={[{ required: true, message: '请输入标题' }]}>

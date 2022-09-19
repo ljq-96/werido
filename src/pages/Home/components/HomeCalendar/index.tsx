@@ -1,37 +1,75 @@
-import { Button, DatePicker, Form, Input, Modal } from 'antd'
-import { Fragment, useState } from 'react'
+import { Button, DatePicker, Form, Input, Modal, Space } from 'antd'
+import moment from 'moment'
+import { Fragment, useEffect, useState } from 'react'
+import { ITodo } from '../../../../../types'
+import { request } from '../../../../api'
 import Calendar from '../../../../components/Calendar'
-
-const events = [
-  { start: '2022-09-12 09:00', end: '2022-09-12 10:00', description: '上班' },
-  { start: '2022-09-15 09:50', end: '2022-09-15 10:50', description: '123456' },
-  { start: '2022-09-15 11:50', end: '2022-09-15 12:30', description: '123456' },
-  { start: '2022-09-15 12:50', end: '2022-09-15 15:50', description: '123456' },
-  { start: '2022-09-15 13:10', end: '2022-09-15 20:30', description: '123456' },
-  { start: '2022-09-16 18:00', end: '2022-09-16 23:59', description: '放假' },
-]
 
 function HomeCalendar() {
   const [showModal, setShowModal] = useState(false)
-  const [onEditEvent, setOnEditEvent] = useState(null)
+  const [onEditTodo, setOnEditTodo] = useState<ITodo>(null)
+  const [todoList, setTodoList] = useState<ITodo[]>([])
+  const [loading, setLoading] = useState(false)
+  const [submitLoading, setSubmitLoading] = useState(false)
   const [form] = Form.useForm()
+
+  const getTodoList = async () => {
+    setLoading(true)
+    const todo = await request.todo.get()
+    setTodoList(todo)
+    setLoading(false)
+  }
+
+  const handleFinish = async fields => {
+    setSubmitLoading(true)
+    const {
+      date,
+      time: [start, end],
+      description,
+    } = fields
+    const dateStr = date.format().split('T')[0]
+    const data = {
+      start: start.format().replace(/(.*?)T/, dateStr + 'T'),
+      end: end.format().replace(/(.*?)T/, dateStr + 'T'),
+      description,
+    }
+    if (onEditTodo) {
+      await request.todo.put({ _id: onEditTodo._id, ...data })
+    } else {
+      await request.todo.post(data)
+    }
+
+    await getTodoList()
+    form.resetFields()
+    setShowModal(false)
+    setOnEditTodo(null)
+    setSubmitLoading(false)
+  }
+
+  useEffect(() => {
+    getTodoList()
+  }, [])
+
   return (
     <Fragment>
       <Calendar
-        events={events}
+        todo={todoList}
+        loading={loading}
         extra={
           <Button type='dashed' onClick={() => setShowModal(true)}>
             添加日程
           </Button>
         }
-        onAction={({ type, event }) => {
+        onAction={({ type, todo }) => {
           switch (type) {
             case 'edit':
-              const { start, end, description } = event
+              const { start, end, description } = todo
               setShowModal(true)
-              setOnEditEvent(event)
+              setOnEditTodo(todo)
+
               form.setFieldsValue({
-                time: [start, end],
+                date: moment(start).startOf('day'),
+                time: [moment(start), moment(end)],
                 description,
               })
               break
@@ -39,24 +77,36 @@ function HomeCalendar() {
               Modal.confirm({
                 type: 'error',
                 content: '是否删除此日程，不可恢复！',
-                onOk: () => {},
+                onOk: async () => {
+                  await request.todo.delete(todo._id)
+                  await getTodoList()
+                },
               })
           }
         }}
       />
       <Modal
-        title={`${onEditEvent ? '编辑' : '添加'}日程`}
+        title={`${onEditTodo ? '编辑' : '添加'}日程`}
         visible={!!showModal}
         onOk={form.submit}
+        width={500}
+        okButtonProps={{ loading: submitLoading }}
         onCancel={() => {
           setShowModal(false)
-          setOnEditEvent(null)
+          setOnEditTodo(null)
           form.resetFields()
         }}
       >
-        <Form form={form}>
-          <Form.Item label='起止时间' name='time' rules={[{ required: true, message: '请选择起止时间' }]}>
-            <DatePicker.RangePicker showTime />
+        <Form form={form} onFinish={handleFinish}>
+          <Form.Item label='起止时间' required>
+            <Space>
+              <Form.Item name='date' noStyle rules={[{ required: true, message: '请选择日期' }]}>
+                <DatePicker />
+              </Form.Item>
+              <Form.Item name='time' noStyle rules={[{ required: true, message: '请选择时间' }]}>
+                <DatePicker.RangePicker picker='time' />
+              </Form.Item>
+            </Space>
           </Form.Item>
           <Form.Item label='日程内容' name='description' rules={[{ required: true, message: '请输入日程内容' }]}>
             <Input.TextArea placeholder='请输入日程内容' />

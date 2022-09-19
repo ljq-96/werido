@@ -1,5 +1,6 @@
 import { WeiboOutlined, ZhihuOutlined } from '@ant-design/icons'
 import { Avatar, Card, List, Segmented, Skeleton } from 'antd'
+import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { ITops } from '../../../types'
 import { TopsType } from '../../../types/enum'
@@ -46,7 +47,7 @@ function Tops() {
         dataSource={list}
         renderItem={(item, index) => (
           <TranslateY key={item.title} delay={index * 100}>
-            <List.Item>
+            <List.Item className={clsx(index < 3 && 'top3')}>
               <List.Item.Meta
                 avatar={<Avatar size={'small'}>{index + 1}</Avatar>}
                 title={<div onClick={() => window.open(item.url)}>{item.title}</div>}

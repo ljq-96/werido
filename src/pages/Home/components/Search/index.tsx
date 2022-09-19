@@ -4,7 +4,7 @@ import { TranslateX } from '../../../../components/Animation'
 import './style.less'
 
 const searchTab = [
-  { title: '百度', action: 'https://www.baidu.com/s', name: 'wq' },
+  { title: '百度', action: 'https://www.baidu.com/s', name: 'wd' },
   { title: 'Google', action: 'https://www.google.com/search', name: 'q' },
 ]
 function Search() {

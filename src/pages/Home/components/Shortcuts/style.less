@@ -1,0 +1,30 @@
+.shortcuts-item {
+  padding: 8px;
+  border-radius: 2px;
+  text-align: center;
+  cursor: pointer;
+  &:hover {
+    .shortcuts-item-icon {
+      color: var(--ant-primary-color);
+      background-color: var(--ant-primary-2);
+      border-color: var(--ant-primary-color);
+    }
+    .shortcuts-item-title {
+      color: var(--ant-primary-color);
+    }
+  }
+  .shortcuts-item-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto 8px;
+    background-color: #f5f5f5;
+    border-radius: 2px;
+  }
+  .shortcuts-item-title {
+    color: #7a7a7a;
+    font-size: 12px;
+  }
+}

@@ -13,6 +13,7 @@ const apiList = {
   docIndex: '/api/docIndex',
   tops: '/api/tops',
   detail: '/api/detail',
+  todo: '/api/todo',
 }
 
 const request = paseRequest(apiList)

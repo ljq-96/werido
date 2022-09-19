@@ -63,7 +63,7 @@ export default (props: PageProps) => {
   const logout = () => {
     request.logout.post().then(res => {
       navigate('/login')
-      message.success(res.msg)
+      message.success('已退出')
       dispatch(basicUserView.destroy.actions())
     })
   }

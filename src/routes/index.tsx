@@ -7,7 +7,8 @@ import {
   AreaChartOutlined,
   ReadOutlined,
   UserOutlined,
-  TagsOutlined,
+  TeamOutlined,
+  TagOutlined,
 } from '@ant-design/icons'
 import { useNavigate, Outlet } from 'react-router-dom'
 import Layout from '../layout'
@@ -43,7 +44,7 @@ const routes: RouteProps[] = [
       {
         path: '/bookmark',
         name: '收藏夹',
-        icon: <TagsOutlined />,
+        icon: <TagOutlined />,
         component: lazy(() => import('../pages/Bookmark')),
       },
       {
@@ -57,6 +58,12 @@ const routes: RouteProps[] = [
         name: '文章详情',
         hide: true,
         component: lazy(() => import('../pages/Blog/Detail')),
+      },
+      {
+        path: '/blog/editor',
+        name: '新建文章',
+        hide: true,
+        component: lazy(() => import('../pages/Blog/Editor')),
       },
       {
         path: '/user_center',
@@ -129,7 +136,7 @@ const routes: RouteProps[] = [
       {
         path: '/manage/users',
         name: '用户管理',
-        icon: <UserOutlined />,
+        icon: <TeamOutlined />,
         component: lazy(() => import('../pages/Manage/User')),
       },
     ],

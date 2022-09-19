@@ -58,7 +58,7 @@ function Bookmark() {
                     setBookmarks(value)
                     request.docIndex.put({ _id: DocIndexType.书签, content: JSON.stringify(extract(value)) })
                   }}
-                  columns={8}
+                  columns={10}
                   strategy={rectSortingStrategy}
                   renderItem={value => (
                     <BookmarkItem

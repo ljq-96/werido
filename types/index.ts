@@ -114,6 +114,16 @@ export interface IBlog {
   tags: string[]
 }
 
+export interface ITodo {
+  _id: string
+  creator: string
+  createTime: number
+  updateTime: number
+  start: string
+  end: string
+  description: string
+}
+
 export interface ITops {
   answer?: number
   date?: string
