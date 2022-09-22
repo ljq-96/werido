@@ -2,6 +2,7 @@ import { Controller, Get, Put, Use } from '../decorator'
 import { RouterCtx } from '../../types'
 import { validateToken } from '../middlewares'
 import { UserModel } from '../model'
+import moment from 'moment'
 
 @Controller('/api/myProfile')
 export class MyProfile {
@@ -9,6 +10,7 @@ export class MyProfile {
   @Use(validateToken)
   async getMyProfile(ctx: RouterCtx) {
     const { user } = ctx.app.context
+    await UserModel.updateOne({ _id: user._id }, { lastLoginTime: moment().format() })
 
     ctx.body = user
   }

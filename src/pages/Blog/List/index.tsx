@@ -3,8 +3,9 @@ import { Col, Row, Card, Spin, Affix, Tag, Divider, Pagination, Button } from 'a
 import { Fragment, useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { IBlog, IBookmark, Pager } from '../../../../types'
+import { StatisticsType } from '../../../../types/enum'
 import { request } from '../../../api'
-import { TranslateY } from '../../../components/Animation'
+import { TranslateX, TranslateY } from '../../../components/Animation'
 import { useUser } from '../../../contexts/useUser'
 import useRequest from '../../../hooks/useRequest'
 import BlogItemCard from './components/BlogItemCard'
@@ -31,7 +32,7 @@ const BlogList = () => {
 
   useEffect(() => {
     getBlogList()
-    request.statistics.get('tag').then(setTags)
+    request.statistics.get(StatisticsType.文章标签).then(setTags)
   }, [])
 
   return (
@@ -39,49 +40,53 @@ const BlogList = () => {
       <Row gutter={16} wrap={false}>
         <Col flex='256px'>
           <Affix offsetTop={16} target={() => document.getElementById('content')}>
-            <Card title='目录'></Card>
+            <TranslateX delay={200}>
+              <Card title='目录'></Card>
+            </TranslateX>
           </Affix>
         </Col>
         <Col flex='auto'>
-          <Spin spinning={loading}>
-            <Card title='文章'>
-              {blogList?.list?.map((item, index) => (
-                <TranslateY delay={index * 200}>
+          <TranslateY>
+            <Spin spinning={loading}>
+              <Card title='文章'>
+                {blogList?.list?.map((item, index) => (
                   <BlogItemCard key={item._id} item={item} />
-                </TranslateY>
-              ))}
-              <Pagination pageSize={SIZE} current={page} total={total} />
-            </Card>
-          </Spin>
+                ))}
+                <Pagination pageSize={SIZE} current={page} total={total} />
+              </Card>
+            </Spin>
+          </TranslateY>
         </Col>
         <Col flex='256px'>
           <Affix offsetTop={16} target={() => document.getElementById('content')}>
-            <Card
-              title='标签'
-              extra={
-                tag && (
-                  <Button type='link' size='small' onClick={() => navigate('/blog', { replace: true })}>
-                    全部
-                  </Button>
-                )
-              }
-            >
-              {tags.map(item => (
-                <Tag
-                  key={item.name}
-                  className='werido-tag'
-                  style={{ marginBottom: 8 }}
-                  color={tag === item.name ? themeColor : undefined}
-                  onClick={() => {
-                    navigate(`/blog?tag=${item.name}`)
-                  }}
-                >
-                  {item.name}
-                  <Divider type='vertical' />
-                  {item.value}
-                </Tag>
-              ))}
-            </Card>
+            <TranslateX delay={200} distance={20}>
+              <Card
+                title='标签'
+                extra={
+                  tag && (
+                    <Button type='link' size='small' onClick={() => navigate('/blog', { replace: true })}>
+                      全部
+                    </Button>
+                  )
+                }
+              >
+                {tags.map(item => (
+                  <Tag
+                    key={item.name}
+                    className='werido-tag'
+                    style={{ marginBottom: 8 }}
+                    color={tag === item.name ? themeColor : undefined}
+                    onClick={() => {
+                      navigate(`/blog?tag=${item.name}`)
+                    }}
+                  >
+                    {item.name}
+                    <Divider type='vertical' />
+                    {item.value}
+                  </Tag>
+                ))}
+              </Card>
+            </TranslateX>
           </Affix>
         </Col>
       </Row>

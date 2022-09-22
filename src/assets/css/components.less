@@ -1,0 +1,31 @@
+.werido-blur {
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+}
+
+.werido-tag {
+  font-family: code;
+  &:not([class*='ant-tag-']) {
+    color: #7a7a7a;
+    background-color: #f5f5f5;
+    border-color: #f0f0f0;
+    cursor: pointer;
+    user-select: none;
+  }
+}
+
+.werido-title {
+  position: relative;
+  padding-left: 16px;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 16px;
+    border-top: 4px solid var(--ant-primary-color);
+    border-bottom: 8px solid var(--ant-primary-4);
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

@@ -122,17 +122,7 @@ function BlogManage() {
       <CommonTable
         ref={tableRef}
         request={request.blog}
-        title={() => (
-          <Space>
-            文章管理
-            <Segmented
-              options={[
-                { label: '管理员', value: 'admin' },
-                { label: '自己', value: 'mine' },
-              ]}
-            />
-          </Space>
-        )}
+        title={() => '文章管理'}
         extra={
           <Space>
             <Button></Button>

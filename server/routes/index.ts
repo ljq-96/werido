@@ -1,6 +1,6 @@
-import * as fs from 'fs'
+import { readdirSync } from 'fs'
 
-fs.readdirSync(__dirname).forEach(file => {
+readdirSync(__dirname).forEach(file => {
   if (file.indexOf('index') === 0 || file.indexOf('aa') === 0) return
   import(`./${file}`)
 })

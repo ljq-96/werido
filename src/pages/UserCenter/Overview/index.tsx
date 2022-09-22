@@ -1,102 +1,43 @@
 import { Card, Col, Row, Statistic } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { request } from '../../../api'
-import { Rose, Area } from '@ant-design/charts'
 import { useUser } from '../../../contexts/useUser'
 import { Number, TranslateX, TranslateY } from '../../../components/Animation'
+import RoseChart from '../../../components/Echarts/Charts/RoseChart'
+import LineChart from '../../../components/Echarts/Charts/LineChart'
+import { StatisticsType } from '../../../../types/enum'
 
 const HEIGHT = 400
 function Dashboard() {
+  const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState<{ name: string; value: number }[]>([])
-  const [time, setTime] = useState<{ type: string; value: number }[]>([])
-  const [count, setCount] = useState(null)
-  const [{ themeColor }] = useUser()
+  const [time, setTime] = useState<{ name: string; value: number }[]>([])
   useEffect(() => {
-    Promise.all([request.statistics.get('tag'), request.statistics.get('time'), request.statistics.get('count')]).then(
-      ([res1, res2, res3]) => {
+    setLoading(true)
+    Promise.all([request.statistics.get(StatisticsType.文章标签), request.statistics.get(StatisticsType.文章时间)])
+      .then(([res1, res2]) => {
         setTags(res1)
-        setTime(res2)
-        setCount(res3)
-      },
-    )
+        setTime(res2.map(item => ({ name: item.time, value: item.value })))
+      })
+      .finally(() => setLoading(false))
   }, [])
   return (
     <Fragment>
       <Row gutter={[16, 16]}>
-        {/* <Col span={6}>
-          <TranslateX delay={0}>
-            <Card size='small'>
-              <Statistic title='书签数量' valueRender={() => <Number to={count?.bookmark} />} />
-            </Card>
-          </TranslateX>
-        </Col>
-        <Col span={6}>
-          <TranslateX delay={200}>
-            <Card size='small'>
-              <Statistic title='文章数量' valueRender={() => <Number delay={200} to={count?.blog} />} />
-            </Card>
-          </TranslateX>
-        </Col>
-        <Col span={6}>
-          <TranslateX delay={400}>
-            <Card size='small'>
-              <Statistic title='书签数量' valueRender={() => <Number delay={400} to={count?.bookmark} />} />
-            </Card>
-          </TranslateX>
-        </Col>
-        <Col span={6}>
-          <TranslateX delay={600}>
-            <Card size='small'>
-              <Statistic title='书签数量' valueRender={() => <Number delay={600} to={count?.bookmark} />} />
-            </Card>
-          </TranslateX>
-        </Col> */}
-        <Col span={16}>
-          <TranslateY delay={800}>
+        <Col span={12}>
+          <TranslateY delay={200}>
             <Card title='时间'>
               <div style={{ height: HEIGHT }}>
-                <Area
-                  data={time}
-                  xField='time'
-                  yField='value'
-                  smooth={true}
-                  xAxis={{
-                    range: [0, 1],
-                  }}
-                  color={themeColor}
-                  areaStyle={() => {
-                    return {
-                      fill: `l(270) 0:#ffffff 1:${themeColor}`,
-                    }
-                  }}
-                />
+                <LineChart loading={loading} data={time} />
               </div>
             </Card>
           </TranslateY>
         </Col>
-        <Col span={8}>
-          <TranslateY delay={1000}>
+        <Col span={12}>
+          <TranslateY delay={400}>
             <Card title='标签'>
               <div style={{ height: HEIGHT }}>
-                <Rose
-                  data={tags}
-                  xField='name'
-                  yField='value'
-                  radius={0.9}
-                  seriesField='name'
-                  legend={{ position: 'top-left', animate: true }}
-                  color={themeColor}
-                  // interactions={[{ type: 'element-active' }]}
-                  loading={false}
-                  // state={{
-                  //   active: {
-                  //     style: {
-                  //       fillOpacity: 0.65,
-                  //       borderColor: '#fff',
-                  //     },
-                  //   },
-                  // }}
-                />
+                <RoseChart loading={loading} data={tags} />
               </div>
             </Card>
           </TranslateY>

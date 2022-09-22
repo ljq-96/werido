@@ -46,17 +46,15 @@ function Tops() {
         loading={loading}
         dataSource={list}
         renderItem={(item, index) => (
-          <TranslateY key={item.title} delay={index * 100}>
-            <List.Item className={clsx(index < 3 && 'top3')}>
-              <List.Item.Meta
-                avatar={<Avatar size={'small'}>{index + 1}</Avatar>}
-                title={<div onClick={() => window.open(item.url)}>{item.title}</div>}
-                description={
-                  current === TopsType.知乎 ? <div>回答：{item.answer}</div> : <div>热度：{item.hotness}</div>
-                }
-              />
-            </List.Item>
-          </TranslateY>
+          // <TranslateY key={item.title} delay={index * 100}>
+          <List.Item className={clsx(index < 3 && 'top3')}>
+            <List.Item.Meta
+              avatar={<Avatar size={'small'}>{index + 1}</Avatar>}
+              title={<div onClick={() => window.open(item.url)}>{item.title}</div>}
+              description={current === TopsType.知乎 ? <div>回答：{item.answer}</div> : <div>热度：{item.hotness}</div>}
+            />
+          </List.Item>
+          // </TranslateY>
         )}
       ></List>
     </Card>

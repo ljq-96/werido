@@ -23,7 +23,7 @@ const actions = [
 
 const adminActions = [
   { title: '用户管理', icon: <TeamOutlined />, path: '/manage/users' },
-  { title: '文章管理', icon: <FileTextOutlined />, path: '/manage/bookmark' },
+  { title: '文章管理', icon: <FileTextOutlined />, path: '/manage/blog' },
   { title: '书签管理', icon: <TagsOutlined /> },
 ]
 

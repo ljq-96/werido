@@ -1,13 +1,10 @@
-import { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Loading from './components/Loading'
 import routes from './routes'
 import { ConfigProvider } from 'antd'
 import UserProvider from './contexts/useUser'
 import zhCN from 'antd/lib/locale/zh_CN'
 import 'moment/dist/locale/zh-cn'
-import '@ant-design/flowchart/dist/index.css'
 
 const parseRoute = route => {
   return (
@@ -18,7 +15,6 @@ const parseRoute = route => {
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  // <Suspense fallback={<Loading />}>
   <UserProvider>
     <ConfigProvider locale={zhCN}>
       <BrowserRouter>
@@ -26,5 +22,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       </BrowserRouter>
     </ConfigProvider>
   </UserProvider>,
-  // </Suspense>,
 )

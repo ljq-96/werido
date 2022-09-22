@@ -22,7 +22,7 @@ function Bookmark() {
         setBookmarks([
           {
             creator: '62cfe23234cd79f07a173f5f',
-            title: '文档',
+            title: '书签',
             _id: '62fa62c17948b8d29883c3c4',
             children: res,
           },

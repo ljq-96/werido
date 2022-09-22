@@ -3,11 +3,12 @@ import { Controller, Get, UnifyUse } from '../decorator'
 import { validateToken } from '../middlewares'
 import { BlogModel, BookmarkModel } from '../model'
 import { RouterCtx } from '../../types'
+import { StatisticsType } from '../../types/enum'
 
 @Controller('/api/statistics')
 @UnifyUse(validateToken)
 class StatisticsRoute {
-  @Get('/count')
+  @Get(`/${StatisticsType.统计}`)
   async getStatisticsCount(ctx: RouterCtx) {
     const { user } = ctx.app.context
     const blog = await BlogModel.find({ creator: user._id }).countDocuments()
@@ -18,7 +19,7 @@ class StatisticsRoute {
     }
   }
 
-  @Get('/tag')
+  @Get(`/${StatisticsType.文章标签}`)
   async getBlogTags(ctx: RouterCtx) {
     const { user } = ctx.app.context
     const list = await BlogModel.find({ creator: user._id })
@@ -35,7 +36,7 @@ class StatisticsRoute {
     ctx.body = data
   }
 
-  @Get('/time')
+  @Get(`/${StatisticsType.文章时间}`)
   async getBlogTime(ctx: RouterCtx) {
     const { user } = ctx.app.context
     const list = await BlogModel.find({ creator: user._id })

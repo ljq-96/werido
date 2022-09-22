@@ -27,6 +27,9 @@ export class User {
   @prop({ type: String, default: moment().format() })
   updateTime?: string
 
+  @prop({ type: String, default: moment().format() })
+  lastLoginTime?: string
+
   @prop({ type: String, default: '#1890ff' })
   themeColor?: string
 

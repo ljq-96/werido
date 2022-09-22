@@ -179,7 +179,7 @@ const MilkdownEditor = (props: IProps, ref) => {
     <Spin spinning={loading || contentLoading} delay={200}>
       <div className={style.markdownEditor + ' article'}>
         {!readonly && (
-          <div className={style.toolBar}>
+          <div className={clsx(style.toolBar, 'werido-blur')}>
             <Space wrap>
               {(controls || defaultControls).map((item, index) => (
                 <TranslateX key={index} delay={index * 30}>
@@ -203,7 +203,7 @@ const MilkdownEditor = (props: IProps, ref) => {
             <div className={style.container}>
               <ReactEditor editor={editor} />
             </div>
-            <div className={style.catalogContainer} style={{ top: readonly ? -16 : 32 }}>
+            <div className={style.catalogContainer} style={{ top: readonly ? 56 : 104 }}>
               <Tooltip title={!showCatalog && '展开'} placement='left'>
                 <Button
                   className={style.openCatalog}
@@ -218,7 +218,7 @@ const MilkdownEditor = (props: IProps, ref) => {
                 <Anchor
                   affix={true}
                   onClick={e => e.preventDefault()}
-                  getContainer={() => document.getElementById('content')}
+                  // getContainer={() => document.getElementById('content')}
                 >
                   {formatAnchor(arrToTree(catalog))}
                 </Anchor>

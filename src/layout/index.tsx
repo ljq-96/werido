@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import ProLayout, { DefaultFooter } from '@ant-design/pro-layout'
-import { UserOutlined } from '@ant-design/icons'
+import { SettingFilled, UserOutlined } from '@ant-design/icons'
 import {
   ConfigProvider,
   Menu,
@@ -90,81 +90,53 @@ export default (props: PageProps) => {
   return (
     <ProLayout
       className='layout'
-      disableContentMargin
-      fixSiderbar={true}
-      navTheme='light'
-      headerTheme='light'
-      headerHeight={48}
+      layout='mix'
       fixedHeader={false}
       splitMenus={false}
       onCollapse={setCollapsed}
       collapsed={collapsed}
       breakpoint={false}
-      menuHeaderRender={(logo, title) => (
-        <Space>
-          {logo}
-          {!collapsed && (
-            <TranslateX delay={400} distance={-10}>
-              <span style={{ fontSize: 16, fontFamily: 'Tencent', color: loginUser?.themeColor }}>Werido</span>
-            </TranslateX>
-          )}
-        </Space>
-      )}
       title='Werido'
       logo={<Logo style={{ width: 32 }} color={loginUser?.themeColor} />}
       route={currentRoutes}
       menuItemRender={(item, dom) => <Link to={item.path}>{dom}</Link>}
       location={{ pathname }}
-      rightContentRender={() => (
-        <Space>
-          <Button type='text' id='tp-weather-widget'></Button>
-          <Dropdown
-            overlay={
-              <Menu>
-                <Menu.Item>个人中心</Menu.Item>
-                <Menu.Item onClick={() => setShowColorDrawer(true)}>系统设置</Menu.Item>
-                <Menu.Divider />
-                <Menu.Item onClick={logout}>退出</Menu.Item>
-              </Menu>
-            }
-          >
-            <Button type='text'>
-              <Avatar
-                shape='circle'
-                size='small'
-                src={loginUser?.avatar}
-                icon={<UserOutlined />}
-                style={{ marginRight: 10 }}
-              />
-              {loginUser?.username}
-            </Button>
-          </Dropdown>
-        </Space>
-      )}
+      avatarProps={{
+        src: loginUser?.avatar,
+        title: loginUser?.username,
+      }}
+      actionsRender={({}) => {
+        return [<SettingFilled onClick={() => setShowColorDrawer(!showColorDrawer)} />]
+      }}
     >
-      <Layout.Content
-        id='content'
-        style={{
-          position: 'relative',
-          height: 'calc(100vh - 48px)',
-          padding: 16,
-          overflowY: 'auto',
-          overflowX: 'hidden',
-        }}
-      >
-        <Suspense fallback={<Loading />}>
-          {loginUser?._id && <Outlet />}
-          <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
-        </Suspense>
-      </Layout.Content>
-
+      <Suspense fallback={<Loading />}>
+        {loginUser?._id && <Outlet />}
+        <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
+      </Suspense>
       <Drawer
+        className='color-drawer'
         visible={showColorDrawer}
         width={300}
         mask={false}
         onClose={handleDrawer}
         closeIcon={null}
-        style={{ top: 16, zIndex: 18 }}
+        style={{ top: 56, zIndex: 18 }}
+        zIndex={1000}
+        footer={
+          <Space>
+            <Button
+              onClick={() => {
+                setShowColorDrawer(false)
+                getMyProfile()
+              }}
+            >
+              取消
+            </Button>
+            <Button onClick={handleDrawer} type='primary'>
+              应用
+            </Button>
+          </Space>
+        }
       >
         <CirclePicker
           colors={[
@@ -187,62 +159,13 @@ export default (props: PageProps) => {
         <div style={{ margin: '24px 0' }}>
           <SliderPicker color={loginUser?.themeColor} onChange={changeColor} />
         </div>
-        <Card size='small' hoverable>
+        <Card size='small'>
           <div className='overflow-hidden'>
             <div style={{ margin: '0 -1px' }}>
               <MaterialPicker color={loginUser?.themeColor} onChange={changeColor} />
             </div>
           </div>
         </Card>
-
-        <div style={{ marginBottom: 8 }}>
-          前台系统：
-          <Segmented
-            value={loginUser.layoutC}
-            onChange={(e: any) => dispatch(basicUserView.update.actions({ layoutC: e }))}
-            options={[
-              {
-                label: '侧栏',
-                value: 'side',
-              },
-              {
-                label: '顶栏',
-                value: 'top',
-              },
-            ]}
-          ></Segmented>
-        </div>
-        <div>
-          后台管理：
-          <Segmented
-            value={loginUser.layoutB}
-            onChange={(e: any) => dispatch(basicUserView.update.actions({ layoutB: e }))}
-            options={[
-              {
-                label: '侧栏',
-                value: 'side',
-              },
-              {
-                label: '顶栏',
-                value: 'top',
-              },
-            ]}
-          ></Segmented>
-        </div>
-
-        <Space style={{ marginTop: 24 }}>
-          <Button
-            onClick={() => {
-              setShowColorDrawer(false)
-              getMyProfile()
-            }}
-          >
-            取消
-          </Button>
-          <Button onClick={handleDrawer} type='primary'>
-            应用
-          </Button>
-        </Space>
       </Drawer>
     </ProLayout>
   )

@@ -5,7 +5,6 @@ const apiList = {
   register: '/api/register',
   logout: '/api/logout',
   myProfile: '/api/myProfile',
-  user: '/api/admin/user',
   blog: '/api/blog',
   bookmark: '/api/bookmark',
   icon: '/api/icon',
@@ -16,6 +15,14 @@ const apiList = {
   todo: '/api/todo',
 }
 
-const request = paseRequest(apiList)
+const adminApi = {
+  statistics: '/api/admin/statistics',
+  user: '/api/admin/user',
+}
+
+const request = {
+  ...paseRequest(apiList),
+  admin: paseRequest(adminApi),
+}
 
 export { Fetch, request }

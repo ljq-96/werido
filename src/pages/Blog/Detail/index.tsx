@@ -1,34 +1,12 @@
-import {
-  CheckCircleOutlined,
-  EditOutlined,
-  FieldTimeOutlined,
-  FileTextOutlined,
-  RollbackOutlined,
-} from '@ant-design/icons'
-import {
-  Affix,
-  Button,
-  Card,
-  Col,
-  Divider,
-  Form,
-  Input,
-  message,
-  PageHeader,
-  Row,
-  Select,
-  Space,
-  Spin,
-  Tag,
-  Tooltip,
-} from 'antd'
+import { CheckCircleOutlined, EditOutlined, RollbackOutlined } from '@ant-design/icons'
+import { PageContainer } from '@ant-design/pro-layout'
+import { Button, Col, Divider, Form, Input, message, Row, Select, Space, Tag, Tooltip } from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { IBlog } from '../../../../types'
+import { StatisticsType } from '../../../../types/enum'
 import { request } from '../../../api'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
-import { useUser } from '../../../contexts/useUser'
-import { formatTime } from '../../../utils/common'
 
 function BlogDetail() {
   const [onEdit, setOnEdit] = useState(false)
@@ -83,14 +61,14 @@ function BlogDetail() {
   }, [id, onEdit])
 
   useEffect(() => {
-    request.statistics.get('tag').then(res => {
+    request.statistics.get(StatisticsType.文章标签).then(res => {
       setTagOptions(res.map(item => ({ label: item.name, value: item.name })))
     })
   }, [])
 
   return (
     <Fragment>
-      <PageHeader
+      <PageContainer
         title={!onEdit && detail?.title}
         subTitle={
           onEdit && (
@@ -113,8 +91,6 @@ function BlogDetail() {
             </div>
           )
         }
-        ghost={false}
-        style={{ margin: '-16px -16px 16px' }}
         onBack={() => navigate(-1)}
         tags={
           !onEdit &&
@@ -126,31 +102,15 @@ function BlogDetail() {
         }
         extra={extra}
       >
-        {!onEdit && (
-          <Space size='large' style={{ color: '#aaa' }}>
-            <Space size='small'>
-              <FieldTimeOutlined />
-              {formatTime(detail?.createTime)}
-            </Space>
-            <Space size='small'>
-              <FileTextOutlined />
-              {`${detail?.content?.length}字`}
-            </Space>
-          </Space>
-        )}
-      </PageHeader>
-      <Row gutter={16}>
-        <Col flex='200px'>
-          <Affix offsetTop={16} target={() => document.getElementById('content')}>
-            <Card></Card>
-          </Affix>
-        </Col>
-        <Col flex='auto'>
-          <div className='bg-gray-50 min-h-screen'>
-            <MarkdownEditor ref={editor} readonly={!onEdit} loading={loading} />
-          </div>
-        </Col>
-      </Row>
+        <Row gutter={16}>
+          <Col flex='200px'></Col>
+          <Col flex='auto'>
+            <div>
+              <MarkdownEditor ref={editor} readonly={!onEdit} loading={loading} />
+            </div>
+          </Col>
+        </Row>
+      </PageContainer>
     </Fragment>
   )
 }

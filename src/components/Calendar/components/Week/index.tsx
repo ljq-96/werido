@@ -85,7 +85,7 @@ function CalendarWeek() {
                   <td className='calendar-week-body-x-info'>
                     {index % 2 === 0 && (
                       <div>
-                        {index <= 4 ? 0 : ''}
+                        {index <= 9 ? 0 : ''}
                         {index}:00
                       </div>
                     )}

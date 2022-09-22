@@ -22,6 +22,11 @@ export default (props: IProps) => {
               <Shortcuts />
             </TranslateX>
           </Col>
+          <Col span={24}>
+            <TranslateX delay={600}>
+              <Tops />
+            </TranslateX>
+          </Col>
         </Row>
       </Col>
       <Col span={12}>
@@ -45,12 +50,6 @@ export default (props: IProps) => {
               <HomeCalendar />
             </TranslateX>
           </Col>
-          <Col span={24}>
-            <TranslateX distance={20} delay={600}>
-              <Tops />
-            </TranslateX>
-          </Col>
-          <Col></Col>
         </Row>
       </Col>
     </Row>

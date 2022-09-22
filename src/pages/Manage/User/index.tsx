@@ -34,7 +34,7 @@ function UsersManage() {
       content: '确定要删除此用户吗？',
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
-        return request.user.delete(id).then(() => {
+        return request.admin.user.delete(id).then(() => {
           setShowModal(false)
           message.success('删除成功')
           tableRef.current.fetchData()
@@ -46,10 +46,10 @@ function UsersManage() {
   const handleSubmit = async (fields: Partial<IUser>) => {
     if (typeof showModal === 'boolean') {
       const { username, password } = fields
-      await request.user.post({ username, password })
+      await request.admin.user.post({ username, password })
       message.success('新增成功')
     } else {
-      await request.user.put(fields)
+      await request.admin.user.put(fields)
       message.success('修改成功')
     }
     setShowModal(false)
@@ -99,7 +99,7 @@ function UsersManage() {
     <Fragment>
       <CommonTable
         ref={tableRef}
-        request={request.user}
+        request={request.admin.user}
         title={() => '用户管理'}
         extra={
           <Button type='primary' onClick={() => setShowModal(true)}>

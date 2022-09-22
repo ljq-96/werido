@@ -2,6 +2,7 @@ import { Button, Form, Input, message, PageHeader, Select } from 'antd'
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSearchParam } from 'react-use'
+import { StatisticsType } from '../../../../../types/enum'
 import { request } from '../../../../api'
 import MarkdownEditor, { EditorIntance } from '../../../../components/MarkdownEditor'
 
@@ -33,7 +34,7 @@ const BlogEditor = () => {
         form.setFieldsValue(res)
       })
     }
-    request.statistics.get('tag').then(res => {
+    request.statistics.get(StatisticsType.文章标签).then(res => {
       setTagOptions(res.map(item => ({ label: item.name, value: item.name })))
     })
   }, [id])

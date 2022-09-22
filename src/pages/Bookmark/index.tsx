@@ -10,6 +10,7 @@ import './style.less'
 import { DocIndexType } from '../../../types/enum'
 import { extract } from '../../utils/common'
 import Tops from '../../components/Tops'
+import { TranslateX } from '../../components/Animation'
 
 function Bookmark() {
   const [showModal, setShowModal] = useState<IBookmark | boolean>(null)
@@ -40,49 +41,53 @@ function Bookmark() {
     <Fragment>
       <Row gutter={[16, 16]}>
         <Col span={18}>
-          <Card
-            title='我的书签'
-            bodyStyle={{ padding: 12 }}
-            extra={
-              <Button type='primary' onClick={handleCreate}>
-                添加书签
-              </Button>
-            }
-          >
-            <Spin spinning={loading}>
-              {bookmarks.length > 0 ? (
-                <MultipleContainers
-                  vertical
-                  value={bookmarks}
-                  onChange={value => {
-                    setBookmarks(value)
-                    request.docIndex.put({ _id: DocIndexType.书签, content: JSON.stringify(extract(value)) })
-                  }}
-                  columns={10}
-                  strategy={rectSortingStrategy}
-                  renderItem={value => (
-                    <BookmarkItem
-                      item={value}
-                      onMenu={action => {
-                        switch (action) {
-                          case 'edit':
-                            setShowModal(value)
-                            break
-                          case 'pin':
-                            request.bookmark.put({ _id: value._id, pin: !value.pin }).then(getBookmark)
-                        }
-                      }}
-                    />
-                  )}
-                />
-              ) : (
-                <Empty style={{ padding: 24 }} />
-              )}
-            </Spin>
-          </Card>
+          <TranslateX>
+            <Card
+              title='我的书签'
+              bodyStyle={{ padding: 12 }}
+              extra={
+                <Button type='primary' onClick={handleCreate}>
+                  添加书签
+                </Button>
+              }
+            >
+              <Spin spinning={loading}>
+                {bookmarks.length > 0 ? (
+                  <MultipleContainers
+                    vertical
+                    value={bookmarks}
+                    onChange={value => {
+                      setBookmarks(value)
+                      request.docIndex.put({ _id: DocIndexType.书签, content: JSON.stringify(extract(value)) })
+                    }}
+                    columns={10}
+                    strategy={rectSortingStrategy}
+                    renderItem={value => (
+                      <BookmarkItem
+                        item={value}
+                        onMenu={action => {
+                          switch (action) {
+                            case 'edit':
+                              setShowModal(value)
+                              break
+                            case 'pin':
+                              request.bookmark.put({ _id: value._id, pin: !value.pin }).then(getBookmark)
+                          }
+                        }}
+                      />
+                    )}
+                  />
+                ) : (
+                  <Empty style={{ padding: 24 }} />
+                )}
+              </Spin>
+            </Card>
+          </TranslateX>
         </Col>
         <Col span={6}>
-          <Tops />
+          <TranslateX distance={20}>
+            <Tops />
+          </TranslateX>
         </Col>
       </Row>
 
