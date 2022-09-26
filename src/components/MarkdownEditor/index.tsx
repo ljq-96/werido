@@ -195,7 +195,7 @@ const MilkdownEditor = (props: IProps, ref) => {
             <div></div>
           </div>
         )}
-        <TranslateY key={String(readonly)} delay={(controls || defaultControls).length * 30} distance={15}>
+        <TranslateX key={String(readonly)} delay={!readonly && (controls || defaultControls).length * 30} distance={15}>
           <div
             className={clsx(style.content, !showCatalog && style.hide)}
             style={{ height: typeof height === 'number' ? height + 'px' : height }}
@@ -225,7 +225,7 @@ const MilkdownEditor = (props: IProps, ref) => {
               </div>
             </div>
           </div>
-        </TranslateY>
+        </TranslateX>
       </div>
     </Spin>
   )

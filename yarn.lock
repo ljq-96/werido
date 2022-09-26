@@ -46,14 +46,14 @@
     classnames "^2.2.6"
     rc-util "^5.9.4"
 
-"@ant-design/pro-layout@^7.0.7":
-  version "7.0.7"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-layout/-/pro-layout-7.0.7.tgz#2612dddd4366bf6ca40109af67b31a59e6053376"
-  integrity sha512-txEX2OgBvT/WwV/vwWEUFw1T+++Ex61TZ3un5FMpc+AWCDFaseBo3MtOpH85j4CVbP/TW0HzbI3GSpb0wKOzFw==
+"@ant-design/pro-layout@^7.1.2":
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-layout/-/pro-layout-7.1.2.tgz#1f27c3d5ebb49841df8f7ae6f3700ba442808966"
+  integrity sha512-cGtYibKYm/slfa/ybbvRPu7xcCPSZiuyxJgsV925HoU61gPdZBjvf/2PD8hDQUuy9dus0EuZOuRo5pADqI3Hvg==
   dependencies:
     "@ant-design/icons" "^4.0.0"
     "@ant-design/pro-provider" "2.0.3"
-    "@ant-design/pro-utils" "2.1.1"
+    "@ant-design/pro-utils" "2.2.1"
     "@babel/runtime" "^7.18.0"
     "@umijs/route-utils" "^2.1.0"
     "@umijs/ssr-darkreader" "^4.9.44"
@@ -79,10 +79,10 @@
     rc-util "^5.0.1"
     swr "^1.2.0"
 
-"@ant-design/pro-utils@2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-utils/-/pro-utils-2.1.1.tgz#2514aa95bd8d7d51c1dd94d9bf7d2715ae03e553"
-  integrity sha512-TJfI6h5mg640nNVNGBGRj6y2Kd7pe1OqZ+0Mc+gkG0xb/cYwx8gDLKT9+LkyWKvLSNZygDJlUJbgQdXxT81Xpg==
+"@ant-design/pro-utils@2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-utils/-/pro-utils-2.2.1.tgz#670f58fa43bbde3c6a818f49f3200ce76141eb6b"
+  integrity sha512-Rd6Hg3WqfAdiiGHWpp2AQyOSgMIfg32tuLg77Qjq9dC0T6OpKzuQERk9i5A3sEg/mynq6nTK9L8J7lNCWo6FYQ==
   dependencies:
     "@ant-design/cssinjs" "^0.0.0-alpha.38"
     "@ant-design/icons" "^4.3.0"

@@ -1,6 +1,6 @@
-import { Affix, Button, Card, Col, Row, Tabs } from 'antd'
+import { Affix, Button, Card, Col, Menu, Row, Tabs } from 'antd'
 import { Fragment, memo } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { PageProps } from '../../../types'
 import { TranslateX } from '../../components/Animation'
 import UserCard from '../../components/UserCard'
@@ -31,14 +31,23 @@ function UserCenterLayout(props: PageProps) {
         </Col>
         <Col span={18}>
           <TranslateX distance={20}>
-            <Card style={{ marginBottom: 16 }} bodyStyle={{ padding: '16px 16px 0' }}>
-              <Tabs destroyInactiveTabPane onChange={navigate} activeKey={pathname}>
-                {route.routes.map(item => (
-                  <Tabs.TabPane tab={item.name} tabKey={item.path} key={item.path}>
-                    {<item.component />}
-                  </Tabs.TabPane>
-                ))}
-              </Tabs>
+            <Card style={{ marginBottom: 16 }}>
+              <Menu
+                mode={'horizontal'}
+                activeKey={pathname}
+                style={{ marginBottom: 16 }}
+                onClick={e => navigate(e.key)}
+                items={route.routes.map(item => ({
+                  label: item.name,
+                  key: item.path,
+                  icon: item.icon,
+                  children: item.routes?.map(k => ({
+                    label: k.name,
+                    key: k.path,
+                  })),
+                }))}
+              />
+              <Outlet />
             </Card>
           </TranslateX>
         </Col>

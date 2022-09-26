@@ -5,6 +5,7 @@ import { ConfigProvider } from 'antd'
 import UserProvider from './contexts/useUser'
 import zhCN from 'antd/lib/locale/zh_CN'
 import 'moment/dist/locale/zh-cn'
+import StoreProvider from './contexts/useStore'
 
 const parseRoute = route => {
   return (
@@ -15,11 +16,13 @@ const parseRoute = route => {
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <UserProvider>
-    <ConfigProvider locale={zhCN}>
-      <BrowserRouter>
-        <Routes>{routes.map(r => parseRoute(r))}</Routes>
-      </BrowserRouter>
-    </ConfigProvider>
-  </UserProvider>,
+  <StoreProvider>
+    <UserProvider>
+      <ConfigProvider locale={zhCN}>
+        <BrowserRouter>
+          <Routes>{routes.map(r => parseRoute(r))}</Routes>
+        </BrowserRouter>
+      </ConfigProvider>
+    </UserProvider>
+  </StoreProvider>,
 )

@@ -3,11 +3,11 @@ import { Button, Dropdown, Form, Input, Menu, message, Modal, Segmented, Space, 
 import { ColumnsType } from 'antd/lib/table'
 import { Fragment, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IBlog, IUser } from '../../../../types'
-import { request } from '../../../api'
-import CommonTable, { CommonTableInstance, ToolItem } from '../../../components/CommonTable'
-import { formatTime } from '../../../utils/common'
-import { TranslateX } from '../../../components/Animation'
+import { IBlog, IUser } from '../../../../../types'
+import { request } from '../../../../api'
+import CommonTable, { CommonTableInstance, ToolItem } from '../../../../components/CommonTable'
+import { formatTime } from '../../../../utils/common'
+import { TranslateX } from '../../../../components/Animation'
 
 const toolList: ToolItem[] = [
   {
@@ -27,7 +27,7 @@ const toolList: ToolItem[] = [
   },
 ]
 
-function UserCenterBlog(props) {
+function UserCenterBlogList(props) {
   const [showModal, setShowModal] = useState<boolean | IUser>(false)
   const [form] = Form.useForm()
   const tableRef = useRef<CommonTableInstance>(null)
@@ -124,8 +124,8 @@ function UserCenterBlog(props) {
         request={request.blog}
         extra={
           <Space>
-            <Button></Button>
-            <Button type='primary' onClick={() => navigate('/manage/blog/editor')}>
+            <Button>编辑目录</Button>
+            <Button type='primary' onClick={() => navigate('/blog/editor')}>
               新建文章
             </Button>
           </Space>
@@ -156,4 +156,4 @@ function UserCenterBlog(props) {
   )
 }
 
-export default UserCenterBlog
+export default UserCenterBlogList

@@ -27,7 +27,7 @@ function reducer(state: any, { type, payload }) {
   }
 }
 
-export default function Provider({ children }: { children: React.ReactNode }) {
+export default function UserProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
 
   const getUser = useCallback(() => {

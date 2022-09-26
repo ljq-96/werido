@@ -6,15 +6,17 @@ import { IBlog, IBookmark, Pager } from '../../../../types'
 import { StatisticsType } from '../../../../types/enum'
 import { request } from '../../../api'
 import { TranslateX, TranslateY } from '../../../components/Animation'
+import Catalog from '../../../components/Catalog'
+import { useStore } from '../../../contexts/useStore'
 import { useUser } from '../../../contexts/useUser'
 import useRequest from '../../../hooks/useRequest'
 import BlogItemCard from './components/BlogItemCard'
 
 const SIZE = 20
 const BlogList = () => {
+  const [{ tags }, { getTags }] = useStore()
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
-  const [tags, setTags] = useState<{ name: string; value: number }[]>([])
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const tag = searchParams.get('tag')
@@ -32,7 +34,7 @@ const BlogList = () => {
 
   useEffect(() => {
     getBlogList()
-    request.statistics.get(StatisticsType.文章标签).then(setTags)
+    getTags()
   }, [])
 
   return (
@@ -41,14 +43,16 @@ const BlogList = () => {
         <Col flex='256px'>
           <Affix offsetTop={16} target={() => document.getElementById('content')}>
             <TranslateX delay={200}>
-              <Card title='目录'></Card>
+              <Card title='目录'>
+                <Catalog />
+              </Card>
             </TranslateX>
           </Affix>
         </Col>
         <Col flex='auto'>
           <TranslateY>
             <Spin spinning={loading}>
-              <Card title='文章'>
+              <Card title='文章' headStyle={{ borderTop: `2px solid ${themeColor}` }}>
                 {blogList?.list?.map((item, index) => (
                   <BlogItemCard key={item._id} item={item} />
                 ))}

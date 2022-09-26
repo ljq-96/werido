@@ -112,6 +112,11 @@ export interface IBlog {
   description: string
   creator: string
   tags: string[]
+  inCatalog: boolean
+}
+
+export interface ICatalog extends Pick<IBlog, '_id' | 'title' | 'createTime' | 'updateTime'> {
+  children: ICatalog[]
 }
 
 export interface ITodo {

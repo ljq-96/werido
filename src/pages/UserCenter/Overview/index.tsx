@@ -6,18 +6,18 @@ import { Number, TranslateX, TranslateY } from '../../../components/Animation'
 import RoseChart from '../../../components/Echarts/Charts/RoseChart'
 import LineChart from '../../../components/Echarts/Charts/LineChart'
 import { StatisticsType } from '../../../../types/enum'
+import { useStore } from '../../../contexts/useStore'
 
 const HEIGHT = 400
 function Dashboard() {
+  const [{ tags }, { getTags }] = useStore()
   const [loading, setLoading] = useState(false)
-  const [tags, setTags] = useState<{ name: string; value: number }[]>([])
   const [time, setTime] = useState<{ name: string; value: number }[]>([])
   useEffect(() => {
     setLoading(true)
-    Promise.all([request.statistics.get(StatisticsType.文章标签), request.statistics.get(StatisticsType.文章时间)])
-      .then(([res1, res2]) => {
-        setTags(res1)
-        setTime(res2.map(item => ({ name: item.time, value: item.value })))
+    Promise.all([request.statistics.get(StatisticsType.文章时间), getTags()])
+      .then(([res1]) => {
+        setTime(res1.map(item => ({ name: item.time, value: item.value })))
       })
       .finally(() => setLoading(false))
   }, [])

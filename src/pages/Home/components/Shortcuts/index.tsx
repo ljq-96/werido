@@ -17,7 +17,7 @@ import './style.less'
 
 const actions = [
   { title: '新增文章', icon: <EditOutlined />, path: '/blog/editor' },
-  { title: '我的文章', icon: <ReadOutlined />, path: '/user_center/blog' },
+  { title: '我的文章', icon: <ReadOutlined />, path: '/user_center/blog/list' },
   { title: '我的书签', icon: <TagOutlined />, path: '/user_center/bookmark' },
 ]
 

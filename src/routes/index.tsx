@@ -9,11 +9,13 @@ import {
   UserOutlined,
   TeamOutlined,
   TagOutlined,
+  TagsOutlined,
 } from '@ant-design/icons'
 import { useNavigate, Outlet } from 'react-router-dom'
 import Layout from '../layout'
 import { RouteProps } from '../../types'
-import UserCenterBlog from '../pages/UserCenter/Blog'
+import UserCenterBlogList from '../pages/UserCenter/Blog/List'
+import UserCenterBlogCatalog from '../pages/UserCenter/Blog/Catalog'
 import UserCenterOverview from '../pages/UserCenter/Overview'
 import UserCenterDetail from '../pages/UserCenter/Detail'
 
@@ -43,13 +45,13 @@ const routes: RouteProps[] = [
       },
       {
         path: '/bookmark',
-        name: '收藏夹',
+        name: '书签',
         icon: <TagOutlined />,
         component: lazy(() => import('../pages/Bookmark')),
       },
       {
         path: '/blog',
-        name: '文章列表',
+        name: '知识库',
         icon: <ReadOutlined />,
         component: lazy(() => import('../pages/Blog/List')),
       },
@@ -75,24 +77,40 @@ const routes: RouteProps[] = [
             path: '/user_center',
             name: '统计',
             component: UserCenterOverview,
+            icon: <AreaChartOutlined />,
             hide: true,
           },
           {
             path: '/user_center/bookmark',
             name: '我的书签',
-            component: UserCenterBlog,
+            component: UserCenterBlogList,
+            icon: <TagsOutlined />,
             hide: true,
           },
           {
             path: '/user_center/blog',
-            name: '我的文章',
-            component: UserCenterBlog,
+            name: '我的知识库',
+            component: Outlet,
+            icon: <ReadOutlined />,
             hide: true,
+            routes: [
+              {
+                path: '/user_center/blog/list',
+                name: '列表',
+                component: UserCenterBlogList,
+              },
+              {
+                path: '/user_center/blog/catalog',
+                name: '目录',
+                component: UserCenterBlogCatalog,
+              },
+            ],
           },
           {
             path: '/user_center/detail',
             name: '我的账号',
             component: UserCenterDetail,
+            icon: <UserOutlined />,
             hide: true,
           },
         ],

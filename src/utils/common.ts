@@ -89,7 +89,7 @@ export function arrToTree(arr: { text: string; level: number }[]) {
 
 export const extract = (doc: any) => {
   return doc.map(k => ({
-    _id: k._id,
+    _id: k._id || k.key,
     children: extract(k.children || []),
   }))
 }

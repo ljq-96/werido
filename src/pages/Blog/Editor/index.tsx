@@ -1,19 +1,24 @@
 import { PageContainer } from '@ant-design/pro-layout'
 import { Button, Form, Input, message, Select } from 'antd'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSearchParam } from 'react-use'
 import { StatisticsType } from '../../../../types/enum'
 import { request } from '../../../api'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
+import { useStore } from '../../../contexts/useStore'
 
 const BlogEditor = () => {
+  const [{ tags }, { getTags }] = useStore()
   const [loading, setLoading] = useState(false)
-  const [tagOptions, setTagOptions] = useState<{ label: string; value: string }[]>([])
   const id = useSearchParam('id')
   const editor = useRef<EditorIntance>(null)
   const navigate = useNavigate()
   const [form] = Form.useForm()
+
+  const tagOptions = useMemo(() => {
+    return tags.map(item => ({ label: item.name, value: item.name }))
+  }, [tags])
 
   const handleFinish = async fields => {
     setLoading(true)
@@ -29,15 +34,16 @@ const BlogEditor = () => {
   }
 
   useEffect(() => {
+    getTags()
+  }, [])
+
+  useEffect(() => {
     if (id) {
       request.blog.get(id).then(res => {
         editor.current.setValue(res.content)
         form.setFieldsValue(res)
       })
     }
-    request.statistics.get(StatisticsType.文章标签).then(res => {
-      setTagOptions(res.map(item => ({ label: item.name, value: item.name })))
-    })
   }, [id])
 
   return (

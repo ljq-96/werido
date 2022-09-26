@@ -3,6 +3,8 @@ import { Controller, Delete, Get, Post, Put, UnifyUse } from '../decorator'
 import { RouterCtx } from '../../types'
 import { validateToken } from '../middlewares'
 import { BlogModel } from '../model'
+import { getDocIndex, merge } from '../utils/docIndex'
+import { DocIndexType } from '../../types/enum'
 
 @Controller('/api/blog')
 @UnifyUse(validateToken)
@@ -16,6 +18,14 @@ export class BlogRoute {
       .limit(size)
     const total = await BlogModel.find({ creator: user._id }).countDocuments()
     ctx.body = { list, total, page: Number(page), size: Number(size) }
+  }
+
+  @Get('/catalog')
+  async getBlogCatalog(ctx: RouterCtx) {
+    const { _id } = ctx.app.context.user
+    const data = await BlogModel.find({ creator: _id })
+    const docIndex = await getDocIndex(_id, DocIndexType.文章)
+    ctx.body = merge(docIndex, data)
   }
 
   @Get('/:id')

@@ -1,22 +1,29 @@
 import { CheckCircleOutlined, EditOutlined, RollbackOutlined } from '@ant-design/icons'
 import { PageContainer } from '@ant-design/pro-layout'
-import { Button, Col, Divider, Form, Input, message, Row, Select, Space, Tag, Tooltip } from 'antd'
+import { Button, Card, Col, Divider, Form, Input, message, Row, Select, Space, Tag, Tooltip, Affix } from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { IBlog } from '../../../../types'
 import { StatisticsType } from '../../../../types/enum'
 import { request } from '../../../api'
+import { TranslateX } from '../../../components/Animation'
+import Catalog from '../../../components/Catalog'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
+import { useStore } from '../../../contexts/useStore'
 
 function BlogDetail() {
+  const [{ tags }, { getTags }] = useStore()
   const [onEdit, setOnEdit] = useState(false)
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<IBlog>(null)
-  const [tagOptions, setTagOptions] = useState<{ label: string; value: string }[]>([])
   const [form] = Form.useForm()
   const { id } = useParams()
   const editor = useRef<EditorIntance>()
   const navigate = useNavigate()
+
+  const tagOptions = useMemo(() => {
+    return tags.map(item => ({ label: item.name, value: item.name }))
+  }, [tags])
 
   const handleFinish = async fields => {
     setLoading(true)
@@ -61,9 +68,7 @@ function BlogDetail() {
   }, [id, onEdit])
 
   useEffect(() => {
-    request.statistics.get(StatisticsType.文章标签).then(res => {
-      setTagOptions(res.map(item => ({ label: item.name, value: item.name })))
-    })
+    getTags()
   }, [])
 
   return (
@@ -91,7 +96,7 @@ function BlogDetail() {
             </div>
           )
         }
-        onBack={() => navigate(-1)}
+        onBack={() => navigate('/blog', { replace: true })}
         tags={
           !onEdit &&
           detail?.tags?.map(item => (
@@ -102,12 +107,20 @@ function BlogDetail() {
         }
         extra={extra}
       >
-        <Row gutter={16}>
-          <Col flex='200px'></Col>
+        <Row gutter={16} wrap={false}>
+          <Col flex='256px'>
+            <Affix offsetTop={80}>
+              <TranslateX>
+                <Card title='目录'>
+                  <Catalog selectedKeys={[id]} />
+                </Card>
+              </TranslateX>
+            </Affix>
+          </Col>
           <Col flex='auto'>
-            <div>
+            <TranslateX distance={20} key={id}>
               <MarkdownEditor ref={editor} readonly={!onEdit} loading={loading} />
-            </div>
+            </TranslateX>
           </Col>
         </Row>
       </PageContainer>

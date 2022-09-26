@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useMemo, useState } from 'react'
-import ProLayout, { DefaultFooter } from '@ant-design/pro-layout'
+import ProLayout, { DefaultFooter, PageContainer } from '@ant-design/pro-layout'
 import { SettingFilled, UserOutlined } from '@ant-design/icons'
 import {
   ConfigProvider,
@@ -34,6 +34,7 @@ export default (props: PageProps) => {
   const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(true)
   const [showColorDrawer, setShowColorDrawer] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [loginUser, { dispatch, getUser }] = useUser()
 
   const currentRoutes = useMemo(() => {
@@ -51,13 +52,13 @@ export default (props: PageProps) => {
     return parseRoute(route)
   }, [pathname, route])
 
-  const currentLayout = useMemo(
-    () => (currentRoutes.path === '/' ? loginUser.layoutC : loginUser.layoutB),
-    [currentRoutes, loginUser],
-  )
-
   const getMyProfile = () => {
-    getUser().then(res => ConfigProvider.config({ theme: { primaryColor: res.themeColor } }))
+    setLoading(true)
+    getUser()
+      .then(res => ConfigProvider.config({ theme: { primaryColor: res.themeColor } }))
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   const logout = () => {
@@ -110,7 +111,7 @@ export default (props: PageProps) => {
       }}
     >
       <Suspense fallback={<Loading />}>
-        {loginUser?._id && <Outlet />}
+        {loading ? <Loading /> : <Outlet />}
         <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
       </Suspense>
       <Drawer
@@ -125,6 +126,7 @@ export default (props: PageProps) => {
         footer={
           <Space>
             <Button
+              style={{ background: 'transparent' }}
               onClick={() => {
                 setShowColorDrawer(false)
                 getMyProfile()

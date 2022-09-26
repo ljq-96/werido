@@ -21,6 +21,9 @@ export class Blog {
   @prop({ ref: () => User })
   creator?: Ref<User>
 
+  @prop({ type: Boolean, default: false })
+  inCatalog?: boolean
+
   @prop({ type: String, default: moment().format() })
   createTime?: string
 

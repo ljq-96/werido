@@ -19,7 +19,7 @@ class DocIndex {
     const { _id } = ctx.app.context.user
     const { type } = ctx.request.params
     const { body } = ctx.request
-    const data = await DocIndexModel.updateOne({ type, creator: _id }, body)
+    const data = await DocIndexModel.findOneAndUpdate({ type, creator: _id }, body, { upsert: true, new: true })
     ctx.body = data
   }
 }

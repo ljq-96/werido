@@ -27,7 +27,7 @@
   "devDependencies": {
     "@ant-design/colors": "^6.0.0",
     "@ant-design/icons": "^4.7.0",
-    "@ant-design/pro-layout": "^7.0.7",
+    "@ant-design/pro-layout": "^7.1.2",
     "@dnd-kit/core": "^6.0.5",
     "@dnd-kit/sortable": "^7.0.1",
     "@milkdown/core": "^6.3.2",
