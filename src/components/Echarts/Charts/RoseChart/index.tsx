@@ -31,8 +31,8 @@ function RoseChart(props: IProps) {
         visualMap: [
           {
             show: false,
-            min: Math.min(...data.map(item => item.value)),
-            max: Math.max(...data.map(item => item.value)),
+            min: Math.min(...data?.map(item => item.value)),
+            max: Math.max(...data?.map(item => item.value)),
             inRange: {
               opacity: [0.4, 1],
             },
@@ -58,7 +58,7 @@ function RoseChart(props: IProps) {
             itemStyle: {
               color: themeColor,
             },
-            data: data.filter(item => !!item.value),
+            data: data?.filter(item => !!item.value),
           },
         ],
       }}

@@ -41,7 +41,7 @@ const BlogList = () => {
     <Fragment>
       <Row gutter={16} wrap={false}>
         <Col flex='256px'>
-          <Affix offsetTop={16} target={() => document.getElementById('content')}>
+          <Affix offsetTop={80}>
             <TranslateX delay={200}>
               <Card title='目录'>
                 <Catalog />
@@ -62,7 +62,7 @@ const BlogList = () => {
           </TranslateY>
         </Col>
         <Col flex='256px'>
-          <Affix offsetTop={16} target={() => document.getElementById('content')}>
+          <Affix offsetTop={80}>
             <TranslateX delay={200} distance={20}>
               <Card
                 title='标签'

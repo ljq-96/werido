@@ -23,7 +23,7 @@ export const merge = (docIndex: Doc, doc: any) => {
     return prev
   }, {})
   walk(docIndex, item => {
-    const { _id, ...reset } = docMap[item._id]
+    const { _id, ...reset } = docMap[item._id] || {}
     Object.assign(item, reset)
   })
   return docIndex

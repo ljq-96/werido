@@ -1,5 +1,5 @@
 import { PageContainer } from '@ant-design/pro-layout'
-import { Button, Form, Input, message, Select } from 'antd'
+import { Affix, Button, Form, Input, message, PageHeader, Select, Space } from 'antd'
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSearchParam } from 'react-use'
@@ -48,9 +48,11 @@ const BlogEditor = () => {
 
   return (
     <div>
-      <PageContainer
-        title={id ? '编辑文章' : '新增文章'}
-        content={
+      <PageHeader
+        ghost={false}
+        onBack={() => navigate(-1)}
+        style={{ border: '1px solid #f0f0f0', borderBottom: 'none' }}
+        subTitle={
           <Form form={form} onFinish={handleFinish} layout='inline'>
             <Form.Item name='title' rules={[{ required: true, message: '' }]}>
               <Input placeholder='请输入标题' style={{ width: 256 }} allowClear />
@@ -67,15 +69,15 @@ const BlogEditor = () => {
             </Form.Item>
           </Form>
         }
-        footer={[
-          <Button onClick={() => navigate(-1)}>取消</Button>,
-          <Button type='primary' onClick={form.submit} loading={loading}>
-            {id ? '更新' : '保存'}
-          </Button>,
-        ]}
-      >
-        <MarkdownEditor ref={editor} />
-      </PageContainer>
+        extra={
+          <Affix offsetTop={64}>
+            <Button type='primary' onClick={form.submit} loading={loading}>
+              {id ? '更新' : '保存'}
+            </Button>
+          </Affix>
+        }
+      />
+      <MarkdownEditor ref={editor} />
     </div>
   )
 }

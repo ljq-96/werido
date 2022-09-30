@@ -19,8 +19,8 @@ export function Number(props: IProps) {
   })
 
   return (
-    <animated.div className={className}>
+    <animated.span className={className}>
       {render ? render(number.to(n => n.toFixed(precision))) : number.to(n => n.toFixed(precision))}
-    </animated.div>
+    </animated.span>
   )
 }

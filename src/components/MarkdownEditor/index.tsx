@@ -14,7 +14,7 @@ import { cursor } from '@milkdown/plugin-cursor'
 import { clipboard } from '@milkdown/plugin-clipboard'
 import { indent, indentPlugin } from '@milkdown/plugin-indent'
 import { iframePlugin } from './plugin/iframe'
-import {} from '@milkdown/plugin-menu'
+import { menu } from '@milkdown/plugin-menu'
 import { nord } from '@milkdown/theme-nord'
 import { EditorRef, ReactEditor, useEditor, useNodeCtx } from '@milkdown/react'
 import { Anchor, Button, Drawer, Space, Spin, Tooltip, Tree, TreeNodeProps } from 'antd'
@@ -116,6 +116,7 @@ const MilkdownEditor = (props: IProps, ref) => {
         .use(cursor)
         .use(clipboard)
         .use(tooltip)
+        // .use(menu)
         // .use(block)
         .use(theme)
         .use(iframePlugin)

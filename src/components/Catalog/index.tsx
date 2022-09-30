@@ -1,4 +1,4 @@
-import { Spin, Tree, TreeProps } from 'antd'
+import { Empty, Spin, Tree, TreeProps } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../../contexts/useStore'
@@ -14,7 +14,7 @@ function Catalog(props: TreeProps) {
     getCatalog().finally(() => setLoading(false))
   }, [])
 
-  return (
+  return catalog?.length ? (
     <Tree
       className='catalog-tree'
       blockNode
@@ -27,6 +27,8 @@ function Catalog(props: TreeProps) {
       onSelect={([id]) => id && navigate(`/blog/${id}`)}
       {...props}
     />
+  ) : (
+    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
   )
 }
 

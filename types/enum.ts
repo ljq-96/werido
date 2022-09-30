@@ -24,5 +24,7 @@ export enum StatisticsType {
   统计 = 'count',
   文章标签 = 'blogTag',
   文章时间 = 'blogTime',
+  文章字数 = 'blogWords',
   用户活跃度 = 'userActive',
+  日历日程 = 'todo',
 }

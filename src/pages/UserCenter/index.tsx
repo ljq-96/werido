@@ -17,7 +17,7 @@ function UserCenterLayout(props: PageProps) {
     <Fragment>
       <Row gutter={[16, 16]} className='user-center'>
         <Col span={6}>
-          <Affix target={() => document.getElementById('content')} offsetTop={16}>
+          <Affix offsetTop={80}>
             <div>
               <TranslateX>
                 <UserCard id={user?._id}>

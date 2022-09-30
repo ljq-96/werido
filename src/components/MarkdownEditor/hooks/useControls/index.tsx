@@ -77,6 +77,15 @@ const hasMark = (state, type): boolean => {
   return state.doc.rangeHasMark(from, to, type)
 }
 
+const MenuItem = ({ title, subTitle }: { title: string; subTitle: string }) => {
+  return (
+    <div className='flex justify-between items-end'>
+      <div>{title}</div>
+      <div className='text-gray-500 ml-4 text-xs'>{subTitle}</div>
+    </div>
+  )
+}
+
 function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
   const [activeBtns, setActiveBtns] = useState<Set<ActivedButton>>(new Set())
   const [showIframe, setShowIframe] = useState(false)
@@ -151,8 +160,8 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
     }
 
     /** 文本 */
-    const toggleText = (level: number) => {
-      if (level === 0) {
+    const toggleText = (level: string) => {
+      if (level === '0') {
         editor.action(ctx => ctx.get(commandsCtx).call(commands.TurnIntoText))
       } else {
         editor.action(ctx => ctx.get(commandsCtx).call(commands.TurnIntoHeading, level))
@@ -317,48 +326,16 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
             arrow
             overlay={
               <Menu
-                onClick={e => {
-                  const { key } = e
-                  toggleText(Number(key))
-                }}
-              >
-                <Menu.Item key='0'>
-                  <span style={{ marginRight: 16 }}>正文</span>
-                  <Text type='secondary' style={{ fontSize: 12 }}>
-                    Ctrl+Alt+0
-                  </Text>
-                </Menu.Item>
-                <Menu.Item key='1'>
-                  <span>H1</span>
-                  <Text type='secondary' style={{ fontSize: 12 }}>
-                    Ctrl+Alt+1
-                  </Text>
-                </Menu.Item>
-                <Menu.Item key='2'>
-                  <span>H2</span>
-                  <Text type='secondary' style={{ fontSize: 12 }}>
-                    Ctrl+Alt+2
-                  </Text>
-                </Menu.Item>
-                <Menu.Item key='3'>
-                  <span>H3</span>
-                  <Text type='secondary' style={{ fontSize: 12 }}>
-                    Ctrl+Alt+3
-                  </Text>
-                </Menu.Item>
-                <Menu.Item key='4'>
-                  <span>H4</span>
-                  <Text type='secondary' style={{ fontSize: 12 }}>
-                    Ctrl+Alt+4
-                  </Text>
-                </Menu.Item>
-                <Menu.Item key='5'>
-                  <span>H4</span>
-                  <Text type='secondary' style={{ fontSize: 12 }}>
-                    Ctrl+Alt+5
-                  </Text>
-                </Menu.Item>
-              </Menu>
+                items={[
+                  { label: <MenuItem title='正文' subTitle='Ctrl+Alt+0' />, key: 0 },
+                  { label: <MenuItem title='H1' subTitle='Ctrl+Alt+1' />, key: 1 },
+                  { label: <MenuItem title='H2' subTitle='Ctrl+Alt+2' />, key: 2 },
+                  { label: <MenuItem title='H3' subTitle='Ctrl+Alt+3' />, key: 3 },
+                  { label: <MenuItem title='H4' subTitle='Ctrl+Alt+4' />, key: 4 },
+                  { label: <MenuItem title='H5' subTitle='Ctrl+Alt+5' />, key: 5 },
+                ]}
+                onClick={({ key }) => toggleText(key)}
+              />
             }
           >
             <Button type='text' icon={<BorderlessTableOutlined />}>

@@ -1,6 +1,8 @@
+import { Spin } from 'antd'
 import * as echarts from 'echarts'
 import * as React from 'react'
 import elementResizeEvent, { unbind } from '../../utils/element-resize-event'
+import 'echarts-wordcloud'
 
 export interface ReactEchartsProps {
   onChartReady?: (echartObj: echarts.ECharts) => void
@@ -63,8 +65,8 @@ export default class ReactEcharts extends React.Component<ReactEchartsProps> {
     // set the echart option
     echartObj.setOption(this.props.option as any, this.props.notMerge || false, this.props.lazyUpdate || false)
     // set loading mask
-    if (this.props.loading) echartObj.showLoading()
-    else echartObj.hideLoading()
+    // if (this.props.loading) echartObj.showLoading()
+    // else echartObj.hideLoading()
 
     return echartObj
   }
@@ -85,11 +87,16 @@ export default class ReactEcharts extends React.Component<ReactEchartsProps> {
   }
   render() {
     let {
+      loading = false,
       style = {
         height: 350,
       },
     } = this.props
     // for render
-    return <div ref={this.initEchartsDom} className={this.props.className} style={style} />
+    return (
+      <Spin spinning={loading}>
+        <div ref={this.initEchartsDom} className={this.props.className} style={style} />
+      </Spin>
+    )
   }
 }

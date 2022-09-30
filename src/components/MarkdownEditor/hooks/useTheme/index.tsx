@@ -30,6 +30,8 @@ function useTheme() {
       downArrow: 'icon-down',
       image: 'icon-image',
       unchecked: 'icon-image',
+      select: 'icon-image',
+      blockHandle: 'icon-image',
     }
 
     return themeFactory((emotion, manager) => {

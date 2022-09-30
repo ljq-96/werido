@@ -11,7 +11,7 @@ interface IProps {
   }[]
 }
 
-function LineChart(props: IProps) {
+function BarChart(props: IProps) {
   const { data = [], loading } = props
   const [{ themeColor }] = useUser()
   const plate = generate(themeColor)
@@ -22,13 +22,12 @@ function LineChart(props: IProps) {
       option={{
         xAxis: {
           type: 'category',
-          boundaryGap: false,
           data: data?.map(item => item.name),
         },
         grid: {
-          left: '10px',
-          top: '30px',
-          right: '0px',
+          left: 0,
+          top: 10,
+          right: 0,
           bottom: 0,
           containLabel: true,
         },
@@ -38,24 +37,23 @@ function LineChart(props: IProps) {
         },
         tooltip: {
           trigger: 'axis',
+          axisPointer: {
+            type: 'shadow',
+          },
         },
         series: [
           {
             data: data?.map(item => item.value),
-            type: 'line',
-            smooth: true,
+            type: 'bar',
             itemStyle: {
-              color: themeColor,
-            },
-            areaStyle: {
               color: new graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 0,
-                  color: plate[3],
+                  color: themeColor,
                 },
                 {
                   offset: 1,
-                  color: '#fff',
+                  color: plate[3],
                 },
               ]),
             },
@@ -66,4 +64,4 @@ function LineChart(props: IProps) {
   )
 }
 
-export default LineChart
+export default BarChart

@@ -4,17 +4,17 @@ import { useUser } from '../../../../contexts/useUser'
 
 interface IProps {
   loading?: boolean
-  data: {
+  data?: {
     name: string
     value: number
   }[]
 }
 
 function RiverChart(props: IProps) {
-  const { data, loading } = props
+  const { data = [], loading } = props
   const [{ themeColor }] = useUser()
   const plate = generate(themeColor).slice(0, 6).reverse()
-  const max = Math.max(...data.map(item => item.value))
+  const max = Math.max(...data?.map(item => item.value))
   const step = max / 10
 
   return (
@@ -49,7 +49,7 @@ function RiverChart(props: IProps) {
             type: 'piecewise',
             show: false,
             dimension: 0,
-            pieces: data.map((_, index) => ({
+            pieces: data?.map((_, index) => ({
               gt: index,
               lt: index + 1,
               color: plate[index],
@@ -60,7 +60,7 @@ function RiverChart(props: IProps) {
           type: 'category',
           boundaryGap: false,
           show: false,
-          data: [...data.map(item => item.name), 'ee'],
+          data: [...data?.map(item => item.name), 'ee'],
         },
         yAxis: {
           type: 'value',
@@ -75,7 +75,7 @@ function RiverChart(props: IProps) {
             smoothMonotone: 'x',
             areaStyle: { color: plate[4] },
             showSymbol: false,
-            data: [...data.map(item => item.value + step), step],
+            data: [...data?.map(item => item.value + step), step],
           },
           {
             type: 'line',
@@ -85,7 +85,7 @@ function RiverChart(props: IProps) {
             smoothMonotone: 'x',
             areaStyle: { color: plate[4] },
             showSymbol: false,
-            data: [...data.map(item => -item.value - step), -step],
+            data: [...data?.map(item => -item.value - step), -step],
           },
           {
             type: 'line',
@@ -95,7 +95,7 @@ function RiverChart(props: IProps) {
             smoothMonotone: 'x',
             areaStyle: { color: plate[5] },
             showSymbol: false,
-            data: [...data.map(item => item.value + 2 * step), 2 * step],
+            data: [...data?.map(item => item.value + 2 * step), 2 * step],
           },
           {
             type: 'line',
@@ -105,7 +105,7 @@ function RiverChart(props: IProps) {
             smoothMonotone: 'x',
             areaStyle: { color: plate[5] },
             showSymbol: false,
-            data: [...data.map(item => -item.value - 2 * step), -2 * step],
+            data: [...data?.map(item => -item.value - 2 * step), -2 * step],
           },
           {
             type: 'line',
@@ -115,17 +115,17 @@ function RiverChart(props: IProps) {
             lineStyle: { width: 0 },
             animation: false,
             showSymbol: false,
-            data: [...data.map(item => item.value), 0],
+            data: [...data?.map(item => item.value), 0],
             emphasis: { disabled: true },
             markLine: {
               symbol: ['none', 'none'],
               label: {
                 show: true,
                 lineHeight: 20,
-                distance: [0, -60],
+                distance: [0, -40],
                 formatter: (value: any) => {
                   const { dataIndex } = value
-                  if (dataIndex === 0) return `{text1|${data[dataIndex].name}\n\n}`
+                  if (dataIndex === 0) return `{text1|${data[dataIndex].name}\n}`
                   return `{text2|${data[dataIndex].name}}\n{percent|${((data[dataIndex].value / max) * 100).toFixed(
                     2,
                   )}%}`
@@ -149,7 +149,7 @@ function RiverChart(props: IProps) {
               lineStyle: {
                 type: 'solid',
               },
-              data: data.map((item, index) => ({ name: item.name, xAxis: index })),
+              data: data?.map((item, index) => ({ name: item.name, xAxis: index })),
             },
             // zlevel: 10,
           },
@@ -160,7 +160,8 @@ function RiverChart(props: IProps) {
             areaStyle: { opacity: 1 },
             lineStyle: { width: 0 },
             showSymbol: false,
-            data: [...data.map(item => -item.value), 0],
+            animation: false,
+            data: [...data?.map(item => -item.value), 0],
             emphasis: { disabled: true },
             markLine: {
               symbol: ['none', 'none'],
@@ -193,7 +194,7 @@ function RiverChart(props: IProps) {
               lineStyle: {
                 type: 'solid',
               },
-              data: data.map((item, index) => ({ name: item.name, value: item.value, xAxis: index })),
+              data: data?.map((item, index) => ({ name: item.name, value: item.value, xAxis: index })),
             },
             // zlevel: 10,
           },

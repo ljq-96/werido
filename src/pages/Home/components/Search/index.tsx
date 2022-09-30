@@ -13,13 +13,17 @@ function Search() {
   const [sugList, setSugList] = useState<string[]>([])
 
   const handleInput = value => {
+    if (!value) {
+      setSugList([])
+      return
+    }
     const onScript = document.createElement('script')
     onScript.src = `https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=${value}&cb=setSug`
     document.querySelector('body').appendChild(onScript)
   }
 
   useEffect(() => {
-    window.setSug = data => setSugList(data.s?.slice(0, 5) || [])
+    window.setSug = data => setSugList(data.s || [])
     return () => (window.setSug = null)
   }, [])
   return (
@@ -35,15 +39,17 @@ function Search() {
         ))}
       </Tabs>
       <AutoComplete
-        allowClear
+        backfill
         options={sugList.map(item => ({ label: item, value: item }))}
         onChange={handleInput}
+        onSelect={value => value && window.open(`${current.action}?${current.name}=${value}`)}
         style={{ width: '100%' }}
       >
         <Input.Search
+          allowClear
           size='large'
           enterButton='搜索'
-          onSearch={value => window.open(`${current.action}?${current.name}=${value}`)}
+          onSearch={value => value && window.open(`${current.action}?${current.name}=${value}`)}
         />
       </AutoComplete>
     </Card>

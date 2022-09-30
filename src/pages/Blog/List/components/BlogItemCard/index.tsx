@@ -2,7 +2,7 @@ import { FieldStringOutlined, FieldTimeOutlined, FileTextOutlined } from '@ant-d
 import { Card, Space } from 'antd'
 import clsx from 'clsx'
 import moment from 'moment'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { IBlog } from '../../../../../../types'
 import { Render } from '../../../../../components/MarkdownEditor'
 import style from './style.module.less'
@@ -11,12 +11,8 @@ const BlogItemCard = ({ item }: { item: IBlog }) => {
   const { title, content, description, tags, createTime, words, _id } = item
   const navigate = useNavigate()
   return (
-    <div className={style.blogItem}>
-      <div
-        className={clsx('werido-title', style.title)}
-        style={{ margin: '0 -16px' }}
-        onClick={() => navigate(`/blog/${_id}`)}
-      >
+    <Link to={`/blog/${_id}`} className={style.blogItem}>
+      <div className={clsx('werido-title', style.title)} style={{ margin: '0 -16px' }}>
         {title}
       </div>
       <div className={style.description}>
@@ -34,7 +30,7 @@ const BlogItemCard = ({ item }: { item: IBlog }) => {
           </Space>
         </Space>
       </div>
-    </div>
+    </Link>
   )
 }
 
