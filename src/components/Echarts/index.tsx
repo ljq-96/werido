@@ -89,7 +89,7 @@ export default class ReactEcharts extends React.Component<ReactEchartsProps> {
     let {
       loading = false,
       style = {
-        height: 350,
+        height: 300,
       },
     } = this.props
     // for render

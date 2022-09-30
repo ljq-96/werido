@@ -9,6 +9,16 @@ function Catalog(props: TreeProps) {
   const [{ catalog }, { getCatalog }] = useStore()
   const [loading, setLoading] = useState(false)
 
+  const handleSelect = id => {
+    if (id) {
+      navigate(`/blog/${id}`)
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
+    }
+  }
+
   useEffect(() => {
     setLoading(true)
     getCatalog().finally(() => setLoading(false))
@@ -24,7 +34,7 @@ function Catalog(props: TreeProps) {
       fieldNames={{ key: '_id' }}
       defaultExpandAll
       selectedKeys={[]}
-      onSelect={([id]) => id && navigate(`/blog/${id}`)}
+      onSelect={([id]) => handleSelect(id)}
       {...props}
     />
   ) : (

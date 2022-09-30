@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { Controller, Get, UnifyUse } from '../decorator'
 import { validateToken } from '../middlewares'
-import { BlogModel, BookmarkModel } from '../model'
+import { BlogModel, BookmarkModel, TodoModel } from '../model'
 import { RouterCtx } from '../../types'
 import { StatisticsType } from '../../types/enum'
 
@@ -59,6 +59,37 @@ class StatisticsRoute {
     const data = Object.entries(timeMap)
       .map(([time, value]) => ({ time, value }))
       .sort((a, b) => moment(a.time).valueOf() - moment(b.time).valueOf())
+    ctx.body = data
+  }
+
+  @Get(`/${StatisticsType.文章字数}`)
+  async getBlogWords(ctx: RouterCtx) {
+    const { user } = ctx.app.context
+    const list = await BlogModel.find({ creator: user._id })
+    const data = [
+      { name: '0~3', value: 0 },
+      { name: '3~6', value: 0 },
+      { name: '6~9', value: 0 },
+      { name: '9-12', value: 0 },
+      { name: '12+', value: 0 },
+    ]
+    list.forEach(item => {
+      const i = Math.floor((item?.words || 0) / 3000)
+      data[i > 4 ? 4 : i].value++
+    })
+    ctx.body = data
+  }
+
+  @Get(`/${StatisticsType.日历日程}`)
+  async getTodo(ctx: RouterCtx) {
+    const { user } = ctx.app.context
+    const list = await TodoModel.find({ creator: user._id })
+    const data = list.map(item => [
+      moment(item.start).valueOf() - moment(item.start).startOf('day').valueOf(),
+      moment(item.end).valueOf() - moment(item.end).startOf('day').valueOf(),
+      moment(item.start).startOf('day').format('yyyy-MM-DD'),
+      item.description,
+    ])
     ctx.body = data
   }
 }

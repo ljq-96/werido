@@ -18,6 +18,21 @@ function TodoScatterChart(props: IProps) {
     <Echarts
       loading={loading}
       option={{
+        tooltip: {
+          formatter: val => {
+            const {
+              data: [, , time, desc],
+            } = val
+            return `${time} ${desc}`
+          },
+          axisPointer: {
+            type: 'cross',
+            snap: true,
+            label: {
+              formatter: e => moment(e.value).utcOffset(0).format('HH:mm'),
+            },
+          },
+        },
         xAxis: {
           name: '开始',
           nameLocation: 'end',

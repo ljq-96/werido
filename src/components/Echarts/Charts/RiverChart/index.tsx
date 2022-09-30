@@ -49,11 +49,14 @@ function RiverChart(props: IProps) {
             type: 'piecewise',
             show: false,
             dimension: 0,
-            pieces: data?.map((_, index) => ({
-              gt: index,
-              lt: index + 1,
-              color: plate[index],
-            })),
+            pieces: data?.map((_, index) => {
+              const opacity = (255 - (200 / (data.length - 1)) * index).toString(16).split('.')[0]
+              return {
+                gt: index,
+                lt: index + 1,
+                color: themeColor + (opacity.length <= 1 ? `0${opacity}` : opacity),
+              }
+            }),
           },
         ],
         xAxis: {
@@ -73,7 +76,7 @@ function RiverChart(props: IProps) {
             emphasis: { disabled: true },
             smooth: 0.6,
             smoothMonotone: 'x',
-            areaStyle: { color: plate[4] },
+            areaStyle: { color: themeColor + '14' },
             showSymbol: false,
             data: [...data?.map(item => item.value + step), step],
           },
@@ -83,7 +86,7 @@ function RiverChart(props: IProps) {
             emphasis: { disabled: true },
             smooth: 0.6,
             smoothMonotone: 'x',
-            areaStyle: { color: plate[4] },
+            areaStyle: { color: themeColor + '14' },
             showSymbol: false,
             data: [...data?.map(item => -item.value - step), -step],
           },
@@ -93,7 +96,7 @@ function RiverChart(props: IProps) {
             emphasis: { disabled: true },
             smooth: 0.6,
             smoothMonotone: 'x',
-            areaStyle: { color: plate[5] },
+            areaStyle: { color: themeColor + '28' },
             showSymbol: false,
             data: [...data?.map(item => item.value + 2 * step), 2 * step],
           },
@@ -103,7 +106,7 @@ function RiverChart(props: IProps) {
             emphasis: { disabled: true },
             smooth: 0.6,
             smoothMonotone: 'x',
-            areaStyle: { color: plate[5] },
+            areaStyle: { color: themeColor + '28' },
             showSymbol: false,
             data: [...data?.map(item => -item.value - 2 * step), -2 * step],
           },
@@ -168,7 +171,7 @@ function RiverChart(props: IProps) {
               label: {
                 show: true,
                 position: 'start',
-                distance: [0, -185],
+                distance: [0, -160],
                 lineHeight: 20,
                 formatter: (value: any) => {
                   const { dataIndex } = value
@@ -179,14 +182,14 @@ function RiverChart(props: IProps) {
                     align: 'left',
                     fontSize: 16,
                     color: '#fff',
-                    padding: [0, 0, 0, 60],
+                    padding: [0, 0, 0, 40],
                     fontWeight: 'bold',
                   },
                   textColored: {
                     align: 'left',
                     fontSize: 16,
                     color: themeColor,
-                    padding: [0, 0, 0, 60],
+                    padding: [0, 0, 0, 40],
                     fontWeight: 'bold',
                   },
                 },

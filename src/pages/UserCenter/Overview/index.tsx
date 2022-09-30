@@ -8,6 +8,8 @@ import LineChart from '../../../components/Echarts/Charts/LineChart'
 import { StatisticsType } from '../../../../types/enum'
 import { useStore } from '../../../contexts/useStore'
 import useRequest from '../../../hooks/useRequest'
+import BarChart from '../../../components/Echarts/Charts/BarChart'
+import TodoScatterChart from '../../../components/Echarts/Charts/TodoScatterChart'
 
 function Dashboard() {
   const [{ tags }, { getTags }] = useStore()
@@ -16,31 +18,51 @@ function Dashboard() {
     loading: blogTimeLoading,
     execute: getBlogTime,
   } = useRequest(() => request.statistics.get(StatisticsType.文章时间))
+  const {
+    data: blogWords,
+    loading: blogWordsLoading,
+    execute: getBlogWords,
+  } = useRequest(() => request.statistics.get(StatisticsType.文章字数))
+  const {
+    data: todo,
+    loading: todoLoading,
+    execute: getTodo,
+  } = useRequest(() => request.statistics.get(StatisticsType.日历日程))
   useEffect(() => {
     getBlogTime()
+    getBlogWords()
+    getTodo()
     getTags()
   }, [])
   return (
     <Fragment>
-      <Row gutter={[16, 16]}>
-        <Col span={12}>
-          <TranslateY delay={200}>
-            <Card title='时间'>
+      <TranslateY>
+        <Row gutter={[16, 16]}>
+          <Col span={12}>
+            <Card title='新增文章'>
               <LineChart
                 loading={blogTimeLoading}
                 data={blogTime?.map(item => ({ name: item.time, value: item.value })) || []}
               />
             </Card>
-          </TranslateY>
-        </Col>
-        <Col span={12}>
-          <TranslateY delay={400}>
-            <Card title='标签'>
+          </Col>
+          <Col span={12}>
+            <Card title='文章标签'>
               <RoseChart data={tags} />
             </Card>
-          </TranslateY>
-        </Col>
-      </Row>
+          </Col>
+          <Col span={12}>
+            <Card title='我的日程'>
+              <TodoScatterChart data={todo} loading={todoLoading} />
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card title='文章字数'>
+              <BarChart data={blogWords} loading={blogWordsLoading} />
+            </Card>
+          </Col>
+        </Row>
+      </TranslateY>
     </Fragment>
   )
 }

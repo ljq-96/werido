@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import ProLayout, { DefaultFooter, PageContainer } from '@ant-design/pro-layout'
-import { SettingFilled, UserOutlined } from '@ant-design/icons'
+import { LogoutOutlined, SettingFilled, UserOutlined } from '@ant-design/icons'
 import {
   ConfigProvider,
   Menu,
@@ -107,11 +107,14 @@ export default (props: PageProps) => {
         title: loginUser?.username,
       }}
       actionsRender={({}) => {
-        return [<SettingFilled onClick={() => setShowColorDrawer(!showColorDrawer)} />]
+        return [
+          <SettingFilled onClick={() => setShowColorDrawer(!showColorDrawer)} />,
+          <LogoutOutlined onClick={logout} />,
+        ]
       }}
     >
       <Suspense fallback={<Loading />}>
-        {loading ? <Loading /> : <Outlet />}
+        {loading && !loginUser ? <Loading /> : <Outlet />}
         <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
       </Suspense>
       <Drawer

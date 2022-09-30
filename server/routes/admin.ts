@@ -142,6 +142,7 @@ export class StatisticsManageRoute {
     const data = list.map(item => [
       moment(item.start).valueOf() - moment(item.start).startOf('day').valueOf(),
       moment(item.end).valueOf() - moment(item.end).startOf('day').valueOf(),
+      moment(item.start).startOf('day').format('yyyy-MM-DD'),
       item.description,
     ])
     ctx.body = data

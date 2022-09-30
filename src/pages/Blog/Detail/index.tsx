@@ -1,21 +1,6 @@
 import { CheckCircleOutlined, EditOutlined, RollbackOutlined } from '@ant-design/icons'
 import { PageContainer } from '@ant-design/pro-layout'
-import {
-  Button,
-  Card,
-  Col,
-  Divider,
-  Form,
-  Input,
-  message,
-  Row,
-  Select,
-  Space,
-  Tag,
-  Tooltip,
-  Affix,
-  PageHeader,
-} from 'antd'
+import { Button, Card, Col, Form, Input, message, Row, Select, Space, Tag, Affix, PageHeader, Spin } from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { IBlog } from '../../../../types'
@@ -70,18 +55,17 @@ function BlogDetail() {
   }, [onEdit])
 
   useEffect(() => {
-    if (!onEdit) {
-      setLoading(true)
-      request.blog
-        .get(id)
-        .then(res => {
-          editor.current.setValue(res.content)
-          setDetail(res)
-        })
-        .finally(() => {
-          setLoading(false)
-        })
-    }
+    setLoading(true)
+    request.blog
+      .get(id)
+      .then(res => {
+        editor.current.setValue(res.content)
+        setDetail(res)
+        form.setFieldsValue({ title: res.title, tags: res.tags })
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [id, onEdit])
 
   useEffect(() => {
@@ -101,84 +85,47 @@ function BlogDetail() {
           </Affix>
         </Col>
         <Col flex='auto'>
-          {/* <TranslateX distance={20} key={id}> */}
-          <PageHeader
-            ghost={false}
-            title={!onEdit && detail?.title}
-            style={{ border: '1px solid #f0f0f0', borderBottom: 'none' }}
-            subTitle={
-              onEdit && (
-                <div style={{ height: 32 }}>
-                  <Form form={form} onFinish={handleFinish} layout='inline'>
-                    <Form.Item name='title' rules={[{ required: true, message: '' }]} initialValue={detail.title}>
-                      <Input placeholder='请输入标题' style={{ width: 256 }} allowClear />
-                    </Form.Item>
-                    <Form.Item label='标签' name='tags' initialValue={detail.tags}>
-                      <Select
-                        mode='tags'
-                        placeholder='请选择标签'
-                        maxTagCount='responsive'
-                        style={{ width: 256 }}
-                        options={tagOptions}
-                        allowClear
-                      />
-                    </Form.Item>
-                  </Form>
-                </div>
-              )
-            }
-            onBack={() => navigate('/blog', { replace: true })}
-            tags={
-              !onEdit &&
-              detail?.tags?.map(item => (
-                <Tag className='werido-tag' key={item} onClick={() => {}}>
-                  {item}
-                </Tag>
-              ))
-            }
-            extra={extra}
-          />
-
-          <MarkdownEditor ref={editor} readonly={!onEdit} loading={loading} />
-          {/* </TranslateX> */}
+          <Spin spinning={loading}>
+            <PageHeader
+              ghost={false}
+              title={!onEdit && detail?.title}
+              style={{ border: '1px solid #f0f0f0', borderBottom: 'none' }}
+              subTitle={
+                onEdit && (
+                  <div style={{ height: 32 }}>
+                    <Form form={form} onFinish={handleFinish} layout='inline'>
+                      <Form.Item name='title' rules={[{ required: true, message: '' }]} initialValue={detail.title}>
+                        <Input placeholder='请输入标题' style={{ width: 256 }} allowClear />
+                      </Form.Item>
+                      <Form.Item label='标签' name='tags' initialValue={detail.tags}>
+                        <Select
+                          mode='tags'
+                          placeholder='请选择标签'
+                          maxTagCount='responsive'
+                          style={{ width: 256 }}
+                          options={tagOptions}
+                          allowClear
+                        />
+                      </Form.Item>
+                    </Form>
+                  </div>
+                )
+              }
+              onBack={() => navigate('/blog', { replace: true })}
+              tags={
+                !onEdit &&
+                detail?.tags?.map(item => (
+                  <Tag className='werido-tag' key={item} onClick={() => {}}>
+                    {item}
+                  </Tag>
+                ))
+              }
+              extra={extra}
+            />
+            <MarkdownEditor ref={editor} readonly={!onEdit} />
+          </Spin>
         </Col>
       </Row>
-      {/* <PageContainer
-        title={!onEdit && detail?.title}
-        subTitle={
-          onEdit && (
-            <div style={{ height: 32 }}>
-              <Form form={form} onFinish={handleFinish} layout='inline'>
-                <Form.Item name='title' rules={[{ required: true, message: '' }]} initialValue={detail.title}>
-                  <Input placeholder='请输入标题' style={{ width: 256 }} allowClear />
-                </Form.Item>
-                <Form.Item label='标签' name='tags' initialValue={detail.tags}>
-                  <Select
-                    mode='tags'
-                    placeholder='请选择标签'
-                    maxTagCount='responsive'
-                    style={{ width: 256 }}
-                    options={tagOptions}
-                    allowClear
-                  />
-                </Form.Item>
-              </Form>
-            </div>
-          )
-        }
-        onBack={() => navigate('/blog', { replace: true })}
-        tags={
-          !onEdit &&
-          detail?.tags?.map(item => (
-            <Tag className='werido-tag' key={item} onClick={() => {}}>
-              {item}
-            </Tag>
-          ))
-        }
-        extra={extra}
-      >
-        
-      </PageContainer> */}
     </Fragment>
   )
 }
