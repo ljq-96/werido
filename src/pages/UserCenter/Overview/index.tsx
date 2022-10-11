@@ -17,17 +17,17 @@ function Dashboard() {
     data: blogTime,
     loading: blogTimeLoading,
     execute: getBlogTime,
-  } = useRequest(() => request.statistics.get(StatisticsType.文章时间))
+  } = useRequest(() => request.statistics({ method: 'GET', query: StatisticsType.文章时间 }))
   const {
     data: blogWords,
     loading: blogWordsLoading,
     execute: getBlogWords,
-  } = useRequest(() => request.statistics.get(StatisticsType.文章字数))
+  } = useRequest(() => request.statistics({ method: 'GET', query: StatisticsType.文章字数 }))
   const {
     data: todo,
     loading: todoLoading,
     execute: getTodo,
-  } = useRequest(() => request.statistics.get(StatisticsType.日历日程))
+  } = useRequest(() => request.statistics({ method: 'GET', query: StatisticsType.日历日程 }))
   useEffect(() => {
     getBlogTime()
     getBlogWords()

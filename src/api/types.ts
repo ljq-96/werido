@@ -3,9 +3,9 @@ export type Methods = 'GET' | 'POST' | 'DELETE' | 'PUT'
 export interface RequestConfig<T = any> {
   url: string
   method?: Methods
-  query?: T
-  body?: T
-  params?: string
+  query?: string | number
+  data?: T
+  params?: T
 }
 
 export type BaseConfig = string | { target: string; baseConfig: RequestConfig }

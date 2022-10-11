@@ -31,7 +31,7 @@ export default function UserProvider({ children }: { children: React.ReactNode }
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
 
   const getUser = useCallback(() => {
-    return request.myProfile.get().then(res => {
+    return request.myProfile({ method: 'GET' }).then(res => {
       dispatch(basicUserView.update.actions(res))
       return res
     })

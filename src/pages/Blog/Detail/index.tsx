@@ -27,7 +27,7 @@ function BlogDetail() {
 
   const handleFinish = async fields => {
     setLoading(true)
-    await request.blog.put({ _id: id, content: editor.current.getValue(), ...fields })
+    await request.blog({ method: 'PUT', query: id, data: { content: editor.current.getValue(), ...fields } })
     message.success('已更新')
     setOnEdit(false)
     setLoading(false)
@@ -56,8 +56,8 @@ function BlogDetail() {
 
   useEffect(() => {
     setLoading(true)
-    request.blog
-      .get(id)
+    request
+      .blog({ method: 'GET', query: id })
       .then(res => {
         editor.current.setValue(res.content)
         setDetail(res)

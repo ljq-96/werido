@@ -6,7 +6,7 @@ import { request } from '../../../api'
 export function useCatalog() {
   const [catalog, setCatalog] = useState<ICatalog[]>([])
   const getCatalog = useCallback(() => {
-    return request.blog.get('catalog').then(res => {
+    return request.blog({ method: 'GET', query: 'catalog' }).then(res => {
       setCatalog(res)
       return res
     })

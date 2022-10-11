@@ -1,7 +1,7 @@
 import { Spin } from 'antd'
 import * as echarts from 'echarts'
 import * as React from 'react'
-import elementResizeEvent, { unbind } from '../../utils/element-resize-event'
+import elementResizeEvent, { unbind } from '../../utils/elementResizeEvent'
 import 'echarts-wordcloud'
 
 export interface ReactEchartsProps {

@@ -16,32 +16,32 @@ function Dashboard() {
     data: blogTime,
     execute: getBlogTime,
     loading: blogTimeLoading,
-  } = useRequest(() => request.admin.statistics.get(StatisticsType.文章时间))
+  } = useRequest(() => request.admin.statistics({ method: 'GET', query: StatisticsType.文章时间 }))
   const {
     data: blogWords,
     execute: getBlogWords,
     loading: blogWordsLoading,
-  } = useRequest(() => request.admin.statistics.get(StatisticsType.文章字数))
+  } = useRequest(() => request.admin.statistics({ method: 'GET', query: StatisticsType.文章字数 }))
   const {
     data: statistics,
     execute: getStatistics,
     loading: statisticsLoading,
-  } = useRequest(() => request.admin.statistics.get(StatisticsType.统计))
+  } = useRequest(() => request.admin.statistics({ method: 'GET', query: StatisticsType.统计 }))
   const {
     data: userActive,
     execute: getUserActive,
     loading: userActiveLoading,
-  } = useRequest(() => request.admin.statistics.get(StatisticsType.用户活跃度))
+  } = useRequest(() => request.admin.statistics({ method: 'GET', query: StatisticsType.用户活跃度 }))
   const {
     data: todo,
     execute: getTodo,
     loading: todoLoading,
-  } = useRequest(() => request.admin.statistics.get(StatisticsType.日历日程))
+  } = useRequest(() => request.admin.statistics({ method: 'GET', query: StatisticsType.日历日程 }))
   const {
     data: tagCount,
     execute: getTagCount,
     loading: tagCountLoading,
-  } = useRequest(() => request.admin.statistics.get(StatisticsType.文章标签))
+  } = useRequest(() => request.admin.statistics({ method: 'GET', query: StatisticsType.文章标签 }))
 
   useEffect(() => {
     getBlogTime()

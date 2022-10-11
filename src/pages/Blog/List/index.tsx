@@ -26,9 +26,12 @@ const BlogList = () => {
     data: blogList,
     execute: getBlogList,
   } = useRequest<Pager<IBlog>>(() =>
-    request.blog.get({
-      page: page,
-      size: SIZE,
+    request.blog({
+      method: 'GET',
+      params: {
+        page: page,
+        size: SIZE,
+      },
     }),
   )
 

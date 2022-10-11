@@ -5,7 +5,7 @@ import { request } from '../../../api'
 export function useTags() {
   const [tags, setTags] = useState<{ name: string; value: number }[]>([])
   const getTags = useCallback(() => {
-    return request.statistics.get(StatisticsType.文章标签).then(res => {
+    return request.statistics({ method: 'GET', query: StatisticsType.文章标签 }).then(res => {
       setTags(res)
       return res
     })

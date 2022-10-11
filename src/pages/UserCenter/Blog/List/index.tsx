@@ -41,7 +41,7 @@ function UserCenterBlogList(props) {
       content: '确定要删除此文章吗？',
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
-        return request.blog.delete(id).then(() => {
+        return request.blog({ method: 'DELETE', query: id }).then(() => {
           // setShowModal(false)
           message.success('删除成功')
           tableRef.current.fetchData()

@@ -17,7 +17,7 @@ export const querystring = {
     })
     return result
   },
-  stringify: (obj: { [k: string]: any }) => {
+  stringify: (obj: { [k: string]: any } = {}) => {
     let result = []
     Object.keys(obj).forEach(key => {
       const value = obj[key]

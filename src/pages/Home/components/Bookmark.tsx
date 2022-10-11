@@ -16,8 +16,8 @@ function Bookmark() {
 
   const getBookmark = () => {
     setLoading(true)
-    request.bookmark
-      .get('favorite')
+    request
+      .bookmark({ method: 'GET', query: 'favorite' })
       .then(res => {
         setBookmarks([
           {
@@ -45,7 +45,11 @@ function Bookmark() {
             value={bookmarks}
             onChange={value => {
               setBookmarks(value)
-              request.docIndex.put({ _id: DocIndexType.首页书签, content: JSON.stringify(extract(value[0].children)) })
+              request.docIndex({
+                method: 'PUT',
+                query: DocIndexType.首页书签,
+                data: { content: JSON.stringify(extract(value[0].children)) },
+              })
             }}
             columns={5}
             strategy={rectSortingStrategy}
@@ -58,7 +62,13 @@ function Bookmark() {
                       setShowModal(value)
                       break
                     case 'pin':
-                      request.bookmark.put({ _id: value._id, pin: !value.pin }).then(getBookmark)
+                      request
+                        .bookmark({
+                          method: 'PUT',
+                          query: value._id,
+                          data: { pin: !value.pin },
+                        })
+                        .then(getBookmark)
                   }
                 }}
               />

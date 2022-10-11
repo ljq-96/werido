@@ -15,7 +15,7 @@ function HomeCalendar() {
 
   const getTodoList = async () => {
     setLoading(true)
-    const todo = await request.todo.get()
+    const todo = await request.todo({ method: 'GET' })
     setTodoList(todo)
     setLoading(false)
   }
@@ -34,9 +34,9 @@ function HomeCalendar() {
       description,
     }
     if (onEditTodo) {
-      await request.todo.put({ _id: onEditTodo._id, ...data })
+      await request.todo({ method: 'PUT', query: onEditTodo._id, data })
     } else {
-      await request.todo.post(data)
+      await request.todo({ method: 'POST', data })
     }
 
     await getTodoList()
@@ -78,7 +78,7 @@ function HomeCalendar() {
                 type: 'error',
                 content: '是否删除此日程，不可恢复！',
                 onOk: async () => {
-                  await request.todo.delete(todo._id)
+                  await request.todo({ method: 'DELETE', query: todo._id })
                   await getTodoList()
                 },
               })

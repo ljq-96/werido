@@ -22,11 +22,11 @@ function Login() {
   const onFinish = (fields: IUser & { password_c?: string }) => {
     const { username, password, password_c } = fields
     if (isLogin) {
-      request.login.post({ username, password }).then(res => {
+      request.login({ method: 'POST', data: { username, password } }).then(res => {
         navigator('/home')
       })
     } else {
-      request.register.post({ username, password }).then(res => {
+      request.register({ method: 'POST', data: { username, password } }).then(res => {
         message.success('注册成功，请登录！')
         setIsLogin(true)
         form.setFields([

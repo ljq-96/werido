@@ -18,8 +18,8 @@ function UserCard({ id, children }: IProps) {
 
   useEffect(() => {
     setLoading(true)
-    request.detail
-      .get(`user/${id}`)
+    request
+      .detail({ method: 'GET', query: `user/${id}` })
       .then(setUser)
       .finally(() => setLoading(false))
   }, [id, loginUser])

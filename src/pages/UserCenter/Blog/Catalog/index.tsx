@@ -22,13 +22,17 @@ function UserCenterBlogCatalog() {
   const onChange = async (nextTargetKeys: string[], direction: TransferDirection, moveKeys: string[]) => {
     setLoading(true)
     if (direction === 'left') {
-      await Promise.all(moveKeys.map(item => request.blog.put({ _id: item, inCatalog: true })))
+      await Promise.all(moveKeys.map(item => request.blog({ method: 'PUT', query: item, data: { inCatalog: true } })))
       const _treeData = [...treeData, ...dataSource.filter(item => moveKeys.includes(item._id))]
       setTreeData(_treeData)
-      await request.docIndex.put({ _id: DocIndexType.文章, content: JSON.stringify(extract(_treeData)) })
+      await request.docIndex({
+        method: 'PUT',
+        query: DocIndexType.文章,
+        data: { content: JSON.stringify(extract(_treeData)) },
+      })
     }
     if (direction === 'right') {
-      await Promise.all(moveKeys.map(item => request.blog.put({ _id: item, inCatalog: false })))
+      await Promise.all(moveKeys.map(item => request.blog({ method: 'PUT', query: item, data: { inCatalog: false } })))
       const walk = tree => {
         for (let i = 0; i < tree.length; i++) {
           if (tree[i].children?.length > 0) walk(tree[i].children)
@@ -39,7 +43,11 @@ function UserCenterBlogCatalog() {
         }
       }
       walk(treeData)
-      await request.docIndex.put({ _id: DocIndexType.文章, content: JSON.stringify(extract(treeData)) })
+      await request.docIndex({
+        method: 'PUT',
+        query: DocIndexType.文章,
+        data: { content: JSON.stringify(extract(treeData)) },
+      })
       setTreeData([...treeData])
     }
     setTargetKeys(nextTargetKeys)
@@ -105,13 +113,13 @@ function UserCenterBlogCatalog() {
         ar.splice(i! + 1, 0, dragObj!)
       }
     }
-    request.docIndex.put({ _id: DocIndexType.文章, content: JSON.stringify(extract(data)) })
+    request.docIndex({ method: 'PUT', query: DocIndexType.文章, data: { content: JSON.stringify(extract(data)) } })
     setTreeData(data)
   }
 
   useEffect(() => {
     setLoading(true)
-    Promise.all([request.blog.get({ size: 100000 }), getCatalog()])
+    Promise.all([request.blog({ method: 'GET', params: { size: 100000 } }), getCatalog()])
       .then(([res1, res2]) => {
         setDataSoure(
           res1.list.map(item => ({

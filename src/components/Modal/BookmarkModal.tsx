@@ -34,14 +34,18 @@ function BookmarkModal(props: IProps) {
       const iconStr = icon ? (icon?.originFileObj ? await getBase64(icon?.originFileObj) : icon?.thumbUrl) : null
       fields.icon = iconStr
       if (typeof visible === 'object') {
-        await request.bookmark.put({
-          _id: visible._id,
-          ...fields,
+        await request.bookmark({
+          method: 'PUT',
+          query: visible._id,
+          data: fields,
         })
         message.success('更新成功')
       } else {
         fields.parent = fields.parent[0]
-        await request.bookmark.post(fields)
+        await request.bookmark({
+          method: 'POST',
+          data: fields,
+        })
         message.success('添加成功')
       }
 

@@ -1,11 +1,10 @@
 import { WeiboOutlined, ZhihuOutlined } from '@ant-design/icons'
-import { Avatar, Card, List, Segmented, Skeleton } from 'antd'
+import { Avatar, Card, List, Segmented } from 'antd'
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { ITops } from '../../../types'
 import { TopsType } from '../../../types/enum'
 import { request } from '../../api'
-import { TranslateY } from '../Animation'
 import './style.less'
 
 function Tops() {
@@ -15,10 +14,8 @@ function Tops() {
 
   useEffect(() => {
     setLoading(true)
-    console.log(current)
-
-    request.tops
-      .get(current)
+    request
+      .tops({ method: 'GET', query: current })
       .then(setList)
       .finally(() => setLoading(false))
   }, [current])
