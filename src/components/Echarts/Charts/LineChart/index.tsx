@@ -27,8 +27,8 @@ function LineChart(props: IProps) {
         },
         grid: {
           left: '10px',
-          top: '30px',
-          right: '0px',
+          top: 5,
+          right: 25,
           bottom: 0,
           containLabel: true,
         },

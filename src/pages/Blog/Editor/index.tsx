@@ -1,5 +1,5 @@
-import { PageContainer } from '@ant-design/pro-layout'
-import { Affix, Button, Form, Input, message, PageHeader, Select, Space } from 'antd'
+import { PageContainer, PageHeader } from '@ant-design/pro-layout'
+import { Affix, Button, Form, Input, message, Select, Space } from 'antd'
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSearchParam } from 'react-use'
@@ -15,7 +15,6 @@ const BlogEditor = () => {
   const editor = useRef<EditorIntance>(null)
   const navigate = useNavigate()
   const [form] = Form.useForm()
-
   const tagOptions = useMemo(() => {
     return tags.map(item => ({ label: item.name, value: item.name }))
   }, [tags])

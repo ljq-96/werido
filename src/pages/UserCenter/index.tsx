@@ -21,9 +21,11 @@ function UserCenterLayout(props: PageProps) {
             <div>
               <TranslateX>
                 <UserCard id={user?._id}>
-                  <Button type='primary' block shape='round'>
-                    我的主页
-                  </Button>
+                  <div>
+                    <Button type='primary' block>
+                      我的主页
+                    </Button>
+                  </div>
                 </UserCard>
               </TranslateX>
             </div>

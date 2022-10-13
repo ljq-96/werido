@@ -1,6 +1,6 @@
-import { AutoComplete, Button, Dropdown, Form, Input, Menu, message, Modal, Popover, Select, Tooltip } from 'antd'
+import { AutoComplete, Button, Dropdown, Form, Input, Menu, message, Modal, Upload, Select, Tooltip } from 'antd'
 import ImgCrop from 'antd-img-crop'
-import Upload, { RcFile, UploadFile } from 'antd/lib/upload'
+import { RcFile, UploadFile } from 'antd/es/upload'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { IBookmark } from '../../../types'
 import { request } from '../../api'

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import routes from './routes'
 import { ConfigProvider } from 'antd'
 import UserProvider from './contexts/useUser'
-import zhCN from 'antd/lib/locale/zh_CN'
+import zhCN from 'antd/es/locale/zh_CN'
 import 'moment/dist/locale/zh-cn'
 import StoreProvider from './contexts/useStore'
 

@@ -1,6 +1,6 @@
 import { CheckCircleOutlined, EditOutlined, RollbackOutlined } from '@ant-design/icons'
-import { PageContainer } from '@ant-design/pro-layout'
-import { Button, Card, Col, Form, Input, message, Row, Select, Space, Tag, Affix, PageHeader, Spin } from 'antd'
+import { PageContainer, PageHeader } from '@ant-design/pro-layout'
+import { Button, Card, Col, Form, Input, message, Row, Select, Space, Tag, Affix, Spin } from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { IBlog } from '../../../../types'
@@ -20,7 +20,6 @@ function BlogDetail() {
   const { id } = useParams()
   const editor = useRef<EditorIntance>()
   const navigate = useNavigate()
-
   const tagOptions = useMemo(() => {
     return tags.map(item => ({ label: item.name, value: item.name }))
   }, [tags])

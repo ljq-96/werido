@@ -37,11 +37,13 @@ import {
   Menu,
   Modal,
   Popconfirm,
+  Select,
   Tooltip,
   Typography,
   Upload,
 } from 'antd'
 import { EditorRef, UseEditorReturn } from '@milkdown/react'
+import { TranslateX } from '../../../Animation'
 
 export type Controls =
   | 'undo'
@@ -63,7 +65,7 @@ export type Controls =
   | 'iframe'
   | 'fullScreen'
 
-type ActivedButton = 'strong' | 'link' | 'em' | 'code_inline'
+type ActivedButton = 'strong' | 'link' | 'em' | 'code_inline' | 'strike_through'
 
 const { Text } = Typography
 
@@ -88,6 +90,7 @@ const MenuItem = ({ title, subTitle }: { title: string; subTitle: string }) => {
 
 function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
   const [activeBtns, setActiveBtns] = useState<Set<ActivedButton>>(new Set())
+  const [activeText, setActiveText] = useState('0')
   const [showIframe, setShowIframe] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [iframeForm] = Form.useForm()
@@ -166,6 +169,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
       } else {
         editor.action(ctx => ctx.get(commandsCtx).call(commands.TurnIntoHeading, level))
       }
+      setActiveText(level)
     }
 
     /** 分割线 */
@@ -239,7 +243,12 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
         action: toggleStrikeThrough,
         element: (
           <Tooltip title='删除线' placement='bottom'>
-            <Button type='text' onClick={toggleStrikeThrough} icon={<StrikethroughOutlined />} />
+            <Button
+              type='text'
+              onClick={toggleStrikeThrough}
+              icon={<StrikethroughOutlined />}
+              className={activeBtns.has('strike_through') ? 'active' : ''}
+            />
           </Tooltip>
         ),
       },
@@ -323,23 +332,25 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
         action: toggleText,
         element: (
           <Dropdown
-            arrow
             overlay={
               <Menu
+                activeKey={activeText}
                 items={[
-                  { label: <MenuItem title='正文' subTitle='Ctrl+Alt+0' />, key: 0 },
-                  { label: <MenuItem title='H1' subTitle='Ctrl+Alt+1' />, key: 1 },
-                  { label: <MenuItem title='H2' subTitle='Ctrl+Alt+2' />, key: 2 },
-                  { label: <MenuItem title='H3' subTitle='Ctrl+Alt+3' />, key: 3 },
-                  { label: <MenuItem title='H4' subTitle='Ctrl+Alt+4' />, key: 4 },
-                  { label: <MenuItem title='H5' subTitle='Ctrl+Alt+5' />, key: 5 },
+                  { label: <MenuItem title='正文' subTitle='Ctrl+Alt+0' />, key: '0' },
+                  { label: <MenuItem title='标题1' subTitle='Ctrl+Alt+1' />, key: '1' },
+                  { label: <MenuItem title='标题2' subTitle='Ctrl+Alt+2' />, key: '2' },
+                  { label: <MenuItem title='标题3' subTitle='Ctrl+Alt+3' />, key: '3' },
+                  { label: <MenuItem title='标题4' subTitle='Ctrl+Alt+4' />, key: '4' },
+                  { label: <MenuItem title='标题5' subTitle='Ctrl+Alt+5' />, key: '5' },
                 ]}
                 onClick={({ key }) => toggleText(key)}
               />
             }
           >
-            <Button type='text' icon={<BorderlessTableOutlined />}>
-              文本
+            <Button type='text' icon={<BorderlessTableOutlined />} style={{ width: 90, textAlign: 'left' }}>
+              <TranslateX distance={10} key={activeText}>
+                {activeText === '0' ? '正文' : `标题${activeText}`}
+              </TranslateX>
             </Button>
           </Dropdown>
         ),
@@ -420,7 +431,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
         ),
       },
     }
-  }, [editor, showIframe, isFullScreen, dom])
+  }, [editor, showIframe, isFullScreen, dom, activeBtns, activeText])
 
   useEffect(() => {
     const getState = () => {
@@ -434,6 +445,13 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
         })
         if (!isSameSet(activeBtns, _activeBtns)) {
           setActiveBtns(_activeBtns)
+        }
+        const { $from, $to } = state.selection
+
+        if ($from.parent.attrs?.level === $to.parent.attrs?.level) {
+          setActiveText($from.parent.attrs?.level?.toString() || '0')
+        } else {
+          setActiveText('0')
         }
       })
     }

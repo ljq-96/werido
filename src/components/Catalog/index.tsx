@@ -1,4 +1,4 @@
-import { CalendarOutlined, FileOutlined, FolderOpenOutlined, FolderOutlined, SettingOutlined } from '@ant-design/icons'
+import { FileTextOutlined, FolderOpenOutlined, FolderOutlined, SettingOutlined } from '@ant-design/icons'
 import { Empty, Spin, Tree, TreeProps } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -30,13 +30,11 @@ function Catalog(props: TreeProps) {
       className='catalog-tree'
       blockNode
       draggable
-      showIcon={false}
       treeData={catalog as any}
       fieldNames={{ key: '_id' }}
       defaultExpandAll
       selectedKeys={[]}
-      showLine
-      icon={false}
+      showLine={{ showLeafIcon: <FileTextOutlined /> }}
       switcherIcon={e =>
         e?.expanded ? (
           <FolderOpenOutlined style={{ fontSize: 16, color: 'unset', transform: 'translateY(3px)' }} />
