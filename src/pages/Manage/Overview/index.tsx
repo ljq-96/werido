@@ -10,6 +10,7 @@ import LineChart from '../../../components/Echarts/Charts/LineChart'
 import BarChart from '../../../components/Echarts/Charts/BarChart'
 import TodoScatterChart from '../../../components/Echarts/Charts/TodoScatterChart'
 import WordCloudChart from '../../../components/Echarts/Charts/WordCloudChart'
+import { CalendarOutlined, FileTextOutlined, TagsOutlined, UserOutlined } from '@ant-design/icons'
 
 function Dashboard() {
   const {
@@ -59,6 +60,7 @@ function Dashboard() {
           <TranslateX delay={200}>
             <StatisticsCard
               title='用户数量'
+              extra={<UserOutlined />}
               count={statistics?.userCount}
               subTitle='今日活跃'
               subCount={statistics?.dailyActiveUserCount}
@@ -70,6 +72,7 @@ function Dashboard() {
           <TranslateY>
             <StatisticsCard
               title='文章数量'
+              extra={<FileTextOutlined />}
               count={statistics?.blogCount}
               subTitle='本月新增'
               subCount={statistics?.blogMonthIncreased}
@@ -81,6 +84,7 @@ function Dashboard() {
           <TranslateY>
             <StatisticsCard
               title='书签数量'
+              extra={<TagsOutlined />}
               count={statistics?.bookmarkCount}
               subTitle='本月新增'
               subCount={statistics?.bookmarkMonthIncreased}
@@ -92,6 +96,7 @@ function Dashboard() {
           <TranslateX delay={200} distance={20}>
             <StatisticsCard
               title='日程总数'
+              extra={<CalendarOutlined />}
               count={statistics?.todoCount}
               subTitle='待办'
               subCount={statistics?.unTodoCount}

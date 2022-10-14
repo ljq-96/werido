@@ -18,6 +18,9 @@ const apiList = {
 const adminApi = {
   statistics: '/api/admin/statistics',
   user: '/api/admin/user',
+  blog: '/api/admin/blog',
+  bookmark: '/api/admin/bookmark',
+  todo: '/api/admin/todo',
 }
 
 const request = {

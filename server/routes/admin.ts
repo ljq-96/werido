@@ -35,6 +35,89 @@ export class UserManageRoute {
   }
 }
 
+@Controller('/api/admin/bookmark')
+@UnifyUse(validateToken)
+@UnifyUse(isAdmin)
+export class BookmarkManageRoute {
+  @Get()
+  async getBookmarkList(ctx: RouterCtx) {
+    const { page = 1, size = 1000, ...reset } = ctx.request.query
+    const list = await BookmarkModel.find({ ...reset, type: DocType.文档 })
+      .populate('creator')
+      .skip((page - 1) * size)
+      .limit(Number(size))
+    const total = await BookmarkModel.find({ ...reset, type: DocType.文档 }).countDocuments()
+    ctx.body = { list, page, size, total }
+  }
+
+  @Delete('/:id')
+  async deleteBookmark(ctx: RouterCtx) {
+    const { id } = ctx.request.params
+    const user = await BookmarkModel.deleteOne({ _id: id })
+    ctx.body = user
+  }
+}
+
+@Controller('/api/admin/todo')
+@UnifyUse(validateToken)
+@UnifyUse(isAdmin)
+class TodoRoute {
+  @Get()
+  async getTodoList(ctx: RouterCtx) {
+    const { page = 1, size = 1000, ...reset } = ctx.request.query
+    const list = await TodoModel.find({ ...reset })
+      .populate('creator')
+      .skip((page - 1) * size)
+      .limit(Number(size))
+    const total = await TodoModel.find({ ...reset }).countDocuments()
+    ctx.body = { list, page, size, total }
+  }
+
+  @Put('/:id')
+  async updateTodo(ctx: RouterCtx) {
+    const { id } = ctx.request.params
+    const todo = await TodoModel.findOneAndUpdate({ _id: id }, ctx.request.body)
+    ctx.body = todo
+  }
+
+  @Delete('/:id')
+  async deleteTodo(ctx: RouterCtx) {
+    const { id } = ctx.request.params
+    const todo = await TodoModel.findOneAndDelete({ _id: id })
+    ctx.body = todo
+  }
+}
+
+@Controller('/api/admin/blog')
+@UnifyUse(validateToken)
+@UnifyUse(isAdmin)
+class BlogManageRoute {
+  @Get()
+  async getBlogList(ctx: RouterCtx) {
+    const { page = 1, size = 1000, ...reset } = ctx.request.query
+    const list = await BlogModel.find({ ...reset })
+      .populate('creator')
+      .skip((page - 1) * size)
+      .limit(Number(size))
+    const total = await BlogModel.find({ ...reset }).countDocuments()
+    ctx.body = { list, page, size, total }
+  }
+
+  @Put('/:id')
+  async updateBlog(ctx: RouterCtx) {
+    const { id } = ctx.request.params
+    const todo = await BlogModel.findOneAndUpdate({ _id: id }, ctx.request.body)
+    ctx.body = todo
+  }
+
+  @Delete('/:id')
+  async deleteBlog(ctx: RouterCtx) {
+    const { id } = ctx.request.params
+    const todo = await BlogModel.findOneAndDelete({ _id: id })
+    ctx.body = todo
+  }
+}
+
 @Controller('/api/admin/statistics')
 @UnifyUse(validateToken)
 @UnifyUse(isAdmin)
