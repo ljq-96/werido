@@ -87,7 +87,7 @@ function UsersManage() {
             >
               编辑
             </Button>
-            <Button type='link' danger onClick={() => handleDelete(record._id)}>
+            <Button type='link' onClick={() => handleDelete(record._id)}>
               删除
             </Button>
           </Space>
@@ -120,7 +120,7 @@ function UsersManage() {
           form.resetFields()
         }}
       >
-        <Form form={form} labelCol={{ style: { width: 70 } }} onFinish={handleSubmit}>
+        <Form form={form} labelCol={{ style: { width: 70 } }} onFinish={handleSubmit} autoComplete={'false'}>
           <Form.Item label='用户名' name='username' rules={[{ required: true, message: '请输入用户名！' }]}>
             <Input placeholder='请输入用户名' />
           </Form.Item>
