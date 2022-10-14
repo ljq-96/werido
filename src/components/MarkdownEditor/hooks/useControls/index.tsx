@@ -348,9 +348,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
             }
           >
             <Button type='text' icon={<BorderlessTableOutlined />} style={{ width: 90, textAlign: 'left' }}>
-              <TranslateX distance={10} key={activeText}>
-                {activeText === '0' ? '正文' : `标题${activeText}`}
-              </TranslateX>
+              {activeText === '0' ? '正文' : `标题${activeText}`}
             </Button>
           </Dropdown>
         ),

@@ -10,6 +10,7 @@ import {
   TeamOutlined,
   TagOutlined,
   TagsOutlined,
+  CalendarOutlined,
 } from '@ant-design/icons'
 import { useNavigate, Outlet } from 'react-router-dom'
 import Layout from '../layout'
@@ -38,7 +39,7 @@ const routes: RouteProps[] = [
     component: Layout,
     routes: [
       {
-        path: '/home',
+        path: '/',
         name: '首页',
         icon: <HomeOutlined />,
         component: lazy(() => import('../pages/Home')),
@@ -70,6 +71,7 @@ const routes: RouteProps[] = [
       {
         path: '/user_center',
         name: '用户中心',
+        hide: true,
         icon: <UserOutlined />,
         component: lazy(() => import('../pages/UserCenter')),
         routes: [
@@ -117,9 +119,9 @@ const routes: RouteProps[] = [
       },
       {
         path: '/to_manage',
-        name: '管理系统',
+        redirect: '/manage/overview',
+        name: '后台管理',
         icon: <LaptopOutlined />,
-        component: () => <Redirect to='/manage/overview' />,
       },
     ],
   },
@@ -129,9 +131,9 @@ const routes: RouteProps[] = [
     routes: [
       {
         path: '/manage/to_home',
-        name: '返回首页',
+        redirect: '/',
+        name: '返回前台',
         icon: <RollbackOutlined />,
-        component: () => <Redirect to='/home' />,
       },
       {
         path: '/manage/overview',
@@ -150,6 +152,18 @@ const routes: RouteProps[] = [
         name: '新建文章',
         hide: true,
         component: lazy(() => import('../pages/Manage/Blog/Editor')),
+      },
+      {
+        path: '/manage/bookmark',
+        name: '书签管理',
+        icon: <TagsOutlined />,
+        component: lazy(() => import('../pages/Manage/Bookmark')),
+      },
+      {
+        path: '/manage/todo',
+        name: '日程管理',
+        icon: <CalendarOutlined />,
+        component: lazy(() => import('../pages/Manage/Todo')),
       },
       {
         path: '/manage/users',

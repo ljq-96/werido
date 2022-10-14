@@ -1,20 +1,7 @@
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import ProLayout, { DefaultFooter, PageContainer } from '@ant-design/pro-layout'
-import { LogoutOutlined, SettingFilled, UserOutlined } from '@ant-design/icons'
-import {
-  ConfigProvider,
-  Menu,
-  Layout,
-  Space,
-  Button,
-  Avatar,
-  Dropdown,
-  Drawer,
-  Segmented,
-  Card,
-  message,
-  Spin,
-} from 'antd'
+import { LogoutOutlined, RightOutlined, SettingFilled, UserOutlined } from '@ant-design/icons'
+import { ConfigProvider, Space, Button, Drawer, Card, message } from 'antd'
 import { Link, Outlet, useNavigate, useLocation, useMatch } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { useUser } from '../contexts/useUser'
@@ -24,7 +11,6 @@ import { basicUserView } from '../contexts/useUser/actions'
 import { PageProps, RouteProps } from '../../types'
 import Loading from '../components/Loading'
 import * as colors from '@ant-design/colors'
-import { TranslateX } from '../components/Animation'
 import './style.less'
 import '../assets/css/index.less'
 
@@ -32,7 +18,6 @@ export default (props: PageProps) => {
   const { route } = props
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const [collapsed, setCollapsed] = useState(true)
   const [showColorDrawer, setShowColorDrawer] = useState(false)
   const [loading, setLoading] = useState(false)
   const [loginUser, { dispatch, getUser }] = useUser()
@@ -90,21 +75,24 @@ export default (props: PageProps) => {
 
   return (
     <ProLayout
+      loading={loading}
       className='layout'
-      layout='mix'
-      fixedHeader={false}
+      fixedHeader={true}
       splitMenus={false}
-      onCollapse={setCollapsed}
-      collapsed={collapsed}
-      breakpoint={false}
+      siderWidth={180}
+      breakpoint='lg'
       title='Werido'
       logo={<Logo style={{ width: 32 }} color={loginUser?.themeColor} />}
+      layout={route.path === '/manage' ? 'mix' : 'top'}
+      contentWidth={route.path === '/manage' ? 'Fluid' : 'Fixed'}
       route={currentRoutes}
       menuItemRender={(item, dom) => <Link to={item.path}>{dom}</Link>}
       location={{ pathname }}
+      onMenuHeaderClick={() => navigate('/')}
       avatarProps={{
         src: loginUser?.avatar,
         title: loginUser?.username,
+        onClick: () => navigate('/user_center'),
       }}
       actionsRender={({}) => {
         return [
@@ -114,7 +102,7 @@ export default (props: PageProps) => {
       }}
     >
       <Suspense fallback={<Loading />}>
-        {loading && !loginUser ? <Loading /> : <Outlet />}
+        {loginUser && <Outlet />}
         <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
       </Suspense>
       <Drawer

@@ -47,9 +47,10 @@ export type QueryList<T = any> = {
 
 export interface RouteProps {
   path: string
+  redirect?: string
   name?: string
   icon?: JSX.Element
-  component?: ComponentType | LazyExoticComponent<any>
+  component?: ComponentType<any> | LazyExoticComponent<any>
   hide?: boolean
   routes?: RouteProps[]
 }
