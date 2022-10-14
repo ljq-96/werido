@@ -1,37 +1,46 @@
 import { InfoCircleOutlined } from '@ant-design/icons'
 import { Button, Dropdown, Form, Input, Menu, message, Modal, Segmented, Space, Tag } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IBlog, IUser } from '../../../../../types'
 import { request } from '../../../../api'
 import CommonTable, { CommonTableInstance, ToolItem } from '../../../../components/CommonTable'
 import { formatTime } from '../../../../utils/common'
-import { TranslateX } from '../../../../components/Animation'
-
-const toolList: ToolItem[] = [
-  {
-    type: 'input',
-    name: 'username',
-    label: '文章标题',
-  },
-  {
-    type: 'date',
-    name: 'createTime',
-    label: '创建时间',
-  },
-  {
-    type: 'select',
-    name: 'tags',
-    label: '标签',
-  },
-]
+import useRequest from '../../../../hooks/useRequest'
+import { StatisticsType } from '../../../../../types/enum'
 
 function BlogManage() {
   const [showModal, setShowModal] = useState<boolean | IUser>(false)
   const [form] = Form.useForm()
   const tableRef = useRef<CommonTableInstance>(null)
   const navigate = useNavigate()
+  const { data: tags, execute: getTags } = useRequest(() =>
+    request.admin.statistics({ method: 'GET', query: StatisticsType.文章标签 }),
+  )
+
+  const toolList = useMemo<ToolItem[]>(() => {
+    return [
+      {
+        type: 'input',
+        name: 'username',
+        label: '文章标题',
+      },
+      {
+        type: 'date',
+        name: 'createTime',
+        label: '创建时间',
+      },
+      {
+        type: 'select',
+        name: 'tags',
+        label: '标签',
+        childrenProps: {
+          options: tags?.map(item => ({ label: item.name, value: item.name })),
+        },
+      },
+    ]
+  }, [tags])
 
   const handleDelete = (id: string) => {
     Modal.confirm({
@@ -59,22 +68,8 @@ function BlogManage() {
       dataIndex: 'title',
     },
     {
-      title: '标签',
-      dataIndex: 'tags',
-      render: (val: string[]) =>
-        val?.length ? (
-          <Space wrap size={[0, 8]}>
-            {val.map((item, index) => (
-              <TranslateX key={item} delay={index * 100 + 200}>
-                <Tag className='werido-tag' key={item}>
-                  {item}
-                </Tag>
-              </TranslateX>
-            ))}
-          </Space>
-        ) : (
-          '--'
-        ),
+      title: '标题',
+      dataIndex: 'title',
     },
     {
       title: '字数',
@@ -117,11 +112,15 @@ function BlogManage() {
     },
   ]
 
+  useEffect(() => {
+    getTags()
+  }, [])
+
   return (
     <Fragment>
       <CommonTable
         ref={tableRef}
-        request={request.blog}
+        request={request.admin.blog}
         title={() => '文章管理'}
         extra={
           <Space>
