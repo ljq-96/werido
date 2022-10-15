@@ -7,7 +7,7 @@ import { IBlog, IUser } from '../../../../../types'
 import { request } from '../../../../api'
 import CommonTable, { CommonTableInstance, ToolItem } from '../../../../components/CommonTable'
 import { formatTime } from '../../../../utils/common'
-import useRequest from '../../../../hooks/useRequest'
+import { useRequest } from '../../../../hooks'
 import { StatisticsType } from '../../../../../types/enum'
 
 function BlogManage() {
@@ -136,7 +136,7 @@ function BlogManage() {
 
       <Modal
         title={`${typeof showModal === 'boolean' ? '新增' : '编辑'}用户`}
-        visible={!!showModal}
+        open={!!showModal}
         onOk={form.submit}
         onCancel={() => {
           setShowModal(false)

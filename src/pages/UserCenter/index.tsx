@@ -5,6 +5,7 @@ import { PageProps } from '../../../types'
 import { TranslateX } from '../../components/Animation'
 import UserCard from '../../components/UserCard'
 import { useUser } from '../../contexts/useUser'
+import { useParseRoute } from '../../hooks'
 import './style.less'
 
 function UserCenterLayout(props: PageProps) {
@@ -12,6 +13,10 @@ function UserCenterLayout(props: PageProps) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const [user] = useUser()
+  console.log(route)
+
+  const parsedRoute = useParseRoute(route, { showAll: true })
+  console.log(parsedRoute)
 
   return (
     <Fragment>
@@ -22,7 +27,7 @@ function UserCenterLayout(props: PageProps) {
               <TranslateX>
                 <UserCard id={user?._id}>
                   <div>
-                    <Button type='primary' block>
+                    <Button type='primary' block shape='round'>
                       我的主页
                     </Button>
                   </div>
@@ -36,10 +41,10 @@ function UserCenterLayout(props: PageProps) {
             <Card style={{ marginBottom: 16 }}>
               <Menu
                 mode={'horizontal'}
-                activeKey={pathname}
+                selectedKeys={[pathname]}
                 style={{ marginBottom: 16 }}
                 onClick={e => navigate(e.key)}
-                items={route.routes.map(item => ({
+                items={parsedRoute.routes.map(item => ({
                   label: item.name,
                   key: item.path,
                   icon: item.icon,

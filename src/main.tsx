@@ -8,14 +8,15 @@ import 'moment/dist/locale/zh-cn'
 import StoreProvider from './contexts/useStore'
 import { RouteProps } from '../types'
 
-const parseRoute = (route: RouteProps) => {
+const parseRoute = (route: RouteProps, basePath = '') => {
+  const path = `/${basePath}/${route.path}`.replace(/\/+/g, '/')
   return (
     <Route
-      key={route.path}
-      path={route.path}
+      key={path}
+      path={path}
       element={route.redirect ? <Navigate replace to={route.redirect} /> : <route.component route={route} />}
     >
-      {route?.routes?.map(item => parseRoute(item))}
+      {route?.routes?.map(item => parseRoute(item, path))}
     </Route>
   )
 }

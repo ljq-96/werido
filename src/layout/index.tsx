@@ -13,6 +13,7 @@ import Loading from '../components/Loading'
 import * as colors from '@ant-design/colors'
 import './style.less'
 import '../assets/css/index.less'
+import { useParseRoute } from '../hooks'
 
 export default (props: PageProps) => {
   const { route } = props
@@ -21,21 +22,7 @@ export default (props: PageProps) => {
   const [showColorDrawer, setShowColorDrawer] = useState(false)
   const [loading, setLoading] = useState(false)
   const [loginUser, { dispatch, getUser }] = useUser()
-
-  const currentRoutes = useMemo(() => {
-    function parseRoute(item: RouteProps) {
-      const { routes } = item
-      if (routes) {
-        return {
-          ...item,
-          routes: routes.filter(item => !item.hide).map(item => parseRoute(item)),
-        }
-      }
-      return item
-    }
-
-    return parseRoute(route)
-  }, [pathname, route])
+  const currentRoutes = useParseRoute(route)
 
   const getMyProfile = () => {
     setLoading(true)
@@ -107,7 +94,7 @@ export default (props: PageProps) => {
       </Suspense>
       <Drawer
         className='color-drawer'
-        visible={showColorDrawer}
+        open={showColorDrawer}
         width={300}
         mask={false}
         onClose={handleDrawer}

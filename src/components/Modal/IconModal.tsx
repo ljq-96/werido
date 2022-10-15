@@ -166,7 +166,7 @@ export default (props: IProps) => {
   return (
     <Modal
       title={title}
-      visible={visible}
+      open={visible}
       width={530}
       onCancel={e => {
         onCancel()

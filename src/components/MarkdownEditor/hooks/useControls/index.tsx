@@ -390,7 +390,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
 
             <Modal
               title='Iframe'
-              visible={showIframe}
+              open={showIframe}
               onCancel={() => {
                 setShowIframe(false)
                 iframeForm.resetFields()

@@ -78,89 +78,91 @@ function CalendarWeek() {
       <Spin spinning={loading} className='calendar-week-body-wrapper'>
         <div className='calendar-week-body'>
           <table>
-            {Array(24)
-              .fill(1)
-              .map((_, index) => (
-                <tr className='calendar-week-body-x' key={index}>
-                  <td className='calendar-week-body-x-info'>
-                    {index % 2 === 0 && (
-                      <div>
-                        {index <= 9 ? 0 : ''}
-                        {index}:00
-                      </div>
-                    )}
-                  </td>
-                  {days.map((item, j) => (
-                    <td className='calendar-week-body-y' key={'' + index + j} style={{ height: HOUR_HEIGHT }}>
-                      {index === 0 &&
-                        item.todos?.length > 0 &&
-                        item.todos.map(todos =>
-                          todos.map((todo, k) => (
-                            <Popover
-                              trigger={['click']}
-                              placement='leftTop'
-                              getPopupContainer={el => el.parentElement}
-                              content={
-                                <div className='calendar-week-body-event-detail'>
-                                  <div className='calendar-week-body-event-detail-time'>
-                                    <Badge
-                                      status={todo.end.valueOf() < moment().valueOf() ? 'default' : 'processing'}
-                                      text={`${todo.start.format('MM.DD HH:mm')} - ${todo.end.format('MM.DD HH:mm')}`}
-                                    />
-                                  </div>
-                                  <div className='calendar-week-body-event-detail-content'>{todo.description}</div>
-                                  <div>
-                                    <Button
-                                      type='link'
-                                      size='small'
-                                      onClick={() =>
-                                        onAction?.({
-                                          type: 'edit',
-                                          todo: { ...todo, start: todo.start.format(), end: todo.end.format() },
-                                        })
-                                      }
-                                    >
-                                      编辑
-                                    </Button>
-                                    <Button
-                                      type='link'
-                                      size='small'
-                                      onClick={() =>
-                                        onAction?.({
-                                          type: 'delete',
-                                          todo: { ...todo, start: todo.start.format(), end: todo.end.format() },
-                                        })
-                                      }
-                                    >
-                                      删除
-                                    </Button>
-                                  </div>
-                                </div>
-                              }
-                            >
-                              <div
-                                className='calendar-week-body-events'
-                                style={{
-                                  position: 'absolute',
-                                  width: `calc(${(1 / todos.length) * 100}% - ${(todos.length - 1) * 2}px)`,
-                                  height: ((todo.end.valueOf() - todo.start.valueOf()) / 3600_000) * HOUR_HEIGHT,
-                                  top:
-                                    ((todo.start.valueOf() - moment(todo.start).startOf('day').valueOf()) / 3600000) *
-                                    HOUR_HEIGHT,
-                                  left: `calc(${(k / todos.length) * 100}% + ${k * 2}px)`,
-                                  backgroundColor: todo.end.valueOf() < moment().valueOf() ? '#f5f5f5' : undefined,
-                                  borderColor: todo.end.valueOf() < moment().valueOf() ? '#aaa' : undefined,
-                                }}
-                              >
-                                {todo.description}
-                              </div>
-                            </Popover>
-                          )),
-                        )}
+            <tbody>
+              {Array(24)
+                .fill(1)
+                .map((_, index) => (
+                  <tr className='calendar-week-body-x' key={index}>
+                    <td className='calendar-week-body-x-info'>
+                      {index % 2 === 0 && (
+                        <div>
+                          {index <= 9 ? 0 : ''}
+                          {index}:00
+                        </div>
+                      )}
                     </td>
-                  ))}
-                </tr>
-              ))}
+                    {days.map((item, j) => (
+                      <td className='calendar-week-body-y' key={'' + index + j} style={{ height: HOUR_HEIGHT }}>
+                        {index === 0 &&
+                          item.todos?.length > 0 &&
+                          item.todos.map(todos =>
+                            todos.map((todo, k) => (
+                              <Popover
+                                trigger={['click']}
+                                placement='leftTop'
+                                getPopupContainer={el => el.parentElement}
+                                content={
+                                  <div className='calendar-week-body-event-detail'>
+                                    <div className='calendar-week-body-event-detail-time'>
+                                      <Badge
+                                        status={todo.end.valueOf() < moment().valueOf() ? 'default' : 'processing'}
+                                        text={`${todo.start.format('MM.DD HH:mm')} - ${todo.end.format('MM.DD HH:mm')}`}
+                                      />
+                                    </div>
+                                    <div className='calendar-week-body-event-detail-content'>{todo.description}</div>
+                                    <div>
+                                      <Button
+                                        type='link'
+                                        size='small'
+                                        onClick={() =>
+                                          onAction?.({
+                                            type: 'edit',
+                                            todo: { ...todo, start: todo.start.format(), end: todo.end.format() },
+                                          })
+                                        }
+                                      >
+                                        编辑
+                                      </Button>
+                                      <Button
+                                        type='link'
+                                        size='small'
+                                        onClick={() =>
+                                          onAction?.({
+                                            type: 'delete',
+                                            todo: { ...todo, start: todo.start.format(), end: todo.end.format() },
+                                          })
+                                        }
+                                      >
+                                        删除
+                                      </Button>
+                                    </div>
+                                  </div>
+                                }
+                              >
+                                <div
+                                  className='calendar-week-body-events'
+                                  style={{
+                                    position: 'absolute',
+                                    width: `calc(${(1 / todos.length) * 100}% - ${(todos.length - 1) * 2}px)`,
+                                    height: ((todo.end.valueOf() - todo.start.valueOf()) / 3600_000) * HOUR_HEIGHT,
+                                    top:
+                                      ((todo.start.valueOf() - moment(todo.start).startOf('day').valueOf()) / 3600000) *
+                                      HOUR_HEIGHT,
+                                    left: `calc(${(k / todos.length) * 100}% + ${k * 2}px)`,
+                                    backgroundColor: todo.end.valueOf() < moment().valueOf() ? '#f5f5f5' : undefined,
+                                    borderColor: todo.end.valueOf() < moment().valueOf() ? '#aaa' : undefined,
+                                  }}
+                                >
+                                  {todo.description}
+                                </div>
+                              </Popover>
+                            )),
+                          )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+            </tbody>
           </table>
           <div
             className='calendar-week-time'

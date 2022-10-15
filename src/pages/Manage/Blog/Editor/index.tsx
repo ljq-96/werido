@@ -66,7 +66,7 @@ const BlogEditor = () => {
         ghost={false}
         style={{ margin: '-16px -16px 16px' }}
         extra={[
-          <Button type='primary' onClick={form.submit} loading={loading}>
+          <Button type='primary' onClick={form.submit} loading={loading} key={1}>
             {id ? '更新' : '保存'}
           </Button>,
         ]}

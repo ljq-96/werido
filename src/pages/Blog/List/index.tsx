@@ -9,7 +9,7 @@ import { TranslateX, TranslateY } from '../../../components/Animation'
 import Catalog from '../../../components/Catalog'
 import { useStore } from '../../../contexts/useStore'
 import { useUser } from '../../../contexts/useUser'
-import useRequest from '../../../hooks/useRequest'
+import { useRequest } from '../../../hooks'
 import BlogItemCard from './components/BlogItemCard'
 
 const SIZE = 20

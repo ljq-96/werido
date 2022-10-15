@@ -141,7 +141,7 @@ function TodoManage() {
 
       <Modal
         title={`编辑日程`}
-        visible={!!showModal}
+        open={!!showModal}
         onOk={form.submit}
         width={500}
         okButtonProps={{ loading: submitLoading }}

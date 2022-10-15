@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { IResponse } from '../../types'
 
-const useRequest = <DataType>(asnycFunction: () => Promise<DataType>, resetData?: boolean) => {
+export const useRequest = <DataType>(asnycFunction: () => Promise<DataType>, resetData?: boolean) => {
   const [data, setData] = useState<DataType>(undefined)
   const [loading, setLoading] = useState(false)
 
@@ -19,5 +19,3 @@ const useRequest = <DataType>(asnycFunction: () => Promise<DataType>, resetData?
 
   return { execute, data, loading }
 }
-
-export default useRequest

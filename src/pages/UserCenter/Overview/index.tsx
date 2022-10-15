@@ -7,7 +7,7 @@ import RoseChart from '../../../components/Echarts/Charts/RoseChart'
 import LineChart from '../../../components/Echarts/Charts/LineChart'
 import { StatisticsType } from '../../../../types/enum'
 import { useStore } from '../../../contexts/useStore'
-import useRequest from '../../../hooks/useRequest'
+import { useRequest } from '../../../hooks'
 import BarChart from '../../../components/Echarts/Charts/BarChart'
 import TodoScatterChart from '../../../components/Echarts/Charts/TodoScatterChart'
 

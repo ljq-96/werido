@@ -87,7 +87,7 @@ function HomeCalendar() {
       />
       <Modal
         title={`${onEditTodo ? '编辑' : '添加'}日程`}
-        visible={!!showModal}
+        open={!!showModal}
         onOk={form.submit}
         width={500}
         okButtonProps={{ loading: submitLoading }}

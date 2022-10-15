@@ -3,7 +3,7 @@ import { SorterResult } from 'antd/lib/table/interface'
 import moment from 'moment'
 import { CSSProperties, forwardRef, Fragment, ReactElement, useEffect, useImperativeHandle, useState } from 'react'
 import { BaseRequest } from '../../api/utils'
-import useRequest from '../../hooks/useRequest'
+import { useRequest } from '../../hooks'
 import { formatTime } from '../../utils/common'
 import { TranslateY } from '../Animation'
 

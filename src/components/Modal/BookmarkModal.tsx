@@ -73,7 +73,7 @@ function BookmarkModal(props: IProps) {
   return (
     <Modal
       title='书签'
-      visible={!!visible}
+      open={!!visible}
       onOk={form.submit}
       okButtonProps={{ loading: onSubmit }}
       onCancel={() => {

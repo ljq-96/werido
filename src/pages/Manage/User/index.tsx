@@ -113,7 +113,7 @@ function UsersManage() {
 
       <Modal
         title={`${typeof showModal === 'boolean' ? '新增' : '编辑'}用户`}
-        visible={!!showModal}
+        open={!!showModal}
         onOk={form.submit}
         onCancel={() => {
           setShowModal(false)

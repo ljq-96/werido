@@ -29,15 +29,12 @@ function Search() {
   return (
     <Card className='search-card'>
       <Tabs
+        items={searchTab.map(item => ({ key: item.title, label: item.title }))}
         onChange={val => {
           const index = searchTab.findIndex(item => item.title === val)
           setCurrent(searchTab[index])
         }}
-      >
-        {searchTab.map(item => (
-          <Tabs.TabPane tab={item.title} key={item.title} />
-        ))}
-      </Tabs>
+      />
       <AutoComplete
         backfill
         options={sugList.map(item => ({ label: item, value: item }))}
