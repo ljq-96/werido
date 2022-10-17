@@ -38,8 +38,8 @@ function UserCenterLayout(props: PageProps) {
         </Col>
         <Col span={18}>
           <TranslateX distance={20}>
-            <Card style={{ marginBottom: 16 }}>
-              <Menu
+            {/* <Card style={{ marginBottom: 16 }}> */}
+            {/* <Menu
                 mode={'horizontal'}
                 selectedKeys={[pathname]}
                 style={{ marginBottom: 16 }}
@@ -53,9 +53,9 @@ function UserCenterLayout(props: PageProps) {
                     key: k.path,
                   })),
                 }))}
-              />
-              <Outlet />
-            </Card>
+              /> */}
+            <Outlet />
+            {/* </Card> */}
           </TranslateX>
         </Col>
       </Row>

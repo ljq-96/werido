@@ -1,9 +1,10 @@
-import { Empty, Spin, Transfer, Tree } from 'antd'
+import { Card, Empty, Spin, Transfer, Tree } from 'antd'
 import { TransferDirection } from 'antd/lib/transfer'
 import { DataNode, TreeProps } from 'antd/lib/tree'
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { DocIndexType } from '../../../../../types/enum'
 import { request } from '../../../../api'
+import { TranslateY } from '../../../../components/Animation'
 import { useStore } from '../../../../contexts/useStore'
 import { extract } from '../../../../utils/common'
 
@@ -138,54 +139,58 @@ function UserCenterBlogCatalog() {
 
   return (
     <Fragment>
-      <Spin spinning={loading}>
-        <Transfer
-          rowKey={({ _id }) => _id}
-          titles={['知识库目录', '未在目录中']}
-          listStyle={{ flex: 1, height: 'calc(100vh - 270px)', borderColor: '#f0f0f0' }}
-          targetKeys={targetKeys}
-          selectedKeys={selectedKeys}
-          dataSource={dataSource}
-          onSelectChange={onSelectChange}
-          onChange={onChange}
-          render={item => item.title}
-          showSelectAll={false}
-          operations={['移出目录', '加入目录']}
-        >
-          {({ direction, onItemSelect, selectedKeys, onItemSelectAll }) => {
-            if (direction === 'left') {
-              return treeData.length ? (
-                <Tree
-                  blockNode
-                  checkable
-                  draggable
-                  showIcon={false}
-                  defaultExpandAll
-                  onDrop={onDrop}
-                  selectedKeys={selectedKeys}
-                  checkedKeys={selectedKeys}
-                  fieldNames={{ key: '_id' }}
-                  treeData={treeData}
-                  onCheck={(keys: any) => {
-                    const unSelect = selectedKeys.filter(item => !keys.includes(item))
-                    onItemSelectAll(keys, true)
-                    onItemSelectAll(unSelect, false)
-                  }}
-                  // onSelect={(keys: any) => {
-                  //   const unSelect = selectedKeys.filter(item => !keys.includes(item))
-                  //   onItemSelectAll(keys, true)
-                  //   onItemSelectAll(unSelect, false)
-                  // }}
-                />
-              ) : (
-                <div style={{ height: '100%' }} className='flex items-center justify-center'>
-                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                </div>
-              )
-            }
-          }}
-        </Transfer>
-      </Spin>
+      <TranslateY>
+        <Card>
+          <Spin spinning={loading}>
+            <Transfer
+              rowKey={({ _id }) => _id}
+              titles={['知识库目录', '未在目录中']}
+              listStyle={{ flex: 1, height: 'calc(100vh - 270px)', borderColor: '#f0f0f0' }}
+              targetKeys={targetKeys}
+              selectedKeys={selectedKeys}
+              dataSource={dataSource}
+              onSelectChange={onSelectChange}
+              onChange={onChange}
+              render={item => item.title}
+              showSelectAll={false}
+              operations={['移出目录', '加入目录']}
+            >
+              {({ direction, onItemSelect, selectedKeys, onItemSelectAll }) => {
+                if (direction === 'left') {
+                  return treeData.length ? (
+                    <Tree
+                      blockNode
+                      checkable
+                      draggable
+                      showIcon={false}
+                      defaultExpandAll
+                      onDrop={onDrop}
+                      selectedKeys={selectedKeys}
+                      checkedKeys={selectedKeys}
+                      fieldNames={{ key: '_id' }}
+                      treeData={treeData}
+                      onCheck={(keys: any) => {
+                        const unSelect = selectedKeys.filter(item => !keys.includes(item))
+                        onItemSelectAll(keys, true)
+                        onItemSelectAll(unSelect, false)
+                      }}
+                      // onSelect={(keys: any) => {
+                      //   const unSelect = selectedKeys.filter(item => !keys.includes(item))
+                      //   onItemSelectAll(keys, true)
+                      //   onItemSelectAll(unSelect, false)
+                      // }}
+                    />
+                  ) : (
+                    <div style={{ height: '100%' }} className='flex items-center justify-center'>
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                    </div>
+                  )
+                }
+              }}
+            </Transfer>
+          </Spin>
+        </Card>
+      </TranslateY>
     </Fragment>
   )
 }

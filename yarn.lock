@@ -46,14 +46,14 @@
     classnames "^2.2.6"
     rc-util "^5.9.4"
 
-"@ant-design/pro-layout@^7.1.2":
-  version "7.1.2"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-layout/-/pro-layout-7.1.2.tgz#1f27c3d5ebb49841df8f7ae6f3700ba442808966"
-  integrity sha512-cGtYibKYm/slfa/ybbvRPu7xcCPSZiuyxJgsV925HoU61gPdZBjvf/2PD8hDQUuy9dus0EuZOuRo5pADqI3Hvg==
+"@ant-design/pro-layout@^7.1.8":
+  version "7.1.8"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-layout/-/pro-layout-7.1.8.tgz#69492f52d5f5a897b00238610bafb9fe9245b5cf"
+  integrity sha512-DoiQQjrwmOvVQf8huiQwKBceL1ZqnVXzvhMzto+XuxFDXlXXM0frkwCQC3PuTSfX9XuZtPd5dgolGvfOseEQEg==
   dependencies:
     "@ant-design/icons" "^4.0.0"
-    "@ant-design/pro-provider" "2.0.3"
-    "@ant-design/pro-utils" "2.2.1"
+    "@ant-design/pro-provider" "2.0.6"
+    "@ant-design/pro-utils" "2.2.6"
     "@babel/runtime" "^7.18.0"
     "@umijs/route-utils" "^2.1.0"
     "@umijs/ssr-darkreader" "^4.9.44"
@@ -70,23 +70,23 @@
     use-media-antd-query "^1.1.0"
     warning "^4.0.3"
 
-"@ant-design/pro-provider@2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-provider/-/pro-provider-2.0.3.tgz#465c4029dcdd8e5a66cff05b5b14a1de8d9d75ec"
-  integrity sha512-TQ4hQ3jdgIUP5ZQmFdmQZ27KapdsZn0OGFh0k2qbKXFuOallUUMmHkQanvX9u63woJKGZLk8r86RCfbfszUvmg==
+"@ant-design/pro-provider@2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-provider/-/pro-provider-2.0.6.tgz#23861ae8ec434ac7587b306a8e07d9a325207637"
+  integrity sha512-ksel6RTPKOkZPc4h7W8Xe7/E5t2ciTupGUcjKuWoBKjXLRmyOH9hK+jAzEjdknYQCvV0JjSy+nZdiCUFS65liw==
   dependencies:
     "@babel/runtime" "^7.18.0"
     rc-util "^5.0.1"
     swr "^1.2.0"
 
-"@ant-design/pro-utils@2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-utils/-/pro-utils-2.2.1.tgz#670f58fa43bbde3c6a818f49f3200ce76141eb6b"
-  integrity sha512-Rd6Hg3WqfAdiiGHWpp2AQyOSgMIfg32tuLg77Qjq9dC0T6OpKzuQERk9i5A3sEg/mynq6nTK9L8J7lNCWo6FYQ==
+"@ant-design/pro-utils@2.2.6":
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-utils/-/pro-utils-2.2.6.tgz#93d4275d6527245ce8df3e6bed09b3b1b702b505"
+  integrity sha512-kBI0oK8VI/uR+pZjAnublXkXstBSo9inm7WQr5H7cf2cy+21gjNSvuHxr5Vz+CEjt7gP48xkcLuEee60wJLMmg==
   dependencies:
     "@ant-design/cssinjs" "^0.0.0-alpha.38"
     "@ant-design/icons" "^4.3.0"
-    "@ant-design/pro-provider" "2.0.3"
+    "@ant-design/pro-provider" "2.0.6"
     "@babel/runtime" "^7.18.0"
     "@ctrl/tinycolor" "^3.4.0"
     classnames "^2.2.6"

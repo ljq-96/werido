@@ -8,6 +8,7 @@ import { Gutter } from 'antd/lib/grid/row'
 import HomeCalendar from './components/HomeCalendar'
 import Shortcuts from './components/Shortcuts'
 import { TranslateX, TranslateY } from '../../components/Animation'
+import SS from './components/Search copy'
 
 interface IProps {}
 

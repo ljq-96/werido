@@ -79,11 +79,12 @@ const Search = props => {
         style={{
           position: 'relative',
           borderRadius: 4,
-          paddingTop: '56%',
+          paddingTop: '30%',
           overflow: 'hidden',
         }}
       >
-        <LandScape1 color={loginUser?.themeColor} style={{ position: 'absolute', bottom: '-10%', width: '100%' }} />
+        <Space color={loginUser?.themeColor} starColors={['#fff']} sunColor='#ffa940' animate />
+        {/* <LandScape1 color={loginUser?.themeColor} style={{ position: 'absolute', bottom: '-10%', width: '100%' }} /> */}
         <div className={`search ${isOnSearch ? 'onsearch' : ''}`} style={{ height: height }}>
           <input
             type='text'

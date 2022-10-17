@@ -65,13 +65,13 @@ export default (props: PageProps) => {
       loading={loading}
       className='layout'
       fixedHeader={true}
-      splitMenus={false}
       siderWidth={180}
       breakpoint='lg'
       title='Werido'
       logo={<Logo style={{ width: 32 }} color={loginUser?.themeColor} />}
-      layout={route.path === '/manage' ? 'mix' : 'top'}
-      contentWidth={route.path === '/manage' ? 'Fluid' : 'Fixed'}
+      layout={'mix'}
+      menu={{ type: 'group' }}
+      splitMenus={true}
       route={currentRoutes}
       menuItemRender={(item, dom) => <Link to={item.path}>{dom}</Link>}
       location={{ pathname }}
@@ -79,7 +79,6 @@ export default (props: PageProps) => {
       avatarProps={{
         src: loginUser?.avatar,
         title: loginUser?.username,
-        onClick: () => navigate('/user_center'),
       }}
       actionsRender={({}) => {
         return [
