@@ -4,7 +4,7 @@ import moment, { Moment } from 'moment'
 
 /** 自定义图标 */
 export const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3208498_rvqh0pj9ql.js',
+  scriptUrl: '//at.alicdn.com/t/c/font_3208498_o061ui3d3pn.js',
 })
 
 /** qs */

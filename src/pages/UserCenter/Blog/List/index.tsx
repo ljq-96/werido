@@ -93,7 +93,7 @@ function UserCenterBlogList(props) {
       render: (value, record) => {
         return (
           <Space style={{ marginLeft: -16 }}>
-            <Button type='link' onClick={() => navigate(`/manage/blog/editor?id=${record._id}`)}>
+            <Button type='link' onClick={() => navigate(`/blog/editor?id=${record._id}`)}>
               编辑
             </Button>
             <Button type='link' onClick={() => handleDelete(record._id)}>

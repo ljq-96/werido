@@ -23,7 +23,7 @@ function Login() {
     const { username, password, password_c } = fields
     if (isLogin) {
       request.login({ method: 'POST', data: { username, password } }).then(res => {
-        navigator('/home')
+        navigator('/')
       })
     } else {
       request.register({ method: 'POST', data: { username, password } }).then(res => {

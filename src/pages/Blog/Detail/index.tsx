@@ -1,4 +1,3 @@
-import { CheckCircleOutlined, EditOutlined, RollbackOutlined } from '@ant-design/icons'
 import { PageContainer, PageHeader } from '@ant-design/pro-layout'
 import { Button, Card, Col, Form, Input, message, Row, Select, Space, Tag, Affix, Spin } from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
@@ -58,8 +57,8 @@ function BlogDetail() {
     request
       .blog({ method: 'GET', query: id })
       .then(res => {
-        editor.current.setValue(res.content)
         setDetail(res)
+        // editor.current.setValue(res.content)
         form.setFieldsValue({ title: res.title, tags: res.tags })
       })
       .finally(() => {
@@ -121,7 +120,7 @@ function BlogDetail() {
               }
               extra={extra}
             />
-            <MarkdownEditor ref={editor} readonly={!onEdit} />
+            <MarkdownEditor ref={editor} readonly={!onEdit} value={detail?.content} />
           </Spin>
         </Col>
       </Row>

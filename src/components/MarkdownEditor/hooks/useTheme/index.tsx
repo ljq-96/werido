@@ -27,11 +27,146 @@ function useTheme() {
   const theme = useMemo(() => {
     const [c1, c2, c3, c4, c5, c6, c7] = generate(themeColor)
     const iconMapping = {
-      downArrow: 'icon-down',
-      image: 'icon-image',
-      unchecked: 'icon-image',
-      select: 'icon-image',
-      blockHandle: 'icon-image',
+      h1: {
+        label: '一级标题',
+        icon: 'icon-h-1',
+      },
+      h2: {
+        label: '二级标题',
+        icon: 'icon-h-2',
+      },
+      h3: {
+        label: '三级标题',
+        icon: 'icon-h-3',
+      },
+      loading: {
+        label: 'loading',
+        icon: 'icon-image',
+      },
+      quote: {
+        label: 'quote',
+        icon: 'icon-quote',
+      },
+      code: {
+        label: '代码块',
+        icon: 'icon-code',
+      },
+      table: {
+        label: '表格',
+        icon: 'icon-image',
+      },
+      divider: {
+        label: '分隔线',
+        icon: 'icon-image',
+      },
+      image: {
+        label: '图片',
+        icon: 'icon-image',
+      },
+      brokenImage: {
+        label: 'broken image',
+        icon: 'icon-image',
+      },
+      bulletList: {
+        label: '无序列表',
+        icon: 'icon-unorderedlist',
+      },
+      orderedList: {
+        label: '有序列表',
+        icon: 'icon-orderedlist',
+      },
+      taskList: {
+        label: '任务列表',
+        icon: 'icon-checklist',
+      },
+      bold: {
+        label: '加粗',
+        icon: 'icon-bold',
+      },
+      italic: {
+        label: '倾斜',
+        icon: 'icon-italic',
+      },
+      inlineCode: {
+        label: '行内代码',
+        icon: 'icon-inlinecode',
+      },
+      strikeThrough: {
+        label: '删除线',
+        icon: 'icon-strikethrough',
+      },
+      link: {
+        label: '链接',
+        icon: 'icon-link',
+      },
+      leftArrow: {
+        label: 'left arrow',
+        icon: 'icon-image',
+      },
+      rightArrow: {
+        label: 'right arrow',
+        icon: 'chevron_right',
+      },
+      upArrow: {
+        label: 'up arrow',
+        icon: 'icon-image',
+      },
+      downArrow: {
+        label: 'down arrow',
+        icon: 'icon-down',
+      },
+      alignLeft: {
+        label: 'align left',
+        icon: 'icon-align-left',
+      },
+      alignRight: {
+        label: 'align right',
+        icon: 'icon-align-right',
+      },
+      alignCenter: {
+        label: 'align center',
+        icon: 'icon-align-center',
+      },
+      delete: {
+        label: 'delete',
+        icon: 'icon-image',
+      },
+      select: {
+        label: 'select',
+        icon: 'icon-image',
+      },
+      unchecked: {
+        label: 'unchecked',
+        icon: 'icon-image',
+      },
+      checked: {
+        label: 'checked',
+        icon: 'icon-image',
+      },
+      undo: {
+        label: '撤回',
+        icon: 'icon-image',
+      },
+      redo: {
+        label: 'redo',
+        icon: 'icon-image',
+      },
+      liftList: {
+        label: 'lift list',
+        icon: 'icon-image',
+      },
+      sinkList: {
+        label: 'sink list',
+        icon: 'icon-image',
+      },
+      dragHandle: {
+        label: 'drag handle',
+        icon: 'icon-holder',
+      },
+      text: {
+        label: '正文',
+        icon: 'icon-paragraph',
+      },
     }
 
     return themeFactory((emotion, manager) => {
@@ -122,10 +257,10 @@ function useTheme() {
         }
         const span = document.createElement('span')
         span.className = 'icon'
-        span.innerHTML = `<svg width="1em" height="1em" fill="currentColor"><use xlink:href="#${icon}"></use></svg>`
+        span.innerHTML = `<svg width="1em" height="1em" fill="currentColor"><use xlink:href="#${icon.icon}"></use></svg>`
         return {
           dom: span,
-          label: '123',
+          label: icon.label,
         }
       })
 

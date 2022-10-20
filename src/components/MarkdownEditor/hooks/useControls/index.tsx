@@ -282,7 +282,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
             <Button
               type='text'
               onClick={toggleInlineCode}
-              icon={<IconFont type='icon-code' />}
+              icon={<IconFont type='icon-inlinecode' />}
               className={activeBtns.has('code_inline') ? 'active' : ''}
             />
           </Tooltip>
@@ -316,7 +316,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
         action: turnIntoTaskList,
         element: (
           <Tooltip title='任务列表' placement='bottom'>
-            <Button type='text' onClick={turnIntoTaskList} icon={<CheckSquareOutlined />} />
+            <Button type='text' onClick={turnIntoTaskList} icon={<IconFont type='icon-checklist' />} />
           </Tooltip>
         ),
       },
@@ -347,7 +347,11 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
               />
             }
           >
-            <Button type='text' icon={<BorderlessTableOutlined />} style={{ width: 90, textAlign: 'left' }}>
+            <Button
+              type='text'
+              icon={<IconFont type={activeText === '0' ? 'icon-paragraph' : `icon-h-${activeText}`} />}
+              style={{ width: 90, textAlign: 'left' }}
+            >
               {activeText === '0' ? '正文' : `标题${activeText}`}
             </Button>
           </Dropdown>
@@ -460,7 +464,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
       dom?.removeEventListener('click', getState)
       dom?.removeEventListener('keyup', getState)
     }
-  }, [activeBtns, dom])
+  }, [activeBtns, editor, dom])
 
   return controls
 }

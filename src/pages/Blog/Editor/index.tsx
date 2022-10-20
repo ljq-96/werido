@@ -3,6 +3,7 @@ import { Affix, Button, Form, Input, message, Select, Space } from 'antd'
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSearchParam } from 'react-use'
+import { IBlog } from '../../../../types'
 import { StatisticsType } from '../../../../types/enum'
 import { request } from '../../../api'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
@@ -11,6 +12,7 @@ import { useStore } from '../../../contexts/useStore'
 const BlogEditor = () => {
   const [{ tags }, { getTags }] = useStore()
   const [loading, setLoading] = useState(false)
+  const [detail, setDetail] = useState<IBlog>()
   const id = useSearchParam('id')
   const editor = useRef<EditorIntance>(null)
   const navigate = useNavigate()
@@ -39,7 +41,8 @@ const BlogEditor = () => {
   useEffect(() => {
     if (id) {
       request.blog({ method: 'GET', query: id }).then(res => {
-        editor.current.setValue(res.content)
+        setDetail(res)
+        // editor.current.setValue(res.content)
         form.setFieldsValue(res)
       })
     }
@@ -76,7 +79,7 @@ const BlogEditor = () => {
           </Affix>
         }
       />
-      <MarkdownEditor ref={editor} />
+      <MarkdownEditor ref={editor} value={detail?.content} />
     </div>
   )
 }

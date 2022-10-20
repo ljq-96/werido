@@ -15,7 +15,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
   const selection = css`
     .ProseMirror-selectednode {
-      outline: ${manager.get(ThemeSize, 'lineWidth')} solid ${line};
+      outline: none;
     }
 
     li.ProseMirror-selectednode {
@@ -66,28 +66,30 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     h1 {
       border-bottom: 2px solid #eee;
       font-size: 38px;
-      line-height: 1.23;
-      padding: 15px 0;
+      line-height: 1;
+      padding: 0 0 10px;
+      margin: 15px 0;
     }
     h2 {
       border-bottom: 1px solid #eee;
       font-size: 30px;
-      line-height: 1.35;
-      padding: 15px 0;
+      line-height: 1;
+      padding: 0 0 10px;
+      margin: 15px 0;
     }
     h3 {
       font-size: 24px;
-      line-height: 1.35;
+      line-height: 1;
       margin: 15px 0;
     }
     h4 {
       font-size: 20px;
-      line-height: 1.4;
+      line-height: 1;
       margin: 15px 0;
     }
     h5 {
       font-size: 16px;
-      line-height: 1.5;
+      line-height: 1;
       margin: 15px 0;
     }
     .heading {
@@ -173,7 +175,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
         background-color: #fff;
         font-family: ${manager.get(ThemeFont, 'code')};
         transform-origin: top center;
-        transition: 0.4s;
+        transition: 0.2s;
         &[data-fold='true'] {
           display: unset;
           transform: scaleY(0);
@@ -193,6 +195,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
           line-height: 22px;
           padding: 5px 12px;
           &:hover {
+            color: unset;
             background-color: #f5f5f5;
           }
         }
@@ -356,6 +359,62 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     }
   `
 
+  const block = css`
+    .block-handle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+      color: #7a7a7a;
+      border-radius: 2px;
+      font-size: 18px;
+      transform: translateY(-2px);
+      &:hover {
+        color: #4a4a4a;
+      }
+    }
+    .block-menu {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(5px);
+      border: none;
+      border-radius: 0;
+      padding: 4px 0;
+      box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
+      .block-menu_item {
+        &:hover {
+          color: unset;
+          background: rgba(0, 0, 0, 0.05);
+        }
+      }
+    }
+  `
+
+  const tooltip = css`
+    .tooltip {
+      border: none;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(5px);
+      padding: 4px;
+      box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
+      .icon {
+        width: 32px;
+        height: 32px;
+        color: #4a4a4a;
+        border: none;
+        &:not(:last-child) {
+          margin-right: 4px;
+        }
+        &:hover {
+          background: rgba(0, 0, 0, 0.05);
+        }
+        &::after {
+          display: none;
+        }
+      }
+    }
+  `
+
   injectProsemirrorView(emotion)
 
   injectGlobal`
@@ -369,6 +428,8 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       /* ${manager.get(ThemeShadow, undefined)} */
       ${manager.get(ThemeScrollbar, undefined)}
       ${selection};
+      ${block};
+      ${tooltip};
 
       .editor {
         ${editorLayout};

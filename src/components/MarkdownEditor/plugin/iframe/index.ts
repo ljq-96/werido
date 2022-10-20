@@ -4,7 +4,7 @@ import { InputRule } from 'prosemirror-inputrules'
 import directive from 'remark-directive'
 
 const id = 'iframe'
-const iframe = createNode(() => ({
+const iframeNode = createNode(() => ({
   id,
   schema: () => ({
     attrs: {
@@ -18,7 +18,7 @@ const iframe = createNode(() => ({
     parseDOM: [
       {
         tag: 'iframe',
-        getAttrs: (dom) => {
+        getAttrs: dom => {
           if (!(dom instanceof HTMLElement)) {
             throw new Error()
           }
@@ -29,9 +29,9 @@ const iframe = createNode(() => ({
         },
       },
     ],
-    toDOM: (node) => ['iframe', { ...node.attrs, class: 'iframe' }, 0],
+    toDOM: node => ['iframe', { ...node.attrs, class: 'iframe' }, 0],
     parseMarkdown: {
-      match: (node) => {
+      match: node => {
         return node.type === 'textDirective' && node.name === 'iframe'
       },
       runner: (state, node, type) => {
@@ -39,7 +39,7 @@ const iframe = createNode(() => ({
       },
     },
     toMarkdown: {
-      match: (node) => node.type.name === id,
+      match: node => node.type.name === id,
       runner: (state, node) => {
         state.addNode('textDirective', undefined, undefined, {
           name: 'iframe',
@@ -51,7 +51,7 @@ const iframe = createNode(() => ({
       },
     },
   }),
-  inputRules: (nodeType) => [
+  inputRules: nodeType => [
     new InputRule(/:iframe\{src="(?<src>[^"]+)?"height="(?<height>[^"]+)?"?\}/, (state, match, start, end) => {
       const [okay, src = '', height = ''] = match
       console.log(src, height)
@@ -67,4 +67,4 @@ const iframe = createNode(() => ({
   remarkPlugins: () => [directive as RemarkPlugin],
 }))
 
-export const iframePlugin = AtomList.create([iframe()])
+export const iframe = AtomList.create([iframeNode()])
