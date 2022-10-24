@@ -1,4 +1,4 @@
-import { Button, Card, Col, Empty, Row, Segmented, Space, Spin } from 'antd'
+import { Button, Card, Col, Dropdown, Empty, Menu, Row, Segmented, Space, Spin } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { IBookmark } from '../../../types'
 import { request } from '../../api'
@@ -46,9 +46,17 @@ function Bookmark() {
               title='我的书签'
               bodyStyle={{ padding: 12 }}
               extra={
-                <Button type='primary' onClick={handleCreate}>
-                  添加书签
-                </Button>
+                <Dropdown.Button
+                  type='primary'
+                  overlay={
+                    <Menu
+                      items={[
+                        { label: '添加书签', key: 1, onClick: handleCreate },
+                        { label: '导入书签', key: 2 },
+                      ]}
+                    />
+                  }
+                />
               }
             >
               <Spin spinning={loading}>

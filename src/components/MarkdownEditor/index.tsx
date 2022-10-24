@@ -11,7 +11,7 @@ import './codeTheme/prism-one-light.css'
 import { RightOutlined, SaveOutlined } from '@ant-design/icons'
 import clsx from 'clsx'
 import { arrToTree } from '../../utils/common'
-import { TranslateX } from '../Animation'
+import { TranslateX, TranslateY } from '../Animation'
 import editorFactory from './utils/editorFactory'
 import rendererFactory from './utils/renderFactory'
 
@@ -118,7 +118,7 @@ const MilkdownEditor = (props: IProps, ref) => {
             <div></div>
           </div>
         )}
-        <TranslateX key={String(readonly)} delay={!readonly && (controls || defaultControls).length * 30} distance={15}>
+        <TranslateY key={String(readonly)} delay={!readonly && (controls || defaultControls).length * 30} distance={15}>
           <div
             className={clsx(style.content, !showCatalog && style.hide)}
             style={{ height: typeof height === 'number' ? height + 'px' : height }}
@@ -144,7 +144,7 @@ const MilkdownEditor = (props: IProps, ref) => {
               </div>
             </div>
           </div>
-        </TranslateX>
+        </TranslateY>
       </div>
     </Spin>
   )

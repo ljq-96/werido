@@ -33,7 +33,7 @@ const routes: RouteProps[] = [
     routes: [
       {
         path: '/',
-        name: '首页',
+        name: '工作台',
         icon: <HomeOutlined />,
         component: lazy(() => import('../pages/Home')),
       },

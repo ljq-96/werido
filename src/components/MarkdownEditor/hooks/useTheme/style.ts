@@ -1,5 +1,3 @@
-/* Copyright 2021, Milkdown by Mirone. */
-
 import { Emotion, ThemeBorder, ThemeFont, ThemeManager, ThemeScrollbar, ThemeShadow, ThemeSize } from '@milkdown/core'
 import { getPalette } from '@milkdown/design-system'
 import { injectProsemirrorView } from '@milkdown/theme-pack-helper'
@@ -133,76 +131,6 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     }
   `
 
-  const code = css`
-    .code-fence {
-      border: 1px solid #eee;
-      margin: 1em 0;
-      pre {
-        font-family: ${manager.get(ThemeFont, 'code')};
-        margin: 0 1.2em !important;
-        white-space: pre;
-        overflow: auto;
-        ${manager.get(ThemeScrollbar, ['x'])}
-        background-color: ${palette('background')};
-        color: ${palette('neutral')};
-        font-size: 0.875em;
-        border-radius: ${radius};
-
-        code {
-          line-height: 1.5;
-          font-family: ${manager.get(ThemeFont, 'code')};
-        }
-      }
-      .code-fence_selector-wrapper {
-        .code-fence_selector {
-          margin: -1em 0 0 0;
-          box-shadow: none;
-          border: none;
-          color: #aaa;
-          font-family: ${manager.get(ThemeFont, 'code')};
-          transition: 0.4s;
-          border-radius: 2px;
-          &:hover {
-            color: #4a4a4a;
-          }
-          .icon {
-            color: #7a7a7a;
-            border-left: none;
-          }
-        }
-      }
-      .code-fence_selector-list {
-        background-color: #fff;
-        font-family: ${manager.get(ThemeFont, 'code')};
-        transform-origin: top center;
-        transition: 0.2s;
-        &[data-fold='true'] {
-          display: unset;
-          transform: scaleY(0);
-          opacity: 0;
-        }
-        &[data-fold='false'] {
-          box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
-        }
-        &::-webkit-scrollbar-thumb {
-          background-color: #eee;
-          &:hover {
-            background-color: #aaa;
-          }
-        }
-        .code-fence_selector-list-item {
-          transition: 0.3s;
-          line-height: 22px;
-          padding: 5px 12px;
-          &:hover {
-            color: unset;
-            background-color: #f5f5f5;
-          }
-        }
-      }
-    }
-  `
-
   const img = css`
     .image {
       display: inline-block;
@@ -220,7 +148,6 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       background-color: ${palette('background')};
       border-radius: ${radius};
       font-weight: 500;
-      font-family: ${code};
       padding: 0 0.2em;
       margin: 0 0.2em;
       font-size: 1em;
@@ -381,6 +308,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       border-radius: 0;
       padding: 4px 0;
       box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
+      animation: transform-y 200ms;
       .block-menu_item {
         &:hover {
           color: unset;
@@ -391,12 +319,14 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   `
 
   const tooltip = css`
-    .tooltip {
+    .tooltip,
+    .tooltip-input {
       border: none;
       background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(5px);
       padding: 4px;
       box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
+      animation: transform-y 200ms;
       .icon {
         width: 32px;
         height: 32px;
@@ -413,6 +343,16 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
         }
       }
     }
+    .tooltip-input {
+      padding: 8px 8px 8px 16px;
+      button {
+        color: #4a4a4a;
+        border-radius: 2px;
+        &:hover {
+          background: #f5f5f5;
+        }
+      }
+    }
   `
 
   injectProsemirrorView(emotion)
@@ -425,7 +365,6 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
           color: #aaa;
         }
       }
-      /* ${manager.get(ThemeShadow, undefined)} */
       ${manager.get(ThemeScrollbar, undefined)}
       ${selection};
       ${block};
@@ -438,7 +377,6 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
         ${blockquote};
         ${hr};
         ${list};
-        ${code};
         ${img};
         ${table};
         ${footnote};

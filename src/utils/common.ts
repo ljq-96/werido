@@ -1,10 +1,12 @@
 import { createFromIconfontCN } from '@ant-design/icons'
+import { message } from 'antd'
 import { RcFile } from 'antd/lib/upload'
 import moment, { Moment } from 'moment'
+import copy from 'copy-to-clipboard'
 
 /** 自定义图标 */
 export const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_3208498_o061ui3d3pn.js',
+  scriptUrl: '//at.alicdn.com/t/c/font_3208498_eaeeq8aehu5.js',
 })
 
 /** qs */
@@ -102,3 +104,8 @@ export const getBase64 = (file: RcFile): Promise<string> =>
     reader.onload = () => resolve(reader.result as string)
     reader.onerror = error => reject(error)
   })
+
+export function copyText(text: string) {
+  copy(text)
+  message.success('复制成功')
+}

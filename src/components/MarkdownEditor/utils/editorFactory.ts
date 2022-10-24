@@ -12,12 +12,12 @@ import { prismPlugin } from '@milkdown/plugin-prism'
 import { slash } from '@milkdown/plugin-slash'
 import { tooltip } from '@milkdown/plugin-tooltip'
 import { trailing } from '@milkdown/plugin-trailing'
-import { gfm, commonmark, image, codeFence as cmCodeFence } from '@milkdown/preset-gfm'
+import { gfm, taskListItem, image, codeFence } from '@milkdown/preset-gfm'
 import { refractor } from 'refractor/lib/common'
 import { defaultConfigBuilder } from './config/blockConfig'
 import { outline } from '@milkdown/utils'
 import { iframe } from '../plugin/iframe'
-import { Image } from '../components/Image'
+import { Image, TaskList, CodeFence } from './components'
 
 export default function editorFactory(
   root: HTMLElement | null,
@@ -27,7 +27,10 @@ export default function editorFactory(
   onChange?: (markdown: string) => void,
   setOutlines?: React.Dispatch<React.SetStateAction<any[]>>,
 ) {
-  const nodes = gfm.configure(image, { view: renderReact(Image) })
+  const nodes = gfm
+    .configure(image, { view: renderReact(Image) })
+    .configure(taskListItem, { view: renderReact(TaskList) })
+    .configure(codeFence, { view: renderReact(CodeFence) })
   const editor = Editor.make()
     .config(ctx => {
       ctx.set(rootCtx, root)
