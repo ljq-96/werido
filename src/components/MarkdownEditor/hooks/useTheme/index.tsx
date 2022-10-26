@@ -18,7 +18,7 @@ import { getStyle } from './style'
 
 const size = {
   radius: '4px',
-  lineWidth: '2px',
+  lineWidth: '1px',
 }
 
 function useTheme() {
@@ -101,15 +101,15 @@ function useTheme() {
       },
       leftArrow: {
         label: 'left arrow',
-        icon: 'icon-image',
+        icon: 'icon-left',
       },
       rightArrow: {
         label: 'right arrow',
-        icon: 'chevron_right',
+        icon: 'icon-right',
       },
       upArrow: {
         label: 'up arrow',
-        icon: 'icon-image',
+        icon: 'icon-up',
       },
       downArrow: {
         label: 'down arrow',
@@ -129,11 +129,11 @@ function useTheme() {
       },
       delete: {
         label: 'delete',
-        icon: 'icon-image',
+        icon: 'icon-delete',
       },
       select: {
         label: 'select',
-        icon: 'icon-image',
+        icon: 'icon-selectall',
       },
       unchecked: {
         label: 'unchecked',
@@ -176,13 +176,13 @@ function useTheme() {
           case 'primary':
             return c6
           case 'secondary':
-            return c2
+            return c1
           case 'solid':
             return '#f0f0f0'
           case 'neutral':
             return '#4a4a4a'
           case 'line':
-            return '#e6e6e6'
+            return '#f0f0f0'
           case 'shadow':
             return '#eee'
           case 'background':

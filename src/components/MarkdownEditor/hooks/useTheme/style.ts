@@ -16,6 +16,14 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       outline: none;
     }
 
+    .ProseMirror-widget {
+      .icon {
+        position: relative;
+        color: #4a4a4a;
+        z-index: 2;
+      }
+    }
+
     li.ProseMirror-selectednode {
       outline: none;
     }
@@ -267,11 +275,17 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
         right: 0;
         top: 0;
         bottom: 0;
-        background: ${palette('primary', 0.38)};
+        background: ${palette('secondary', 0.38)};
         pointer-events: none;
+      }
+      p {
+        position: relative;
+        color: #4a4a4a;
+        z-index: 3;
       }
 
       & ::selection {
+        color: unset;
         background: transparent;
       }
     }
@@ -320,13 +334,16 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
   const tooltip = css`
     .tooltip,
-    .tooltip-input {
+    .tooltip-input,
+    .table-tooltip {
       border: none;
       background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(5px);
       padding: 4px;
       box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
       animation: transform-y 200ms;
+      transition: 0.4s;
+      z-index: 5;
       .icon {
         width: 32px;
         height: 32px;
@@ -340,6 +357,9 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
         }
         &::after {
           display: none;
+        }
+        &.hide {
+          display: none !important;
         }
       }
     }

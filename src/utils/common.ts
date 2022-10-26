@@ -6,7 +6,7 @@ import copy from 'copy-to-clipboard'
 
 /** 自定义图标 */
 export const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_3208498_eaeeq8aehu5.js',
+  scriptUrl: '//at.alicdn.com/t/c/font_3208498_gj37fot6ye.js',
 })
 
 /** qs */
