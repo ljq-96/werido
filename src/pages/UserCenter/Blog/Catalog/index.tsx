@@ -29,7 +29,7 @@ function UserCenterBlogCatalog() {
       await request.docIndex({
         method: 'PUT',
         query: DocIndexType.文章,
-        data: { content: JSON.stringify(extract(_treeData)) },
+        data: extract(_treeData),
       })
     }
     if (direction === 'right') {
@@ -47,7 +47,7 @@ function UserCenterBlogCatalog() {
       await request.docIndex({
         method: 'PUT',
         query: DocIndexType.文章,
-        data: { content: JSON.stringify(extract(treeData)) },
+        data: extract(treeData),
       })
       setTreeData([...treeData])
     }
@@ -114,7 +114,7 @@ function UserCenterBlogCatalog() {
         ar.splice(i! + 1, 0, dragObj!)
       }
     }
-    request.docIndex({ method: 'PUT', query: DocIndexType.文章, data: { content: JSON.stringify(extract(data)) } })
+    request.docIndex({ method: 'PUT', query: DocIndexType.文章, data: extract(data) })
     setTreeData(data)
   }
 

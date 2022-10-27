@@ -48,7 +48,7 @@ function Bookmark() {
               request.docIndex({
                 method: 'PUT',
                 query: DocIndexType.首页书签,
-                data: { content: JSON.stringify(extract(value[0].children)) },
+                data: extract(value[0].children),
               })
             }}
             columns={5}

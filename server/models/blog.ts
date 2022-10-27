@@ -40,4 +40,4 @@ export class Blog {
   parent?: Ref<Blog>
 }
 
-export const BlogModel = getModelForClass(Blog)
+export const blogModel = getModelForClass(Blog)

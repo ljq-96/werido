@@ -1,13 +1,12 @@
 import axios from 'axios'
-import { Controller, Get } from '../decorator'
-import { RouterCtx } from '../../types'
+import { controller, get, DarukContext } from 'daruk'
 import { TopsType } from '../../types/enum'
 
-@Controller('/api/tops')
-class TopsRoute {
-  @Get('/:type')
-  async getNews(ctx: RouterCtx) {
-    const { type } = ctx.request.params
+@controller('/api/tops')
+export class InformationController {
+  @get('/:type')
+  async getNews(ctx: DarukContext) {
+    const { type } = (ctx.request as any).params
     switch (type) {
       case TopsType.知乎:
         const zhihu = await axios.get('https://quark.sm.cn/api/rest?method=Newstoplist.zhihu')

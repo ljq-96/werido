@@ -7,23 +7,11 @@ import { useUser } from '../../contexts/useUser'
 import { Number } from '../Animation'
 
 interface IProps {
-  id: string
+  user: IUser
   children?: ReactElement
 }
 
-function UserCard({ id, children }: IProps) {
-  const [loginUser] = useUser()
-  const [user, setUser] = useState<IUser>()
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    setLoading(true)
-    request
-      .detail({ method: 'GET', query: `user/${id}` })
-      .then(setUser)
-      .finally(() => setLoading(false))
-  }, [id, loginUser])
-
+function UserCard({ children, user }: IProps) {
   return (
     <Card bodyStyle={{ textAlign: 'center', position: 'relative' }}>
       <Avatar src={user?.avatar} shape='circle' size='large' icon={<UserOutlined />} />
@@ -48,9 +36,9 @@ function UserCard({ id, children }: IProps) {
           </div>
         </div>
         <div className='flex-1 py-2 cursor-pointer transition-all rounded-sm hover:bg-gray-100'>
-          <div className='text-gray-500'>文章</div>
+          <div className='text-gray-500'>日程</div>
           <div className='text-lg'>
-            <Number to={user?.blog} />
+            <Number to={user?.todo} />
           </div>
         </div>
       </div>

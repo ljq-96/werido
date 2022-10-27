@@ -25,7 +25,7 @@ function UserCenterLayout(props: PageProps) {
           <Affix offsetTop={80}>
             <div>
               <TranslateX>
-                <UserCard id={user?._id}>
+                <UserCard user={user}>
                   <div>
                     <Button type='primary' block shape='round'>
                       我的主页

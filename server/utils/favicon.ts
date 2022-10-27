@@ -3,7 +3,7 @@ import { load } from 'cheerio'
 import http from 'https'
 
 export const getFavicon = async (url: string) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise<string | undefined>(async (resolve, reject) => {
     try {
       const res = await axios.get(url)
       const $ = load(res.data)
@@ -22,10 +22,10 @@ export const getFavicon = async (url: string) => {
           var base64Img = data.toString('base64')
           resolve(`data:image/${icon?.split('.')?.pop()};base64,${base64Img}`)
         })
-        res.on('error', () => resolve(null))
+        res.on('error', () => resolve(undefined))
       })
     } catch {
-      resolve(null)
+      resolve(undefined)
     }
   })
 }

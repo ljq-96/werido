@@ -3,7 +3,7 @@ import { querystring } from '../utils/common'
 import { RequestConfig } from './types'
 
 export async function Fetch<F = any, T = any>({ url, method, data, query, params }: RequestConfig<F>): Promise<T> {
-  const pasedUrl = (query ? `${url}/${query}` : url) + (params ? `?${querystring.stringify(params)}` : '')
+  const pasedUrl = (query !== undefined ? `${url}/${query}` : url) + (params ? `?${querystring.stringify(params)}` : '')
   const response = await fetch(pasedUrl, {
     method: method || (data ? 'POST' : 'GET'),
     body: data && JSON.stringify(data),

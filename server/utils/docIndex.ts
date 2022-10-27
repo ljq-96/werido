@@ -1,4 +1,4 @@
-import { DocIndexModel } from '../model'
+import { docIndexModel } from '../models'
 import { DocIndexType, DocType } from '../../types/enum'
 
 type Doc = {
@@ -7,7 +7,7 @@ type Doc = {
 }[]
 
 export const getDocIndex: (creator: string, type: DocIndexType) => Promise<Doc> = async (creator, type) => {
-  const docIndexString = (await DocIndexModel.findOne({ creator, type }).distinct('content'))[0]
+  const docIndexString = (await docIndexModel.findOne({ creator, type }).distinct('content'))[0]
   return JSON.parse(docIndexString || '[]')
 }
 

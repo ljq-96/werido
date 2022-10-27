@@ -70,7 +70,7 @@ export default (props: PageProps) => {
       title='Werido'
       logo={<Logo style={{ width: 32 }} color={loginUser?.themeColor} />}
       layout={'mix'}
-      menu={{ type: 'group' }}
+      menu={{ type: 'sub' }}
       splitMenus={true}
       route={currentRoutes}
       menuItemRender={(item, dom) => <Link to={item.path}>{dom}</Link>}

@@ -127,15 +127,12 @@ const MilkdownEditor = (props: IProps, ref) => {
               <ReactEditor editor={editor} />
             </div>
             <div className={style.catalogContainer} style={{ top: readonly ? 56 : 104 }}>
-              <Tooltip title={!showCatalog && '展开'} placement='left'>
-                <Button
-                  className={style.openCatalog}
-                  shape='circle'
-                  icon={<RightOutlined />}
-                  onClick={() => setShowCatalog(!showCatalog)}
-                />
-              </Tooltip>
-
+              <Button
+                className={style.openCatalog}
+                shape='circle'
+                icon={<RightOutlined />}
+                onClick={() => setShowCatalog(!showCatalog)}
+              />
               <div className={style.catalogWrapper}>
                 <div className={style.catalogTitle}>大纲</div>
                 <Anchor affix={true} onClick={e => e.preventDefault()}>

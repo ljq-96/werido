@@ -69,7 +69,7 @@ function Bookmark() {
                       request.docIndex({
                         method: 'PUT',
                         query: DocIndexType.书签,
-                        data: { content: JSON.stringify(extract(value)) },
+                        data: extract(value),
                       })
                     }}
                     columns={10}

@@ -40,4 +40,4 @@ export class User {
   layoutB?: string
 }
 
-export const UserModel = getModelForClass(User)
+export const userModel = getModelForClass(User)

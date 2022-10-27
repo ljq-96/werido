@@ -71,6 +71,7 @@ export interface IUser {
   layoutC: 'side' | 'top'
   bookmark: number
   blog: number
+  todo: number
   avatar: string
   desc: string
   location: string

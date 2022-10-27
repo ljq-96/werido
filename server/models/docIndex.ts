@@ -20,4 +20,4 @@ export class DocIndex {
   updateTime?: string
 }
 
-export const DocIndexModel = getModelForClass(DocIndex)
+export const docIndexModel = getModelForClass(DocIndex)
