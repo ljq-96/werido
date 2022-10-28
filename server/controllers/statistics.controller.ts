@@ -56,7 +56,7 @@ export class AdminStatisticsController {
 
   @get(`/${StatisticsType.统计}`)
   async statistic(ctx: DarukContext) {
-    ctx.body = this.statisticsService.statistics()
+    ctx.body = await this.statisticsService.statistics()
   }
 
   @get(`/${StatisticsType.文章时间}`)

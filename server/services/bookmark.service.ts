@@ -89,4 +89,8 @@ export class BookmarkService {
     )
     return bookmark
   }
+
+  public async deleteOne(id: string) {
+    return await this.bookmarkModel.findByIdAndDelete(id)
+  }
 }

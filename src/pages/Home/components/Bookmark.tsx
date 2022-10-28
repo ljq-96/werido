@@ -69,6 +69,9 @@ function Bookmark() {
                           data: { pin: !value.pin },
                         })
                         .then(getBookmark)
+                      break
+                    case 'delete':
+                      request.bookmark({ method: 'DELETE', query: value._id }).then(getBookmark)
                   }
                 }}
               />

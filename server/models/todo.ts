@@ -1,6 +1,6 @@
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose'
 import moment from 'moment'
-import { User } from './User'
+import { User } from './user'
 
 export class Todo {
   @prop({ type: String })

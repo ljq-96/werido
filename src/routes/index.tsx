@@ -64,12 +64,11 @@ const routes: RouteProps[] = [
       {
         path: '/user_center',
         name: '用户中心',
-
         icon: <UserOutlined />,
         component: lazy(() => import('../pages/UserCenter')),
         routes: [
           {
-            path: '/',
+            path: '',
             name: '数据统计',
             component: UserCenterOverview,
             icon: <AreaChartOutlined />,
@@ -115,7 +114,7 @@ const routes: RouteProps[] = [
         icon: <LaptopOutlined />,
         routes: [
           {
-            path: '/',
+            path: '',
             name: '数据统计',
             icon: <AreaChartOutlined />,
             component: lazy(() => import('../pages/Manage/Overview')),

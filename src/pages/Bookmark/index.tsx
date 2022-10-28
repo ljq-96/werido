@@ -65,11 +65,15 @@ function Bookmark() {
                     vertical
                     value={bookmarks}
                     onChange={value => {
-                      setBookmarks(value)
+                      const _value = value.filter(item => {
+                        if (item.children?.length) return true
+                        request.bookmark({ method: 'DELETE', query: item._id })
+                      })
+                      setBookmarks(_value)
                       request.docIndex({
                         method: 'PUT',
                         query: DocIndexType.书签,
-                        data: extract(value),
+                        data: extract(_value),
                       })
                     }}
                     columns={10}
@@ -86,6 +90,8 @@ function Bookmark() {
                               request
                                 .bookmark({ method: 'PUT', query: value._id, data: { pin: !value.pin } })
                                 .then(getBookmark)
+                            case 'delete':
+                              request.bookmark({ method: 'DELETE', query: value._id }).then(getBookmark)
                           }
                         }}
                       />

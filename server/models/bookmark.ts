@@ -1,7 +1,7 @@
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose'
 import moment from 'moment'
 import { DocType } from '../../types/enum'
-import { User } from './User'
+import { User } from './user'
 
 export class Bookmark {
   @prop({ type: Number, enum: DocType, default: DocType.文档 })

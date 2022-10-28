@@ -36,6 +36,11 @@ export class BookmarkController {
   async createBookmark(ctx: DarukContext) {
     ctx.body = await this.bookmarkService.createOne(ctx.request.body)
   }
+
+  @del('/:id')
+  async deleteBoolmark(ctx: DarukContext) {
+    ctx.body = await this.bookmarkService.deleteOne((ctx.request as any).params.id)
+  }
 }
 
 @controller('/api/admin/bookmark')
