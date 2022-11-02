@@ -9,7 +9,16 @@ const isDev = process.env.NODE_ENV === 'development'
 const PORT = process.env.PORT
 
 async function createServer() {
-  const darukServer = DarukServer()
+  const darukServer = DarukServer({
+    notFound(ctx) {
+      ctx.body = '404 notFound'
+    },
+    errorOptions: {
+      all(err, ctx) {
+        ctx.body = err.message
+      },
+    },
+  })
   await darukServer.loadFile('./server/services')
   await darukServer.loadFile('./server/controllers')
   await darukServer.loadFile('./server/middlewares')

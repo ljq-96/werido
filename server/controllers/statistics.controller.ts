@@ -10,6 +10,7 @@ export class StatisticsController {
   @inject('BlogService') public blogService: BlogService
   @inject('TodoService') public todoService: TodoService
   @inject('StatisticsService') public statisticsService: StatisticsService
+
   @middleware('validateToken')
   @get(`/${StatisticsType.文章标签}`)
   async getBlogTags(ctx: DarukContext) {
@@ -18,6 +19,7 @@ export class StatisticsController {
     ctx.body = this.statisticsService.blogTag(list)
   }
 
+  @middleware('validateToken')
   @get(`/${StatisticsType.文章时间}`)
   async getBlogTime(ctx: DarukContext) {
     const { user } = ctx.app.context
@@ -25,6 +27,7 @@ export class StatisticsController {
     ctx.body = this.statisticsService.blogTime(list)
   }
 
+  @middleware('validateToken')
   @get(`/${StatisticsType.文章字数}`)
   async getBlogWords(ctx: DarukContext) {
     const { user } = ctx.app.context
@@ -32,6 +35,7 @@ export class StatisticsController {
     ctx.body = this.statisticsService.blogWords(list)
   }
 
+  @middleware('validateToken')
   @get(`/${StatisticsType.日历日程}`)
   async getTodo(ctx: DarukContext) {
     const { user } = ctx.app.context
@@ -46,6 +50,7 @@ export class AdminStatisticsController {
   @inject('TodoService') public todoService: TodoService
   @inject('UserService') public userService: UserService
   @inject('StatisticsService') public statisticsService: StatisticsService
+
   @middleware('validateToken')
   @middleware('isAdmin')
   @get(`/${StatisticsType.用户活跃度}`)
@@ -54,29 +59,39 @@ export class AdminStatisticsController {
     ctx.body = this.statisticsService.userActive(list)
   }
 
+  @middleware('validateToken')
+  @middleware('isAdmin')
   @get(`/${StatisticsType.统计}`)
   async statistic(ctx: DarukContext) {
     ctx.body = await this.statisticsService.statistics()
   }
 
+  @middleware('validateToken')
+  @middleware('isAdmin')
   @get(`/${StatisticsType.文章时间}`)
   async getBlogTime(ctx: DarukContext) {
     const { list } = await this.blogService.getList({})
     ctx.body = this.statisticsService.blogTime(list)
   }
 
+  @middleware('validateToken')
+  @middleware('isAdmin')
   @get(`/${StatisticsType.文章字数}`)
   async getBlogWords(ctx: DarukContext) {
     const { list } = await this.blogService.getList({})
     ctx.body = this.statisticsService.blogWords(list)
   }
 
+  @middleware('validateToken')
+  @middleware('isAdmin')
   @get(`/${StatisticsType.日历日程}`)
   async getTodo(ctx: DarukContext) {
     const { list } = await this.todoService.getList({})
     ctx.body = this.statisticsService.todo(list)
   }
 
+  @middleware('validateToken')
+  @middleware('isAdmin')
   @get(`/${StatisticsType.文章标签}`)
   async getBlogTags(ctx: DarukContext) {
     const { list } = await this.blogService.getList({})

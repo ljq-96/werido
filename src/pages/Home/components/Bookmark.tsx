@@ -1,4 +1,4 @@
-import { Card, Spin } from 'antd'
+import { Card, Empty, Spin } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { IBookmark } from '../../../../types'
 import { request } from '../../../api'
@@ -77,6 +77,7 @@ function Bookmark() {
               />
             )}
           />
+          {bookmarks[0]?.children?.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
         </Spin>
       </Card>
 

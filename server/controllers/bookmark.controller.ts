@@ -9,6 +9,7 @@ import { BookmarkService } from '../services/bookmark.service'
 export class BookmarkController {
   @inject('DocIndexService') public docIndexService: DocIndexService
   @inject('BookmarkService') public bookmarkService: BookmarkService
+
   @middleware('validateToken')
   @get('')
   async getMyBookmarks(ctx: DarukContext) {
@@ -18,6 +19,7 @@ export class BookmarkController {
     ctx.body = merge(docIndex, data)
   }
 
+  @middleware('validateToken')
   @get('/favorite')
   async getMyFavBookmarks(ctx: DarukContext) {
     const { _id } = ctx.app.context.user
@@ -26,17 +28,20 @@ export class BookmarkController {
     ctx.body = merge(docIndex, data)
   }
 
+  @middleware('validateToken')
   @put('/:id')
   async updateBookmark(ctx: DarukContext) {
     const { id } = (ctx.request as any).params
     ctx.body = await this.bookmarkService.updateOne(id, ctx.request.body)
   }
 
+  @middleware('validateToken')
   @post('')
   async createBookmark(ctx: DarukContext) {
     ctx.body = await this.bookmarkService.createOne(ctx.request.body)
   }
 
+  @middleware('validateToken')
   @del('/:id')
   async deleteBoolmark(ctx: DarukContext) {
     ctx.body = await this.bookmarkService.deleteOne((ctx.request as any).params.id)
@@ -59,6 +64,8 @@ export class AdminBookmarkController {
     ctx.body = { list, page, size, total }
   }
 
+  @middleware('validateToken')
+  @middleware('isAdmin')
   @del('/:id')
   async deleteBookmark(ctx: DarukContext) {
     const { id } = (ctx.request as any).params

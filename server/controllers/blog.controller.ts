@@ -9,6 +9,7 @@ import { DocIndexService } from '../services/docIndex.service'
 export class BlogController {
   @inject('BlogService') public blogService: BlogService
   @inject('DocIndexService') public docIndexService: DocIndexService
+
   @middleware('validateToken')
   @get('')
   public async getBlogs(ctx: DarukContext) {
@@ -17,6 +18,7 @@ export class BlogController {
     ctx.body = await this.blogService.getList({ creator: user._id }, { page: Number(page), size: Number(size) })
   }
 
+  @middleware('validateToken')
   @get('/catalog')
   public async getBlogCatalog(ctx: DarukContext) {
     const { _id } = ctx.app.context.user
@@ -25,23 +27,27 @@ export class BlogController {
     ctx.body = merge(docIndex, data)
   }
 
+  @middleware('validateToken')
   @get('/:id')
   public async getBlogById(ctx: DarukContext) {
     const { id } = (ctx.request as any).params
     ctx.body = await this.blogService.getDetail(id)
   }
 
+  @middleware('validateToken')
   @post('')
   public async createBlog(ctx: DarukContext) {
     ctx.body = await this.blogService.createOne(ctx.request.body)
   }
 
+  @middleware('validateToken')
   @put('/:id')
   public async updateBlog(ctx: DarukContext) {
     const { id } = (ctx.request as any).params
     ctx.body = this.blogService.updateOne(id, ctx.request.body)
   }
 
+  @middleware('validateToken')
   @del('/:id')
   public async deleteBlog(ctx: DarukContext) {
     const { id } = (ctx.request as any).params
@@ -50,8 +56,9 @@ export class BlogController {
 }
 
 @controller('/api/admin/blog')
-class AdminBlogController {
+export class AdminBlogController {
   @inject('BlogService') public blogService: BlogService
+
   @middleware('validateToken')
   @middleware('isAdmin')
   @get('')
@@ -66,12 +73,16 @@ class AdminBlogController {
     ctx.body = { list, page, size, total }
   }
 
+  @middleware('validateToken')
+  @middleware('isAdmin')
   @put('/:id')
   async updateBlog(ctx: DarukContext) {
     const { id } = (ctx.request as any).params
     ctx.body = this.blogService.updateOne(id, ctx.request.body)
   }
 
+  @middleware('validateToken')
+  @middleware('isAdmin')
   @del('/:id')
   async deleteBlog(ctx: DarukContext) {
     const { id } = (ctx.request as any).params

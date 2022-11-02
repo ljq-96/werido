@@ -28,3 +28,9 @@ export enum StatisticsType {
   用户活跃度 = 'userActive',
   日历日程 = 'todo',
 }
+
+export function getListfromEnum(obj: { [key: number | string]: any }) {
+  return Object.entries(obj)
+    .map(([label, value]: [any, any]) => ({ value, label }))
+    .filter(i => !!isNaN(i.label as any))
+}

@@ -5,6 +5,7 @@ import { TodoService } from '../services/todo.service'
 @controller('/api/todo')
 export class TodoController {
   @inject('TodoService') public todoService: TodoService
+
   @middleware('validateToken')
   @get('')
   async getTodoList(ctx: DarukContext) {
@@ -13,18 +14,21 @@ export class TodoController {
     ctx.body = list
   }
 
+  @middleware('validateToken')
   @post('')
   async createTodo(ctx: DarukContext) {
     const { user } = ctx.app.context
     ctx.body = await this.todoService.createOne({ creator: user._id, ...ctx.request.body })
   }
 
+  @middleware('validateToken')
   @put('/:id')
   async updateTodo(ctx: DarukContext) {
     const { id } = (ctx.request as any).params
     ctx.body = await this.todoService.updateOne(id, ctx.request.body)
   }
 
+  @middleware('validateToken')
   @del('/:id')
   async deleteTodo(ctx: DarukContext) {
     const { id } = (ctx.request as any).params
@@ -48,6 +52,8 @@ export class AdminTodoController {
     ctx.body = { list, page, size, total }
   }
 
+  @middleware('validateToken')
+  @middleware('isAdmin')
   @put('/:id')
   async updateTodo(ctx: DarukContext) {
     const { id } = (ctx.request as any).params
@@ -55,6 +61,7 @@ export class AdminTodoController {
     ctx.body = todo
   }
 
+  @middleware('isAdmin')
   @del('/:id')
   async deleteTodo(ctx: DarukContext) {
     const { id } = (ctx.request as any).params

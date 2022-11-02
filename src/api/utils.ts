@@ -15,13 +15,18 @@ export async function Fetch<F = any, T = any>({ url, method, data, query, params
   if (response.ok) {
     return await response.json()
   }
+  const errMsg = await response.text()
   switch (response.status) {
     case 401:
-      location.href = '/login'
+      // location.href = '/login'
       break
+    case 404:
+      message.error(errMsg || '404')
+      break
+    default:
+      message.error(errMsg || '未知错误')
   }
-  const errMsg = await response.text()
-  message.error(errMsg)
+
   throw errMsg
 }
 

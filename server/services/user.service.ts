@@ -1,11 +1,24 @@
 import { service, inject, DarukContext } from 'daruk'
 import { sign } from 'jsonwebtoken'
-import { User, userModel } from '../models'
+import moment from 'moment'
+import { blogModel, bookmarkModel, todoModel, User, userModel } from '../models'
 
 @service()
 export class UserService {
   userModel = userModel
+  blogModel = blogModel
+  todoModel = todoModel
+  bookmarkModel = bookmarkModel
   @inject('ctx') private ctx!: DarukContext
+
+  public async getProfile() {
+    const { _id } = this.ctx.app.context.user
+    const user: any = await this.updateOne(_id, { lastLoginTime: moment().format() })
+    const blog = await this.blogModel.find({ creator: _id }).countDocuments()
+    const bookmark = await this.bookmarkModel.find({ creator: _id }).countDocuments()
+    const todo = await this.todoModel.find({ creator: _id }).countDocuments()
+    return { ...user._doc, blog, bookmark, todo }
+  }
 
   public async login({ username, password }: { username: string; password: string }) {
     this.ctx.assert(username && password, 400, '用户名或密码不能为空')
@@ -43,5 +56,9 @@ export class UserService {
 
   public async createOne(payload: User) {
     return await this.userModel.create(payload)
+  }
+
+  public async deleteOne(id: string) {
+    return await this.userModel.findByIdAndDelete(id)
   }
 }

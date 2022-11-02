@@ -8,7 +8,7 @@ export class AccountController {
   async login(ctx: DarukContext) {
     const body = ctx.request?.body || {}
     const { username, password } = body
-    ctx.body = this.userService.login({ username, password })
+    ctx.body = await this.userService.login({ username, password })
   }
 
   @post('/register')

@@ -5,6 +5,7 @@ import { DocIndexService } from '../services/docIndex.service'
 @controller('/api/docIndex')
 export class DocIndexController {
   @inject('DocIndexService') public docIndexService: DocIndexService
+
   @middleware('validateToken')
   @get('/:type')
   async getDocIndex(ctx: RouterCtx) {
@@ -13,6 +14,7 @@ export class DocIndexController {
     ctx.body = await this.docIndexService.getDocIndex({ type, user: _id })
   }
 
+  @middleware('validateToken')
   @put('/:type')
   async putDocIndex(ctx: RouterCtx) {
     const { _id } = ctx.app.context.user

@@ -79,6 +79,7 @@ export default (props: PageProps) => {
       avatarProps={{
         src: loginUser?.avatar,
         title: loginUser?.username,
+        children: loginUser?.username?.[0],
       }}
       actionsRender={({}) => {
         return [

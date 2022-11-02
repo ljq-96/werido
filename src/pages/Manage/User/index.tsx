@@ -1,9 +1,9 @@
 import { InfoCircleOutlined } from '@ant-design/icons'
-import { Button, Form, Input, message, Modal, Space } from 'antd'
+import { Button, Form, Input, message, Modal, Space, Segmented } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { Fragment, useRef, useState } from 'react'
 import { IUser } from '../../../../types'
-import { UserStatus } from '../../../../types/enum'
+import { getListfromEnum, UserStatus } from '../../../../types/enum'
 import { request } from '../../../api'
 import CommonTable, { CommonTableInstance, ToolItem } from '../../../components/CommonTable'
 import { formatTime } from '../../../utils/common'
@@ -65,7 +65,15 @@ function UsersManage() {
     {
       title: '状态',
       dataIndex: 'status',
-      render: val => UserStatus[val],
+      render: (val, record) => (
+        <Segmented
+          size='small'
+          defaultValue={val}
+          options={getListfromEnum(UserStatus)}
+          disabled={record.username === 'admin'}
+          onChange={status => request.admin.user({ method: 'PUT', query: record._id, data: { status } })}
+        />
+      ),
     },
     {
       title: '创建时间',
