@@ -1,37 +1,43 @@
 import { InfoCircleOutlined } from '@ant-design/icons'
-import { Button, Dropdown, Form, Input, Menu, message, Modal, Segmented, Space, Tag } from 'antd'
+import { Alert, Button, Dropdown, Form, Input, Menu, message, Modal, Segmented, Space, Tag } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IBlog, IUser } from '../../../../../types'
 import { request } from '../../../../api'
 import CommonTable, { CommonTableInstance, ToolItem } from '../../../../components/CommonTable'
 import { formatTime } from '../../../../utils/common'
 import { TranslateX } from '../../../../components/Animation'
-
-const toolList: ToolItem[] = [
-  {
-    type: 'input',
-    name: 'username',
-    label: '文章标题',
-  },
-  {
-    type: 'date',
-    name: 'createTime',
-    label: '创建时间',
-  },
-  {
-    type: 'select',
-    name: 'tags',
-    label: '标签',
-  },
-]
+import { useStore } from '../../../../contexts/useStore'
 
 function UserCenterBlogList(props) {
   const [showModal, setShowModal] = useState<boolean | IUser>(false)
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   const [form] = Form.useForm()
   const tableRef = useRef<CommonTableInstance>(null)
   const navigate = useNavigate()
+  const [{ tags }, { getTags }] = useStore()
+
+  const toolList: ToolItem[] = [
+    {
+      type: 'input',
+      name: 'username',
+      label: '文章标题',
+    },
+    {
+      type: 'date',
+      name: 'createTime',
+      label: '创建时间',
+    },
+    {
+      type: 'select',
+      name: 'tags',
+      label: '标签',
+      childrenProps: {
+        options: tags.map(item => ({ label: item.name, value: item.name })),
+      },
+    },
+  ]
 
   const handleDelete = (id: string) => {
     Modal.confirm({
@@ -57,24 +63,6 @@ function UserCenterBlogList(props) {
     {
       title: '标题',
       dataIndex: 'title',
-    },
-    {
-      title: '标签',
-      dataIndex: 'tags',
-      render: (val: string[]) =>
-        val?.length ? (
-          <Space wrap size={[0, 8]}>
-            <TranslateX.List>
-              {val.map((item, index) => (
-                <Tag className='werido-tag' key={item}>
-                  {item}
-                </Tag>
-              ))}
-            </TranslateX.List>
-          </Space>
-        ) : (
-          '--'
-        ),
     },
     {
       title: '字数',
@@ -117,15 +105,35 @@ function UserCenterBlogList(props) {
     },
   ]
 
+  useEffect(() => {
+    getTags()
+  }, [])
+
   return (
     <Fragment>
       <CommonTable
         ref={tableRef}
+        title={() =>
+          selectedKeys.length > 0 && (
+            <Space>
+              已选择<a>{selectedKeys.length}</a>条
+            </Space>
+          )
+        }
         request={request.blog}
+        rowSelection={{ selectedRowKeys: selectedKeys, onChange: (keys: string[]) => setSelectedKeys(keys) }}
         extra={
           <Space>
-            <Button>编辑目录</Button>
-            <Button type='primary' onClick={() => navigate('/blog/editor')}>
+            {selectedKeys.length > 0 && (
+              <TranslateX.List className='inline-block'>
+                <Button key={1} className='mr-2'>
+                  导出
+                </Button>
+                <Button key={2}>删除</Button>
+              </TranslateX.List>
+            )}
+
+            <Button key={3} type='primary' onClick={() => navigate('/blog/editor')}>
               新建文章
             </Button>
           </Space>

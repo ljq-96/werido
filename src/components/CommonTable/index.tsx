@@ -42,7 +42,7 @@ function getToolItem(tool: ToolItem) {
 }
 
 function CommonTable(props: TableProps<any> & IProps, ref) {
-  const { request, title, extra, toolList, toolLabelWidth = 80, ...reset } = props
+  const { request, title, rowKey, extra, toolList, toolLabelWidth = 80, ...reset } = props
   const [pageInfo, setPageInfo] = useState({ page: 1, size: 10 })
   const [sortInfo, setSortInfo] = useState<[string?, ('asc' | 'desc')?]>([])
   const [form] = Form.useForm()
@@ -123,13 +123,14 @@ function CommonTable(props: TableProps<any> & IProps, ref) {
           <TranslateY delay={200}>
             <Card>
               {(title || extra) && (
-                <Row justify='space-between' align='middle' style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: 16 }}>{title?.([])}</div>
-                  <div>{extra}</div>
+                <Row justify='space-between' align='middle' style={{ marginBottom: 16 }} gutter={16}>
+                  <Col flex='auto'>{title?.([])}</Col>
+                  <Col>{extra}</Col>
                 </Row>
               )}
               <Table
                 {...reset}
+                rowKey={rowKey || '_id'}
                 loading={{ spinning: loading, delay: 300 }}
                 dataSource={data?.list || []}
                 onChange={({ pageSize, current }, filter, sorter) => {
@@ -146,7 +147,14 @@ function CommonTable(props: TableProps<any> & IProps, ref) {
                   total: data?.total || 0,
                   pageSize: pageInfo.size,
                   current: pageInfo.page,
-                  showTotal: total => `共${total}条记录 第${pageInfo.page}/${Math.ceil(total / pageInfo.size)}页`,
+                  showTotal: total => (
+                    <Space style={{ flexGrow: 1 }}>
+                      共<a>{total}</a> 条记录
+                      <span>
+                        第{pageInfo.page}/{Math.ceil(total / pageInfo.size)}页
+                      </span>
+                    </Space>
+                  ),
                 }}
               />
             </Card>

@@ -13,10 +13,8 @@ function UserCenterLayout(props: PageProps) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const [user] = useUser()
-  console.log(route)
 
   const parsedRoute = useParseRoute(route, { showAll: true })
-  console.log(parsedRoute)
 
   return (
     <Fragment>

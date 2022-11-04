@@ -89,7 +89,11 @@ export default (props: PageProps) => {
       }}
     >
       <Suspense fallback={<Loading />}>
-        {loginUser && <Outlet />}
+        {loginUser && (
+          <div style={{ marginRight: showColorDrawer ? 300 : 0, transition: '0.4s' }}>
+            <Outlet />
+          </div>
+        )}
         <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
       </Suspense>
       <Drawer

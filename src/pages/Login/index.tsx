@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Form, Button, Input, Card, message, Row, Col, ConfigProvider } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { request } from '../../api'
@@ -7,20 +7,23 @@ import Logo from '../../components/Logo'
 import LoginImage from '../../components/Svg/Login'
 import './index.less'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
+import ModalVerify, { ModalVerifyInstance } from '../../components/ModalVerify'
 
 const COLOR = '#1890ff'
 function Login() {
+  const [data, setData] = useState<IUser>()
   const [isLogin, setIsLogin] = useState(true)
   const [form] = Form.useForm()
   const navigator = useNavigate()
+  const modalVerifyRef = useRef<ModalVerifyInstance>(null)
 
   const handleChangeType = () => {
     setIsLogin(!isLogin)
     form.resetFields()
   }
 
-  const onFinish = (fields: IUser & { password_c?: string }) => {
-    const { username, password, password_c } = fields
+  const onFinish = () => {
+    const { username, password } = data
     if (isLogin) {
       request.login({ method: 'POST', data: { username, password } }).then(res => {
         navigator('/')
@@ -35,6 +38,7 @@ function Login() {
         ])
       })
     }
+    modalVerifyRef.current.close()
   }
 
   useEffect(() => {
@@ -56,7 +60,10 @@ function Login() {
           form={form}
           layout='vertical'
           labelCol={{ style: { width: 80 } }}
-          onFinish={onFinish}
+          onFinish={value => {
+            setData(value)
+            modalVerifyRef.current.show()
+          }}
           requiredMark={false}
         >
           <Form.Item name='username' label='用户名' rules={[{ required: true, message: '请输入用户名' }]}>
@@ -96,6 +103,7 @@ function Login() {
         </a>
       </div>
       <LoginImage className='login-image' color={COLOR} />
+      <ModalVerify ref={modalVerifyRef} onSuccess={onFinish} />
     </div>
   )
 }

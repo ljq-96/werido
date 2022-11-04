@@ -8,16 +8,16 @@ import { history } from '@milkdown/plugin-history'
 import { indent } from '@milkdown/plugin-indent'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
 import { math } from '@milkdown/plugin-math'
-import { prismPlugin } from '@milkdown/plugin-prism'
+import { prism } from '@milkdown/plugin-prism'
 import { slash } from '@milkdown/plugin-slash'
 import { tooltip } from '@milkdown/plugin-tooltip'
 import { trailing } from '@milkdown/plugin-trailing'
 import { gfm, taskListItem, image, codeFence } from '@milkdown/preset-gfm'
-import { refractor } from 'refractor/lib/common'
 import { defaultConfigBuilder } from './config/blockConfig'
 import { outline } from '@milkdown/utils'
 import { iframe } from '../plugin/iframe'
 import { Image, TaskList, CodeFence } from './components'
+import './prism'
 
 export default function editorFactory(
   root: HTMLElement | null,
@@ -56,7 +56,7 @@ export default function editorFactory(
     .use(clipboard)
     .use(history)
     .use(cursor)
-    .use(prismPlugin({ configureRefractor: () => refractor }))
+    .use(prism)
     .use(math)
     .use(indent)
     .use(diagram)
