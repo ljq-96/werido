@@ -25,10 +25,14 @@ import {
   GatewayOutlined,
   FullscreenOutlined,
   FullscreenExitOutlined,
+  PlusOutlined,
+  ApartmentOutlined,
 } from '@ant-design/icons'
 import { Fragment, ReactElement, useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Button,
+  Card,
+  Col,
   Divider,
   Dropdown,
   Form,
@@ -37,6 +41,8 @@ import {
   Menu,
   Modal,
   Popconfirm,
+  Popover,
+  Row,
   Select,
   Tooltip,
   Typography,
@@ -44,6 +50,8 @@ import {
 } from 'antd'
 import { EditorRef, UseEditorReturn } from '@milkdown/react'
 import { TranslateX } from '../../../Animation'
+import { mermaidExample } from './utils'
+import { language } from '../../utils/components'
 
 export type Controls =
   | 'undo'
@@ -64,6 +72,7 @@ export type Controls =
   | 'clear'
   | 'iframe'
   | 'fullScreen'
+  | 'more'
 
 type ActivedButton = 'strong' | 'link' | 'em' | 'code_inline' | 'strike_through'
 
@@ -186,6 +195,25 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
       editor?.action(replaceAll(value))
     }
 
+    const insertValue = str => {
+      editor.action(insert(str))
+    }
+
+    const handleMoreMenu = (keys: string[]) => {
+      console.log(keys)
+
+      const [k1, k2] = keys
+      switch (k2) {
+        case 'iframe':
+          handleIframe()
+          break
+        case 'quote':
+          wrapInBlockquote()
+        case 'mermaid':
+          insertValue(`\`\`\`mermaid${mermaidExample[k1]}\`\`\``)
+      }
+    }
+
     const handleFullScreen = () => {
       if (isFullScreen) {
         setIsFullScreen(false)
@@ -197,6 +225,51 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
     }
 
     return {
+      more: {
+        element: (
+          <Dropdown
+            placement='bottomLeft'
+            arrow={{ pointAtCenter: true }}
+            overlay={
+              <Menu
+                className='w-32'
+                onClick={({ keyPath }) => handleMoreMenu(keyPath)}
+                items={[
+                  { icon: <IconFont type='icon-quote' />, label: '引用', key: 'quote' },
+                  {
+                    icon: <ApartmentOutlined />,
+                    label: '绘图',
+                    key: 'mermaid',
+                    children: [
+                      { label: '饼图', key: 'pie' },
+                      { label: '流程图', key: 'grafh' },
+                      { label: '甘特图', key: 'gantt' },
+                      { label: '序列图', key: 'sequenceDiagram' },
+                    ],
+                  },
+                  {
+                    icon: <CodeOutlined />,
+                    label: '代码块',
+                    key: 'code',
+                    children: Object.entries(language).map(([lan, icon]) => ({
+                      label: (
+                        <Row>
+                          <img style={{ width: 18, marginRight: 8 }} src={icon} />
+                          <code>{lan || 'plain text'}</code>
+                        </Row>
+                      ),
+                      value: lan,
+                    })),
+                  },
+                  { icon: <GatewayOutlined />, label: '嵌入页面', key: 'iframe' },
+                ]}
+              ></Menu>
+            }
+          >
+            <Button size='small' type='primary' shape='circle' icon={<PlusOutlined />} />
+          </Dropdown>
+        ),
+      },
       undo: {
         action: undo,
         element: (
@@ -404,7 +477,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
               <Form
                 form={iframeForm}
                 onFinish={({ src, height }) => {
-                  editor.action(insert(`:iframe{src="${src}" height="${height ?? 200}"}`))
+                  insertValue(`:iframe{src="${src}" height="${height ?? 200}"}`)
                   iframeForm.resetFields()
                   setShowIframe(false)
                 }}

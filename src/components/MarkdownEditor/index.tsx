@@ -31,6 +31,8 @@ export interface EditorIntance {
 }
 
 const defaultControls: Controls[] = [
+  'more',
+  'divider',
   'undo',
   'text',
   'blod',

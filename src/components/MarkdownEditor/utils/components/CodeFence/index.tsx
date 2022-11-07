@@ -22,14 +22,14 @@ import sql from './imgs/sql.svg'
 import vue from './imgs/vue.svg'
 import txt from './imgs/txt.svg'
 
-const language = {
+export const language = {
   '': txt,
   html,
   css,
   javascript,
   typescript,
-  react,
-  vue,
+  // react,
+  // vue,
   java,
   c,
   python,
