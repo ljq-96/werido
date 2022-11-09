@@ -1,12 +1,13 @@
-import { CloseOutlined } from '@ant-design/icons'
-import { Col, Row, Card, Spin, Affix, Tag, Divider, Pagination, Button } from 'antd'
-import { Fragment, useEffect, useState } from 'react'
+import { CloseOutlined, SettingOutlined } from '@ant-design/icons'
+import { Col, Row, Card, Spin, Affix, Tag, Divider, Pagination, Button, Space, Tooltip } from 'antd'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { IBlog, IBookmark, Pager } from '../../../../types'
 import { StatisticsType } from '../../../../types/enum'
 import { request } from '../../../api'
 import { TranslateX, TranslateY } from '../../../components/Animation'
-import Catalog from '../../../components/Catalog'
+import Catalog, { CatalogInstance } from '../../../components/Catalog'
+import CatalogIcon from '../../../components/CatalogIcon'
 import { useStore } from '../../../contexts/useStore'
 import { useUser } from '../../../contexts/useUser'
 import { useRequest } from '../../../hooks'
@@ -15,15 +16,16 @@ import BlogItemCard from './components/BlogItemCard'
 const SIZE = 20
 const BlogList = () => {
   const [{ tags }, { getTags }] = useStore()
+  const [expandCatalog, setExpandCatalog] = useState(true)
   const [page, setPage] = useState(1)
-  const [total, setTotal] = useState(0)
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const catalogRef = useRef<CatalogInstance>(null)
   const tag = searchParams.get('tag')
   const [{ themeColor }] = useUser()
   const {
     loading,
-    data: blogList,
+    data: blog,
     execute: getBlogList,
   } = useRequest<Pager<IBlog>>(() =>
     request.blog({
@@ -37,6 +39,9 @@ const BlogList = () => {
 
   useEffect(() => {
     getBlogList()
+  }, [page])
+
+  useEffect(() => {
     getTags()
   }, [])
 
@@ -46,8 +51,28 @@ const BlogList = () => {
         <Col flex='256px'>
           <Affix offsetTop={80}>
             <TranslateX delay={200}>
-              <Card title='目录'>
-                <Catalog />
+              <Card
+                title='目录'
+                extra={
+                  <Tooltip placement='bottom' title={expandCatalog ? '全部折叠' : '全部展开'}>
+                    <Button
+                      size='small'
+                      type='text'
+                      icon={<CatalogIcon open={expandCatalog} />}
+                      onClick={() => {
+                        if (expandCatalog) {
+                          setExpandCatalog(false)
+                          catalogRef.current.closeAll()
+                        } else {
+                          setExpandCatalog(true)
+                          catalogRef.current.expandAll()
+                        }
+                      }}
+                    />
+                  </Tooltip>
+                }
+              >
+                <Catalog ref={catalogRef} />
               </Card>
             </TranslateX>
           </Affix>
@@ -56,10 +81,10 @@ const BlogList = () => {
           <TranslateY>
             <Spin spinning={loading}>
               <Card title='文章' headStyle={{ borderTop: `2px solid ${themeColor}` }}>
-                {blogList?.list?.map((item, index) => (
+                {blog?.list?.map((item, index) => (
                   <BlogItemCard key={item._id} item={item} />
                 ))}
-                <Pagination pageSize={SIZE} current={page} total={total} />
+                <Pagination pageSize={SIZE} current={page} total={blog?.total} onChange={page => setPage(page)} />
               </Card>
             </Spin>
           </TranslateY>

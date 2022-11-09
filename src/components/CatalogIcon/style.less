@@ -1,0 +1,59 @@
+.catalog-icon {
+  width: 1em;
+  height: 1em;
+  .line1,
+  .line3 {
+    &::before {
+      position: absolute;
+      left: 0;
+      content: '';
+      height: 0.1em;
+      border: 0.2em solid transparent;
+      border-top: 0.2em solid #7a7a7a;
+      border-radius: 0.1em;
+      transform: translateY(0);
+      transition: 0.4s;
+    }
+  }
+  .line2 {
+    margin: 0.35em 0;
+  }
+  .line3::before {
+    transform: translateY(-0.05em);
+  }
+  .line1,
+  .line2,
+  .line3 {
+    position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    flex-shrink: 0;
+    &::after {
+      content: '';
+      height: 0.1em;
+      width: 0.5em;
+      border-radius: 0.1em;
+      background-color: #7a7a7a;
+      transition: 0.4s;
+      flex-shrink: 0;
+    }
+  }
+  &.close {
+    .line1,
+    .line3 {
+      &::after {
+        width: 1em;
+      }
+    }
+    .line1::before {
+      transform: translateY(0.28em) rotate(-90deg);
+    }
+    .line2::after {
+      width: 0.618em;
+    }
+    .line3::before {
+      transform: translateY(-0.62em) rotate(-90deg);
+    }
+  }
+}

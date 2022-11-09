@@ -49,7 +49,7 @@ function useTheme() {
       },
       code: {
         label: '代码块',
-        icon: 'icon-code',
+        icon: 'icon-inlinecode',
       },
       table: {
         label: '表格',

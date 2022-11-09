@@ -17,7 +17,6 @@ import { defaultConfigBuilder } from './config/blockConfig'
 import { outline } from '@milkdown/utils'
 import { iframe } from '../plugin/iframe'
 import { Image, TaskList, CodeFence } from './components'
-import './prism'
 
 export default function editorFactory(
   root: HTMLElement | null,

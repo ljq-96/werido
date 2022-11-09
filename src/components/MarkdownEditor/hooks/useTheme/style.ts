@@ -316,8 +316,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       }
     }
     .block-menu {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(5px);
+      background: #fff;
       border: none;
       border-radius: 0;
       padding: 4px 0;
@@ -337,8 +336,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     .tooltip-input,
     .table-tooltip {
       border: none;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(5px);
+      background: #fff;
       padding: 4px;
       box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
       animation: transform-y 200ms;

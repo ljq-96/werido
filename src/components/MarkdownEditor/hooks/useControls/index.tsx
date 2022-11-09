@@ -1,38 +1,28 @@
 import { Editor, commandsCtx, editorViewCtx } from '@milkdown/core'
 import { IconFont, isSameSet } from '../../../../utils/common'
-import { insert, forceUpdate, replaceAll } from '@milkdown/utils'
-import { history, Undo } from '@milkdown/plugin-history'
-import { gfm, commands } from '@milkdown/preset-gfm'
+import { insert, replaceAll } from '@milkdown/utils'
+import { Undo } from '@milkdown/plugin-history'
+import { commands } from '@milkdown/preset-gfm'
 import {
   BoldOutlined,
   ItalicOutlined,
   StrikethroughOutlined,
-  ExpandOutlined,
-  UnderlineOutlined,
   UnorderedListOutlined,
   OrderedListOutlined,
-  CheckSquareOutlined,
   CodeOutlined,
   LineOutlined,
   LinkOutlined,
-  TableOutlined,
   UndoOutlined,
-  DownOutlined,
-  BorderlessTableOutlined,
-  TrophyOutlined,
   DeleteOutlined,
-  SaveOutlined,
   GatewayOutlined,
   FullscreenOutlined,
   FullscreenExitOutlined,
   PlusOutlined,
   ApartmentOutlined,
 } from '@ant-design/icons'
-import { Fragment, ReactElement, useCallback, useEffect, useMemo, useState } from 'react'
+import { Fragment, ReactElement, useEffect, useMemo, useState } from 'react'
 import {
   Button,
-  Card,
-  Col,
   Divider,
   Dropdown,
   Form,
@@ -41,17 +31,11 @@ import {
   Menu,
   Modal,
   Popconfirm,
-  Popover,
-  Row,
-  Select,
   Tooltip,
   Typography,
   Upload,
 } from 'antd'
-import { EditorRef, UseEditorReturn } from '@milkdown/react'
-import { TranslateX } from '../../../Animation'
 import { mermaidExample } from './utils'
-import { language } from '../../utils/components'
 
 export type Controls =
   | 'undo'
@@ -200,17 +184,21 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
     }
 
     const handleMoreMenu = (keys: string[]) => {
-      console.log(keys)
-
-      const [k1, k2] = keys
-      switch (k2) {
+      const k1 = keys.pop()
+      const k2 = keys.pop()
+      switch (k1) {
         case 'iframe':
           handleIframe()
           break
         case 'quote':
           wrapInBlockquote()
+          break
+        case 'code':
+          turnIntoCodeFence()
+          break
         case 'mermaid':
-          insertValue(`\`\`\`mermaid${mermaidExample[k1]}\`\`\``)
+          insertValue(`\`\`\`mermaid${mermaidExample[k2]}\`\`\``)
+          break
       }
     }
 
@@ -228,6 +216,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
       more: {
         element: (
           <Dropdown
+            overlayClassName='aaaa'
             placement='bottomLeft'
             arrow={{ pointAtCenter: true }}
             overlay={
@@ -247,20 +236,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
                       { label: '序列图', key: 'sequenceDiagram' },
                     ],
                   },
-                  {
-                    icon: <CodeOutlined />,
-                    label: '代码块',
-                    key: 'code',
-                    children: Object.entries(language).map(([lan, icon]) => ({
-                      label: (
-                        <Row>
-                          <img style={{ width: 18, marginRight: 8 }} src={icon} />
-                          <code>{lan || 'plain text'}</code>
-                        </Row>
-                      ),
-                      value: lan,
-                    })),
-                  },
+                  { icon: <CodeOutlined />, label: '代码块', key: 'code' },
                   { icon: <GatewayOutlined />, label: '嵌入页面', key: 'iframe' },
                 ]}
               ></Menu>

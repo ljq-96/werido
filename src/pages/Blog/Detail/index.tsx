@@ -1,23 +1,39 @@
-import { PageContainer } from '@ant-design/pro-layout'
-import { Button, Card, Col, Form, Input, message, Row, Select, Space, Tag, Affix, Spin, PageHeader } from 'antd'
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Input,
+  message,
+  Row,
+  Select,
+  Space,
+  Tag,
+  Affix,
+  Spin,
+  PageHeader,
+  Tooltip,
+} from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { IBlog } from '../../../../types'
-import { StatisticsType } from '../../../../types/enum'
 import { request } from '../../../api'
-import { TranslateX, TranslateY } from '../../../components/Animation'
-import Catalog from '../../../components/Catalog'
+import { TranslateX } from '../../../components/Animation'
+import Catalog, { CatalogInstance } from '../../../components/Catalog'
+import CatalogIcon from '../../../components/CatalogIcon'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
 import { useStore } from '../../../contexts/useStore'
 
 function BlogDetail() {
   const [{ tags }, { getTags }] = useStore()
   const [onEdit, setOnEdit] = useState(false)
+  const [expandCatalog, setExpandCatalog] = useState(true)
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<IBlog>(null)
   const [form] = Form.useForm()
   const { id } = useParams()
   const editor = useRef<EditorIntance>()
+  const catalogRef = useRef<CatalogInstance>(null)
   const navigate = useNavigate()
   const tagOptions = useMemo(() => {
     return tags.map(item => ({ label: item.name, value: item.name }))
@@ -76,8 +92,28 @@ function BlogDetail() {
         <Col flex='256px'>
           <Affix offsetTop={80}>
             <TranslateX>
-              <Card title='目录'>
-                <Catalog selectedKeys={[id]} />
+              <Card
+                title='目录'
+                extra={
+                  <Tooltip placement='bottom' title={expandCatalog ? '全部折叠' : '全部展开'}>
+                    <Button
+                      size='small'
+                      type='text'
+                      icon={<CatalogIcon open={expandCatalog} />}
+                      onClick={() => {
+                        if (expandCatalog) {
+                          setExpandCatalog(false)
+                          catalogRef.current.closeAll()
+                        } else {
+                          setExpandCatalog(true)
+                          catalogRef.current.expandAll()
+                        }
+                      }}
+                    />
+                  </Tooltip>
+                }
+              >
+                <Catalog ref={catalogRef} selectedKeys={[id]} />
               </Card>
             </TranslateX>
           </Affix>
