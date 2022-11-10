@@ -1,4 +1,4 @@
-import { Badge, Button, Popover, Spin } from 'antd'
+import { Badge, Button, Popover, Spin, Tooltip } from 'antd'
 import clsx from 'clsx'
 import moment, { Moment } from 'moment'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
@@ -174,10 +174,12 @@ function CalendarWeek() {
             <div className='calendar-week-time-info'>{time.format('HH:mm')}</div>
             <div className='calendar-week-time-line'>
               {moment(current).startOf('week').valueOf() === moment().startOf('week').valueOf() && (
-                <div
-                  className='calendar-week-time-dot status-processing'
-                  style={{ left: ((moment().day() === 0 ? 6 : moment().day() - 1) / 7) * 100 + '%' }}
-                />
+                <Tooltip title={time.format('yyyy-MM-DD HH:mm')}>
+                  <div
+                    className='calendar-week-time-dot status-processing'
+                    style={{ left: ((moment().day() === 0 ? 6 : moment().day() - 1) / 7) * 100 + '%' }}
+                  />
+                </Tooltip>
               )}
             </div>
           </div>

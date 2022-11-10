@@ -212,18 +212,46 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
       }
     }
 
+    const iframeModal = (
+      <Modal
+        title='Iframe'
+        open={showIframe}
+        onCancel={() => {
+          setShowIframe(false)
+          iframeForm.resetFields()
+        }}
+        onOk={iframeForm.submit}
+      >
+        <Form
+          form={iframeForm}
+          onFinish={({ src, height }) => {
+            insertValue(`:iframe{src="${src}" height="${height ?? 200}"}`)
+            iframeForm.resetFields()
+            setShowIframe(false)
+          }}
+        >
+          <Form.Item label='地址' name='src' rules={[{ required: true, message: '请输入地址！' }]}>
+            <Input placeholder='请输入地址' />
+          </Form.Item>
+          <Form.Item label='高度' name='height' rules={[{ required: true, message: '请输入视口高度！' }]}>
+            <InputNumber placeholder='请输入视口高度' addonAfter='px' min={100} />
+          </Form.Item>
+        </Form>
+      </Modal>
+    )
+
     return {
       more: {
         element: (
-          <Dropdown
-            overlayClassName='aaaa'
-            placement='bottomLeft'
-            arrow={{ pointAtCenter: true }}
-            overlay={
-              <Menu
-                className='w-32'
-                onClick={({ keyPath }) => handleMoreMenu(keyPath)}
-                items={[
+          <Fragment>
+            <Dropdown
+              overlayClassName='aaaa'
+              placement='bottomLeft'
+              arrow={{ pointAtCenter: true }}
+              menu={{
+                className: 'w-32',
+                onClick: ({ keyPath }) => handleMoreMenu(keyPath),
+                items: [
                   { icon: <IconFont type='icon-quote' />, label: '引用', key: 'quote' },
                   {
                     icon: <ApartmentOutlined />,
@@ -238,12 +266,13 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
                   },
                   { icon: <CodeOutlined />, label: '代码块', key: 'code' },
                   { icon: <GatewayOutlined />, label: '嵌入页面', key: 'iframe' },
-                ]}
-              ></Menu>
-            }
-          >
-            <Button size='small' type='primary' shape='circle' icon={<PlusOutlined />} />
-          </Dropdown>
+                ],
+              }}
+            >
+              <Button size='small' type='primary' shape='circle' icon={<PlusOutlined />} />
+            </Dropdown>
+            {iframeModal}
+          </Fragment>
         ),
       },
       undo: {
@@ -381,20 +410,18 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
         action: toggleText,
         element: (
           <Dropdown
-            overlay={
-              <Menu
-                activeKey={activeText}
-                items={[
-                  { label: <MenuItem title='正文' subTitle='Ctrl+Alt+0' />, key: '0' },
-                  { label: <MenuItem title='标题1' subTitle='Ctrl+Alt+1' />, key: '1' },
-                  { label: <MenuItem title='标题2' subTitle='Ctrl+Alt+2' />, key: '2' },
-                  { label: <MenuItem title='标题3' subTitle='Ctrl+Alt+3' />, key: '3' },
-                  { label: <MenuItem title='标题4' subTitle='Ctrl+Alt+4' />, key: '4' },
-                  { label: <MenuItem title='标题5' subTitle='Ctrl+Alt+5' />, key: '5' },
-                ]}
-                onClick={({ key }) => toggleText(key)}
-              />
-            }
+            menu={{
+              accessKey: activeText,
+              onClick: ({ key }) => toggleText(key),
+              items: [
+                { label: <MenuItem title='正文' subTitle='Ctrl+Alt+0' />, key: '0' },
+                { label: <MenuItem title='标题1' subTitle='Ctrl+Alt+1' />, key: '1' },
+                { label: <MenuItem title='标题2' subTitle='Ctrl+Alt+2' />, key: '2' },
+                { label: <MenuItem title='标题3' subTitle='Ctrl+Alt+3' />, key: '3' },
+                { label: <MenuItem title='标题4' subTitle='Ctrl+Alt+4' />, key: '4' },
+                { label: <MenuItem title='标题5' subTitle='Ctrl+Alt+5' />, key: '5' },
+              ],
+            }}
           >
             <Button
               type='text'
@@ -440,32 +467,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
             <Tooltip title='iframe' placement='bottom'>
               <Button type='text' onClick={handleIframe} icon={<GatewayOutlined />} />
             </Tooltip>
-
-            <Modal
-              title='Iframe'
-              open={showIframe}
-              onCancel={() => {
-                setShowIframe(false)
-                iframeForm.resetFields()
-              }}
-              onOk={iframeForm.submit}
-            >
-              <Form
-                form={iframeForm}
-                onFinish={({ src, height }) => {
-                  insertValue(`:iframe{src="${src}" height="${height ?? 200}"}`)
-                  iframeForm.resetFields()
-                  setShowIframe(false)
-                }}
-              >
-                <Form.Item label='地址' name='src' rules={[{ required: true, message: '请输入地址！' }]}>
-                  <Input placeholder='请输入地址' />
-                </Form.Item>
-                <Form.Item label='高度' name='height' rules={[{ required: true, message: '请输入视口高度！' }]}>
-                  <InputNumber placeholder='请输入视口高度' addonAfter='px' min={100} />
-                </Form.Item>
-              </Form>
-            </Modal>
+            {iframeModal}
           </Fragment>
         ),
       },

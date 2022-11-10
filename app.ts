@@ -3,6 +3,9 @@ import { DarukServer } from 'daruk'
 import historyApiFallback from 'koa2-connect-history-api-fallback'
 import koaStatic from 'koa-static'
 import path from 'path'
+import { createProxyMiddleware } from 'http-proxy-middleware'
+import viteConf from './vite.config'
+import k2c from 'koa-connect'
 require('dotenv').config()
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -33,6 +36,10 @@ async function createServer() {
       .use(historyApiFallback({ whiteList: ['/api'], index: '/' }))
       .use(koaStatic(path.join(__dirname, './public'), {}) as any)
   }
+  Object.entries(viteConf.server.proxy).reduce(
+    (app, [api, conf]) => app.use(k2c(createProxyMiddleware(api, conf) as any)),
+    darukServer.app,
+  )
 
   await mongoose.connect(process.env.MONGO!)
   console.log(`running at http://localhost:${PORT}`)
