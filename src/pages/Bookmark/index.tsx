@@ -47,15 +47,12 @@ function Bookmark() {
               bodyStyle={{ padding: 12 }}
               extra={
                 <Dropdown.Button
-                  type='primary'
-                  overlay={
-                    <Menu
-                      items={[
-                        { label: '添加书签', key: 1, onClick: handleCreate },
-                        { label: '导入书签', key: 2 },
-                      ]}
-                    />
-                  }
+                  menu={{
+                    items: [
+                      { label: '添加书签', key: 1, onClick: handleCreate },
+                      { label: '导入书签', key: 2 },
+                    ],
+                  }}
                 />
               }
             >

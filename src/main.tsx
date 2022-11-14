@@ -7,7 +7,6 @@ import zhCN from 'antd/es/locale/zh_CN'
 import 'moment/dist/locale/zh-cn'
 import StoreProvider from './contexts/useStore'
 import { RouteProps } from '../types'
-import 'qweather-icons/font/qweather-icons.css'
 
 const parseRoute = (route: RouteProps, basePath = '') => {
   const path = `/${basePath}/${route.path}`.replace(/\/+/g, '/')

@@ -1,22 +1,32 @@
 import { Avatar, Button, Col, Popover, Row, Space } from 'antd'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { request } from '../../../api'
-import { Number, TranslateX, TranslateY } from '../../../components/Animation'
+import { Number, TranslateX } from '../../../components/Animation'
 import CityCascader from '../../../components/CityCascader'
 import { useUser } from '../../../contexts/useUser'
+import { IconFont } from '../../../utils/common'
 import TempChart from './TempChart'
+import { iconMap } from './utils'
 
 const KEY = 'b00752c7fa154b01ad1653d41ecf5c0b'
 const weekMap = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 
+const getMinute = (time: string) => {
+  const [hour, minute] = time.split(':')
+  return parseInt(hour) * 60 + parseInt(minute)
+}
+
 function Weather() {
+  const [show, setShow] = useState(false)
   const [position, setPosition] = useState<any>()
   const [now, setNow] = useState<any>()
   const [forecast, setForecast] = useState<any>([])
   const [hours, setHours] = useState<any>([])
   const [location, setLocation] = useState([])
+  const [sunDeg, setSunDeg] = useState({ isSun: true, rotate: 0 })
   const [user] = useUser()
+  const timer = useRef<any>()
   const getWeather = async () => {
     const city = location[location.length - 1]
     const cityInfo = await request.weather.getCityId({ method: 'GET', params: { location: city, key: KEY } })
@@ -52,12 +62,31 @@ function Weather() {
     }
   }, [user])
 
+  useEffect(() => {
+    if (!forecast.length) return
+    const fn = () => {
+      const current = getMinute(moment().format('HH:MM'))
+      const sunRise = getMinute(forecast[0].sunrise)
+      const sunSet = getMinute(forecast[0].sunset)
+      const isSun = current <= sunSet
+      setSunDeg({
+        isSun,
+        rotate: isSun
+          ? ((current - sunRise) / (sunSet - sunRise)) * 180
+          : ((current - sunSet) / (1440 - sunSet + sunRise)) * 180,
+      })
+    }
+    fn()
+    clearInterval(timer.current)
+    timer.current = setInterval(fn, 60000)
+  }, [forecast])
+
   return (
     position && (
       <Popover
-        showArrow={false}
         placement='bottomRight'
         destroyTooltipOnHide
+        onOpenChange={show => setTimeout(() => setShow(show), 400)}
         getPopupContainer={el => el.parentElement}
         title={
           <CityCascader
@@ -66,62 +95,80 @@ function Weather() {
             showArrow={false}
             bordered={false}
             onChange={setLocation}
+            getPopupContainer={el => el.parentElement}
             value={location.length ? location : user.location.split('/')}
           />
         }
         content={
-          forecast && (
-            <div className='w-80'>
-              <div className='text-center'>
-                <div className='text-4xl font-semibold'>
-                  <Number to={parseInt(now?.temp)} />°
-                </div>
-                <Space className='mt-2 mb-2'>
-                  <span>{forecast[0]?.textDay}</span>
-                  <span>
-                    {forecast[0]?.tempMin}°C ~ {forecast[0]?.tempMax}°C
-                  </span>
-                </Space>
+          <div className='w-80'>
+            <div className='relative text-center overflow-hidden h-36'>
+              <div
+                className='absolute left-10 -bottom-28 w-60 h-60 rounded-full border border-dashed border-gray-400'
+                style={{ transform: `rotate(${show ? sunDeg.rotate : 0}deg)`, transition: '2s' }}
+              >
+                <IconFont
+                  type={sunDeg.isSun ? 'icon-weather_sunny_big' : 'icon-weather_moon_big'}
+                  style={{ transform: `rotate(-${show ? sunDeg.rotate : 0}deg)`, transition: '2s' }}
+                  className='absolute -left-2 top-1/2 -translate-y-1/2'
+                />
               </div>
-              <Row className='bg-gray-100 p-2' style={{ margin: '0 -16px' }} gutter={8}>
-                {forecast.map((item, index) => (
-                  <Col key={index} span={8}>
-                    <TranslateX key={location[location.length - 1]} delay={index * 200}>
-                      <div className='bg-white p-2 hover:shadow-lg transition cursor-pointer rounded'>
-                        <div className='mb-1'>
-                          {moment(item.fxDate).format('MM/DD')} {weekMap[moment(item.fxDate).day()]}
-                        </div>
-                        <Space align='end'>
-                          <Avatar className='bg-gray-200 text-gray-600 text-lg flex items-center'>
-                            <i className={`qi-${item.iconDay}`}></i>
-                          </Avatar>
-
-                          <span>
-                            {item.tempMin}/{item.tempMax}
-                          </span>
-                        </Space>
-                      </div>
-                    </TranslateX>
-                  </Col>
-                ))}
-              </Row>
-              <TempChart
-                data={hours.map(item => ({
-                  name: moment(item.fxTime).format('HH:mm'),
-                  value: item.temp,
-                  info: item,
-                }))}
-                style={{ height: 140, margin: '0 -16px 0 -36px', transform: 'translateY(24px)' }}
-              />
+              <div className='text-4xl font-semibold mt-16'>
+                <Number to={parseInt(now?.temp)} />°
+              </div>
+              <Space className='mt-2 mb-2'>
+                <span>{now?.text}</span>
+                <span>
+                  {forecast[0]?.tempMin}°C ~ {forecast[0]?.tempMax}°C
+                </span>
+              </Space>
             </div>
-          )
+            <div className='flex justify-between w-72 m-auto text-xs pt-2 pb-2 text-gray-400'>
+              {sunDeg.isSun ? (
+                <>
+                  <span>{forecast[0]?.sunrise}</span>
+                  <span>{forecast[0]?.sunset}</span>
+                </>
+              ) : (
+                <>
+                  <span>{forecast[0]?.sunset}</span>
+                  <span>{forecast[1]?.sunrise}</span>
+                </>
+              )}
+            </div>
+            <Row className='bg-gray-100 p-2' style={{ margin: '0 -16px' }} gutter={8}>
+              {forecast.map((item, index) => (
+                <Col key={index} span={8}>
+                  <TranslateX key={location[location.length - 1]} delay={index * 200}>
+                    <div className='bg-white p-2 hover:shadow-lg transition cursor-pointer rounded'>
+                      <div className='mb-1'>
+                        {moment(item.fxDate).format('MM/DD')} {weekMap[moment(item.fxDate).day()]}
+                      </div>
+                      <Space align='center'>
+                        <IconFont style={{ fontSize: 28 }} type={iconMap[item.iconDay]} />
+                        <span>
+                          {item.tempMin}/{item.tempMax}
+                        </span>
+                      </Space>
+                    </div>
+                  </TranslateX>
+                </Col>
+              ))}
+            </Row>
+            <TempChart
+              data={hours.map(item => ({
+                name: moment(item.fxTime).format('HH:mm'),
+                value: item.temp,
+                info: item,
+              }))}
+              style={{ height: 140, margin: '0 -16px 0 -36px', transform: 'translateY(24px)' }}
+            />
+          </div>
         }
       >
-        <Button type='text'>
-          <Space size={4}>
-            {position.name}
-            <Avatar size='small' style={{ background: '#f0f0f0', color: '#7a7a7a' }}>
-              <i className={`qi-${now?.icon}`} />
+        <Button size='large' type='text'>
+          <Space align='center'>
+            <Avatar size='small' style={{ background: '#f5f5f5' }}>
+              <IconFont style={{ fontSize: 20, transform: 'translateY(2px)' }} type={iconMap[now?.icon]} />
             </Avatar>
             <span>{now?.temp}°C</span>
           </Space>

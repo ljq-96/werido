@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import ProLayout, { DefaultFooter, PageContainer } from '@ant-design/pro-layout'
-import { LogoutOutlined, RightOutlined, SettingFilled, UserOutlined } from '@ant-design/icons'
-import { ConfigProvider, Space, Button, Drawer, Card, message, Popover, Avatar } from 'antd'
+import { LogoutOutlined, RightOutlined, SettingFilled, SettingOutlined, UserOutlined } from '@ant-design/icons'
+import { ConfigProvider, Space, Button, Drawer, Card, message, Popover, Avatar, Dropdown } from 'antd'
 import { Link, Outlet, useNavigate, useLocation, useMatch } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { useUser } from '../contexts/useUser'
@@ -83,25 +83,27 @@ export default (props: PageProps) => {
         children: loginUser?.username?.[0],
       }}
       rightContentRender={() => (
-        <Space>
+        <Space align='center'>
           <Weather />
-          <Button type='text' size='large'>
-            <Space size={4} align='center'>
-              <Avatar size='small' src={loginUser?.avatar}>
-                {loginUser?.username?.[0]}
-              </Avatar>{' '}
-              {loginUser?.username}
-            </Space>
-          </Button>
+          <Dropdown
+            menu={{
+              items: [
+                { icon: <SettingOutlined />, label: '设置', key: 'setting', onClick: () => setShowColorDrawer(true) },
+                { icon: <LogoutOutlined />, label: '退出', key: 'logout', onClick: logout },
+              ],
+            }}
+          >
+            <Button type='text' size='large'>
+              <Space align='center'>
+                <Avatar size='small' src={loginUser?.avatar}>
+                  {loginUser?.username?.[0]}
+                </Avatar>
+                {loginUser?.username}
+              </Space>
+            </Button>
+          </Dropdown>
         </Space>
       )}
-      actionsRender={({}) => {
-        return [
-          <SettingFilled onClick={() => setShowColorDrawer(!showColorDrawer)} />,
-          <LogoutOutlined onClick={logout} />,
-          <Weather />,
-        ]
-      }}
     >
       <Suspense fallback={<Loading />}>
         {loginUser && (

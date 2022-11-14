@@ -5805,11 +5805,6 @@ quick-lru@^5.1.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-5.1.1.tgz#366493e6b3e42a3a6885e2e99d18f80fb7a8c932"
   integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
 
-qweather-icons@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.npmmirror.com/qweather-icons/-/qweather-icons-1.1.1.tgz#7ec6cb340538f68aca27af58ec524779948183d9"
-  integrity sha512-EDjAoxFR73bPiloR/JRw4VUcSUxgxXToBfhlgkBrjt6SWGKEYPzM/6zoiBcWxa9Y8QYOFGI27a3LMvbASqX2EQ==
-
 ramda@^0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"

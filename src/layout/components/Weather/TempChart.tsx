@@ -40,18 +40,16 @@ function TempChart(props: IProps) {
         yAxis: {
           type: 'value',
           show: false,
-          minInterval: 1,
         },
         tooltip: {
           trigger: 'axis',
           formatter: value => {
             const cur = data[value[0].dataIndex]
-            return `${cur.name}<br/><i class="qi-${cur.info.icon}"></i> ${cur.info.text} ${cur.value}°C`
+            return `${cur.name}<br/> ${cur.info.text} ${cur.value}°C`
           },
         },
         series: [
           {
-            name: '最高温度',
             symbol: 'circle',
             showSymbol: false,
             data: data?.map(item => item.value),
@@ -64,7 +62,7 @@ function TempChart(props: IProps) {
               color: new graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 0,
-                  color: '#ddd',
+                  color: '#ccc',
                 },
                 {
                   offset: 1,
