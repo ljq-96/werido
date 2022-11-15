@@ -2,6 +2,8 @@ import Echarts from '../..'
 import { EChartsOption, graphic } from 'echarts'
 import { useUser } from '../../../../contexts/useUser'
 import { generate } from '@ant-design/colors'
+import { memo } from 'react'
+import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
 
 interface IProps {
   loading?: boolean
@@ -64,4 +66,6 @@ function BarChart(props: IProps) {
   )
 }
 
-export default BarChart
+export default memo(BarChart, (pre, next) => {
+  return isDeepEqual(pre, next)
+})

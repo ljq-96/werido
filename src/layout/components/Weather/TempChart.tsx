@@ -1,8 +1,9 @@
 import { EChartsOption, graphic } from 'echarts'
 import { generate } from '@ant-design/colors'
-import { CSSProperties } from 'react'
+import { CSSProperties, memo } from 'react'
 import { useUser } from '../../../contexts/useUser'
 import ReactEcharts from '../../../components/Echarts'
+import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
 
 interface IProps {
   loading?: boolean
@@ -77,4 +78,6 @@ function TempChart(props: IProps) {
   )
 }
 
-export default TempChart
+export default memo(TempChart, (pre, next) => {
+  return isDeepEqual(pre, next)
+})

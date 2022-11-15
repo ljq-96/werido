@@ -64,46 +64,45 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
     >
       <Collapse.Panel
         key={1}
+        collapsible='icon'
         header={
-          <div onClick={e => e.stopPropagation()}>
-            {view.editable ? (
-              <Select
-                size='small'
-                showSearch
-                className='code'
-                style={{ width: 160 }}
-                bordered={false}
-                showArrow={false}
-                defaultValue={node.attrs['language']}
-                optionLabelProp='display'
-                optionFilterProp='display'
-                filterOption={(input, option) => option!.display.toLowerCase().includes(input.toLowerCase())}
-                options={[
-                  ...Object.entries(language).map(([lan, icon]) => ({
-                    display: lan || 'plain text',
-                    label: (
-                      <Row>
-                        <img style={{ width: 18, marginRight: 8 }} src={icon} />
-                        <code>{lan || 'plain text'}</code>
-                      </Row>
-                    ),
-                    value: lan,
-                  })),
-                ]}
-                onChange={event => {
-                  const { tr } = view.state
-                  view.dispatch(
-                    tr.setNodeMarkup(getPos(), undefined, {
-                      ...node.attrs,
-                      language: event,
-                    }),
-                  )
-                }}
-              />
-            ) : (
-              <code style={{ color: '#aaa' }}>{node.attrs['language']}</code>
-            )}
-          </div>
+          view.editable ? (
+            <Select
+              size='small'
+              showSearch
+              className='code'
+              style={{ width: 160 }}
+              bordered={false}
+              showArrow={false}
+              defaultValue={node.attrs['language']}
+              optionLabelProp='display'
+              optionFilterProp='display'
+              filterOption={(input, option) => option!.display.toLowerCase().includes(input.toLowerCase())}
+              options={[
+                ...Object.entries(language).map(([lan, icon]) => ({
+                  display: lan || 'plain text',
+                  label: (
+                    <Row>
+                      <img style={{ width: 18, marginRight: 8 }} src={icon} />
+                      <code>{lan || 'plain text'}</code>
+                    </Row>
+                  ),
+                  value: lan,
+                })),
+              ]}
+              onChange={event => {
+                const { tr } = view.state
+                view.dispatch(
+                  tr.setNodeMarkup(getPos(), undefined, {
+                    ...node.attrs,
+                    language: event,
+                  }),
+                )
+              }}
+            />
+          ) : (
+            <code style={{ color: '#aaa' }}>{node.attrs['language']}</code>
+          )
         }
         extra={
           !view.editable && (

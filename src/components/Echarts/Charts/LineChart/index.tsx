@@ -2,7 +2,8 @@ import Echarts from '../..'
 import { EChartsOption, graphic } from 'echarts'
 import { useUser } from '../../../../contexts/useUser'
 import { generate } from '@ant-design/colors'
-import { CSSProperties } from 'react'
+import { CSSProperties, memo } from 'react'
+import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
 
 interface IProps {
   loading?: boolean
@@ -69,4 +70,6 @@ function LineChart(props: IProps) {
   )
 }
 
-export default LineChart
+export default memo(LineChart, (pre, next) => {
+  return isDeepEqual(pre, next)
+})

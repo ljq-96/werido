@@ -3,6 +3,8 @@ import { EChartsOption, graphic } from 'echarts'
 import { useUser } from '../../../../contexts/useUser'
 import { generate } from '@ant-design/colors'
 import moment from 'moment'
+import { memo } from 'react'
+import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
 
 interface IProps {
   loading?: boolean
@@ -46,4 +48,6 @@ function WordCloudChart(props: IProps) {
   )
 }
 
-export default WordCloudChart
+export default memo(WordCloudChart, (pre, next) => {
+  return isDeepEqual(pre, next)
+})

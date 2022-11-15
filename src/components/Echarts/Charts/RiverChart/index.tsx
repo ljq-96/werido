@@ -1,6 +1,8 @@
 import { generate } from '@ant-design/colors'
+import { memo } from 'react'
 import Echarts from '../..'
 import { useUser } from '../../../../contexts/useUser'
+import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
 
 interface IProps {
   loading?: boolean
@@ -207,4 +209,6 @@ function RiverChart(props: IProps) {
   )
 }
 
-export default RiverChart
+export default memo(RiverChart, (pre, next) => {
+  return isDeepEqual(pre, next)
+})

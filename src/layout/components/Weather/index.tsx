@@ -104,11 +104,11 @@ function Weather() {
             <div className='relative text-center overflow-hidden h-36'>
               <div
                 className='absolute left-10 -bottom-28 w-60 h-60 rounded-full border border-dashed border-gray-400'
-                style={{ transform: `rotate(${show ? sunDeg.rotate : 0}deg)`, transition: '2s' }}
+                style={{ transform: `rotate(${show ? sunDeg.rotate : 0}deg)`, transition: '1s' }}
               >
                 <IconFont
                   type={sunDeg.isSun ? 'icon-weather_sunny_big' : 'icon-weather_moon_big'}
-                  style={{ transform: `rotate(-${show ? sunDeg.rotate : 0}deg)`, transition: '2s' }}
+                  style={{ transform: `rotate(-${show ? sunDeg.rotate : 0}deg)`, transition: '1s' }}
                   className='absolute -left-2 top-1/2 -translate-y-1/2'
                 />
               </div>

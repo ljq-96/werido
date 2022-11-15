@@ -3,6 +3,8 @@ import { EChartsOption, graphic } from 'echarts'
 import { useUser } from '../../../../contexts/useUser'
 import { generate } from '@ant-design/colors'
 import moment from 'moment'
+import { memo } from 'react'
+import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
 
 interface IProps {
   loading?: boolean
@@ -82,4 +84,6 @@ function TodoScatterChart(props: IProps) {
   )
 }
 
-export default TodoScatterChart
+export default memo(TodoScatterChart, (pre, next) => {
+  return isDeepEqual(pre, next)
+})

@@ -1,6 +1,8 @@
 import Echarts from '../..'
 import { EChartsOption } from 'echarts'
 import { useUser } from '../../../../contexts/useUser'
+import { memo } from 'react'
+import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
 
 interface IProps {
   loading?: boolean
@@ -66,4 +68,6 @@ function RoseChart(props: IProps) {
   )
 }
 
-export default RoseChart
+export default memo(RoseChart, (pre, next) => {
+  return isDeepEqual(pre, next)
+})

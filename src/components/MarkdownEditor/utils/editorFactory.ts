@@ -67,6 +67,5 @@ export default function editorFactory(
         configBuilder: defaultConfigBuilder,
       }),
     )
-
   return editor
 }
