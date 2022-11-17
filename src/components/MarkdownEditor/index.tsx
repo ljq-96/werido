@@ -14,6 +14,8 @@ import { arrToTree } from '../../utils/common'
 import { TranslateX, TranslateY } from '../Animation'
 import editorFactory from './utils/editorFactory'
 import rendererFactory from './utils/renderFactory'
+import useShiki from './hooks/useShiki'
+import { shikiPlugin } from './plugin/shiki'
 
 interface IProps {
   height?: number | string
@@ -59,11 +61,18 @@ const MilkdownEditor = (props: IProps, ref) => {
   const { height, onChange, controls, onFinish, value = '', readonly = false, loading: contentLoading = false } = props
   const [catalog, setCatalog] = useState<{ text: string; level: number }[]>([])
   const [showCatalog, setShowCatalog] = useState(true)
+  const shiki = useShiki()
   const theme = useTheme()
 
   const { editor, getDom, loading, getInstance } = useEditor(
-    (root, renderReact) => editorFactory(root, renderReact, value, readonly, onChange, setCatalog).use(theme),
-    [readonly, value, onChange, theme, setCatalog],
+    (root, renderReact) => {
+      if (shiki) {
+        return editorFactory(root, renderReact, value, readonly, onChange, setCatalog)
+          .use(theme)
+          .use(shikiPlugin(shiki))
+      }
+    },
+    [readonly, value, onChange, theme, setCatalog, shiki],
   )
 
   const control = useControls({ editor: getInstance(), dom: getDom() })

@@ -1,9 +1,7 @@
 import { defaultValueCtx, Editor, editorViewOptionsCtx, rootCtx } from '@milkdown/core'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
-import { prismPlugin } from '@milkdown/plugin-prism'
 import { gfm } from '@milkdown/preset-gfm'
 import { outline } from '@milkdown/utils'
-import { refractor } from 'refractor/lib/common'
 import { iframe } from '../plugin/iframe'
 
 export default function rendererFactory(
@@ -23,11 +21,6 @@ export default function rendererFactory(
     .use(iframe)
     .use(gfm)
     .use(listener)
-    .use(
-      prismPlugin({
-        configureRefractor: () => refractor,
-      }),
-    )
 
   return editor
 }

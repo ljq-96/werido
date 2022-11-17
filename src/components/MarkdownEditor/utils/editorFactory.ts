@@ -8,7 +8,6 @@ import { history } from '@milkdown/plugin-history'
 import { indent } from '@milkdown/plugin-indent'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
 import { math } from '@milkdown/plugin-math'
-import { prism } from '@milkdown/plugin-prism'
 import { slash } from '@milkdown/plugin-slash'
 import { tooltip } from '@milkdown/plugin-tooltip'
 import { trailing } from '@milkdown/plugin-trailing'
@@ -55,7 +54,6 @@ export default function editorFactory(
     .use(clipboard)
     .use(history)
     .use(cursor)
-    .use(prism)
     .use(math)
     .use(indent)
     .use(diagram)

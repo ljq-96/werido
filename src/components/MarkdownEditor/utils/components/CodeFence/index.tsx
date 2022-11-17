@@ -5,46 +5,10 @@ import { Button, Collapse, Row, Select, Space, Tooltip } from 'antd'
 import { FC, Fragment, ReactNode } from 'react'
 import { copyText } from '../../../../../utils/common'
 import './style.less'
-import typescript from './imgs/ts.svg'
-import javascript from './imgs/js.svg'
-import html from './imgs/html.svg'
-import css from './imgs/css.svg'
-import json from './imgs/json.svg'
-import java from './imgs/java.svg'
-import c from './imgs/c.svg'
-import cpp from './imgs/cpp.svg'
-import go from './imgs/go.svg'
-import markdown from './imgs/markdown.svg'
-import python from './imgs/python.svg'
-import react from './imgs/reactjs.svg'
-import ruby from './imgs/ruby.svg'
-import sql from './imgs/sql.svg'
-import vue from './imgs/vue.svg'
-import txt from './imgs/txt.svg'
-
-export const language = {
-  '': txt,
-  html,
-  css,
-  javascript,
-  typescript,
-  // react,
-  // vue,
-  java,
-  c,
-  python,
-  ruby,
-  sql,
-  go,
-  cpp,
-  markdown,
-  json,
-}
+import { Language } from '../../language'
 
 export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
-  const { node, ctx, view, getPos } = useNodeCtx<Node>()
-  // const language = ['', 'javascript', 'vue', 'typescript', 'bash']
-
+  const { node, view, getPos } = useNodeCtx<Node>()
   return (
     <Collapse
       className='code-fence'
@@ -79,11 +43,11 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
               optionFilterProp='display'
               filterOption={(input, option) => option!.display.toLowerCase().includes(input.toLowerCase())}
               options={[
-                ...Object.entries(language).map(([lan, icon]) => ({
+                ...Object.keys(Language).map((lan: Language) => ({
                   display: lan || 'plain text',
                   label: (
                     <Row>
-                      <img style={{ width: 18, marginRight: 8 }} src={icon} />
+                      <img style={{ width: 18, marginRight: 8 }} src={`/languages/icons/${lan || 'txt'}.svg`} />
                       <code>{lan || 'plain text'}</code>
                     </Row>
                   ),

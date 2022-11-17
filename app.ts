@@ -4,8 +4,8 @@ import historyApiFallback from 'koa2-connect-history-api-fallback'
 import koaStatic from 'koa-static'
 import path from 'path'
 import { createProxyMiddleware } from 'http-proxy-middleware'
-import viteConf from './vite.config'
 import k2c from 'koa-connect'
+import proxy from './proxy'
 require('dotenv').config()
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -29,14 +29,13 @@ async function createServer() {
   await darukServer.binding()
   if (isDev) {
     const vite = await (await import('vite')).createServer({ server: { middlewareMode: true } })
-    const k2c = (await import('koa-connect')).default
     darukServer.app.use(koaStatic(path.join(__dirname, './public'), {}) as any).use(k2c(vite.middlewares))
   } else {
     darukServer.app
       .use(historyApiFallback({ whiteList: ['/api'], index: '/' }))
       .use(koaStatic(path.join(__dirname, './public'), {}) as any)
   }
-  Object.entries(viteConf.server.proxy).reduce(
+  Object.entries(proxy).reduce(
     (app, [api, conf]) => app.use(k2c(createProxyMiddleware(api, conf) as any)),
     darukServer.app,
   )

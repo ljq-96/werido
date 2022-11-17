@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import proxy from './proxy'
 
 // https://vitejs.dev/config/
 export default {
@@ -16,15 +17,6 @@ export default {
     },
   },
   server: {
-    proxy: {
-      '/v7/weather': {
-        target: 'https://devapi.qweather.com',
-        changeOrigin: true,
-      },
-      '/v2/city': {
-        target: 'https://geoapi.qweather.com',
-        changeOrigin: true,
-      },
-    },
+    proxy,
   },
 }
