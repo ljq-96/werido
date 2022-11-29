@@ -31,10 +31,6 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     li.ProseMirror-selectednode::after {
       ${manager.get(ThemeBorder, undefined)};
     }
-
-    & ::selection {
-      background: ${highlight};
-    }
   `
 
   const editorLayout = css`

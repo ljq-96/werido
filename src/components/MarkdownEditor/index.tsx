@@ -7,7 +7,6 @@ import { Anchor, Button, Space, Spin, Tooltip } from 'antd'
 import useControls, { Controls } from './hooks/useControls'
 import useTheme from './hooks/useTheme'
 import style from './index.module.less'
-import './codeTheme/prism-gruvbox-light.css'
 import { RightOutlined, SaveOutlined } from '@ant-design/icons'
 import clsx from 'clsx'
 import { arrToTree } from '../../utils/common'
@@ -146,7 +145,7 @@ const MilkdownEditor = (props: IProps, ref) => {
               />
               <div className={style.catalogWrapper}>
                 <div className={style.catalogTitle}>大纲</div>
-                <Anchor affix={true} onClick={e => e.preventDefault()}>
+                <Anchor affix={true} offsetTop={80}>
                   {formatAnchor(arrToTree(catalog))}
                 </Anchor>
               </div>

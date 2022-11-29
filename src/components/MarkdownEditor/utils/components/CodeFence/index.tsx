@@ -65,7 +65,9 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
               }}
             />
           ) : (
-            <code style={{ color: '#aaa' }}>{node.attrs['language']}</code>
+            <code className='code' style={{ color: '#aaa' }}>
+              {node.attrs['language']}
+            </code>
           )
         }
         extra={
@@ -85,7 +87,7 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
           )
         }
       >
-        <pre>{children}</pre>
+        <pre className='m-0'>{children}</pre>
       </Collapse.Panel>
     </Collapse>
   )

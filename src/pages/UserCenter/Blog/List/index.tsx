@@ -1,6 +1,5 @@
 import { InfoCircleOutlined } from '@ant-design/icons'
 import { Alert, Button, Dropdown, Form, Input, Menu, message, Modal, Segmented, Space, Tag } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IBlog, IUser } from '../../../../../types'
@@ -9,7 +8,9 @@ import CommonTable, { CommonTableInstance, ToolItem } from '../../../../componen
 import { formatTime } from '../../../../utils/common'
 import { TranslateX } from '../../../../components/Animation'
 import { useStore } from '../../../../contexts/useStore'
+import { ColumnsType } from 'antd/es/table'
 
+// TODO 导出
 function UserCenterBlogList(props) {
   const [showModal, setShowModal] = useState<boolean | IUser>(false)
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
@@ -48,16 +49,12 @@ function UserCenterBlogList(props) {
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
         return request.blog({ method: 'DELETE', query: id }).then(() => {
-          // setShowModal(false)
           message.success('删除成功')
           tableRef.current.fetchData()
-          return Promise.resolve()
         })
       },
     })
   }
-
-  const handleSubmit = async (fields: Partial<IUser>) => {}
 
   const columns: ColumnsType<IBlog> = [
     {
@@ -141,25 +138,6 @@ function UserCenterBlogList(props) {
         toolList={toolList}
         columns={columns}
       />
-
-      <Modal
-        title={`${typeof showModal === 'boolean' ? '新增' : '编辑'}用户`}
-        open={!!showModal}
-        onOk={form.submit}
-        onCancel={() => {
-          setShowModal(false)
-          form.resetFields()
-        }}
-      >
-        <Form form={form} labelCol={{ style: { width: 70 } }} onFinish={handleSubmit}>
-          <Form.Item label='用户名' name='username' rules={[{ required: true, message: '请输入用户名！' }]}>
-            <Input placeholder='请输入用户名' />
-          </Form.Item>
-          <Form.Item label='密码' name='password' rules={[{ required: true, message: '请输入密码！' }]}>
-            <Input.Password placeholder='请输入密码' />
-          </Form.Item>
-        </Form>
-      </Modal>
     </Fragment>
   )
 }

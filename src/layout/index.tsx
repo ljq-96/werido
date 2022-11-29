@@ -64,6 +64,7 @@ export default (props: PageProps) => {
   return (
     <ProLayout
       loading={loading}
+      token={{ colorPrimary: loginUser?.themeColor }}
       className='layout'
       fixedHeader={true}
       siderWidth={180}
@@ -75,7 +76,7 @@ export default (props: PageProps) => {
       splitMenus={true}
       route={currentRoutes}
       menuItemRender={(item, dom) => <Link to={item.path}>{dom}</Link>}
-      location={{ pathname }}
+      // location={{ pathname }}
       onMenuHeaderClick={() => navigate('/')}
       avatarProps={{
         src: loginUser?.avatar,
@@ -105,69 +106,71 @@ export default (props: PageProps) => {
         </Space>
       )}
     >
-      <Suspense fallback={<Loading />}>
-        {loginUser && (
-          <div style={{ marginRight: showColorDrawer ? 300 : 0, transition: '0.4s' }}>
-            <Outlet />
-          </div>
-        )}
-        <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
-      </Suspense>
-      <Drawer
-        className='color-drawer'
-        open={showColorDrawer}
-        width={300}
-        mask={false}
-        onClose={handleDrawer}
-        closeIcon={null}
-        style={{ top: 56, zIndex: 18 }}
-        zIndex={1000}
-        footer={
-          <Space>
-            <Button
-              style={{ background: 'rgba(255, 255, 255, 0.4)' }}
-              onClick={() => {
-                setShowColorDrawer(false)
-                getMyProfile()
-              }}
-            >
-              取消
-            </Button>
-            <Button onClick={handleDrawer} type='primary'>
-              应用
-            </Button>
-          </Space>
-        }
-      >
-        <CirclePicker
-          colors={[
-            colors.red.primary,
-            colors.volcano.primary,
-            colors.orange.primary,
-            colors.gold.primary,
-            colors.yellow.primary,
-            colors.lime.primary,
-            colors.green.primary,
-            colors.cyan.primary,
-            colors.blue.primary,
-            colors.geekblue.primary,
-            colors.purple.primary,
-            colors.magenta.primary,
-          ]}
-          color={loginUser?.themeColor}
-          onChange={changeColor}
-        />
-        <div style={{ margin: '24px 0' }}>
-          <SliderPicker color={loginUser?.themeColor} onChange={changeColor} />
-        </div>
-        <Card size='small'>
-          <div className='overflow-hidden'>
-            <div style={{ margin: '0 -1px' }}>
-              <MaterialPicker color={loginUser?.themeColor} onChange={changeColor} />
+      <ConfigProvider theme={loginUser?.themeColor ? { token: { colorPrimary: loginUser.themeColor } } : {}}>
+        <Suspense fallback={<Loading />}>
+          {loginUser && (
+            <div style={{ marginRight: showColorDrawer ? 300 : 0, transition: '0.4s' }}>
+              <Outlet />
             </div>
+          )}
+          <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
+        </Suspense>
+        <Drawer
+          className='color-drawer'
+          open={showColorDrawer}
+          width={300}
+          mask={false}
+          onClose={handleDrawer}
+          closeIcon={null}
+          style={{ top: 56, zIndex: 18 }}
+          zIndex={1000}
+          footer={
+            <Space>
+              <Button
+                style={{ background: 'rgba(255, 255, 255, 0.4)' }}
+                onClick={() => {
+                  setShowColorDrawer(false)
+                  getMyProfile()
+                }}
+              >
+                取消
+              </Button>
+              <Button onClick={handleDrawer} type='primary'>
+                应用
+              </Button>
+            </Space>
+          }
+        >
+          <CirclePicker
+            colors={[
+              colors.red.primary,
+              colors.volcano.primary,
+              colors.orange.primary,
+              colors.gold.primary,
+              colors.yellow.primary,
+              colors.lime.primary,
+              colors.green.primary,
+              colors.cyan.primary,
+              colors.blue.primary,
+              colors.geekblue.primary,
+              colors.purple.primary,
+              colors.magenta.primary,
+            ]}
+            color={loginUser?.themeColor}
+            onChange={changeColor}
+          />
+          <div style={{ margin: '24px 0' }}>
+            <SliderPicker color={loginUser?.themeColor} onChange={changeColor} />
           </div>
-        </Card>
-      </Drawer>
+          <Card size='small'>
+            <div className='overflow-hidden'>
+              <div style={{ margin: '0 -1px' }}>
+                <MaterialPicker color={loginUser?.themeColor} onChange={changeColor} />
+              </div>
+            </div>
+          </Card>
+        </Drawer>
+      </ConfigProvider>
     </ProLayout>
   )
 }

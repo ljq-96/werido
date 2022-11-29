@@ -1,19 +1,5 @@
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  message,
-  Row,
-  Select,
-  Space,
-  Tag,
-  Affix,
-  Spin,
-  PageHeader,
-  Tooltip,
-} from 'antd'
+import { PageHeader } from '@ant-design/pro-layout'
+import { Button, Card, Col, Form, Input, message, Row, Select, Space, Tag, Affix, Spin, Tooltip } from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { IBlog } from '../../../../types'
@@ -25,7 +11,7 @@ import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEdito
 import { useStore } from '../../../contexts/useStore'
 
 function BlogDetail() {
-  const [{ tags }, { getTags }] = useStore()
+  const [{ tags, catalog }, { getTags }] = useStore()
   const [onEdit, setOnEdit] = useState(false)
   const [expandCatalog, setExpandCatalog] = useState(true)
   const [loading, setLoading] = useState(false)
@@ -46,6 +32,8 @@ function BlogDetail() {
     setOnEdit(false)
     setLoading(false)
   }
+
+  console.log(catalog)
 
   const extra = useMemo(() => {
     return onEdit
@@ -97,7 +85,7 @@ function BlogDetail() {
                 extra={
                   <Tooltip placement='bottom' title={expandCatalog ? '全部折叠' : '全部展开'}>
                     <Button
-                      size='small'
+                      // size='small'
                       type='text'
                       icon={<CatalogIcon open={expandCatalog} />}
                       onClick={() => {

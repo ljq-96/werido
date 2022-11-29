@@ -11,6 +11,7 @@ import { DocIndexType } from '../../../types/enum'
 import { extract } from '../../utils/common'
 import Tops from '../../components/Tops'
 import { TranslateX } from '../../components/Animation'
+import { MoreOutlined } from '@ant-design/icons'
 
 function Bookmark() {
   const [showModal, setShowModal] = useState<IBookmark | boolean>(null)
@@ -46,14 +47,16 @@ function Bookmark() {
               title='我的书签'
               bodyStyle={{ padding: 12 }}
               extra={
-                <Dropdown.Button
+                <Dropdown
                   menu={{
                     items: [
                       { label: '添加书签', key: 1, onClick: handleCreate },
                       { label: '导入书签', key: 2 },
                     ],
                   }}
-                />
+                >
+                  <Button icon={<MoreOutlined />} />
+                </Dropdown>
               }
             >
               <Spin spinning={loading}>

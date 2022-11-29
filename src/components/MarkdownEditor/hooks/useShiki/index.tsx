@@ -2,6 +2,7 @@ import { MilkdownPlugin } from '@milkdown/core'
 import { useEffect, useState } from 'react'
 import { setCDN, getHighlighter, loadTheme, Lang } from 'shiki'
 import ayu from '../../codeTheme/ayu.json'
+import minLight from '../../codeTheme/minLight.json'
 import { shikiPlugin } from '../../plugin/shiki'
 import { Language } from '../../utils/language'
 

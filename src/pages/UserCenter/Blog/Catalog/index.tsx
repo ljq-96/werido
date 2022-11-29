@@ -1,6 +1,6 @@
 import { Card, Empty, Spin, Transfer, Tree } from 'antd'
-import { TransferDirection } from 'antd/lib/transfer'
-import { DataNode, TreeProps } from 'antd/lib/tree'
+import { TransferDirection } from 'antd/es/transfer'
+import { DataNode, TreeProps } from 'antd/es/tree'
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { DocIndexType } from '../../../../../types/enum'
 import { request } from '../../../../api'
@@ -145,7 +145,7 @@ function UserCenterBlogCatalog() {
             <Transfer
               rowKey={({ _id }) => _id}
               titles={['知识库目录', '未在目录中']}
-              listStyle={{ flex: 1, height: 'calc(100vh - 270px)', borderColor: '#f0f0f0' }}
+              listStyle={{ flex: 1, borderColor: '#f0f0f0' }}
               targetKeys={targetKeys}
               selectedKeys={selectedKeys}
               dataSource={dataSource}

@@ -90,7 +90,7 @@ function Weather() {
         getPopupContainer={el => el.parentElement}
         title={
           <CityCascader
-            style={{ marginLeft: -16, width: '100%' }}
+            style={{ width: '100%' }}
             allowClear={false}
             showArrow={false}
             bordered={false}
@@ -100,7 +100,7 @@ function Weather() {
           />
         }
         content={
-          <div className='w-80'>
+          <div className='w-80 overflow-hidden -ml-3 -mr-3'>
             <div className='relative text-center overflow-hidden h-36'>
               <div
                 className='absolute left-10 -bottom-28 w-60 h-60 rounded-full border border-dashed border-gray-400'
@@ -135,7 +135,7 @@ function Weather() {
                 </>
               )}
             </div>
-            <Row className='bg-gray-100 p-2' style={{ margin: '0 -16px' }} gutter={8}>
+            <Row className='bg-gray-100 p-2' gutter={8}>
               {forecast.map((item, index) => (
                 <Col key={index} span={8}>
                   <TranslateX key={location[location.length - 1]} delay={index * 200}>
@@ -160,7 +160,7 @@ function Weather() {
                 value: item.temp,
                 info: item,
               }))}
-              style={{ height: 140, margin: '0 -16px 0 -36px', transform: 'translateY(24px)' }}
+              style={{ height: 140, marginLeft: -16, transform: 'translateY(24px)' }}
             />
           </div>
         }

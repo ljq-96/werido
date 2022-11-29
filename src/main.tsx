@@ -1,8 +1,8 @@
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import routes from './routes'
-import { ConfigProvider } from 'antd'
-import UserProvider from './contexts/useUser'
+import { ConfigProvider, Button } from 'antd'
+import UserProvider, { useUser } from './contexts/useUser'
 import zhCN from 'antd/es/locale/zh_CN'
 import 'moment/dist/locale/zh-cn'
 import StoreProvider from './contexts/useStore'
@@ -21,14 +21,27 @@ const parseRoute = (route: RouteProps, basePath = '') => {
   )
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <StoreProvider>
-    <UserProvider>
-      <ConfigProvider locale={zhCN}>
-        <BrowserRouter>
-          <Routes>{routes.map(r => parseRoute(r))}</Routes>
-        </BrowserRouter>
-      </ConfigProvider>
-    </UserProvider>
-  </StoreProvider>,
-)
+function Main() {
+  const [{ themeColor }] = useUser()
+  console.log(themeColor)
+
+  return (
+    <ConfigProvider locale={zhCN} theme={{ token: themeColor ? { colorPrimary: themeColor } : {} }}>
+      <BrowserRouter>
+        <Routes>{routes.map(r => parseRoute(r))}</Routes>
+      </BrowserRouter>
+    </ConfigProvider>
+  )
+}
+
+function App() {
+  return (
+    <StoreProvider>
+      <UserProvider>
+        <Main />
+      </UserProvider>
+    </StoreProvider>
+  )
+}
+
+ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
