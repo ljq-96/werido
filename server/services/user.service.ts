@@ -1,6 +1,6 @@
 import { service, inject, DarukContext } from 'daruk'
+import dayjs from 'dayjs'
 import { sign } from 'jsonwebtoken'
-import moment from 'moment'
 import { blogModel, bookmarkModel, todoModel, User, userModel } from '../models'
 
 @service()
@@ -13,7 +13,7 @@ export class UserService {
 
   public async getProfile() {
     const { _id } = this.ctx.app.context.user
-    const user: any = await this.updateOne(_id, { lastLoginTime: moment().format() })
+    const user: any = await this.updateOne(_id, { lastLoginTime: dayjs().format() })
     const blog = await this.blogModel.find({ creator: _id }).countDocuments()
     const bookmark = await this.bookmarkModel.find({ creator: _id }).countDocuments()
     const todo = await this.todoModel.find({ creator: _id }).countDocuments()

@@ -1,21 +1,21 @@
 import { Button, Dropdown, Empty, Menu, Spin } from 'antd'
 import clsx from 'clsx'
-import moment, { Moment } from 'moment'
 import { useContext, useMemo } from 'react'
 import { TranslateX, TranslateY } from '../../../Animation'
 import { MoreOutlined } from '@ant-design/icons'
 import { getEvents } from '../../utils'
 import { CalendarContext } from '../..'
 import './style.less'
+import dayjs, { Dayjs } from 'dayjs'
 
 function CalendarDay() {
   const { current, setCurrent, todo, onAction, loading } = useContext(CalendarContext)
 
-  const days = useMemo<{ week: string; day?: Moment }[]>(() => {
+  const days = useMemo<{ week: string; day?: Dayjs }[]>(() => {
     const dayIndex = current.day() === 0 ? 6 : current.day() - 1
     return ['一', '二', '三', '四', '五', '六', '日'].map((item, index) => ({
       week: item,
-      day: moment(current).subtract(dayIndex - index, 'days'),
+      day: dayjs(current).subtract(dayIndex - index, 'days'),
     }))
   }, [current])
 
@@ -31,8 +31,8 @@ function CalendarDay() {
             key={item.week}
             className={clsx(
               'calendar-day-head-item',
-              item.day.format('yyyy-MM-DD') === moment().format('yyyy-MM-DD') && 'active',
-              item.day.format('yyyy-MM-DD') === current.format('yyyy-MM-DD') && 'current',
+              item.day.format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD') && 'active',
+              item.day.format('YYYY-MM-DD') === current.format('YYYY-MM-DD') && 'current',
             )}
             onClick={() => setCurrent(item.day)}
           >
@@ -41,8 +41,8 @@ function CalendarDay() {
             <div
               className={clsx(
                 'calendar-day-head-item-dot',
-                item.day.format('yyyy-MM-DD') === moment().format('yyyy-MM-DD') &&
-                  moment().format('yyyy-MM-DD') === current.format('yyyy-MM-DD') &&
+                item.day.format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD') &&
+                  dayjs().format('YYYY-MM-DD') === current.format('YYYY-MM-DD') &&
                   'status-processing',
               )}
             ></div>
@@ -51,7 +51,7 @@ function CalendarDay() {
       </div>
       <Spin spinning={loading}>
         <div className='calendar-day-today'>
-          <div>{current.format('yyyy.MM.DD')}</div>
+          <div>{current.format('YYYY.MM.DD')}</div>
           <div>{currentEvents?.length ?? 0}个日程</div>
         </div>
 

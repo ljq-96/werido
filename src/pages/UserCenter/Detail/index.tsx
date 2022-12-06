@@ -49,7 +49,7 @@ function UserCenterDetail() {
       <Form form={form} labelCol={{ style: { width: 100 } }} onFinish={handleFinish}>
         <TranslateX.List interval={100}>
           <Form.Item label='用户名' name='username' rules={[{ required: true, message: '请输入用户名！' }]}>
-            <Input placeholder='请输入用户名' />
+            <Input autoComplete='new-password' placeholder='请输入用户名' />
           </Form.Item>
           <Form.Item label='描述' name='desc'>
             <Input placeholder='请输入描述' showCount maxLength={50} />
@@ -78,7 +78,7 @@ function UserCenterDetail() {
               }),
             ]}
           >
-            <Input.Password placeholder='请输入确认密码' />
+            <Input.Password autoComplete='new-password' placeholder='请输入确认密码' />
           </Form.Item>
           <Form.Item name='location' label='所在地'>
             <CityCascader />

@@ -1,5 +1,5 @@
 import { Avatar, Button, Col, Popover, Row, Space } from 'antd'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { useEffect, useRef, useState } from 'react'
 import { request } from '../../../api'
 import { Number, TranslateX } from '../../../components/Animation'
@@ -65,7 +65,7 @@ function Weather() {
   useEffect(() => {
     if (!forecast.length) return
     const fn = () => {
-      const current = getMinute(moment().format('HH:MM'))
+      const current = getMinute(dayjs().format('HH:MM'))
       const sunRise = getMinute(forecast[0].sunrise)
       const sunSet = getMinute(forecast[0].sunset)
       const isSun = current <= sunSet
@@ -84,6 +84,7 @@ function Weather() {
   return (
     position && (
       <Popover
+        showArrow={false}
         placement='bottomRight'
         destroyTooltipOnHide
         onOpenChange={show => setTimeout(() => setShow(show), 400)}
@@ -141,7 +142,7 @@ function Weather() {
                   <TranslateX key={location[location.length - 1]} delay={index * 200}>
                     <div className='bg-white p-2 hover:shadow-lg transition cursor-pointer rounded'>
                       <div className='mb-1'>
-                        {moment(item.fxDate).format('MM/DD')} {weekMap[moment(item.fxDate).day()]}
+                        {dayjs(item.fxDate).format('MM/DD')} {weekMap[dayjs(item.fxDate).day()]}
                       </div>
                       <Space align='center'>
                         <IconFont style={{ fontSize: 28 }} type={iconMap[item.iconDay]} />
@@ -156,7 +157,7 @@ function Weather() {
             </Row>
             <TempChart
               data={hours.map(item => ({
-                name: moment(item.fxTime).format('HH:mm'),
+                name: dayjs(item.fxTime).format('HH:mm'),
                 value: item.temp,
                 info: item,
               }))}
@@ -165,13 +166,11 @@ function Weather() {
           </div>
         }
       >
-        <Button size='large' type='text'>
-          <Space align='center'>
-            <Avatar size='small' style={{ background: '#f5f5f5' }}>
-              <IconFont style={{ fontSize: 20, transform: 'translateY(2px)' }} type={iconMap[now?.icon]} />
-            </Avatar>
-            <span>{now?.temp}°C</span>
-          </Space>
+        <Button size='large' type='text' style={{ paddingTop: 0, paddingBottom: 0 }}>
+          <Avatar size='small' className='mr-2 bg-gray-200'>
+            <IconFont style={{ fontSize: 20, transform: 'translateY(2px)' }} type={iconMap[now?.icon]} />
+          </Avatar>
+          <span>{now?.temp}°C</span>
         </Button>
       </Popover>
     )

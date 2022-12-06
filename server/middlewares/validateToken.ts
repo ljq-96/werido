@@ -9,12 +9,16 @@ export class ValidateToken implements MiddlewareClass {
   // @inject('UserService') public userService: UserService
   public initMiddleware() {
     return async (ctx: DarukContext, next) => {
-      const token: any = jwt.verify(ctx.cookies.get('token') as string, 'werido')
-      const user: any = await userModel.findOne({ _id: token.data })
-      ctx.assert(user, 401, '登陆过期请重新登陆')
-      ctx.assert(user.status !== UserStatus.已禁用, 403, '您已被禁用，请联系管理员')
-      ctx.app.context.user = user._doc
-      await next()
+      try {
+        const token: any = jwt.verify(ctx.cookies.get('token') as string, 'werido')
+        const user: any = await userModel.findOne({ _id: token.data })
+        ctx.assert(user, 401, '登陆过期请重新登陆')
+        ctx.assert(user.status !== UserStatus.已禁用, 403, '您已被禁用，请联系管理员')
+        ctx.app.context.user = user._doc
+        await next()
+      } catch {
+        ctx.assert(false, 401, '登陆过期请重新登陆')
+      }
     }
   }
 }

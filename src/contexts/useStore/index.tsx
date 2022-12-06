@@ -26,13 +26,10 @@ export default function StoreProvider({ children }: { children: ReactNode }) {
 
   return (
     <StoreContext.Provider
-      value={useMemo(
-        () => [
-          { tags, catalog },
-          { getTags, getCatalog },
-        ],
-        [tags],
-      )}
+      value={[
+        { tags, catalog },
+        { getTags, getCatalog },
+      ]}
     >
       {children}
     </StoreContext.Provider>

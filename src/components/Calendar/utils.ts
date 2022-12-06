@@ -1,15 +1,15 @@
-import moment, { Moment } from 'moment'
+import dayjs, { Dayjs } from 'dayjs'
 import { ITodo } from '../../../types'
 
-export function getEvents(events: ITodo[], current: Moment) {
+export function getEvents(events: ITodo[], current: Dayjs) {
   return events
     ?.filter(item => {
-      const c = moment(item.start).valueOf()
-      return c >= moment(current).startOf('day').valueOf() && c <= moment(current).endOf('day').valueOf()
+      const c = dayjs(item.start).valueOf()
+      return c >= dayjs(current).startOf('day').valueOf() && c <= dayjs(current).endOf('day').valueOf()
     })
     ?.map(item => ({
       ...item,
-      start: moment(item.start),
-      end: moment(item.end),
+      start: dayjs(item.start),
+      end: dayjs(item.end),
     }))
 }

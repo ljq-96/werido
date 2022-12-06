@@ -1,6 +1,6 @@
 import { prop, getModelForClass } from '@typegoose/typegoose'
+import dayjs from 'dayjs'
 import { UserStatus } from '../../types/enum'
-import moment from 'moment'
 
 export class User {
   @prop({ type: String })
@@ -21,13 +21,13 @@ export class User {
   @prop({ type: Number, enum: UserStatus, default: UserStatus.普通用户 })
   status?: UserStatus
 
-  @prop({ type: String, default: moment().format() })
+  @prop({ type: String, default: dayjs().format() })
   createTime?: string
 
-  @prop({ type: String, default: moment().format() })
+  @prop({ type: String, default: dayjs().format() })
   updateTime?: string
 
-  @prop({ type: String, default: moment().format() })
+  @prop({ type: String, default: dayjs().format() })
   lastLoginTime?: string
 
   @prop({ type: String, default: '#1890ff' })

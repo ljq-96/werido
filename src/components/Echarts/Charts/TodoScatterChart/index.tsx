@@ -2,9 +2,11 @@ import Echarts from '../..'
 import { EChartsOption, graphic } from 'echarts'
 import { useUser } from '../../../../contexts/useUser'
 import { generate } from '@ant-design/colors'
-import moment from 'moment'
 import { memo } from 'react'
 import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
 interface IProps {
   loading?: boolean
@@ -31,7 +33,7 @@ function TodoScatterChart(props: IProps) {
             type: 'cross',
             snap: true,
             label: {
-              formatter: e => moment(e.value).utcOffset(0).format('HH:mm'),
+              formatter: e => dayjs.utc(e.value).format('HH:mm'),
             },
           },
         },
@@ -45,7 +47,7 @@ function TodoScatterChart(props: IProps) {
           axisLabel: {
             formatter: val => {
               if (val === 86399999) return '24:00'
-              return moment(val).utcOffset(0).format('HH:mm')
+              return dayjs.utc(val).format('HH:mm')
             },
             rotate: 60,
           },
@@ -60,7 +62,7 @@ function TodoScatterChart(props: IProps) {
           axisLabel: {
             formatter: val => {
               if (val === 86399999) return '24:00'
-              if (val) return moment(val).utcOffset(0).format('HH:mm')
+              if (val) return dayjs.utc(val).format('HH:mm')
             },
           },
         },

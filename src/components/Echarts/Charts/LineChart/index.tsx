@@ -48,6 +48,7 @@ function LineChart(props: IProps) {
             data: data?.map(item => item.value),
             type: 'line',
             smooth: true,
+            symbol: 'none',
             itemStyle: {
               color: themeColor,
             },

@@ -1,5 +1,5 @@
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { DocType } from '../../types/enum'
 import { User } from './user'
 
@@ -19,10 +19,10 @@ export class Bookmark {
   @prop({ type: String })
   icon?: string
 
-  @prop({ type: String, default: moment().format() })
+  @prop({ type: String, default: dayjs().format() })
   createTime?: string
 
-  @prop({ type: String, default: moment().format() })
+  @prop({ type: String, default: dayjs().format() })
   updateTime?: string
 
   @prop({ type: Boolean })

@@ -1,24 +1,24 @@
 import { Badge, Button, Popover, Spin, Tooltip } from 'antd'
 import clsx from 'clsx'
-import moment, { Moment } from 'moment'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { TranslateY } from '../../../Animation'
 import { getEvents } from '../../utils'
 import { CalendarContext } from '../..'
 import './style.less'
+import dayjs, { Dayjs } from 'dayjs'
 
 const HOUR_HEIGHT = 25
 
 function CalendarWeek() {
   const { current, todo, onAction, loading } = useContext(CalendarContext)
 
-  const [time, setTime] = useState<Moment>(moment())
+  const [time, setTime] = useState<Dayjs>(dayjs())
   const timer = useRef(null)
 
   const days = useMemo(() => {
     const dayIndex = current.day() === 0 ? 6 : current.day() - 1
     return ['一', '二', '三', '四', '五', '六', '日'].map((item, index) => {
-      const day = moment(current).subtract(dayIndex - index, 'days')
+      const day = dayjs(current).subtract(dayIndex - index, 'days')
       const _events = getEvents(todo, day)
       const res: typeof _events[] = []
       while (_events.length) {
@@ -48,7 +48,7 @@ function CalendarWeek() {
 
   useEffect(() => {
     timer.current = setInterval(() => {
-      setTime(moment())
+      setTime(dayjs())
     }, 10000)
     return () => clearInterval(timer.current)
   }, [])
@@ -66,7 +66,7 @@ function CalendarWeek() {
             key={item.week}
             className={clsx(
               'calendar-week-head-item',
-              item.day.date() === moment().date() && 'active',
+              item.day.date() === dayjs().date() && 'active',
               item.day.date() === current.date() && 'current',
             )}
           >
@@ -105,7 +105,7 @@ function CalendarWeek() {
                                   <div className='calendar-week-body-event-detail'>
                                     <div className='calendar-week-body-event-detail-time'>
                                       <Badge
-                                        status={todo.end.valueOf() < moment().valueOf() ? 'default' : 'processing'}
+                                        status={todo.end.valueOf() < dayjs().valueOf() ? 'default' : 'processing'}
                                         text={`${todo.start.format('MM.DD HH:mm')} - ${todo.end.format('MM.DD HH:mm')}`}
                                       />
                                     </div>
@@ -146,11 +146,11 @@ function CalendarWeek() {
                                     width: `calc(${(1 / todos.length) * 100}% - ${(todos.length - 1) * 2}px)`,
                                     height: ((todo.end.valueOf() - todo.start.valueOf()) / 3600_000) * HOUR_HEIGHT,
                                     top:
-                                      ((todo.start.valueOf() - moment(todo.start).startOf('day').valueOf()) / 3600000) *
+                                      ((todo.start.valueOf() - dayjs(todo.start).startOf('day').valueOf()) / 3600000) *
                                       HOUR_HEIGHT,
                                     left: `calc(${(k / todos.length) * 100}% + ${k * 2}px)`,
-                                    backgroundColor: todo.end.valueOf() < moment().valueOf() ? '#f5f5f5' : undefined,
-                                    borderColor: todo.end.valueOf() < moment().valueOf() ? '#aaa' : undefined,
+                                    backgroundColor: todo.end.valueOf() < dayjs().valueOf() ? '#f5f5f5' : undefined,
+                                    borderColor: todo.end.valueOf() < dayjs().valueOf() ? '#aaa' : undefined,
                                   }}
                                 >
                                   {todo.description}
@@ -167,17 +167,17 @@ function CalendarWeek() {
           <div
             className='calendar-week-time'
             style={{
-              top: (time.valueOf() - moment().startOf('day').valueOf()) / 864000 + '%',
+              top: (time.valueOf() - dayjs().startOf('day').valueOf()) / 864000 + '%',
               transform: 'translateY(-50%)',
             }}
           >
             <div className='calendar-week-time-info'>{time.format('HH:mm')}</div>
             <div className='calendar-week-time-line'>
-              {moment(current).startOf('week').valueOf() === moment().startOf('week').valueOf() && (
-                <Tooltip title={time.format('yyyy-MM-DD HH:mm')}>
+              {dayjs(current).startOf('week').valueOf() === dayjs().startOf('week').valueOf() && (
+                <Tooltip title={time.format('YYYY-MM-DD HH:mm')}>
                   <div
                     className='calendar-week-time-dot status-processing'
-                    style={{ left: ((moment().day() === 0 ? 6 : moment().day() - 1) / 7) * 100 + '%' }}
+                    style={{ left: ((dayjs().day() === 0 ? 6 : dayjs().day() - 1) / 7) * 100 + '%' }}
                   />
                 </Tooltip>
               )}

@@ -2,11 +2,11 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { Card, Input, Popover, Tooltip, ConfigProvider } from 'antd'
 import { FieldTimeOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import Space from '../../../components/Canvas/Space'
-import moment from 'moment'
 import { debounce } from '../../../utils/common'
 import { useUser } from '../../../contexts/useUser'
 import LandScape1 from '../../../components/Wallpaper/LandScape1'
 import { useWindowScroll } from 'react-use'
+import dayjs from 'dayjs'
 
 declare global {
   interface Window {
@@ -15,7 +15,7 @@ declare global {
 }
 
 const Search = props => {
-  const [time, setTime] = useState(moment().format('yyyy-MM-DD HH:mm:ss'))
+  const [time, setTime] = useState(dayjs().format('YYYY-MM-DD HH:mm:ss'))
   const [sugList, setSugList] = useState<string[]>([])
   const [isOnSearch, setIsOnSearch] = useState(false)
   const [loginUser] = useUser()
@@ -62,7 +62,7 @@ const Search = props => {
 
   useEffect(() => {
     setTimeout(() => {
-      setTime(moment().format('yyyy-MM-DD HH:mm:ss'))
+      setTime(dayjs().format('YYYY-MM-DD HH:mm:ss'))
     }, 1000)
   }, [time])
 

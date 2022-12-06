@@ -6,6 +6,7 @@
     "resolveJsonModule": true,
     "importHelpers": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true

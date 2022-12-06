@@ -1,5 +1,5 @@
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { User } from './user'
 
 export class Blog {
@@ -24,10 +24,10 @@ export class Blog {
   @prop({ type: Boolean, default: false })
   inCatalog?: boolean
 
-  @prop({ type: String, default: moment().format() })
+  @prop({ type: String, default: dayjs().format() })
   createTime?: string
 
-  @prop({ type: String, default: moment().format() })
+  @prop({ type: String, default: dayjs().format() })
   updateTime?: string
 
   @prop({ ref: () => Blog })

@@ -1,7 +1,7 @@
 import { InfoCircleOutlined } from '@ant-design/icons'
 import { Button, DatePicker, Form, Input, message, Modal, Space, Tag } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { Fragment, useRef, useState } from 'react'
 import { ITodo } from '../../../../types'
 import { UserStatus } from '../../../../types/enum'
@@ -85,8 +85,8 @@ function TodoManage() {
       render: (_, record) => {
         return (
           <Tag className='werido-tag'>
-            {moment(record.start).format('yyyy-MM-DD')}：{moment(record.start).format('HH:mm')}-
-            {moment(record.end).format('HH:mm')}
+            {dayjs(record.start).format('YYYY-MM-DD')}：{dayjs(record.start).format('HH:mm')}-
+            {dayjs(record.end).format('HH:mm')}
           </Tag>
         )
       },
@@ -112,8 +112,8 @@ function TodoManage() {
                 setShowModal(record)
                 const { start, end, description } = record
                 form.setFieldsValue({
-                  date: moment(start).startOf('day'),
-                  time: [moment(start), moment(end)],
+                  date: dayjs(start).startOf('day'),
+                  time: [dayjs(start), dayjs(end)],
                   description,
                 })
               }}

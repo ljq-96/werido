@@ -1,5 +1,5 @@
 import { service, inject, DarukContext } from 'daruk'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { DocType } from '../../types/enum'
 import { todoModel, Todo, Blog, User, userModel, blogModel, bookmarkModel } from '../models'
 
@@ -26,8 +26,8 @@ export class StatisticsService {
   }
 
   public blogTime(list: Blog[]) {
-    const start = moment(Math.min(...list.map(item => moment(item.createTime).valueOf())))
-    const end = moment()
+    const start = dayjs(Math.min(...list.map(item => dayjs(item.createTime).valueOf())))
+    const end = dayjs()
     const startYear = start.year(),
       endYear = end.year(),
       startMonth = start.month(),
@@ -39,12 +39,12 @@ export class StatisticsService {
       }
     }
     list.forEach(i => {
-      const time = moment(i.createTime).format('yyyy-MM')
+      const time = dayjs(i.createTime).format('YYYY-MM')
       timeMap[time] = timeMap[time] + 1
     })
     const data = Object.entries(timeMap)
       .map(([time, value]) => ({ time, value }))
-      .sort((a, b) => moment(a.time).valueOf() - moment(b.time).valueOf())
+      .sort((a, b) => dayjs(a.time).valueOf() - dayjs(b.time).valueOf())
     return data
   }
 
@@ -65,9 +65,9 @@ export class StatisticsService {
 
   public todo(list: Todo[]) {
     const data = list.map(item => [
-      moment(item.start).valueOf() - moment(item.start).startOf('day').valueOf(),
-      moment(item.end).valueOf() - moment(item.end).startOf('day').valueOf(),
-      moment(item.start).startOf('day').format('yyyy-MM-DD'),
+      dayjs(item.start).valueOf() - dayjs(item.start).startOf('day').valueOf(),
+      dayjs(item.end).valueOf() - dayjs(item.end).startOf('day').valueOf(),
+      dayjs(item.start).startOf('day').format('YYYY-MM-DD'),
       item.description,
     ])
     return data
@@ -79,15 +79,15 @@ export class StatisticsService {
       { name: '总数', value: list.length },
       {
         name: '年活跃',
-        value: list.filter(item => moment().valueOf() - moment(item.lastLoginTime).valueOf() <= oneDay * 365).length,
+        value: list.filter(item => dayjs().valueOf() - dayjs(item.lastLoginTime).valueOf() <= oneDay * 365).length,
       },
       {
         name: '月活跃',
-        value: list.filter(item => moment().valueOf() - moment(item.lastLoginTime).valueOf() <= oneDay * 31).length,
+        value: list.filter(item => dayjs().valueOf() - dayjs(item.lastLoginTime).valueOf() <= oneDay * 31).length,
       },
       {
         name: '日活跃',
-        value: list.filter(item => moment().valueOf() - moment(item.lastLoginTime).valueOf() <= oneDay).length,
+        value: list.filter(item => dayjs().valueOf() - dayjs(item.lastLoginTime).valueOf() <= oneDay).length,
       },
     ]
   }
@@ -96,14 +96,14 @@ export class StatisticsService {
     const userCount = await this.userModel.find().countDocuments()
     const dailyActiveUserCount = await this.userModel
       .find({
-        lastLoginTime: { $gt: moment().subtract(1, 'day').format() },
+        lastLoginTime: { $gt: dayjs().subtract(1, 'day').format() },
       })
       .countDocuments()
 
     const blogCount = await this.blogModel.find().countDocuments()
     const blogMonthIncreased = await this.blogModel
       .find({
-        createTime: { $gt: moment().startOf('month').format() },
+        createTime: { $gt: dayjs().startOf('month').format() },
       })
       .countDocuments()
 
@@ -111,12 +111,12 @@ export class StatisticsService {
     const bookmarkMonthIncreased = await this.bookmarkModel
       .find({
         type: DocType.文档,
-        createTime: { $gt: moment().startOf('month').format() },
+        createTime: { $gt: dayjs().startOf('month').format() },
       })
       .countDocuments()
 
     const todoCount = await this.todoModel.find().countDocuments()
-    const unTodoCount = await this.todoModel.find({ end: { $gt: moment().format() } }).countDocuments()
+    const unTodoCount = await this.todoModel.find({ end: { $gt: dayjs().format() } }).countDocuments()
 
     return {
       userCount,

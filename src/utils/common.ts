@@ -1,8 +1,8 @@
 import { createFromIconfontCN } from '@ant-design/icons'
 import { message } from 'antd'
 import { RcFile } from 'antd/lib/upload'
-import moment, { Moment } from 'moment'
 import copy from 'copy-to-clipboard'
+import dayjs from 'dayjs'
 
 /** 自定义图标 */
 export const IconFont = createFromIconfontCN({
@@ -58,7 +58,7 @@ export const randomInArr = (arr: any[]) => arr[Math.floor(Math.random() * arr.le
 export const toLogin = () => (location.href = location.pathname.split('#')[0] + '#/login')
 
 /** 格式化时间 */
-export const formatTime = (time, formats = 'yyyy-MM-DD HH:mm:ss') => moment(time).format(formats)
+export const formatTime = (time, formats = 'YYYY-MM-DD HH:mm:ss') => dayjs(time).format(formats)
 
 /** 比较Set */
 export const isSameSet = (s1: Set<any>, s2: Set<any>) => {

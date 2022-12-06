@@ -1,6 +1,5 @@
 import { Space, Button, Card, TableProps, Row, Col, Table, Form, Input, DatePicker, Select } from 'antd'
 import { SorterResult } from 'antd/lib/table/interface'
-import moment from 'moment'
 import { CSSProperties, forwardRef, Fragment, ReactElement, useEffect, useImperativeHandle, useState } from 'react'
 import { BaseRequest } from '../../api/utils'
 import { useRequest } from '../../hooks'
@@ -51,8 +50,8 @@ function CommonTable(props: TableProps<any> & IProps, ref) {
     toolList?.forEach(item => {
       const value = fields[item.name]
       if (item.type === 'date' && value) {
-        fields[`${item.name}Min`] = formatTime(value[0], 'yyyy-MMM-DD 00:00:00')
-        fields[`${item.name}Max`] = formatTime(value[1], 'yyyy-MMM-DD 23:59:59')
+        fields[`${item.name}Min`] = formatTime(value[0], 'YYYY-MMM-DD 00:00:00')
+        fields[`${item.name}Max`] = formatTime(value[1], 'YYYY-MMM-DD 23:59:59')
         delete fields[item.name]
       }
     })

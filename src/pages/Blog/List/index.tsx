@@ -56,7 +56,6 @@ const BlogList = () => {
                 extra={
                   <Tooltip placement='bottom' title={expandCatalog ? '全部折叠' : '全部展开'}>
                     <Button
-                      size='small'
                       type='text'
                       icon={<CatalogIcon open={expandCatalog} />}
                       onClick={() => {
@@ -72,6 +71,7 @@ const BlogList = () => {
                   </Tooltip>
                 }
               >
+                <div className='blog-item'></div>
                 <Catalog ref={catalogRef} />
               </Card>
             </TranslateX>
@@ -80,7 +80,7 @@ const BlogList = () => {
         <Col flex='auto'>
           <TranslateY>
             <Spin spinning={loading}>
-              <Card title='文章' headStyle={{ borderTop: `2px solid ${themeColor}` }}>
+              <Card title='文章'>
                 {blog?.list?.map((item, index) => (
                   <BlogItemCard key={item._id} item={item} />
                 ))}

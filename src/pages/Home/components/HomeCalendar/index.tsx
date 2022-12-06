@@ -1,5 +1,5 @@
 import { Button, DatePicker, Form, Input, Modal, Space } from 'antd'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { Fragment, useEffect, useState } from 'react'
 import { ITodo } from '../../../../../types'
 import { request } from '../../../../api'
@@ -68,8 +68,8 @@ function HomeCalendar() {
               setOnEditTodo(todo)
 
               form.setFieldsValue({
-                date: moment(start).startOf('day'),
-                time: [moment(start), moment(end)],
+                date: dayjs(start).startOf('day'),
+                time: [dayjs(start), dayjs(end)],
                 description,
               })
               break

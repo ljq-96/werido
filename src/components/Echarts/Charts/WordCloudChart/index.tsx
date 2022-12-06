@@ -2,7 +2,6 @@ import Echarts from '../..'
 import { EChartsOption, graphic } from 'echarts'
 import { useUser } from '../../../../contexts/useUser'
 import { generate } from '@ant-design/colors'
-import moment from 'moment'
 import { memo } from 'react'
 import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
 

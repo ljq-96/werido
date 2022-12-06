@@ -1,5 +1,5 @@
 import { Button, Calendar, Divider, Popover } from 'antd'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { Fragment, useContext, useState } from 'react'
 import { CalendarContext } from '../..'
 import { TranslateX, TranslateY } from '../../../Animation'
@@ -13,15 +13,15 @@ function CalendarMonth() {
       <Calendar
         fullscreen={true}
         headerRender={() => null}
-        value={moment(current)}
+        value={dayjs(current)}
         onSelect={value => {
-          const _selectedTodo = value.format('yyyy-MM-DD')
+          const _selectedTodo = value.format('YYYY-MM-DD')
           setSelectedTodo(_selectedTodo === selectedTodo ? '' : _selectedTodo)
         }}
         onChange={setCurrent}
         dateCellRender={value => {
-          const date = value.format('yyyy-MM-DD')
-          const todos = todo.filter(item => moment(item.start).format('yyyy-MM-DD') === date)
+          const date = value.format('YYYY-MM-DD')
+          const todos = todo.filter(item => dayjs(item.start).format('YYYY-MM-DD') === date)
           return todos.length ? (
             <Popover
               visible={selectedTodo === date}
@@ -35,7 +35,7 @@ function CalendarMonth() {
                       {index !== 0 && <Divider />}
                       <div key={item._id} className='calendar-month-detail-item'>
                         <div>
-                          {moment(item.start).format('HH:mm')} - {moment(item.end).format('HH:mm')}
+                          {dayjs(item.start).format('HH:mm')} - {dayjs(item.end).format('HH:mm')}
                         </div>
                         <div>{item.description}</div>
                         <div>

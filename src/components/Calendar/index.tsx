@@ -1,6 +1,6 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
-import { Button, Card, CardProps, Radio, RadioChangeEvent, Segmented } from 'antd'
-import moment, { Moment } from 'moment'
+import { Button, Card, CardProps, Segmented } from 'antd'
+import dayjs, { Dayjs } from 'dayjs'
 import { createContext, useCallback, useMemo, useState } from 'react'
 import { ITodo } from '../../../types'
 import CalendarDay from './components/Day'
@@ -16,8 +16,8 @@ interface IProps extends CardProps {
 
 export const CalendarContext = createContext<{
   todo?: ITodo[]
-  current: Moment
-  setCurrent: (time: Moment) => void
+  current: Dayjs
+  setCurrent: (time: Dayjs) => void
   onAction?: (params: { type: 'edit' | 'delete'; todo: ITodo }) => void
   loading?: boolean
 }>(null)
@@ -25,7 +25,7 @@ export const CalendarContext = createContext<{
 function Calendar(props: IProps) {
   const { title = '日历日程', todo, onAction, loading, ...reset } = props
   const [status, setStatus] = useState<'日' | '周' | '月'>('周')
-  const [current, setCurrent] = useState(moment())
+  const [current, setCurrent] = useState(dayjs())
 
   const CalendarType = useMemo(() => {
     return {
@@ -38,18 +38,18 @@ function Calendar(props: IProps) {
   const handleDate = useCallback(
     (value: number) => {
       if (value === 0) {
-        setCurrent(moment())
+        setCurrent(dayjs())
         return
       }
       switch (status) {
         case '日':
-          setCurrent(moment(current).subtract(value, 'day'))
+          setCurrent(dayjs(current).subtract(value, 'day'))
           break
         case '周':
-          setCurrent(moment(current).subtract(value, 'week'))
+          setCurrent(dayjs(current).subtract(value, 'week'))
           break
         case '月':
-          setCurrent(moment(current).subtract(value, 'month'))
+          setCurrent(dayjs(current).subtract(value, 'month'))
           break
       }
     },
@@ -63,12 +63,10 @@ function Calendar(props: IProps) {
             <Button icon={<LeftOutlined />} onClick={() => handleDate(1)} />
             <Button onClick={() => handleDate(0)}>
               {status === '日'
-                ? current.format('yyyy.MM.DD')
+                ? current.format('YYYY.MM.DD')
                 : status === '周'
-                ? `${moment(current).startOf('week').format('MM.DD')} - ${moment(current)
-                    .endOf('week')
-                    .format('MM.DD')}`
-                : current.format('yyyy.MM')}
+                ? `${dayjs(current).startOf('week').format('MM.DD')} - ${dayjs(current).endOf('week').format('MM.DD')}`
+                : current.format('YYYY.MM')}
             </Button>
             <Button icon={<RightOutlined />} onClick={() => handleDate(-1)} />
           </Button.Group>

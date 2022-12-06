@@ -37,7 +37,7 @@ function Bookmark() {
 
   return (
     <Fragment>
-      <Card size='small'>
+      <Card title='书签'>
         <Spin spinning={loading}>
           <MultipleContainers
             vertical
