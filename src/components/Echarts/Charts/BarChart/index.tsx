@@ -20,6 +20,7 @@ function BarChart(props: IProps) {
 
   return (
     <Echarts
+      noData={!loading && !data.length}
       loading={loading}
       option={{
         xAxis: {

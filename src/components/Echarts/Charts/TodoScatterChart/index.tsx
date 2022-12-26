@@ -14,13 +14,14 @@ interface IProps {
 }
 
 function TodoScatterChart(props: IProps) {
-  const { data = [0, 0], loading } = props
+  const { data = [], loading } = props
   const [{ themeColor }] = useUser()
   const plate = generate(themeColor)
 
   return (
     <Echarts
       loading={loading}
+      noData={!loading && !data.length}
       option={{
         tooltip: {
           formatter: val => {

@@ -22,6 +22,7 @@ function RiverChart(props: IProps) {
   return (
     <Echarts
       loading={loading}
+      noData={!loading && !data.length}
       option={{
         color: [themeColor],
         tooltip: {

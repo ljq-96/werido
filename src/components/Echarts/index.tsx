@@ -1,4 +1,4 @@
-import { Spin } from 'antd'
+import { Empty, Spin } from 'antd'
 import * as echarts from 'echarts'
 import * as React from 'react'
 import elementResizeEvent, { unbind } from '../../utils/elementResizeEvent'
@@ -13,11 +13,13 @@ export interface ReactEchartsProps {
   notMerge?: boolean
   lazyUpdate?: boolean
   option: echarts.EChartsOption
+  noData?: boolean
 }
 export default class ReactEcharts extends React.Component<ReactEchartsProps> {
   // first add
   componentDidMount() {
     const props = this.props
+    if (props.noData) return
     let echartObj = this.renderEchartDom()
     let onEvents = Object.assign({}, props.onEvents)
     Object.keys(props).map(key => {
@@ -33,12 +35,13 @@ export default class ReactEcharts extends React.Component<ReactEchartsProps> {
   }
   // update
   componentDidUpdate() {
+    if (this.props.noData) return
     this.renderEchartDom()
     this.bindEvents(this.getEchartsInstance(), this.props.onEvents || {})
   }
   // remove
   componentWillUnmount() {
-    echarts.dispose(this.echartsDom)
+    this.echartsDom && echarts.dispose(this.echartsDom)
   }
   echartsDom: HTMLDivElement
   initEchartsDom = (echartsDom: HTMLDivElement) => {
@@ -87,6 +90,7 @@ export default class ReactEcharts extends React.Component<ReactEchartsProps> {
   }
   render() {
     let {
+      noData = false,
       loading = false,
       style = {
         height: 300,
@@ -95,7 +99,15 @@ export default class ReactEcharts extends React.Component<ReactEchartsProps> {
     // for render
     return (
       <Spin spinning={loading}>
-        <div ref={this.initEchartsDom} className={this.props.className} style={style} />
+        {noData ? (
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            className={this.props.className}
+            style={{ margin: 0, paddingTop: 24, ...style }}
+          />
+        ) : (
+          <div ref={this.initEchartsDom} className={this.props.className} style={style} />
+        )}
       </Spin>
     )
   }

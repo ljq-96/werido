@@ -2,6 +2,7 @@ import { service, inject, DarukContext } from 'daruk'
 import dayjs from 'dayjs'
 import { sign } from 'jsonwebtoken'
 import { blogModel, bookmarkModel, todoModel, User, userModel } from '../models'
+import { decrypt } from '../utils/common'
 
 @service()
 export class UserService {
@@ -22,7 +23,7 @@ export class UserService {
 
   public async login({ username, password }: { username: string; password: string }) {
     this.ctx.assert(username && password, 400, '用户名或密码不能为空')
-    const user = (await this.getList({ username, password })).list[0]
+    const user = (await this.getList({ username, password: decrypt.decrypt(password) as string })).list[0]
     this.ctx.assert(user, 404, '用户名或密码错误')
     const token = sign({ exp: Math.floor(Date.now() / 1000) + 3600 * 24 * 30, data: user._id }, 'werido')
     this.ctx.cookies.set('token', token)
@@ -31,9 +32,9 @@ export class UserService {
 
   public async register({ username, password }: { username: string; password: string }) {
     this.ctx.assert(username && password, 400, '用户名或密码不能为空')
-    const user = (await this.getList({ username, password })).list[0]
+    const user = (await this.getList({ username, password: decrypt.decrypt(password) as string })).list[0]
     this.ctx.assert(!user, 400, '用户名已存在')
-    return await this.createOne({ username, password })
+    return await this.createOne({ username, password: decrypt.decrypt(password) as string })
   }
 
   public async getDetail(id: string) {

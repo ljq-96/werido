@@ -3,6 +3,15 @@ import { message } from 'antd'
 import { RcFile } from 'antd/lib/upload'
 import copy from 'copy-to-clipboard'
 import dayjs from 'dayjs'
+import JSEncrypt from 'jsencrypt'
+
+export const encryptor = new JSEncrypt()
+encryptor.setPublicKey(`-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDElcnzNyzXpsY3xyVQZCsDgcla
+OOE925XFJTZc9USEwugELXigGeOWRg8qBtBSJsO8HPINfX1RlAQ19COeOKNhGV+R
+Ho/79WFtkL09lHnd8/r+2KsuGozvjWu1Glsh6qO6VQGHwgUxNs7QaPL00jITlkZp
+dG0ndYJg2zfdF/dhgQIDAQAB
+-----END PUBLIC KEY-----`)
 
 /** 自定义图标 */
 export const IconFont = createFromIconfontCN({

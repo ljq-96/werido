@@ -10,7 +10,7 @@ const apiList = {
   icon: '/api/icon',
   statistics: '/api/statistics',
   docIndex: '/api/docIndex',
-  tops: '/api/tops',
+  tops: '/quark/toplist',
   detail: '/api/detail',
   todo: '/api/todo',
 }

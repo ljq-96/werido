@@ -101,7 +101,7 @@ function Weather() {
           />
         }
         content={
-          <div className='w-80 overflow-hidden -ml-3 -mr-3'>
+          <div className='w-80 overflow-hidden -ml-3 -mr-3 -mb-3'>
             <div className='relative text-center overflow-hidden h-36'>
               <div
                 className='absolute left-10 -bottom-28 w-60 h-60 rounded-full border border-dashed border-gray-400'
@@ -161,7 +161,7 @@ function Weather() {
                 value: item.temp,
                 info: item,
               }))}
-              style={{ height: 140, marginLeft: -16, transform: 'translateY(24px)' }}
+              style={{ height: 140, marginLeft: -24, transform: 'translateY(24px)' }}
             />
           </div>
         }

@@ -83,10 +83,7 @@ export class BookmarkService {
         ],
       })
     }
-    await this.docIndexService.updateOne(
-      { user: user._id, type: DocIndexType.书签 },
-      { content: JSON.stringify(docIndex) },
-    )
+    await this.docIndexService.updateOne({ user: user._id, type: DocIndexType.书签 }, docIndex)
     return bookmark
   }
 

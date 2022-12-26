@@ -14,13 +14,9 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
       className='code-fence'
       expandIcon={({ isActive }) => (
         <Tooltip title={isActive ? '收起' : '展开'}>
-          <Button
-            size='small'
-            type='text'
-            icon={
-              <CaretDownOutlined style={{ transition: '0.4s', transform: `rotate(${isActive ? '0' : '-90deg'})` }} />
-            }
-          />
+          <Button size='small' type='text'>
+            <CaretDownOutlined style={{ transition: '0.4s', transform: `rotate(${isActive ? '0' : '-90deg'})` }} />
+          </Button>
         </Tooltip>
       )}
       defaultActiveKey={1}
@@ -34,7 +30,6 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
             <Select
               size='small'
               showSearch
-              className='code'
               style={{ width: 160 }}
               bordered={false}
               showArrow={false}
@@ -65,9 +60,7 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
               }}
             />
           ) : (
-            <code className='code' style={{ color: '#aaa' }}>
-              {node.attrs['language']}
-            </code>
+            <pre style={{ color: '#aaa', margin: 0 }}>{node.attrs['language']}</pre>
           )
         }
         extra={
@@ -87,7 +80,7 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
           )
         }
       >
-        <pre className='m-0'>{children}</pre>
+        <pre className='m-0 overflow-auto font-mono'>{children}</pre>
       </Collapse.Panel>
     </Collapse>
   )

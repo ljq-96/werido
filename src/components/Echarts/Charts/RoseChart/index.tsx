@@ -13,12 +13,13 @@ interface IProps {
 }
 
 function RoseChart(props: IProps) {
-  const { data, loading } = props
+  const { data = [], loading } = props
   const [{ themeColor }] = useUser()
 
   return (
     <Echarts
       loading={loading}
+      noData={!loading && !data.length}
       option={{
         grid: {
           left: 10,

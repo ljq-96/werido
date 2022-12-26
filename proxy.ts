@@ -7,4 +7,8 @@ export default {
     target: 'https://geoapi.qweather.com',
     changeOrigin: true,
   },
+  '/quark': {
+    target: 'https://news.myquark.cn',
+    changeOrigin: true,
+  },
 }

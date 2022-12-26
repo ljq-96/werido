@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { ITops } from '../../../types'
 import { TopsType } from '../../../types/enum'
 import { request } from '../../api'
-import './style.less'
 
 function Tops() {
   const [current, setCurrent] = useState(TopsType.知乎)
@@ -16,7 +15,7 @@ function Tops() {
     setLoading(true)
     request
       .tops({ method: 'GET', query: current })
-      .then(setList)
+      .then(res => setList(res.data))
       .finally(() => setLoading(false))
   }, [current])
 
@@ -43,15 +42,17 @@ function Tops() {
         loading={loading}
         dataSource={list}
         renderItem={(item, index) => (
-          // <TranslateY key={item.title} delay={index * 100}>
           <List.Item className={clsx(index < 3 && 'top3')}>
             <List.Item.Meta
               avatar={<Avatar size={'small'}>{index + 1}</Avatar>}
-              title={<div onClick={() => window.open(item.url)}>{item.title}</div>}
-              description={current === TopsType.知乎 ? <div>回答：{item.answer}</div> : <div>热度：{item.hotness}</div>}
+              title={
+                <a href={item.url} target='_blank'>
+                  {item.title}
+                </a>
+              }
+              description={<div>热度：{item.hot}</div>}
             />
           </List.Item>
-          // </TranslateY>
         )}
       ></List>
     </Card>

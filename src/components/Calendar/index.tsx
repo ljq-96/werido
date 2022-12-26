@@ -1,5 +1,5 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
-import { Button, Card, CardProps, Segmented } from 'antd'
+import { Button, Card, CardProps, Segmented, Space } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import { createContext, useCallback, useMemo, useState } from 'react'
 import { ITodo } from '../../../types'
@@ -59,7 +59,7 @@ function Calendar(props: IProps) {
     <Card title={title} bodyStyle={{ padding: 0 }} {...reset}>
       <div style={{ display: 'flex', justifyContent: 'space-between', margin: 16 }}>
         <div>
-          <Button.Group size='small'>
+          <Space.Compact size='small'>
             <Button icon={<LeftOutlined />} onClick={() => handleDate(1)} />
             <Button onClick={() => handleDate(0)}>
               {status === '日'
@@ -69,7 +69,7 @@ function Calendar(props: IProps) {
                 : current.format('YYYY.MM')}
             </Button>
             <Button icon={<RightOutlined />} onClick={() => handleDate(-1)} />
-          </Button.Group>
+          </Space.Compact>
         </div>
         <Segmented size='small' value={status} onChange={setStatus as any} options={Object.keys(CalendarType)} />
       </div>

@@ -133,10 +133,9 @@ export interface ITodo {
 }
 
 export interface ITops {
-  answer?: number
   date?: string
   subtitle?: string
-  hotness?: number
+  hot?: number
   index?: number
   title: string
   url: string

@@ -8,6 +8,7 @@ import LoginImage from '../../components/Svg/Login'
 import './index.less'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import ModalVerify, { ModalVerifyInstance } from '../../components/ModalVerify'
+import { encryptor } from '../../utils/common'
 
 const COLOR = '#1890ff'
 function Login() {
@@ -25,11 +26,11 @@ function Login() {
   const onFinish = () => {
     const { username, password } = data
     if (isLogin) {
-      request.login({ method: 'POST', data: { username, password } }).then(res => {
+      request.login({ method: 'POST', data: { username, password: encryptor.encrypt(password) } }).then(res => {
         navigator('/')
       })
     } else {
-      request.register({ method: 'POST', data: { username, password } }).then(res => {
+      request.register({ method: 'POST', data: { username, password: encryptor.encrypt(password) } }).then(res => {
         message.success('注册成功，请登录！')
         setIsLogin(true)
         form.setFields([

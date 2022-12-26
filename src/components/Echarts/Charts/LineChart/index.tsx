@@ -23,6 +23,7 @@ function LineChart(props: IProps) {
     <Echarts
       style={style}
       loading={loading}
+      noData={!loading && !data.length}
       option={{
         xAxis: {
           type: 'category',
@@ -48,7 +49,7 @@ function LineChart(props: IProps) {
             data: data?.map(item => item.value),
             type: 'line',
             smooth: true,
-            symbol: 'none',
+            showSymbol: false,
             itemStyle: {
               color: themeColor,
             },

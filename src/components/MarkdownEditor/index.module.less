@@ -2,6 +2,7 @@
   position: relative;
   background-color: #fff;
   border: 1px solid #f0f0f0;
+  border-radius: 0 0 6px 6px;
   .toolBar {
     position: sticky;
     top: 56px;
@@ -22,6 +23,7 @@
     padding: 0 16px;
     &.hide {
       .container {
+        flex: 1;
         border-right: none;
       }
       .openCatalog {
@@ -41,7 +43,8 @@
     }
     .container {
       position: relative;
-      flex-grow: 1;
+      flex: 1;
+      width: calc(100% - 200px);
       height: 100%;
       min-height: 300px;
       border-right: 1px solid #f0f0f0;
@@ -50,7 +53,7 @@
       position: sticky;
       top: 104px;
       height: 100%;
-      flex-shrink: 0;
+      flex: 0;
       .openCatalog {
         position: absolute;
         left: -16px;

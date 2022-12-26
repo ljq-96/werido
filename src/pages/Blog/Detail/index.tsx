@@ -1,4 +1,4 @@
-import { PageHeader } from '@ant-design/pro-layout'
+import { PageContainer, PageHeader } from '@ant-design/pro-layout'
 import { Button, Card, Col, Form, Input, message, Row, Select, Space, Tag, Affix, Spin, Tooltip } from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -109,9 +109,13 @@ function BlogDetail() {
         <Col flex='auto'>
           <Spin spinning={loading}>
             <PageHeader
-              ghost={false}
               title={!onEdit && detail?.title}
-              style={{ border: '1px solid #f0f0f0', borderBottom: 'none' }}
+              style={{
+                border: '1px solid #f0f0f0',
+                borderRadius: '6px 6px 0 0',
+                borderBottom: 'none',
+                background: '#fff',
+              }}
               subTitle={
                 onEdit && (
                   <div style={{ height: 32 }}>
