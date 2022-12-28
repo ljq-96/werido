@@ -9,11 +9,7 @@ import { RouteProps } from '../types'
 const parseRoute = (route: RouteProps, basePath = '') => {
   const path = `/${basePath}/${route.path}`.replace(/\/+/g, '/')
   return (
-    <Route
-      key={path}
-      path={path}
-      element={route.redirect ? <Navigate replace to={route.redirect} /> : <route.component route={route} />}
-    >
+    <Route key={path} path={path} element={<route.component route={route} />}>
       {route?.routes?.map(item => parseRoute(item, path))}
     </Route>
   )

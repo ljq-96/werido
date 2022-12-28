@@ -1,5 +1,22 @@
+import { MoreOutlined, ShareAltOutlined } from '@ant-design/icons'
 import { PageContainer, PageHeader } from '@ant-design/pro-layout'
-import { Button, Card, Col, Form, Input, message, Row, Select, Space, Tag, Affix, Spin, Tooltip } from 'antd'
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Input,
+  message,
+  Row,
+  Select,
+  Space,
+  Tag,
+  Affix,
+  Spin,
+  Tooltip,
+  Dropdown,
+  QRCode,
+} from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { IBlog } from '../../../../types'
@@ -9,6 +26,7 @@ import Catalog, { CatalogInstance } from '../../../components/Catalog'
 import CatalogIcon from '../../../components/CatalogIcon'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
 import { useStore } from '../../../contexts/useStore'
+import { downloadFile } from '../../../utils/common'
 
 function BlogDetail() {
   const [{ tags, catalog }, { getTags }] = useStore()
@@ -50,11 +68,24 @@ function BlogDetail() {
           </Affix>,
         ]
       : [
-          <Button type='primary' onClick={() => setOnEdit(!onEdit)}>
-            编辑
-          </Button>,
+          <Button type='text' icon={<ShareAltOutlined />} />,
+          <Dropdown
+            placement='bottomRight'
+            menu={{
+              items: [
+                {
+                  label: '导出',
+                  key: 1,
+                  onClick: () => request.blogExport({ method: 'POST', data: { blogId: id }, responseType: 'blob' }),
+                },
+                { label: '编辑', key: 2, onClick: () => setOnEdit(!onEdit) },
+              ],
+            }}
+          >
+            <Button type='text' icon={<MoreOutlined />} />
+          </Dropdown>,
         ]
-  }, [onEdit])
+  }, [onEdit, id, detail])
 
   useEffect(() => {
     setLoading(true)

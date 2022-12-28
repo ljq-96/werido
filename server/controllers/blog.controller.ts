@@ -4,6 +4,7 @@ import { getDocIndex, merge } from '../utils/docIndex'
 import { DocIndexType } from '../../types/enum'
 import { BlogService } from '../services/blog.service'
 import { DocIndexService } from '../services/docIndex.service'
+import { Readable } from 'stream'
 
 @controller('/api/blog')
 export class BlogController {
@@ -52,6 +53,17 @@ export class BlogController {
   public async deleteBlog(ctx: DarukContext) {
     const { id } = (ctx.request as any).params
     ctx.body = this.blogService.deleteOne(id)
+  }
+
+  @middleware('validateToken')
+  @post('/export')
+  public async exportBlog(ctx: DarukContext) {
+    const { blogId } = ctx.request.body
+    if (blogId) {
+      const blog = await this.blogService.getDetail(blogId)
+      ctx.append('Content-Disposition', `fileName=${encodeURIComponent(blog?.title!)};fileType=md`)
+      ctx.body = Readable.from(blog?.content!)
+    }
   }
 }
 

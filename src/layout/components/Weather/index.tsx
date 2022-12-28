@@ -87,6 +87,7 @@ function Weather() {
         showArrow={false}
         placement='bottomRight'
         destroyTooltipOnHide
+        overlayInnerStyle={{ transform: 'translateY(-10px)' }}
         onOpenChange={show => setTimeout(() => setShow(show), 400)}
         getPopupContainer={el => el.parentElement}
         title={

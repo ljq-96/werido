@@ -1,4 +1,5 @@
 import { WeiboOutlined, ZhihuOutlined } from '@ant-design/icons'
+import { css } from '@emotion/react'
 import { Avatar, Card, List, Segmented } from 'antd'
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
@@ -6,6 +7,7 @@ import { ITops } from '../../../types'
 import { TopsType } from '../../../types/enum'
 import { request } from '../../api'
 
+/** @jsxImportSource @emotion/react */
 function Tops() {
   const [current, setCurrent] = useState(TopsType.知乎)
   const [loading, setLoading] = useState(false)
@@ -27,6 +29,11 @@ function Tops() {
         maxHeight: 'calc(100vh - 144px)',
         overflow: 'auto',
       }}
+      css={css({
+        h4: {
+          margin: 0,
+        },
+      })}
       extra={
         <Segmented
           value={current}

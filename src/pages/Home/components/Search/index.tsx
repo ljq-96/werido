@@ -7,6 +7,7 @@ const searchTab = [
   { title: '百度', action: 'https://www.baidu.com/s', name: 'wd' },
   { title: 'Google', action: 'https://www.google.com/search', name: 'q' },
   { title: '豆瓣', action: 'https://www.douban.com/search', name: 'q' },
+  { title: '知乎', action: 'https://www.zhihu.com/search', name: 'q' },
 ]
 function Search() {
   const [current, setCurrent] = useState(searchTab[0])

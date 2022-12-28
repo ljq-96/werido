@@ -118,3 +118,15 @@ export function copyText(text: string) {
   copy(text)
   message.success('复制成功')
 }
+
+export function downloadFile(blob: Blob, fileName = '未命名') {
+  const link = document.createElement('a')
+  const binaryData = []
+  binaryData.push(blob)
+  link.href = window.URL.createObjectURL(new Blob(binaryData))
+  link.download = fileName
+  link.style.display = 'none'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}

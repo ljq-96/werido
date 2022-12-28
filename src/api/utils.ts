@@ -1,8 +1,15 @@
 import { message } from 'antd'
-import { querystring } from '../utils/common'
+import { downloadFile, querystring } from '../utils/common'
 import { RequestConfig } from './types'
 
-export async function Fetch<F = any, T = any>({ url, method, data, query, params }: RequestConfig<F>): Promise<T> {
+export async function Fetch<F = any, T = any>({
+  url,
+  method,
+  data,
+  query,
+  params,
+  responseType,
+}: RequestConfig<F>): Promise<T> {
   const pasedUrl = (query !== undefined ? `${url}/${query}` : url) + (params ? `?${querystring.stringify(params)}` : '')
   const response = await fetch(pasedUrl, {
     method: method || (data ? 'POST' : 'GET'),
@@ -13,6 +20,18 @@ export async function Fetch<F = any, T = any>({ url, method, data, query, params
     },
   })
   if (response.ok) {
+    if (responseType === 'blob') {
+      const fileInfo: { fileName: string; fileType: string } = response.headers
+        .get('Content-Disposition')
+        .split(';')
+        .map(item => item.split('='))
+        .reduce((a, [key, value]) => {
+          a[key] = decodeURIComponent(value)
+          return a
+        }, {} as any)
+      downloadFile(await response.blob(), `${fileInfo.fileName}.${fileInfo.fileType}`)
+      return
+    }
     return await response.json()
   }
   const errMsg = await response.text()

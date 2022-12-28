@@ -65,10 +65,11 @@ const routes: RouteProps[] = [
         path: '/user_center',
         name: '用户中心',
         icon: <UserOutlined />,
+        redirect: '/user_center/dashboard',
         component: lazy(() => import('../pages/UserCenter')),
         routes: [
           {
-            path: '',
+            path: 'dashboard',
             name: '数据统计',
             component: UserCenterOverview,
             icon: <AreaChartOutlined />,
@@ -111,10 +112,11 @@ const routes: RouteProps[] = [
         path: '/manage',
         component: Outlet,
         name: '后台管理',
+        redirect: '/manage/dashboard',
         icon: <LaptopOutlined />,
         routes: [
           {
-            path: '',
+            path: 'dashboard',
             name: '数据统计',
             icon: <AreaChartOutlined />,
             component: lazy(() => import('../pages/Manage/Overview')),

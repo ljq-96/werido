@@ -6,6 +6,7 @@ export interface RequestConfig<T = any> {
   query?: string | number
   data?: T
   params?: T
+  responseType?: 'blob'
 }
 
 export type BaseConfig = string | { target: string; baseConfig: RequestConfig }

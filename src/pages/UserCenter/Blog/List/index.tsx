@@ -1,4 +1,4 @@
-import { InfoCircleOutlined } from '@ant-design/icons'
+import { InfoCircleOutlined, MoreOutlined } from '@ant-design/icons'
 import { Alert, Button, Dropdown, Form, Input, Menu, message, Modal, Segmented, Space, Tag } from 'antd'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -89,12 +89,17 @@ function UserCenterBlogList(props) {
                 <Menu
                   items={[
                     { label: '查看', key: 'detail' },
-                    { label: '导出', key: 'export' },
+                    {
+                      label: '导出',
+                      key: 'export',
+                      onClick: () =>
+                        request.blogExport({ method: 'POST', responseType: 'blob', data: { blogId: record._id } }),
+                    },
                   ]}
                 ></Menu>
               }
             >
-              <Button type='link'>更多</Button>
+              <Button type='link' icon={<MoreOutlined />} />
             </Dropdown>
           </Space>
         )

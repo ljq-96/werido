@@ -161,7 +161,7 @@ function formatAnchor(tree: any[]) {
   return (
     <Fragment>
       {tree.map(item => (
-        <Anchor.Link key={item.title} href={'#' + item.title} title={item.title}>
+        <Anchor.Link key={item.title} href={'#' + item.title?.toLowerCase()?.replace(/\s/g, '-')} title={item.title}>
           {item.children && formatAnchor(item.children)}
         </Anchor.Link>
       ))}

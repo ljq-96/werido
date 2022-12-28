@@ -6,6 +6,7 @@ const apiList = {
   logout: '/api/logout',
   myProfile: '/api/myProfile',
   blog: '/api/blog',
+  blogExport: '/api/blog/export',
   bookmark: '/api/bookmark',
   icon: '/api/icon',
   statistics: '/api/statistics',

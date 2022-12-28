@@ -41,10 +41,10 @@ export default (props: PageProps) => {
       title='Werido'
       logo={<Logo style={{ width: 32 }} color={loginUser?.themeColor} />}
       layout={'mix'}
-      menu={{ type: 'group' }}
+      menu={{ type: 'sub', ignoreFlatMenu: true }}
       splitMenus={true}
       route={currentRoutes}
-      menuItemRender={(item, dom) => <Link to={item.path}>{dom}</Link>}
+      menuItemRender={(item, dom) => <Link to={item.redirect || item.path}>{dom}</Link>}
       onMenuHeaderClick={() => navigate('/')}
       avatarProps={{
         src: loginUser?.avatar,
