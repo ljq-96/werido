@@ -19,16 +19,16 @@ const BlogItemCard = ({ item }: { item: IBlog }) => {
         className='blog-item'
         css={css({
           display: 'block',
-          borderRadius: 2,
+          borderRadius: token.borderRadius,
           padding: 16,
-          border: '1px solid #f0f0f0',
-          backgroundColor: '#fff',
+          border: `1px solid ${token.colorBorderSecondary}`,
+          backgroundColor: token.colorBgContainer,
           transition: '0.4s',
           marginBottom: 16,
           color: 'unset',
           '&:hover': {
             color: 'unset',
-            backgroundColor: '#fafafa',
+            backgroundColor: token.colorBgLayout,
             '.title': {
               color: token.colorPrimary,
             },

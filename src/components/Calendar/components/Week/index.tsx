@@ -1,19 +1,24 @@
-import { Badge, Button, Popover, Spin, Tooltip } from 'antd'
+/** @jsxImportSource @emotion/react */
+import { Badge, Button, Popover, Spin, theme, Tooltip } from 'antd'
 import clsx from 'clsx'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { TranslateY } from '../../../Animation'
 import { getEvents } from '../../utils'
 import { CalendarContext } from '../..'
-import './style.less'
 import dayjs, { Dayjs } from 'dayjs'
+import { css } from '@emotion/react'
+import useStyle from './style'
 
 const HOUR_HEIGHT = 25
 
 function CalendarWeek() {
   const { current, todo, onAction, loading } = useContext(CalendarContext)
-
   const [time, setTime] = useState<Dayjs>(dayjs())
   const timer = useRef(null)
+  const style = useStyle()
+  const {
+    token: { colorPrimary, colorPrimaryBg, colorBorderSecondary, colorBorder, colorTextSecondary },
+  } = theme.useToken()
 
   const days = useMemo(() => {
     const dayIndex = current.day() === 0 ? 6 : current.day() - 1
@@ -54,7 +59,7 @@ function CalendarWeek() {
   }, [])
 
   return (
-    <TranslateY className='calendar-week'>
+    <TranslateY css={style}>
       <div className='calendar-week-head'>
         <div className='calendar-week-head-info'>
           <div>{days[0].day.format('MM.DD')}</div>
@@ -140,8 +145,7 @@ function CalendarWeek() {
                                 }
                               >
                                 <div
-                                  className='calendar-week-body-events'
-                                  style={{
+                                  css={css({
                                     position: 'absolute',
                                     width: `calc(${(1 / todos.length) * 100}% - ${(todos.length - 1) * 2}px)`,
                                     height: ((todo.end.valueOf() - todo.start.valueOf()) / 3600_000) * HOUR_HEIGHT,
@@ -149,9 +153,19 @@ function CalendarWeek() {
                                       ((todo.start.valueOf() - dayjs(todo.start).startOf('day').valueOf()) / 3600000) *
                                       HOUR_HEIGHT,
                                     left: `calc(${(k / todos.length) * 100}% + ${k * 2}px)`,
-                                    backgroundColor: todo.end.valueOf() < dayjs().valueOf() ? '#f5f5f5' : undefined,
-                                    borderColor: todo.end.valueOf() < dayjs().valueOf() ? '#aaa' : undefined,
-                                  }}
+                                    backgroundColor:
+                                      todo.end.valueOf() < dayjs().valueOf() ? colorBorderSecondary : colorPrimaryBg,
+                                    borderTop: `2px solid ${
+                                      todo.end.valueOf() < dayjs().valueOf() ? colorBorder : colorPrimary
+                                    }`,
+                                    padding: 2,
+                                    fontSize: 10,
+                                    color: colorTextSecondary,
+                                    wordBreak: 'break-all',
+                                    overflow: 'hidden',
+                                    zIndex: 10,
+                                    cursor: 'pointer',
+                                  })}
                                 >
                                   {todo.description}
                                 </div>

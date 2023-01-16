@@ -168,7 +168,7 @@ function Weather() {
         }
       >
         <Button size='large' type='text' style={{ paddingTop: 0, paddingBottom: 0 }}>
-          <Avatar size='small' className='mr-2 bg-gray-200'>
+          <Avatar size='small' className='mr-2'>
             <IconFont style={{ fontSize: 20, transform: 'translateY(2px)' }} type={iconMap[now?.icon]} />
           </Avatar>
           <span>{now?.temp}°C</span>

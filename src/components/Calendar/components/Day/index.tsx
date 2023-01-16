@@ -1,15 +1,18 @@
-import { Button, Dropdown, Empty, Menu, Spin } from 'antd'
+/** @jsxImportSource @emotion/react */
+import { Button, Dropdown, Empty, Menu, Spin, theme } from 'antd'
 import clsx from 'clsx'
 import { useContext, useMemo } from 'react'
 import { TranslateX, TranslateY } from '../../../Animation'
 import { MoreOutlined } from '@ant-design/icons'
 import { getEvents } from '../../utils'
 import { CalendarContext } from '../..'
-import './style.less'
 import dayjs, { Dayjs } from 'dayjs'
+import { css } from '@emotion/react'
+import useStyle from './style'
 
 function CalendarDay() {
   const { current, setCurrent, todo, onAction, loading } = useContext(CalendarContext)
+  const style = useStyle()
 
   const days = useMemo<{ week: string; day?: Dayjs }[]>(() => {
     const dayIndex = current.day() === 0 ? 6 : current.day() - 1
@@ -24,7 +27,7 @@ function CalendarDay() {
   }, [current])
 
   return (
-    <TranslateY className='calendar-day'>
+    <TranslateY css={style}>
       <div className='calendar-day-head'>
         {days.map(item => (
           <div
@@ -65,20 +68,17 @@ function CalendarDay() {
                     {item.start.format('HH:mm')} - {item.end.format('HH:mm')}
                     <Dropdown
                       placement='bottomRight'
-                      overlay={
-                        <Menu
-                          onClick={e =>
-                            onAction?.({
-                              type: e.key as any,
-                              todo: { ...item, start: item.start.format(), end: item.end.format() },
-                            })
-                          }
-                          items={[
-                            { label: '编辑', key: 'edit' },
-                            { label: '删除', key: 'delete' },
-                          ]}
-                        />
-                      }
+                      menu={{
+                        onClick: e =>
+                          onAction?.({
+                            type: e.key as any,
+                            todo: { ...item, start: item.start.format(), end: item.end.format() },
+                          }),
+                        items: [
+                          { label: '编辑', key: 'edit' },
+                          { label: '删除', key: 'delete' },
+                        ],
+                      }}
                     >
                       <Button type='text' size='small' icon={<MoreOutlined />} />
                     </Dropdown>

@@ -1,7 +1,7 @@
 // @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-// @import url('antd/dist/antd.variable.min.css');
+@import url('antd/dist/reset.css');
 @import url('components.less');
 
 *,
@@ -76,11 +76,6 @@ body {
 .ant-page-header {
   padding: 19px 16px;
   border-bottom: 1px solid #f8f8f9;
-}
-
-.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-  background: linear-gradient(rgba(250, 250, 250, 0.9), rgba(250, 250, 250, 0.9)),
-    linear-gradient(var(--ant-primary-color), var(--ant-primary-color));
 }
 
 .ant-card-extra {

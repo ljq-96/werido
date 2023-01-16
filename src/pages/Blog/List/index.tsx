@@ -1,4 +1,5 @@
 import { CloseOutlined, SettingOutlined } from '@ant-design/icons'
+import { PageContainer } from '@ant-design/pro-layout'
 import { Col, Row, Card, Spin, Affix, Tag, Divider, Pagination, Button, Space, Tooltip } from 'antd'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -48,35 +49,6 @@ const BlogList = () => {
   return (
     <Fragment>
       <Row gutter={16} wrap={false}>
-        <Col flex='256px'>
-          <Affix offsetTop={80}>
-            <TranslateX delay={200}>
-              <Card
-                title='目录'
-                extra={
-                  <Tooltip placement='bottom' title={expandCatalog ? '全部折叠' : '全部展开'}>
-                    <Button
-                      type='text'
-                      icon={<CatalogIcon open={expandCatalog} />}
-                      onClick={() => {
-                        if (expandCatalog) {
-                          setExpandCatalog(false)
-                          catalogRef.current.closeAll()
-                        } else {
-                          setExpandCatalog(true)
-                          catalogRef.current.expandAll()
-                        }
-                      }}
-                    />
-                  </Tooltip>
-                }
-              >
-                <div className='blog-item'></div>
-                <Catalog ref={catalogRef} />
-              </Card>
-            </TranslateX>
-          </Affix>
-        </Col>
         <Col flex='auto'>
           <TranslateY>
             <Spin spinning={loading}>

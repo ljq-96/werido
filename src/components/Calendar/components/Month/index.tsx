@@ -1,19 +1,22 @@
-import { Button, Calendar, Divider, Popover } from 'antd'
+import { css } from '@emotion/react'
+import { Button, Calendar, Divider, Popover, theme } from 'antd'
 import dayjs from 'dayjs'
-import { Fragment, useContext, useState } from 'react'
+import { Fragment, useContext, useMemo, useState } from 'react'
 import { CalendarContext } from '../..'
 import { TranslateX, TranslateY } from '../../../Animation'
-import './style.less'
+import useStyle from './style'
 
 function CalendarMonth() {
   const { current, setCurrent, todo, onAction } = useContext(CalendarContext)
   const [selectedTodo, setSelectedTodo] = useState<string>('')
+  const style = useStyle()
+
   return (
-    <TranslateY className='calendar-month'>
+    <TranslateY css={style}>
       <Calendar
         fullscreen={true}
         headerRender={() => null}
-        value={dayjs(current)}
+        value={current}
         onSelect={value => {
           const _selectedTodo = value.format('YYYY-MM-DD')
           setSelectedTodo(_selectedTodo === selectedTodo ? '' : _selectedTodo)
@@ -24,7 +27,7 @@ function CalendarMonth() {
           const todos = todo.filter(item => dayjs(item.start).format('YYYY-MM-DD') === date)
           return todos.length ? (
             <Popover
-              visible={selectedTodo === date}
+              open={selectedTodo === date}
               trigger={['click']}
               placement='leftTop'
               getPopupContainer={el => document.querySelector('.calendar-month')}

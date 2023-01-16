@@ -9,10 +9,12 @@ export type StoreState = [
   {
     tags: { name: string; value: number }[]
     catalog: ICatalog[]
+    isDark: boolean
   },
   {
     getTags: () => Promise<{ name: string; value: number }[]>
     getCatalog: () => Promise<ICatalog[]>
+    setIsDark: (mode: boolean) => void
   },
 ]
 
@@ -23,12 +25,13 @@ export function useStore(): StoreState {
 export default function StoreProvider({ children }: { children: ReactNode }) {
   const { tags, getTags } = useTags()
   const { catalog, getCatalog } = useCatalog()
+  const [isDark, setIsDark] = useState(false)
 
   return (
     <StoreContext.Provider
       value={[
-        { tags, catalog },
-        { getTags, getCatalog },
+        { tags, catalog, isDark },
+        { getTags, getCatalog, setIsDark },
       ]}
     >
       {children}

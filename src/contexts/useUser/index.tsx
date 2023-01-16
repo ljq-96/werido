@@ -4,7 +4,7 @@ import { basicUserView } from './actions'
 import { useLocalStorage } from 'react-use'
 import { request } from '../../api'
 
-const INITIAL_STATE: IUser | null = null
+const INITIAL_STATE: Partial<IUser> = { themeColor: '#1677ff' }
 // const INITIAL_STATE: IUser | null = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
 const UserContext = createContext<any>(INITIAL_STATE)
 

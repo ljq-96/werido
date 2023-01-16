@@ -1,25 +1,10 @@
+/** @jsxImportSource @emotion/react */
 import { MoreOutlined, ShareAltOutlined } from '@ant-design/icons'
-import { PageContainer, PageHeader } from '@ant-design/pro-layout'
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  message,
-  Row,
-  Select,
-  Space,
-  Tag,
-  Affix,
-  Spin,
-  Tooltip,
-  Dropdown,
-  QRCode,
-} from 'antd'
+import { PageContainer } from '@ant-design/pro-layout'
+import { Button, Form, Input, message, Select, Space, Tag, Affix, Dropdown, theme } from 'antd'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { IBlog } from '../../../../types'
+import { IBlog, ICatalog } from '../../../../types'
 import { request } from '../../../api'
 import { TranslateX } from '../../../components/Animation'
 import Catalog, { CatalogInstance } from '../../../components/Catalog'
@@ -29,7 +14,7 @@ import { useStore } from '../../../contexts/useStore'
 import { downloadFile } from '../../../utils/common'
 
 function BlogDetail() {
-  const [{ tags, catalog }, { getTags }] = useStore()
+  const [{ tags }, { getTags }] = useStore()
   const [onEdit, setOnEdit] = useState(false)
   const [expandCatalog, setExpandCatalog] = useState(true)
   const [loading, setLoading] = useState(false)
@@ -42,6 +27,9 @@ function BlogDetail() {
   const tagOptions = useMemo(() => {
     return tags.map(item => ({ label: item.name, value: item.name }))
   }, [tags])
+  const {
+    token: { borderRadius, colorBorderSecondary, colorBgContainer },
+  } = theme.useToken()
 
   const handleFinish = async fields => {
     setLoading(true)
@@ -50,8 +38,6 @@ function BlogDetail() {
     setOnEdit(false)
     setLoading(false)
   }
-
-  console.log(catalog)
 
   const extra = useMemo(() => {
     return onEdit
@@ -93,7 +79,6 @@ function BlogDetail() {
       .blog({ method: 'GET', query: id })
       .then(res => {
         setDetail(res)
-        // editor.current.setValue(res.content)
         form.setFieldsValue({ title: res.title, tags: res.tags })
       })
       .finally(() => {
@@ -106,84 +91,42 @@ function BlogDetail() {
   }, [])
 
   return (
-    <Fragment>
-      <Row gutter={16} wrap={false}>
-        <Col flex='256px'>
-          <Affix offsetTop={80}>
-            <TranslateX>
-              <Card
-                title='目录'
-                extra={
-                  <Tooltip placement='bottom' title={expandCatalog ? '全部折叠' : '全部展开'}>
-                    <Button
-                      // size='small'
-                      type='text'
-                      icon={<CatalogIcon open={expandCatalog} />}
-                      onClick={() => {
-                        if (expandCatalog) {
-                          setExpandCatalog(false)
-                          catalogRef.current.closeAll()
-                        } else {
-                          setExpandCatalog(true)
-                          catalogRef.current.expandAll()
-                        }
-                      }}
-                    />
-                  </Tooltip>
-                }
-              >
-                <Catalog ref={catalogRef} selectedKeys={[id]} />
-              </Card>
-            </TranslateX>
-          </Affix>
-        </Col>
-        <Col flex='auto'>
-          <Spin spinning={loading}>
-            <PageHeader
-              title={!onEdit && detail?.title}
-              style={{
-                border: '1px solid #f0f0f0',
-                borderRadius: '6px 6px 0 0',
-                borderBottom: 'none',
-                background: '#fff',
-              }}
-              subTitle={
-                onEdit && (
-                  <div style={{ height: 32 }}>
-                    <Form form={form} onFinish={handleFinish} layout='inline'>
-                      <Form.Item name='title' rules={[{ required: true, message: '' }]} initialValue={detail.title}>
-                        <Input placeholder='请输入标题' style={{ width: 256 }} allowClear />
-                      </Form.Item>
-                      <Form.Item label='标签' name='tags' initialValue={detail.tags}>
-                        <Select
-                          mode='tags'
-                          placeholder='请选择标签'
-                          maxTagCount='responsive'
-                          style={{ width: 256 }}
-                          options={tagOptions}
-                          allowClear
-                        />
-                      </Form.Item>
-                    </Form>
-                  </div>
-                )
-              }
-              onBack={() => navigate('/blog', { replace: true })}
-              tags={
-                !onEdit &&
-                detail?.tags?.map(item => (
-                  <Tag className='werido-tag' key={item} onClick={() => {}}>
-                    {item}
-                  </Tag>
-                ))
-              }
-              extra={extra}
-            />
-            <MarkdownEditor ref={editor} readonly={!onEdit} value={detail?.content} />
-          </Spin>
-        </Col>
-      </Row>
-    </Fragment>
+    <PageContainer
+      title={!onEdit && detail?.title}
+      onBack={() => navigate('/blog', { replace: true })}
+      tags={
+        !onEdit &&
+        detail?.tags?.map(item => (
+          <Tag className='werido-tag' key={item} onClick={() => {}}>
+            {item}
+          </Tag>
+        ))
+      }
+      extra={extra}
+      subTitle={
+        onEdit && (
+          <div style={{ height: 32 }}>
+            <Form form={form} onFinish={handleFinish} layout='inline'>
+              <Form.Item name='title' rules={[{ required: true, message: '' }]} initialValue={detail.title}>
+                <Input placeholder='请输入标题' style={{ width: 256 }} allowClear />
+              </Form.Item>
+              <Form.Item label='标签' name='tags' initialValue={detail.tags}>
+                <Select
+                  mode='tags'
+                  placeholder='请选择标签'
+                  maxTagCount='responsive'
+                  style={{ width: 256 }}
+                  options={tagOptions}
+                  allowClear
+                />
+              </Form.Item>
+            </Form>
+          </div>
+        )
+      }
+    >
+      <MarkdownEditor ref={editor} readonly={!onEdit} value={detail?.content} />
+    </PageContainer>
   )
 }
 export default BlogDetail

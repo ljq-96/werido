@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { forwardRef, Fragment, useEffect, useImperativeHandle, useState } from 'react'
 import { editorViewCtx, serializerCtx, parserCtx } from '@milkdown/core'
 import { Slice } from '@milkdown/prose/model'
@@ -6,7 +7,6 @@ import { ReactEditor, useEditor } from '@milkdown/react'
 import { Anchor, Button, Space, Spin, Tooltip } from 'antd'
 import useControls, { Controls } from './hooks/useControls'
 import useTheme from './hooks/useTheme'
-import style from './index.module.less'
 import { RightOutlined, SaveOutlined } from '@ant-design/icons'
 import clsx from 'clsx'
 import { arrToTree } from '../../utils/common'
@@ -15,6 +15,7 @@ import editorFactory from './utils/editorFactory'
 import rendererFactory from './utils/renderFactory'
 import useShiki from './hooks/useShiki'
 import { shikiPlugin } from './plugin/shiki'
+import useStyle from './style'
 
 interface IProps {
   height?: number | string
@@ -62,6 +63,7 @@ const MilkdownEditor = (props: IProps, ref) => {
   const [showCatalog, setShowCatalog] = useState(true)
   const shiki = useShiki()
   const theme = useTheme()
+  const style = useStyle()
 
   const { editor, getDom, loading, getInstance } = useEditor(
     (root, renderReact) => {
@@ -110,9 +112,9 @@ const MilkdownEditor = (props: IProps, ref) => {
 
   return (
     <Spin spinning={loading || contentLoading} delay={200}>
-      <div className={style.markdownEditor + ' article'}>
+      <div css={style}>
         {!readonly && (
-          <div className={clsx(style.toolBar, 'werido-blur')}>
+          <div className={clsx('toolBar')}>
             <Space wrap>
               {(controls || defaultControls).map((item, index) => (
                 <TranslateX key={index} delay={index * 30}>
@@ -130,21 +132,21 @@ const MilkdownEditor = (props: IProps, ref) => {
         )}
         <TranslateY key={String(readonly)} delay={!readonly && (controls || defaultControls).length * 30} distance={15}>
           <div
-            className={clsx(style.content, !showCatalog && style.hide)}
+            className={clsx('content', !showCatalog && 'hide')}
             style={{ height: typeof height === 'number' ? height + 'px' : height }}
           >
-            <div className={style.container}>
+            <div className={'container'}>
               <ReactEditor editor={editor} />
             </div>
-            <div className={style.catalogContainer} style={{ top: readonly ? 56 : 104 }}>
+            <div className={'catalogContainer'} style={{ top: readonly ? 56 : 104 }}>
               <Button
-                className={style.openCatalog}
+                className={'openCatalog'}
                 shape='circle'
                 icon={<RightOutlined />}
                 onClick={() => setShowCatalog(!showCatalog)}
               />
-              <div className={style.catalogWrapper}>
-                <div className={style.catalogTitle}>大纲</div>
+              <div className={'catalogWrapper'}>
+                <div className={'catalogTitle'}>大纲</div>
                 <Anchor affix={true} offsetTop={80}>
                   {formatAnchor(arrToTree(catalog))}
                 </Anchor>
@@ -174,6 +176,7 @@ export default forwardRef(MilkdownEditor)
 export function Render({ value }: { value: string }) {
   if (!value) return <></>
   const theme = useTheme()
+  const style = useStyle()
   const { editor, getInstance } = useEditor(root => rendererFactory(root, value).use(theme), [value])
   useEffect(() => {
     return () => {
@@ -181,5 +184,9 @@ export function Render({ value }: { value: string }) {
     }
   }, [value])
 
-  return <ReactEditor editor={editor} />
+  return (
+    // <div css={style}>
+    <ReactEditor editor={editor} />
+    // </div>
+  )
 }

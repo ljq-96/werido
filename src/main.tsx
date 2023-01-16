@@ -3,8 +3,10 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import routes from './routes'
 import UserProvider, { useUser } from './contexts/useUser'
 import 'dayjs/locale/zh-cn'
-import StoreProvider from './contexts/useStore'
+import zh_CN from 'antd/lib/locale/zh_CN'
+import StoreProvider, { useStore } from './contexts/useStore'
 import { RouteProps } from '../types'
+import { App as AntApp, ConfigProvider, theme } from 'antd'
 
 const parseRoute = (route: RouteProps, basePath = '') => {
   const path = `/${basePath}/${route.path}`.replace(/\/+/g, '/')
@@ -15,12 +17,27 @@ const parseRoute = (route: RouteProps, basePath = '') => {
   )
 }
 
+function Main() {
+  const [{ themeColor }] = useUser()
+  const [{ isDark }] = useStore()
+  return (
+    <ConfigProvider
+      theme={{ algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm, token: { colorPrimary: themeColor } }}
+      locale={zh_CN}
+    >
+      <AntApp>
+        <Routes>{routes.map(r => parseRoute(r))}</Routes>
+      </AntApp>
+    </ConfigProvider>
+  )
+}
+
 function App() {
   return (
     <StoreProvider>
       <UserProvider>
         <BrowserRouter>
-          <Routes>{routes.map(r => parseRoute(r))}</Routes>
+          <Main />
         </BrowserRouter>
       </UserProvider>
     </StoreProvider>

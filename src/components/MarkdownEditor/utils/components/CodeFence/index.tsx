@@ -1,17 +1,28 @@
+/** @jsxImportSource @emotion/react */
 import { CaretDownOutlined, CopyOutlined } from '@ant-design/icons'
+import { css } from '@emotion/react'
 import { Node } from '@milkdown/prose/model'
 import { useNodeCtx } from '@milkdown/react'
-import { Button, Collapse, Row, Select, Space, Tooltip } from 'antd'
+import { Button, Collapse, Row, Select, Space, theme, Tooltip } from 'antd'
 import { FC, Fragment, ReactNode } from 'react'
-import { copyText } from '../../../../../utils/common'
-import './style.less'
+import { useCopyText } from '../../../../../hooks'
 import { Language } from '../../language'
 
 export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
   const { node, view, getPos } = useNodeCtx<Node>()
+  const copyText = useCopyText()
+  const {
+    token: { colorTextTertiary },
+  } = theme.useToken()
   return (
     <Collapse
       className='code-fence'
+      css={css({
+        '.ant-select-selector': {
+          fontFamily:
+            'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important',
+        },
+      })}
       expandIcon={({ isActive }) => (
         <Tooltip title={isActive ? '收起' : '展开'}>
           <Button size='small' type='text'>
@@ -69,7 +80,7 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
               size='small'
               type='text'
               icon={<CopyOutlined />}
-              style={{ color: '#7a7a7a' }}
+              style={{ color: colorTextTertiary }}
               onClick={e => {
                 e.stopPropagation()
                 copyText(node.textContent)

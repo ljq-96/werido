@@ -1,5 +1,5 @@
 import { createFromIconfontCN } from '@ant-design/icons'
-import { message } from 'antd'
+import { App, message } from 'antd'
 import { RcFile } from 'antd/lib/upload'
 import copy from 'copy-to-clipboard'
 import dayjs from 'dayjs'
@@ -15,7 +15,7 @@ dG0ndYJg2zfdF/dhgQIDAQAB
 
 /** 自定义图标 */
 export const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_3208498_gk2dthobzn9.js',
+  scriptUrl: '//at.alicdn.com/t/c/font_3208498_o9jxr5mami.js',
 })
 
 /** qs */
@@ -113,11 +113,6 @@ export const getBase64 = (file: RcFile): Promise<string> =>
     reader.onload = () => resolve(reader.result as string)
     reader.onerror = error => reject(error)
   })
-
-export function copyText(text: string) {
-  copy(text)
-  message.success('复制成功')
-}
 
 export function downloadFile(blob: Blob, fileName = '未命名') {
   const link = document.createElement('a')

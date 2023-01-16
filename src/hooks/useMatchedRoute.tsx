@@ -1,10 +1,12 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { RouteProps } from '../../types'
+import { useStore } from '../contexts/useStore'
 import routes from '../routes'
 
 export function useMatchedRoute(pathname?: string) {
   const { pathname: currentPathname } = useLocation()
+
   const route = useMemo<RouteProps>(() => {
     let route: RouteProps
     const walk = (item: RouteProps[]) => {

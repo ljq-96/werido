@@ -13,19 +13,15 @@ import {
 import { generate } from '@ant-design/colors'
 import { useUser } from '../../../../contexts/useUser'
 import { useAllPresetRenderer } from '@milkdown/theme-pack-helper'
-import { getStyle } from './style'
+// import { getStyle } from './style'
+import { theme as antTheme } from 'antd'
 // import './fix.less'
-
-const size = {
-  radius: '4px',
-  lineWidth: '1px',
-}
 
 function useTheme() {
   const [{ themeColor }] = useUser()
+  const { token } = antTheme.useToken()
 
   const theme = useMemo(() => {
-    const [c1, c2, c3, c4, c5, c6, c7] = generate(themeColor)
     const iconMapping = {
       h1: {
         label: '一级标题',
@@ -174,25 +170,28 @@ function useTheme() {
       manager.set(ThemeColor, ([key, opacity]) => {
         switch (key) {
           case 'primary':
-            return c6
+            return token.colorPrimary
           case 'secondary':
-            return c1
+            return token.colorPrimaryBg
           case 'solid':
-            return '#f0f0f0'
+            return token.colorBorder
           case 'neutral':
-            return '#4a4a4a'
+            return token.colorText
           case 'line':
-            return '#f0f0f0'
+            return token.colorBorder
           case 'shadow':
             return '#eee'
           case 'background':
-            return '#f5f5f5'
+            return token.colorBgContainer
         }
       })
 
       manager.set(ThemeSize, key => {
         if (!key) return
-        return size[key]
+        return {
+          radius: token.borderRadius,
+          lineWidth: '1px',
+        }[key]
       })
 
       manager.set(ThemeScrollbar, ([direction = 'y', type = 'normal'] = ['y', 'normal'] as never) => {
@@ -263,10 +262,11 @@ function useTheme() {
           label: icon.label,
         }
       })
+      /* console.log(getStyle(manager, emotion)) */
 
-      manager.set(ThemeGlobal, () => {
+      /* manager.set(ThemeGlobal, () => {
         getStyle(manager, emotion)
-      })
+      }) */
 
       manager.set(ThemeFont, key => {
         if (key === 'typography') return 'Roboto, arial, sans-serif'
@@ -275,7 +275,7 @@ function useTheme() {
 
       useAllPresetRenderer(manager, emotion)
     })
-  }, [themeColor])
+  }, [token])
   return theme
 }
 

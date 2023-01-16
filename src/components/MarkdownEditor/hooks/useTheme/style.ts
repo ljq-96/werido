@@ -1,15 +1,37 @@
 import { Emotion, ThemeBorder, ThemeFont, ThemeManager, ThemeScrollbar, ThemeShadow, ThemeSize } from '@milkdown/core'
 import { getPalette } from '@milkdown/design-system'
 import { injectProsemirrorView } from '@milkdown/theme-pack-helper'
+import { theme } from 'antd'
 
 export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const { injectGlobal, css } = emotion
   const palette = getPalette(manager)
-  const radius = manager.get(ThemeSize, 'radius')
-  const neutral = palette('neutral', 0.87)
-  const surface = palette('surface')
-  const line = palette('line')
-  const highlight = palette('primary', 0.38)
+  const {
+    token: {
+      borderRadius,
+      colorPrimary,
+      colorPrimaryBg,
+      colorBgContainer,
+      colorBorder,
+      colorText,
+      colorTextSecondary,
+      colorTextTertiary,
+      colorBgLayout,
+      boxShadow,
+    },
+  } = theme.useToken()
+  console.log(
+    borderRadius,
+    colorPrimary,
+    colorPrimaryBg,
+    colorBgContainer,
+    colorBorder,
+    colorText,
+    colorTextSecondary,
+    colorTextTertiary,
+    colorBgLayout,
+    boxShadow,
+  )
 
   const selection = css`
     .ProseMirror-selectednode {
@@ -19,7 +41,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     .ProseMirror-widget {
       .icon {
         position: relative;
-        color: #4a4a4a;
+        color: colorText;
         z-index: 2;
       }
     }
@@ -44,6 +66,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       line-height: 1.5;
       letter-spacing: 0.5px;
       margin: 0;
+      color: ${colorText};
     }
   `
 
@@ -51,10 +74,10 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     blockquote {
       padding: 1em;
       line-height: 1.75em;
-      border-left: 4px solid ${palette('primary')};
+      border-left: 4px solid ${colorPrimary};
       margin-left: 0;
       margin-right: 0;
-      border-radius: ${radius};
+      border-radius: ${borderRadius};
       background: ${palette('background')};
       /* * {
         font-size: 1em;
@@ -66,14 +89,14 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
 
   const heading = css`
     h1 {
-      border-bottom: 2px solid #eee;
+      border-bottom: 2px solid ${colorBorder};
       font-size: 38px;
       line-height: 1;
       padding: 0 0 10px;
       margin: 15px 0;
     }
     h2 {
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid ${colorBorder};
       font-size: 30px;
       line-height: 1;
       padding: 0 0 10px;
@@ -102,7 +125,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const hr = css`
     hr {
       height: ${manager.get(ThemeSize, 'lineWidth')};
-      background-color: ${line};
+      background-color: ${colorBgLayout};
       border-width: 0;
     }
   `
@@ -150,12 +173,12 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const inline = css`
     .code-inline {
       background-color: ${palette('background')};
-      border-radius: ${radius};
+      border-radius: ${borderRadius};
       font-weight: 500;
       padding: 0 0.2em;
       margin: 0 0.2em;
       font-size: 1em;
-      border: 1px solid ${line};
+      border: 1px solid ${colorBorder};
     }
 
     .strong {
@@ -266,17 +289,17 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       &::after {
         z-index: 2;
         position: absolute;
-        content: '';
+        content: '""';
         left: 0;
         right: 0;
         top: 0;
         bottom: 0;
-        background: ${palette('secondary', 0.38)};
+        background: ${colorPrimaryBg};
         pointer-events: none;
       }
       p {
         position: relative;
-        color: #4a4a4a;
+        color: ${colorText};
         z-index: 3;
       }
 
@@ -290,8 +313,8 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
   const iframe = css`
     .iframe {
       width: 100%;
-      border: 1px solid #f0f0f0;
-      border-radius: ${radius};
+      border: 1px solid ${colorBorder};
+      border-radius: ${borderRadius};
       margin: 16px 0;
     }
   `
@@ -303,20 +326,20 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       align-items: center;
       width: 24px;
       height: 24px;
-      color: #7a7a7a;
+      color: ${colorTextTertiary};
       border-radius: 2px;
       font-size: 18px;
       transform: translateY(-2px);
       &:hover {
-        color: #4a4a4a;
+        color: ${colorTextSecondary};
       }
     }
     .block-menu {
-      background: #fff;
+      background: ${colorBgContainer};
       border: none;
       border-radius: 0;
       padding: 4px 0;
-      box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
+      box-shadow: ${boxShadow};
       animation: transform-y 200ms;
       .block-menu_item {
         &:hover {
@@ -332,22 +355,22 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     .tooltip-input,
     .table-tooltip {
       border: none;
-      background: #fff;
+      background: ${colorBgContainer};
       padding: 4px;
-      box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
+      box-shadow: ${boxShadow};
       animation: transform-y 200ms;
       transition: 0.4s;
       z-index: 5;
       .icon {
         width: 32px;
         height: 32px;
-        color: #4a4a4a;
+        color: ${colorText};
         border: none;
         &:not(:last-child) {
           margin-right: 4px;
         }
         &:hover {
-          background: rgba(0, 0, 0, 0.05);
+          background: ${colorBgLayout};
         }
         &::after {
           display: none;
@@ -360,10 +383,10 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
     .tooltip-input {
       padding: 8px 8px 8px 16px;
       button {
-        color: #4a4a4a;
-        border-radius: 2px;
+        color: ${colorText};
+        border-radius: ${borderRadius};
         &:hover {
-          background: #f5f5f5;
+          background: ${colorBgLayout};
         }
       }
     }
@@ -376,7 +399,7 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       .empty-node {
         white-space: nowrap;
         &::before {
-          color: #aaa;
+          color: ${colorTextTertiary};
         }
       }
       ${manager.get(ThemeScrollbar, undefined)}
