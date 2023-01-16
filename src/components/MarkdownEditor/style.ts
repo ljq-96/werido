@@ -117,14 +117,14 @@ export default function useStyle() {
       fontWeight: 600,
     },
 
-    '.link,a': {
+    '.link': {
       color: colorPrimary,
       cursor: 'pointer',
       transition: 'all 0.4s ease-in-out',
       fontWeight: 500,
       '&:hover': {
-        backgroundColor: colorPrimary,
-        boxShadow: `0 0.2em colorPrimary, 0 -0.2em colorPrimary`,
+        backgroundColor: colorPrimaryBg,
+        boxShadow: `0 0.2em ${colorPrimaryBg}, 0 -0.2em ${colorPrimaryBg}`,
       },
     },
     '.tableWrapper': {

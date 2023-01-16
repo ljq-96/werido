@@ -14,7 +14,7 @@ import { UserStatus } from '../../../../../types/enum'
 import { useUser } from '../../../../contexts/useUser'
 
 const actions = [
-  { title: '新增文章', icon: <EditOutlined />, path: '/blog/editor' },
+  { title: '新增文章', icon: <EditOutlined />, path: '/editor' },
   { title: '我的文章', icon: <ReadOutlined />, path: '/user_center/blog/list' },
   { title: '我的书签', icon: <TagOutlined />, path: '/user_center/bookmark' },
 ]

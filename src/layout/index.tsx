@@ -1,6 +1,6 @@
-import { Suspense, useEffect, useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import ProLayout, { DefaultFooter, PageContainer, RouteContext } from '@ant-design/pro-layout'
-import { ConfigProvider, Space, theme } from 'antd'
+import { Button, Card, ConfigProvider, Row, Space, theme } from 'antd'
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { useUser } from '../contexts/useUser'
@@ -15,6 +15,7 @@ import { SettingOutlined } from '@ant-design/icons'
 import { useStore } from '../contexts/useStore'
 import { IconFont } from '../utils/common'
 import Catalog from '../components/Catalog'
+import CatalogIcon from '../components/CatalogIcon'
 
 export default (props: PageProps) => {
   const { route } = props

@@ -2,34 +2,25 @@
 import { MoreOutlined, ShareAltOutlined } from '@ant-design/icons'
 import { PageContainer } from '@ant-design/pro-layout'
 import { Button, Form, Input, message, Select, Space, Tag, Affix, Dropdown, theme } from 'antd'
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { IBlog, ICatalog } from '../../../../types'
+import { IBlog } from '../../../../types'
 import { request } from '../../../api'
-import { TranslateX } from '../../../components/Animation'
-import Catalog, { CatalogInstance } from '../../../components/Catalog'
-import CatalogIcon from '../../../components/CatalogIcon'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
 import { useStore } from '../../../contexts/useStore'
-import { downloadFile } from '../../../utils/common'
 
 function BlogDetail() {
   const [{ tags }, { getTags }] = useStore()
   const [onEdit, setOnEdit] = useState(false)
-  const [expandCatalog, setExpandCatalog] = useState(true)
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<IBlog>(null)
   const [form] = Form.useForm()
   const { id } = useParams()
   const editor = useRef<EditorIntance>()
-  const catalogRef = useRef<CatalogInstance>(null)
   const navigate = useNavigate()
   const tagOptions = useMemo(() => {
     return tags.map(item => ({ label: item.name, value: item.name }))
   }, [tags])
-  const {
-    token: { borderRadius, colorBorderSecondary, colorBgContainer },
-  } = theme.useToken()
 
   const handleFinish = async fields => {
     setLoading(true)
@@ -92,6 +83,7 @@ function BlogDetail() {
 
   return (
     <PageContainer
+      loading={loading}
       title={!onEdit && detail?.title}
       onBack={() => navigate('/blog', { replace: true })}
       tags={

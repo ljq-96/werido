@@ -54,6 +54,7 @@ export interface RouteProps {
   component?: ComponentType<any> | LazyExoticComponent<any>
   hide?: boolean
   routes?: RouteProps[]
+  auth?: UserStatus[]
 }
 
 export interface PageProps {

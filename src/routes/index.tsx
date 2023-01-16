@@ -20,6 +20,7 @@ import UserCenterBlogList from '../pages/UserCenter/Blog/List'
 import UserCenterBlogCatalog from '../pages/UserCenter/Blog/Catalog'
 import UserCenterOverview from '../pages/UserCenter/Overview'
 import UserCenterDetail from '../pages/UserCenter/Detail'
+import { UserStatus } from '../../types/enum'
 
 const routes: RouteProps[] = [
   {
@@ -47,16 +48,22 @@ const routes: RouteProps[] = [
         path: '/blog',
         name: '知识库',
         icon: <ReadOutlined />,
-        component: lazy(() => import('../pages/Blog/List')),
+        component: Outlet,
+        routes: [
+          {
+            path: '/',
+            name: '知识库',
+            component: lazy(() => import('../pages/Blog/List')),
+          },
+          {
+            path: '/:id',
+            name: '文章详情',
+            component: lazy(() => import('../pages/Blog/Detail')),
+          },
+        ],
       },
       {
-        path: '/blog/:id',
-        name: '文章详情',
-        hide: true,
-        component: lazy(() => import('../pages/Blog/Detail')),
-      },
-      {
-        path: '/blog/editor',
+        path: '/editor',
         name: '新建文章',
         hide: true,
         component: lazy(() => import('../pages/Blog/Editor')),
@@ -114,6 +121,7 @@ const routes: RouteProps[] = [
         name: '后台管理',
         redirect: '/manage/dashboard',
         icon: <LaptopOutlined />,
+        auth: [UserStatus.管理员],
         routes: [
           {
             path: 'dashboard',

@@ -1,11 +1,10 @@
 import { useMemo } from 'react'
 import { RouteProps } from '../../types'
+import { useUser } from '../contexts/useUser'
 
 export function useParseRoute(route: RouteProps, oprions?: { showAll: boolean }) {
-  function getPercent(num: number) {
-    const length = num.toString().split('.')[1].length
-    return (num * length * 10) / ((length - 2) * 10)
-  }
+  const [{ status }] = useUser()
+
   const parsedRoute = useMemo(() => {
     function parseRoute(item: RouteProps, basePath = '') {
       const { routes, name, icon, path, redirect } = item
@@ -16,7 +15,10 @@ export function useParseRoute(route: RouteProps, oprions?: { showAll: boolean })
           icon,
           redirect,
           path: _path,
-          routes: routes.filter(item => oprions?.showAll || !item.hide).map(item => parseRoute(item, _path)),
+          routes: routes
+            .filter(item => !item.auth || item.auth?.includes(status))
+            .filter(item => oprions?.showAll || !item.hide)
+            .map(item => parseRoute(item, _path)),
         }
       }
       return { name, icon, path: _path, redirect }
