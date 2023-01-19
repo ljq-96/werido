@@ -3,7 +3,7 @@ import { MoreOutlined, ShareAltOutlined } from '@ant-design/icons'
 import { PageContainer } from '@ant-design/pro-layout'
 import { Button, Form, Input, message, Select, Space, Tag, Affix, Dropdown, theme } from 'antd'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { IBlog } from '../../../../types'
 import { request } from '../../../api'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
@@ -11,7 +11,8 @@ import { useStore } from '../../../contexts/useStore'
 
 function BlogDetail() {
   const [{ tags }, { getTags }] = useStore()
-  const [onEdit, setOnEdit] = useState(false)
+  const { state } = useLocation()
+  const [onEdit, setOnEdit] = useState(() => !!(state as any)?.isEdit)
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<IBlog>(null)
   const [form] = Form.useForm()
@@ -77,6 +78,10 @@ function BlogDetail() {
       })
   }, [id, onEdit])
 
+  // useEffect(() => {
+  //   if ((state as any)?.isEdit) setOnEdit(true)
+  // }, [state])
+
   useEffect(() => {
     getTags()
   }, [])
@@ -99,10 +104,10 @@ function BlogDetail() {
         onEdit && (
           <div style={{ height: 32 }}>
             <Form form={form} onFinish={handleFinish} layout='inline'>
-              <Form.Item name='title' rules={[{ required: true, message: '' }]} initialValue={detail.title}>
+              <Form.Item name='title' rules={[{ required: true, message: '' }]} initialValue={detail?.title}>
                 <Input placeholder='请输入标题' style={{ width: 256 }} allowClear />
               </Form.Item>
-              <Form.Item label='标签' name='tags' initialValue={detail.tags}>
+              <Form.Item label='标签' name='tags' initialValue={detail?.tags}>
                 <Select
                   mode='tags'
                   placeholder='请选择标签'

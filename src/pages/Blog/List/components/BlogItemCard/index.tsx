@@ -37,14 +37,14 @@ const BlogItemCard = ({ item }: { item: IBlog }) => {
       >
         <div
           className='title'
-          css={css({ fontSize: 16, fontWeight: 'bold', cursor: 'pointer', transition: '0.2s', marginBottom: 16 })}
+          css={css({ fontSize: 16, fontWeight: 'bold', cursor: 'pointer', transition: '0.2s', marginBottom: 8 })}
         >
           {title}
         </div>
-        <div css={css({ margin: description ? -16 : 0 })}>
+        <div>
           <Render key={_id} value={description} />
         </div>
-        <div css={css({ color: '#8a8f8d' })}>
+        <div css={css({ color: '#8a8f8d', marginTop: 8 })}>
           <Space size='large'>
             <Space size='small'>
               <FieldTimeOutlined />

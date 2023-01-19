@@ -16,6 +16,7 @@ import rendererFactory from './utils/renderFactory'
 import useShiki from './hooks/useShiki'
 import { shikiPlugin } from './plugin/shiki'
 import useStyle from './style'
+import { css } from '@emotion/react'
 
 interface IProps {
   height?: number | string
@@ -112,7 +113,7 @@ const MilkdownEditor = (props: IProps, ref) => {
 
   return (
     <Spin spinning={loading || contentLoading} delay={200}>
-      <div css={style}>
+      <div css={css([style.articleStyle, style.editorStyle])}>
         {!readonly && (
           <div className={clsx('toolBar')}>
             <Space wrap>
@@ -176,7 +177,7 @@ export default forwardRef(MilkdownEditor)
 export function Render({ value }: { value: string }) {
   if (!value) return <></>
   const theme = useTheme()
-  const style = useStyle()
+  const { articleStyle } = useStyle()
   const { editor, getInstance } = useEditor(root => rendererFactory(root, value).use(theme), [value])
   useEffect(() => {
     return () => {
@@ -185,8 +186,8 @@ export function Render({ value }: { value: string }) {
   }, [value])
 
   return (
-    // <div css={style}>
-    <ReactEditor editor={editor} />
-    // </div>
+    <div css={css(articleStyle)}>
+      <ReactEditor editor={editor} />
+    </div>
   )
 }

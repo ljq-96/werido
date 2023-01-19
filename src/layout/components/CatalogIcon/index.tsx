@@ -4,7 +4,7 @@ import { theme } from 'antd'
 
 function CatalogIcon({ open = true }: { open: boolean }) {
   const {
-    token: { colorText },
+    token: { colorTextSecondary },
   } = theme.useToken()
   return (
     <span role='img' className='anticon'>
@@ -15,7 +15,7 @@ function CatalogIcon({ open = true }: { open: boolean }) {
             css={css({
               width: '1em',
               height: '1em',
-              fontSize: 15,
+              fontSize: 12,
               '.line1,.line3': {
                 '&::before': {
                   position: 'absolute',
@@ -23,7 +23,7 @@ function CatalogIcon({ open = true }: { open: boolean }) {
                   content: '""',
                   height: '0.1em',
                   border: '0.2em solid transparent',
-                  borderTop: `0.2em solid ${colorText}`,
+                  borderTop: `0.2em solid ${colorTextSecondary}`,
                   borderRadius: '0.1em',
                   transform: 'translateY(0)',
                   transition: '0.4s',
@@ -46,7 +46,7 @@ function CatalogIcon({ open = true }: { open: boolean }) {
                   height: '0.1em',
                   width: '0.5em',
                   borderRadius: '0.1em',
-                  backgroundColor: colorText,
+                  backgroundColor: colorTextSecondary,
                   transition: '0.4s',
                   flexShrink: 0,
                 },

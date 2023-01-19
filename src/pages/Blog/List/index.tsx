@@ -1,14 +1,12 @@
 import { CloseOutlined, SettingOutlined } from '@ant-design/icons'
 import { PageContainer } from '@ant-design/pro-layout'
-import { Col, Row, Card, Spin, Affix, Tag, Divider, Pagination, Button, Space, Tooltip } from 'antd'
+import { Col, Row, Card, Spin, Affix, Tag, Divider, Pagination, Button, Space, Tooltip, Empty } from 'antd'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { IBlog, IBookmark, Pager } from '../../../../types'
 import { StatisticsType } from '../../../../types/enum'
 import { request } from '../../../api'
 import { TranslateX, TranslateY } from '../../../components/Animation'
-import Catalog, { CatalogInstance } from '../../../components/Catalog'
-import CatalogIcon from '../../../components/CatalogIcon'
 import { useStore } from '../../../contexts/useStore'
 import { useUser } from '../../../contexts/useUser'
 import { useRequest } from '../../../hooks'
@@ -17,11 +15,9 @@ import BlogItemCard from './components/BlogItemCard'
 const SIZE = 20
 const BlogList = () => {
   const [{ tags }, { getTags }] = useStore()
-  const [expandCatalog, setExpandCatalog] = useState(true)
   const [page, setPage] = useState(1)
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const catalogRef = useRef<CatalogInstance>(null)
   const tag = searchParams.get('tag')
   const [{ themeColor }] = useUser()
   const {
@@ -53,10 +49,16 @@ const BlogList = () => {
           <TranslateY>
             <Spin spinning={loading}>
               <Card title='文章'>
-                {blog?.list?.map((item, index) => (
-                  <BlogItemCard key={item._id} item={item} />
-                ))}
-                <Pagination pageSize={SIZE} current={page} total={blog?.total} onChange={page => setPage(page)} />
+                {blog?.list?.length ? (
+                  <Fragment>
+                    {blog.list.map(item => (
+                      <BlogItemCard key={item._id} item={item} />
+                    ))}
+                    <Pagination pageSize={SIZE} current={page} total={blog?.total} onChange={page => setPage(page)} />
+                  </Fragment>
+                ) : (
+                  <Empty />
+                )}
               </Card>
             </Spin>
           </TranslateY>
@@ -74,21 +76,25 @@ const BlogList = () => {
                   )
                 }
               >
-                {tags.map(item => (
-                  <Tag
-                    key={item.name}
-                    className='werido-tag'
-                    style={{ marginBottom: 8 }}
-                    color={tag === item.name ? themeColor : undefined}
-                    onClick={() => {
-                      navigate(`/blog?tag=${item.name}`)
-                    }}
-                  >
-                    {item.name}
-                    <Divider type='vertical' />
-                    {item.value}
-                  </Tag>
-                ))}
+                {tags.length ? (
+                  tags.map(item => (
+                    <Tag
+                      key={item.name}
+                      className='werido-tag'
+                      style={{ marginBottom: 8 }}
+                      color={tag === item.name ? themeColor : undefined}
+                      onClick={() => {
+                        navigate(`/blog?tag=${item.name}`)
+                      }}
+                    >
+                      {item.name}
+                      <Divider type='vertical' />
+                      {item.value}
+                    </Tag>
+                  ))
+                ) : (
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                )}
               </Card>
             </TranslateX>
           </Affix>

@@ -12,6 +12,8 @@ import { slash } from '@milkdown/plugin-slash'
 import { tooltip } from '@milkdown/plugin-tooltip'
 import { trailing } from '@milkdown/plugin-trailing'
 import { gfm, taskListItem, image, codeFence } from '@milkdown/preset-gfm'
+import { splitEditing } from '@milkdown-lab/plugin-split-editing'
+import { nord } from '@milkdown/theme-nord'
 import { defaultConfigBuilder } from './config/blockConfig'
 import { outline } from '@milkdown/utils'
 import { iframe } from '../plugin/iframe'
@@ -47,6 +49,7 @@ export default function editorFactory(
           })
       })
     })
+    // .use(nord)
     .use(iframe)
     .use(emoji)
     .use(nodes)
@@ -60,6 +63,7 @@ export default function editorFactory(
     .use(tooltip)
     .use(slash)
     .use(trailing)
+    // .use(splitEditing)
     .use(
       block.configure(blockPlugin, {
         configBuilder: defaultConfigBuilder,

@@ -10,19 +10,29 @@ export default function useStyle() {
       borderRadius,
       colorText,
       colorBgLayout,
+      colorBgElevated,
       colorPrimaryBg,
-      boxShadow,
+      boxShadowSecondary,
       colorTextSecondary,
       colorTextTertiary,
+      colorBgTextHover,
+      colorTextDescription,
     },
   } = theme.useToken()
   const articleStyle: CSSObject = {
+    '.ProseMirror-selectednode': {
+      outline: 'none',
+    },
+    outline: 'none',
     color: colorText,
     p: {
       fontSize: '1em',
       lineHeight: 1.5,
       letterSpacing: 0.5,
       margin: 0,
+      '&.empty-node': {
+        color: colorTextDescription,
+      },
     },
     blockquote: {
       padding: '1em',
@@ -104,9 +114,8 @@ export default function useStyle() {
       textAlign: 'center',
     },
     '.code-inline': {
-      backgroundColor: colorPrimary,
+      backgroundColor: colorBgTextHover,
       borderRadius: borderRadius,
-      fontWeight: 500,
       padding: '0 0.2em',
       margin: '0 0.2em',
       fontSize: '1em',
@@ -216,40 +225,51 @@ export default function useStyle() {
       width: 24,
       height: 24,
       color: colorTextTertiary,
-      borderRadius: 2,
-      fontSize: 18,
+      backgroundColor: colorBgLayout,
+      borderRadius: '50%',
+      border: `1px solid ${colorBorderSecondary}`,
+      fontSize: 16,
       transform: 'translateY(-2px)',
+      cursor: 'pointer',
       '&:hover': {
-        color: colorTextSecondary,
+        color: colorPrimary,
+        backgroundColor: colorPrimaryBg,
       },
     },
     '.block-menu': {
-      background: colorBgContainer,
+      background: colorBgElevated,
       border: 'none',
-      borderRadius: 0,
-      padding: '4px 0',
-      boxShadow: boxShadow,
+      borderRadius: borderRadius,
+      padding: '0 4px',
+      boxShadow: boxShadowSecondary,
+      marginTop: 16,
       animation: 'transform-y 200ms',
+
       '.block-menu_item': {
+        color: colorTextSecondary,
+        borderRadius: borderRadius,
+        margin: '4px 0',
         '&:hover': {
-          color: 'unset',
-          background: 'rgba(0, 0, 0, 0.05)',
+          color: colorText,
+          background: colorBgTextHover,
         },
       },
     },
     '.tooltip,.tooltip-input,.table-tooltip': {
       border: 'none',
-      background: colorBgContainer,
+      background: colorBgElevated,
       padding: 4,
-      boxShadow: boxShadow,
+      borderRadius: borderRadius,
+      boxShadow: boxShadowSecondary,
       animation: 'transform-y 200ms',
-      transition: '0.4s',
+      transition: '0.2s',
       zIndex: 5,
       '.icon': {
         width: 32,
         height: 32,
         color: colorText,
         border: 'none',
+        borderRadius: borderRadius,
         '&:not(:last-child)': {
           marginRight: 4,
         },
@@ -266,6 +286,8 @@ export default function useStyle() {
     },
     '.tooltip-input': {
       padding: '8px 8px 8px 16px',
+      borderRadius: borderRadius,
+      background: colorBgElevated,
       button: {
         color: colorText,
         borderRadius: borderRadius,
@@ -298,7 +320,7 @@ export default function useStyle() {
     '.content': {
       display: 'flex',
       alignItems: 'stretch',
-      padding: '0 16px',
+      padding: '16px 32px',
       '&.hide': {
         '.container': {
           flex: 1,
@@ -324,7 +346,7 @@ export default function useStyle() {
         flex: 1,
         width: 'calc(100% - 200px)',
         height: '100%',
-        padding: 16,
+        padding: '0 8px',
         minHeight: 300,
         borderRight: `1px solid ${colorBorderSecondary}`,
       },
@@ -365,7 +387,10 @@ export default function useStyle() {
           },
         },
       },
+      '.ProseMirror-focused': {
+        outline: 'none',
+      },
     },
   }
-  return css(articleStyle, editorStyle)
+  return { articleStyle, editorStyle }
 }

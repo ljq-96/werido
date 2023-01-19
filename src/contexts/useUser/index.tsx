@@ -19,7 +19,7 @@ function reducer(state: any, { type, payload }) {
   switch (type) {
     case basicUserView.destroy.type:
       // localStorage.removeItem('user')
-      return null
+      return INITIAL_STATE
     case basicUserView.update.type:
       const user = payload ? Object.assign({}, state, payload) : null
       // localStorage.setItem('user', JSON.stringify(user))

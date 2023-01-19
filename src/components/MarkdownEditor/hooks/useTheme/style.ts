@@ -20,18 +20,6 @@ export const getStyle = (manager: ThemeManager, emotion: Emotion) => {
       boxShadow,
     },
   } = theme.useToken()
-  console.log(
-    borderRadius,
-    colorPrimary,
-    colorPrimaryBg,
-    colorBgContainer,
-    colorBorder,
-    colorText,
-    colorTextSecondary,
-    colorTextTertiary,
-    colorBgLayout,
-    boxShadow,
-  )
 
   const selection = css`
     .ProseMirror-selectednode {

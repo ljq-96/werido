@@ -12,13 +12,17 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
   const { node, view, getPos } = useNodeCtx<Node>()
   const copyText = useCopyText()
   const {
-    token: { colorTextTertiary },
+    token: { colorTextTertiary, colorBorderSecondary },
   } = theme.useToken()
   return (
     <Collapse
       className='code-fence'
       css={css({
-        '.ant-select-selector': {
+        borderColor: colorBorderSecondary,
+        '.ant-collapse-content': {
+          borderColor: colorBorderSecondary,
+        },
+        '.ant-collapse-item,.ant-select-selector': {
           fontFamily:
             'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important',
         },

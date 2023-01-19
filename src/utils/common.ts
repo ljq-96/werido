@@ -125,3 +125,15 @@ export function downloadFile(blob: Blob, fileName = '未命名') {
   link.click()
   document.body.removeChild(link)
 }
+
+export function treeWalk<T>(treeData: T[], fn: (item: T) => void) {
+  const walk = arr => {
+    arr.forEach(item => {
+      fn(item)
+      if (item.children?.length) {
+        walk(item.children)
+      }
+    })
+  }
+  walk(treeData)
+}

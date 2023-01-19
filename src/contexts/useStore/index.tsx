@@ -9,6 +9,7 @@ export type StoreState = [
   {
     tags: { name: string; value: number }[]
     catalog: ICatalog[]
+    catalogLoading: boolean
     isDark: boolean
   },
   {
@@ -24,13 +25,13 @@ export function useStore(): StoreState {
 
 export default function StoreProvider({ children }: { children: ReactNode }) {
   const { tags, getTags } = useTags()
-  const { catalog, getCatalog } = useCatalog()
+  const { catalog, getCatalog, catalogLoading } = useCatalog()
   const [isDark, setIsDark] = useState(false)
 
   return (
     <StoreContext.Provider
       value={[
-        { tags, catalog, isDark },
+        { tags, catalog, catalogLoading, isDark },
         { getTags, getCatalog, setIsDark },
       ]}
     >

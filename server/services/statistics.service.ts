@@ -34,8 +34,17 @@ export class StatisticsService {
       endMonth = end.month()
     const timeMap: { [key: string]: number } = {}
     for (let year = startYear; year <= endYear; year++) {
-      for (let month = startMonth; month <= endMonth; month++) {
-        timeMap[`${year}-${month < 9 ? '0' + (month + 1) : month + 1}`] = 0
+      const fn = (start, end) => {
+        for (let month = start; month <= end; month++) {
+          timeMap[`${year}-${month < 9 ? '0' + (month + 1) : month + 1}`] = 0
+        }
+      }
+      if (year === startYear) {
+        fn(startMonth, 11)
+      } else if (year === endYear) {
+        fn(0, endMonth)
+      } else {
+        fn(0, 11)
       }
     }
     list.forEach(i => {

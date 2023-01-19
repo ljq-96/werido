@@ -488,7 +488,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
 
   useEffect(() => {
     const getState = () => {
-      editor.action(ctx => {
+      editor?.action(ctx => {
         const _activeBtns = new Set<ActivedButton>()
         const { state } = ctx.get(editorViewCtx)
         Object.keys(state.schema.marks).forEach(k => {
