@@ -16,7 +16,7 @@ export function useParseRoute(route: RouteProps, oprions?: { showAll: boolean })
           redirect,
           path: _path,
           routes: routes
-            .filter(item => !item.auth || item.auth?.includes(status))
+            .filter(item => !item.auth || item.auth.includes(status))
             .filter(item => oprions?.showAll || !item.hide)
             .map(item => parseRoute(item, _path)),
         }
@@ -24,7 +24,7 @@ export function useParseRoute(route: RouteProps, oprions?: { showAll: boolean })
       return { name, icon, path: _path, redirect }
     }
     return parseRoute(route)
-  }, [route])
+  }, [route, status])
 
   return parsedRoute
 }

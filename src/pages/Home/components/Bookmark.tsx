@@ -7,12 +7,13 @@ import { MultipleContainers } from '../../../components/Sortable/MultipleContain
 import { rectSortingStrategy } from '@dnd-kit/sortable'
 import { DocIndexType } from '../../../../types/enum'
 import { extract } from '../../../utils/common'
-import BookmarkModal from '../../../components/Modal/BookmarkModal'
+import { useModalDispatch } from '../../../contexts/useModal/hooks'
+import { basicModalView } from '../../../contexts/useModal/actions'
 
 function Bookmark() {
   const [bookmarks, setBookmarks] = useState<IBookmark[]>([])
   const [loading, setLoading] = useState(false)
-  const [showModal, setShowModal] = useState<IBookmark | boolean>(null)
+  const modalDispatch = useModalDispatch()
 
   const getBookmark = () => {
     setLoading(true)
@@ -59,7 +60,7 @@ function Bookmark() {
                 onMenu={action => {
                   switch (action) {
                     case 'edit':
-                      setShowModal(value)
+                      modalDispatch(basicModalView.bookmarkModal.actions(true, value, { onOk: getBookmark }))
                       break
                     case 'pin':
                       request
@@ -80,16 +81,6 @@ function Bookmark() {
           {bookmarks[0]?.children?.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
         </Spin>
       </Card>
-
-      <BookmarkModal
-        visible={showModal}
-        onCancle={() => setShowModal(false)}
-        groups={bookmarks.map(item => ({ label: item.title, value: item.title }))}
-        onOk={() => {
-          setShowModal(false)
-          getBookmark()
-        }}
-      />
     </Fragment>
   )
 }

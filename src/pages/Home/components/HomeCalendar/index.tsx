@@ -1,49 +1,21 @@
-import { Button, DatePicker, Form, Input, Modal, Space } from 'antd'
-import dayjs from 'dayjs'
+import { Button, Modal } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { ITodo } from '../../../../../types'
 import { request } from '../../../../api'
 import Calendar from '../../../../components/Calendar'
+import { useModal } from '../../../../contexts/useModal'
+import { basicModalView } from '../../../../contexts/useModal/actions'
 
 function HomeCalendar() {
-  const [showModal, setShowModal] = useState(false)
-  const [onEditTodo, setOnEditTodo] = useState<ITodo>(null)
+  const [_, { dispatch }] = useModal()
   const [todoList, setTodoList] = useState<ITodo[]>([])
   const [loading, setLoading] = useState(false)
-  const [submitLoading, setSubmitLoading] = useState(false)
-  const [form] = Form.useForm()
 
   const getTodoList = async () => {
     setLoading(true)
     const todo = await request.todo({ method: 'GET' })
     setTodoList(todo)
     setLoading(false)
-  }
-
-  const handleFinish = async fields => {
-    setSubmitLoading(true)
-    const {
-      date,
-      time: [start, end],
-      description,
-    } = fields
-    const dateStr = date.format().split('T')[0]
-    const data = {
-      start: start.format().replace(/(.*?)T/, dateStr + 'T'),
-      end: end.format().replace(/(.*?)T/, dateStr + 'T'),
-      description,
-    }
-    if (onEditTodo) {
-      await request.todo({ method: 'PUT', query: onEditTodo._id, data })
-    } else {
-      await request.todo({ method: 'POST', data })
-    }
-
-    await getTodoList()
-    form.resetFields()
-    setShowModal(false)
-    setOnEditTodo(null)
-    setSubmitLoading(false)
   }
 
   useEffect(() => {
@@ -56,22 +28,17 @@ function HomeCalendar() {
         todo={todoList}
         loading={loading}
         extra={
-          <Button type='dashed' onClick={() => setShowModal(true)}>
+          <Button
+            type='dashed'
+            onClick={() => dispatch(basicModalView.todoModal.actions(true, null, { onOk: getTodoList }))}
+          >
             添加日程
           </Button>
         }
         onAction={({ type, todo }) => {
           switch (type) {
             case 'edit':
-              const { start, end, description } = todo
-              setShowModal(true)
-              setOnEditTodo(todo)
-
-              form.setFieldsValue({
-                date: dayjs(start).startOf('day'),
-                time: [dayjs(start), dayjs(end)],
-                description,
-              })
+              dispatch(basicModalView.todoModal.actions(true, todo, { onOk: getTodoList }))
               break
             case 'delete':
               Modal.confirm({
@@ -85,34 +52,6 @@ function HomeCalendar() {
           }
         }}
       />
-      <Modal
-        title={`${onEditTodo ? '编辑' : '添加'}日程`}
-        open={!!showModal}
-        onOk={form.submit}
-        width={500}
-        okButtonProps={{ loading: submitLoading }}
-        onCancel={() => {
-          setShowModal(false)
-          setOnEditTodo(null)
-          form.resetFields()
-        }}
-      >
-        <Form form={form} onFinish={handleFinish}>
-          <Form.Item label='起止时间' required>
-            <Space>
-              <Form.Item name='date' noStyle rules={[{ required: true, message: '请选择日期' }]}>
-                <DatePicker />
-              </Form.Item>
-              <Form.Item name='time' noStyle rules={[{ required: true, message: '请选择时间' }]}>
-                <DatePicker.RangePicker picker='time' />
-              </Form.Item>
-            </Space>
-          </Form.Item>
-          <Form.Item label='日程内容' name='description' rules={[{ required: true, message: '请输入日程内容' }]}>
-            <Input.TextArea placeholder='请输入日程内容' />
-          </Form.Item>
-        </Form>
-      </Modal>
     </Fragment>
   )
 }

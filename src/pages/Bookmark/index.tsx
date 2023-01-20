@@ -12,11 +12,13 @@ import { extract } from '../../utils/common'
 import Tops from '../../components/Tops'
 import { TranslateX } from '../../components/Animation'
 import { MoreOutlined } from '@ant-design/icons'
+import { useModalDispatch } from '../../contexts/useModal/hooks'
+import { basicModalView } from '../../contexts/useModal/actions'
 
 function Bookmark() {
-  const [showModal, setShowModal] = useState<IBookmark | boolean>(null)
   const [loading, setLoading] = useState(false)
   const [bookmarks, setBookmarks] = useState<IBookmark[]>([])
+  const modalDispatch = useModalDispatch()
 
   const getBookmark = () => {
     setLoading(true)
@@ -28,10 +30,6 @@ function Bookmark() {
       .finally(() => {
         setLoading(false)
       })
-  }
-
-  const handleCreate = () => {
-    setShowModal(true)
   }
 
   useEffect(() => {
@@ -50,7 +48,19 @@ function Bookmark() {
                 <Dropdown
                   menu={{
                     items: [
-                      { label: '添加书签', key: 1, onClick: handleCreate },
+                      {
+                        label: '添加书签',
+                        key: 1,
+                        onClick: () => {
+                          modalDispatch(
+                            basicModalView.bookmarkModal.actions(
+                              true,
+                              { group: bookmarks.map(item => item.title) } as any,
+                              { onOk: getBookmark },
+                            ),
+                          )
+                        },
+                      },
                       { label: '导入书签', key: 2 },
                     ],
                   }}
@@ -84,7 +94,7 @@ function Bookmark() {
                         onMenu={action => {
                           switch (action) {
                             case 'edit':
-                              setShowModal(value)
+                              modalDispatch(basicModalView.bookmarkModal.actions(true, value, { onOk: getBookmark }))
                               break
                             case 'pin':
                               request
@@ -110,16 +120,6 @@ function Bookmark() {
           </TranslateX>
         </Col>
       </Row>
-
-      <BookmarkModal
-        visible={showModal}
-        onCancle={() => setShowModal(false)}
-        groups={bookmarks.map(item => ({ label: item.title, value: item.title }))}
-        onOk={() => {
-          setShowModal(false)
-          getBookmark()
-        }}
-      />
     </Fragment>
   )
 }

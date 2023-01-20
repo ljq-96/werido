@@ -43,10 +43,8 @@ export const Container = forwardRef<HTMLDivElement, Props>(
     }: Props,
     ref,
   ) => {
-    const Component = onClick ? 'button' : 'div'
-
     return (
-      <Component
+      <div
         {...props}
         ref={ref}
         style={
@@ -67,19 +65,16 @@ export const Container = forwardRef<HTMLDivElement, Props>(
         onClick={onClick}
         tabIndex={onClick ? 0 : undefined}
       >
-        {label ? (
+        {label && !disabled ? (
           <div className={styles.Header}>
-            <div className='werido-title'>{label}</div>
-
-            {!disabled && (
-              <div className={styles.Actions}>
-                <Button type='text' icon={<HolderOutlined />} {...handleProps} />
-              </div>
-            )}
+            <div>{label}</div>
+            <div className={styles.Actions}>
+              <Button type='text' icon={<HolderOutlined />} {...handleProps} />
+            </div>
           </div>
         ) : null}
         {placeholder ? children : <ul>{children}</ul>}
-      </Component>
+      </div>
     )
   },
 )

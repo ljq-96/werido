@@ -1,12 +1,13 @@
 import { InfoCircleOutlined } from '@ant-design/icons'
-import { Button, DatePicker, Form, Input, message, Modal, Space, Tag } from 'antd'
+import { Button, message, Modal, Space, Tag } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import dayjs from 'dayjs'
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useRef } from 'react'
 import { ITodo } from '../../../../types'
-import { UserStatus } from '../../../../types/enum'
 import { request } from '../../../api'
 import CommonTable, { CommonTableInstance, ToolItem } from '../../../components/CommonTable'
+import { useModal } from '../../../contexts/useModal'
+import { basicModalView } from '../../../contexts/useModal/actions'
 import { formatTime } from '../../../utils/common'
 
 const toolList: ToolItem[] = [
@@ -33,9 +34,7 @@ const toolList: ToolItem[] = [
 ]
 
 function TodoManage() {
-  const [showModal, setShowModal] = useState<ITodo>(null)
-  const [submitLoading, setSubmitLoading] = useState(false)
-  const [form] = Form.useForm()
+  const [_, { dispatch }] = useModal()
   const tableRef = useRef<CommonTableInstance>(null)
 
   const handleDelete = (id: string) => {
@@ -47,32 +46,11 @@ function TodoManage() {
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
         return request.admin.todo({ method: 'DELETE', query: id }).then(() => {
-          setShowModal(null)
           message.success('删除成功')
           tableRef.current.fetchData()
         })
       },
     })
-  }
-
-  const handleFinish = async fields => {
-    setSubmitLoading(true)
-    const {
-      date,
-      time: [start, end],
-      description,
-    } = fields
-    const dateStr = date.format().split('T')[0]
-    const data = {
-      start: start.format().replace(/(.*?)T/, dateStr + 'T'),
-      end: end.format().replace(/(.*?)T/, dateStr + 'T'),
-      description,
-    }
-    await request.todo({ method: 'PUT', query: showModal._id, data })
-    await tableRef.current.fetchData()
-    form.resetFields()
-    setShowModal(null)
-    setSubmitLoading(false)
   }
 
   const columns: ColumnsType<ITodo> = [
@@ -109,13 +87,7 @@ function TodoManage() {
             <Button
               type='link'
               onClick={() => {
-                setShowModal(record)
-                const { start, end, description } = record
-                form.setFieldsValue({
-                  date: dayjs(start).startOf('day'),
-                  time: [dayjs(start), dayjs(end)],
-                  description,
-                })
+                dispatch(basicModalView.todoModal.actions(true, record, { onOk: tableRef.current.fetchData }))
               }}
             >
               编辑
@@ -138,34 +110,6 @@ function TodoManage() {
         toolList={toolList}
         columns={columns}
       />
-
-      <Modal
-        title={`编辑日程`}
-        open={!!showModal}
-        onOk={form.submit}
-        width={500}
-        okButtonProps={{ loading: submitLoading }}
-        onCancel={() => {
-          setShowModal(null)
-          form.resetFields()
-        }}
-      >
-        <Form form={form} onFinish={handleFinish}>
-          <Form.Item label='起止时间' required>
-            <Space>
-              <Form.Item name='date' noStyle rules={[{ required: true, message: '请选择日期' }]}>
-                <DatePicker />
-              </Form.Item>
-              <Form.Item name='time' noStyle rules={[{ required: true, message: '请选择时间' }]}>
-                <DatePicker.RangePicker picker='time' />
-              </Form.Item>
-            </Space>
-          </Form.Item>
-          <Form.Item label='日程内容' name='description' rules={[{ required: true, message: '请输入日程内容' }]}>
-            <Input.TextArea placeholder='请输入日程内容' />
-          </Form.Item>
-        </Form>
-      </Modal>
     </Fragment>
   )
 }

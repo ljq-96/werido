@@ -5,8 +5,10 @@ import UserProvider, { useUser } from './contexts/useUser'
 import 'dayjs/locale/zh-cn'
 import zh_CN from 'antd/lib/locale/zh_CN'
 import StoreProvider, { useStore } from './contexts/useStore'
+import ModalProvider from './contexts/useModal'
 import { RouteProps } from '../types'
 import { App as AntApp, ConfigProvider, theme } from 'antd'
+import Modals from './modals'
 
 const parseRoute = (route: RouteProps, basePath = '') => {
   const path = `/${basePath}/${route.path}`.replace(/\/+/g, '/')
@@ -27,6 +29,7 @@ function Main() {
     >
       <AntApp>
         <Routes>{routes.map(r => parseRoute(r))}</Routes>
+        <Modals />
       </AntApp>
     </ConfigProvider>
   )
@@ -36,9 +39,11 @@ function App() {
   return (
     <StoreProvider>
       <UserProvider>
-        <BrowserRouter>
-          <Main />
-        </BrowserRouter>
+        <ModalProvider>
+          <BrowserRouter>
+            <Main />
+          </BrowserRouter>
+        </ModalProvider>
       </UserProvider>
     </StoreProvider>
   )
