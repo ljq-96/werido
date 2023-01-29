@@ -48,18 +48,18 @@ const BlogList = () => {
         <Col flex='auto'>
           <TranslateY>
             <Spin spinning={loading}>
-              <Card title='文章'>
-                {blog?.list?.length ? (
-                  <Fragment>
-                    {blog.list.map(item => (
-                      <BlogItemCard key={item._id} item={item} />
-                    ))}
-                    <Pagination pageSize={SIZE} current={page} total={blog?.total} onChange={page => setPage(page)} />
-                  </Fragment>
-                ) : (
-                  <Empty />
-                )}
-              </Card>
+              {/* <Card title='文章'> */}
+              {blog?.list?.length ? (
+                <Fragment>
+                  {blog.list.map(item => (
+                    <BlogItemCard key={item._id} item={item} />
+                  ))}
+                  <Pagination pageSize={SIZE} current={page} total={blog?.total} onChange={page => setPage(page)} />
+                </Fragment>
+              ) : (
+                <Empty />
+              )}
+              {/* </Card> */}
             </Spin>
           </TranslateY>
         </Col>

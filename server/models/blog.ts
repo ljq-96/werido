@@ -12,6 +12,9 @@ export class Blog {
   @prop({ type: String })
   description?: string
 
+  @prop({ type: String })
+  cover?: string
+
   @prop({ type: Number })
   words?: number
 

@@ -87,7 +87,13 @@ function TodoManage() {
             <Button
               type='link'
               onClick={() => {
-                dispatch(basicModalView.todoModal.actions(true, record, { onOk: tableRef.current.fetchData }))
+                dispatch(
+                  basicModalView.todoModal.actions({
+                    visible: true,
+                    options: record,
+                    callback: { onOk: tableRef.current.fetchData },
+                  }),
+                )
               }}
             >
               编辑

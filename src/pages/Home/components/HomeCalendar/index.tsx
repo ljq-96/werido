@@ -30,7 +30,9 @@ function HomeCalendar() {
         extra={
           <Button
             type='dashed'
-            onClick={() => dispatch(basicModalView.todoModal.actions(true, null, { onOk: getTodoList }))}
+            onClick={() =>
+              dispatch(basicModalView.todoModal.actions({ visible: true, callback: { onOk: getTodoList } }))
+            }
           >
             添加日程
           </Button>
@@ -38,7 +40,9 @@ function HomeCalendar() {
         onAction={({ type, todo }) => {
           switch (type) {
             case 'edit':
-              dispatch(basicModalView.todoModal.actions(true, todo, { onOk: getTodoList }))
+              dispatch(
+                basicModalView.todoModal.actions({ visible: true, options: todo, callback: { onOk: getTodoList } }),
+              )
               break
             case 'delete':
               Modal.confirm({

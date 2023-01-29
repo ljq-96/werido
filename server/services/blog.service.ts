@@ -23,7 +23,11 @@ export class BlogService {
   public async updateOne(id: string, payload: Blog) {
     const { content } = payload
     if (content) {
-      payload.description = content?.match(/^([\w\W]*?)\n\n\*\*\*\n\n/)?.[1]
+      payload.description = content?.match(/^([\w\W]*?)#{1,5}\s/)?.[1]?.replace(/\!\[.*?\]\(.*?\)/, '')
+      payload.cover = content
+        ?.match(/\!\[.*?\]\((.*?)\)/)?.[1]
+        ?.replace(/\\/g, '')
+        ?.split(' ')?.[0]
       payload.words = payload?.content?.length
     }
     return await this.blogModel.findByIdAndUpdate(id, payload)
@@ -34,7 +38,11 @@ export class BlogService {
     return await this.blogModel.create({
       creator: this.ctx.app.context.user._id,
       words: content?.length,
-      description: content?.match(/^([\w\W]*?)\n\n\*\*\*\n\n/)?.[1],
+      description: content?.match(/^([\w\W]*?)#{1,5}\s/)?.[1]?.replace(/\!\[.*?\]\(.*?\)/, ''),
+      cover: content
+        ?.match(/\!\[.*?\]\((.*?)\)/)?.[1]
+        ?.replace(/\\/g, '')
+        ?.split(' ')?.[0],
       ...payload,
     })
   }

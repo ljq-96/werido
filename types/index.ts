@@ -114,6 +114,7 @@ export interface IBlog {
   content: string
   words: number
   description: string
+  cover: string
   creator: string
   tags: string[]
   inCatalog: boolean

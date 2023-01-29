@@ -53,11 +53,11 @@ function Bookmark() {
                         key: 1,
                         onClick: () => {
                           modalDispatch(
-                            basicModalView.bookmarkModal.actions(
-                              true,
-                              { group: bookmarks.map(item => item.title) } as any,
-                              { onOk: getBookmark },
-                            ),
+                            basicModalView.bookmarkModal.actions({
+                              visible: true,
+                              options: { group: bookmarks.map(item => item.title) },
+                              callback: { onOk: getBookmark },
+                            }),
                           )
                         },
                       },
@@ -94,7 +94,13 @@ function Bookmark() {
                         onMenu={action => {
                           switch (action) {
                             case 'edit':
-                              modalDispatch(basicModalView.bookmarkModal.actions(true, value, { onOk: getBookmark }))
+                              modalDispatch(
+                                basicModalView.bookmarkModal.actions({
+                                  visible: true,
+                                  options: value,
+                                  callback: { onOk: getBookmark },
+                                }),
+                              )
                               break
                             case 'pin':
                               request

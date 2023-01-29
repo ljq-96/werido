@@ -60,7 +60,13 @@ function Bookmark() {
                 onMenu={action => {
                   switch (action) {
                     case 'edit':
-                      modalDispatch(basicModalView.bookmarkModal.actions(true, value, { onOk: getBookmark }))
+                      modalDispatch(
+                        basicModalView.bookmarkModal.actions({
+                          visible: true,
+                          options: value,
+                          callback: { onOk: getBookmark },
+                        }),
+                      )
                       break
                     case 'pin':
                       request

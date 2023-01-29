@@ -1,6 +1,6 @@
-import { FieldTimeOutlined, FileTextOutlined } from '@ant-design/icons'
-import { Space, theme } from 'antd'
-import { Link } from 'react-router-dom'
+import { ArrowRightOutlined, FieldTimeOutlined, FileTextOutlined } from '@ant-design/icons'
+import { Button, Card, Divider, Row, Space, theme } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
 import { IBlog } from '../../../../../../types'
 import { Render } from '../../../../../components/MarkdownEditor'
 import { css, jsx } from '@emotion/react'
@@ -9,54 +9,63 @@ import dayjs from 'dayjs'
 
 /** @jsxImportSource @emotion/react */
 const BlogItemCard = ({ item }: { item: IBlog }) => {
-  const { title, content, description, tags, createTime, words, _id } = item
+  const { title, content, description, tags, cover, createTime, words, _id } = item
   const { token } = theme.useToken()
+  const navigate = useNavigate()
 
   return (
     <Fragment>
-      <Link
-        to={`/blog/${_id}`}
+      <Card
         className='blog-item'
+        size='small'
         css={css({
-          display: 'block',
-          borderRadius: token.borderRadius,
-          padding: 16,
-          border: `1px solid ${token.colorBorderSecondary}`,
-          backgroundColor: token.colorBgContainer,
-          transition: '0.4s',
           marginBottom: 16,
-          color: 'unset',
-          '&:hover': {
-            color: 'unset',
-            backgroundColor: token.colorBgLayout,
-            '.title': {
+          '.desc': {
+            color: token.colorTextDescription,
+          },
+          '.title': {
+            fontSize: '1.5em',
+            transition: '0.2s',
+            margin: '8px 0',
+            color: token.colorText,
+            '&:hover': {
               color: token.colorPrimary,
             },
           },
         })}
+        cover={cover && <img src={cover} css={css({ height: 260, objectFit: 'cover' })} />}
       >
-        <div
-          className='title'
-          css={css({ fontSize: 16, fontWeight: 'bold', cursor: 'pointer', transition: '0.2s', marginBottom: 8 })}
-        >
-          {title}
-        </div>
-        <div>
-          <Render key={_id} value={description} />
-        </div>
-        <div css={css({ color: '#8a8f8d', marginTop: 8 })}>
-          <Space size='large'>
+        <div className='desc'>
+          <Space>
             <Space size='small'>
               <FieldTimeOutlined />
               {dayjs(createTime).format('YYYY-MM-DD HH:mm:ss')}
             </Space>
+            <Divider type='vertical' />
             <Space size='small'>
               <FileTextOutlined />
               {`${words}字`}
             </Space>
           </Space>
         </div>
-      </Link>
+        <Link to={`/blog/${_id}`} className='title'>
+          {title}
+        </Link>
+        <div css={css({ marginTop: 8 })}>
+          <Render key={_id} value={description} />
+          <div></div>
+        </div>
+        <Button
+          size='small'
+          type='text'
+          onClick={() => navigate(`/blog/${_id}`)}
+          css={css({
+            background: token.colorBgLayout,
+          })}
+        >
+          阅读全文 <ArrowRightOutlined />
+        </Button>
+      </Card>
     </Fragment>
   )
 }

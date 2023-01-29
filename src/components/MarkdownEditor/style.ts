@@ -29,51 +29,49 @@ export default function useStyle() {
       fontSize: '1em',
       lineHeight: 1.5,
       letterSpacing: 0.5,
-      margin: 0,
+      margin: '0.5em 0',
       '&.empty-node': {
         color: colorTextDescription,
       },
     },
     blockquote: {
-      padding: '1em',
-      lineHeight: '1.75em',
-      borderLeft: `4px solid ${colorPrimary}`,
+      // overflow: 'hidden',
+      padding: '0 1em',
+      borderLeft: `4px solid ${colorBorderSecondary}`,
       marginLeft: 0,
       marginRight: 0,
-      borderRadius: borderRadius,
-      background: colorBgLayout,
     },
     h1: {
       borderBottom: `2px solid ${colorBorderSecondary}`,
-      fontSize: 38,
+      fontSize: '2em',
       lineHeight: 1,
       padding: '0 0 10px',
       margin: '15px 0',
     },
     h2: {
       borderBottom: `1px solid ${colorBorderSecondary}`,
-      fontSize: 30,
+      fontSize: '1.5em',
       lineHeight: 1,
       padding: '0 0 10px',
       margin: '15px 0',
     },
     h3: {
-      fontSize: 24,
+      fontSize: '1.25em',
       lineHeight: 1,
       margin: '15px 0',
     },
     h4: {
-      fontSize: 20,
+      fontSize: '1.125em',
       lineHeight: 1,
       margin: '15px 0',
     },
     h5: {
-      fontSize: 16,
+      fontSize: '1em',
       lineHeight: 1,
       margin: '15px 0',
     },
     '.heading': {
-      fontWeight: 600,
+      fontWeight: 500,
     },
     hr: {
       height: 1,
@@ -91,8 +89,12 @@ export default function useStyle() {
       },
     },
 
+    ul: {
+      listStyleType: 'circle',
+    },
+
     li: {
-      listStyle: 'none',
+      // listStyle: 'none',
     },
 
     '.task-list-item': {
@@ -126,16 +128,6 @@ export default function useStyle() {
       fontWeight: 600,
     },
 
-    '.link': {
-      color: colorPrimary,
-      cursor: 'pointer',
-      transition: 'all 0.4s ease-in-out',
-      fontWeight: 500,
-      '&:hover': {
-        backgroundColor: colorPrimaryBg,
-        boxShadow: `0 0.2em ${colorPrimaryBg}, 0 -0.2em ${colorPrimaryBg}`,
-      },
-    },
     '.tableWrapper': {
       overflowX: 'auto',
       margin: 0,
