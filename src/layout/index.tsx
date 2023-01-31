@@ -1,12 +1,11 @@
 import { Suspense, useEffect, useMemo, useState } from 'react'
-import ProLayout, { DefaultFooter } from '@ant-design/pro-layout'
-import { theme } from 'antd'
-import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
+import ProLayout, { DefaultFooter, FooterToolbar } from '@ant-design/pro-layout'
+import { Avatar, Button, FloatButton, theme } from 'antd'
+import { Link, Outlet, useNavigate, useLocation, useParams } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { useUser } from '../contexts/useUser'
 import { PageProps } from '../../types'
 import Loading from '../components/Loading'
-import './style.less'
 import '../assets/css/index.less'
 import { useParseRoute } from '../hooks'
 import Weather from './components/Weather'
@@ -14,15 +13,21 @@ import LoginUser from './components/LoginUser'
 import { useStore } from '../contexts/useStore'
 import { IconFont } from '../utils/common'
 import Catalog from './components/Catalog'
+import TouristFooter from './components/TouristFooter'
+import { LeftOutlined, RightOutlined } from '@ant-design/icons'
+import useStyle from './style'
 
 export default (props: PageProps) => {
   const { route } = props
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const { pathname } = useLocation()
-  const [{ _id }, { getUser }] = useUser()
+  const [collapsed, setCollapsed] = useState(false)
+  const [{ _id, avatar }, { getUser }] = useUser()
   const parsedRoutes = useParseRoute(route)
-  const [{ isDark }, { setIsDark }] = useStore()
+  const [{ isDark }, { setIsDark, getCatalog, getTags, getArchives }] = useStore()
+  const { people } = useParams()
+  const style = useStyle()
   const {
     token: { colorPrimary },
   } = theme.useToken()
@@ -31,24 +36,32 @@ export default (props: PageProps) => {
 
   const getMyProfile = () => {
     setLoading(true)
-    getUser().finally(() => {
-      setLoading(false)
-    })
+    getUser(people)
+      .then(() => {
+        getCatalog(people)
+        getTags(people)
+        getArchives(people)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   useEffect(() => {
     getMyProfile()
-  }, [])
+  }, [people])
 
   return (
     <ProLayout
+      css={style}
       loading={loading}
       className='layout'
       fixedHeader={true}
+      collapsed={collapsed}
       siderWidth={isInBlog ? 240 : 180}
       breakpoint='md'
-      title='Werido'
-      logo={<Logo style={{ width: 32 }} color={colorPrimary} />}
+      title={people || 'Werido'}
+      logo={people ? <Avatar src={avatar} /> : <Logo style={{ width: 32 }} color={colorPrimary} />}
       layout={'mix'}
       menu={{
         type: 'sub',
@@ -59,17 +72,22 @@ export default (props: PageProps) => {
       }}
       splitMenus={true}
       route={parsedRoutes}
-      menuItemRender={(item, dom) => <Link to={item.redirect || item.path}>{dom}</Link>}
+      menuItemRender={(item, dom) => <Link to={item.redirect || item.path.replace(':people', people)}>{dom}</Link>}
       menuContentRender={isInBlog ? () => <Catalog /> : undefined}
       onMenuHeaderClick={() => navigate('/')}
       actionsRender={() => [
         <IconFont onClick={() => setIsDark(!isDark)} type={isDark ? 'icon-sun' : 'icon-moon'} />,
-        <Weather />,
-        <LoginUser />,
+        !people && <Weather />,
+        !people && <LoginUser />,
       ]}
+      collapsedButtonRender={collapsed => (
+        <div className='collapsed-btn' onClick={() => setCollapsed(!collapsed)}>
+          <div className={`icon ${collapsed ? 'collapsed' : ''}`}>{<LeftOutlined />}</div>
+        </div>
+      )}
     >
       <Suspense fallback={<Loading />}>{_id && <Outlet />}</Suspense>
-      <DefaultFooter style={{ background: 'transparent' }} copyright='京ICP备2022008343号' />
+      {people ? <TouristFooter /> : <DefaultFooter copyright='京ICP备2022008343号' />}
     </ProLayout>
   )
 }

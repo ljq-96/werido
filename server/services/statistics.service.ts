@@ -32,11 +32,11 @@ export class StatisticsService {
       endYear = end.year(),
       startMonth = start.month(),
       endMonth = end.month()
-    const timeMap: { [key: string]: number } = {}
+    const timeMap: any = {}
     for (let year = startYear; year <= endYear; year++) {
       const fn = (start, end) => {
         for (let month = start; month <= end; month++) {
-          timeMap[`${year}-${month < 9 ? '0' + (month + 1) : month + 1}`] = 0
+          timeMap[`${year}-${month < 9 ? '0' + (month + 1) : month + 1}`] = { value: 0, blogs: [] }
         }
       }
       if (year === startYear) {
@@ -49,10 +49,11 @@ export class StatisticsService {
     }
     list.forEach(i => {
       const time = dayjs(i.createTime).format('YYYY-MM')
-      timeMap[time] = timeMap[time] + 1
+      timeMap[time].value = timeMap[time].value + 1
+      timeMap[time].blogs.push(i)
     })
     const data = Object.entries(timeMap)
-      .map(([time, value]) => ({ time, value }))
+      .map(([time, value]: any) => ({ time, ...value }))
       .sort((a, b) => dayjs(a.time).valueOf() - dayjs(b.time).valueOf())
     return data
   }

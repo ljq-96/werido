@@ -34,10 +34,12 @@ function LoginUser() {
   return (
     <Fragment>
       <Dropdown
+        destroyPopupOnHide
         menu={{
           items: [
-            { icon: <SettingOutlined />, label: '设置', key: 'setting', onClick: () => setShowColorDrawer(true) },
-            { icon: <LogoutOutlined />, label: '退出', key: 'logout', onClick: logout },
+            { label: '我的主页', key: 'mine', onClick: () => navigate(`/people/${username}/`) },
+            { label: '主题设置', key: 'setting', onClick: () => setShowColorDrawer(true) },
+            { label: '退出登录', key: 'logout', onClick: logout },
           ],
         }}
       >

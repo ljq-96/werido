@@ -15,7 +15,7 @@ dG0ndYJg2zfdF/dhgQIDAQAB
 
 /** 自定义图标 */
 export const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_3208498_o9jxr5mami.js',
+  scriptUrl: '//at.alicdn.com/t/c/font_3208498_4j8romdlta.js',
 })
 
 /** qs */

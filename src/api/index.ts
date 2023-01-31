@@ -14,6 +14,7 @@ const apiList = {
   tops: '/quark/toplist',
   detail: '/api/detail',
   todo: '/api/todo',
+  tourist: '/api/tourist',
 }
 
 const adminApi = {

@@ -41,6 +41,10 @@ export class UserService {
     return await this.userModel.findById(id)
   }
 
+  public async getDetailByName(username: string) {
+    return await this.userModel.findOne({ username })
+  }
+
   public async getList(params: User, pageInfo?: { page: number; size: number }) {
     const { page, size } = pageInfo || { page: 1, size: 100000 }
     const list = await this.userModel

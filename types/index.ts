@@ -77,6 +77,7 @@ export interface IUser {
   avatar: string
   desc: string
   location: string
+  isTourist: boolean
 }
 
 export interface IconType {

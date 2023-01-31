@@ -24,7 +24,10 @@ function Main() {
   const [{ isDark }] = useStore()
   return (
     <ConfigProvider
-      theme={{ algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm, token: { colorPrimary: themeColor } }}
+      theme={{
+        algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+        token: { colorPrimary: themeColor, fontFamily: 'Ubuntu' },
+      }}
       locale={zh_CN}
     >
       <AntApp>

@@ -14,7 +14,6 @@ export default function useStyle() {
     },
   } = theme.useToken()
   return css({
-    padding: '0 4px',
     '.head': {
       padding: '15px 8px',
       marginBottom: 8,

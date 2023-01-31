@@ -1,4 +1,6 @@
-import { Avatar, Button, Col, Popover, Row, Space } from 'antd'
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import { Avatar, Button, Col, Popover, Row, Space, theme } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useRef, useState } from 'react'
 import { request } from '../../../api'
@@ -27,6 +29,9 @@ function Weather() {
   const [sunDeg, setSunDeg] = useState({ isSun: true, rotate: 0 })
   const [user] = useUser()
   const timer = useRef<any>()
+  const {
+    token: { colorBgLayout },
+  } = theme.useToken()
   const getWeather = async () => {
     const city = location[location.length - 1]
     const cityInfo = await request.weather.getCityId({ method: 'GET', params: { location: city, key: KEY } })
@@ -89,7 +94,7 @@ function Weather() {
         destroyTooltipOnHide
         overlayInnerStyle={{ transform: 'translateY(-10px)' }}
         onOpenChange={show => setTimeout(() => setShow(show), 400)}
-        getPopupContainer={el => el.parentElement}
+        // getPopupContainer={el => el.parentElement}
         title={
           <CityCascader
             style={{ width: '100%' }}
@@ -168,8 +173,8 @@ function Weather() {
         }
       >
         <Button size='large' type='text' style={{ paddingTop: 0, paddingBottom: 0 }}>
-          <Avatar size='small' className='mr-2'>
-            <IconFont style={{ fontSize: 20, transform: 'translateY(2px)' }} type={iconMap[now?.icon]} />
+          <Avatar size='small' className='mr-2' css={css({ backgroundColor: colorBgLayout })}>
+            <IconFont style={{ fontSize: 20, transform: 'translateY(1px)' }} type={iconMap[now?.icon]} />
           </Avatar>
           <span>{now?.temp}°C</span>
         </Button>

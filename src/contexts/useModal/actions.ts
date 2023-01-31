@@ -33,12 +33,15 @@ type ModalView = {
 export const basicModalView: ModalView = Object.keys(ModalAction).reduce((prev, current) => {
   prev[ModalAction[current]] = {
     type: ModalAction[current],
-    actions: ({ visible, options, callback }) =>
-      basicActions(ModalAction[current], {
-        modalAction: visible ? ModalAction[current] : null,
-        [ModalAction[current]]: options,
-        callback,
-      }),
+    actions: params =>
+      basicActions(
+        ModalAction[current],
+        params && {
+          modalAction: params.visible ? ModalAction[current] : null,
+          [ModalAction[current]]: params.options,
+          callback: params.callback,
+        },
+      ),
   }
   return prev
 }, {} as ModalView)

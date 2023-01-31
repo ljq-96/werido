@@ -163,6 +163,33 @@ const routes: RouteProps[] = [
       },
     ],
   },
+  {
+    path: '/people/:people',
+    name: '123',
+    component: Layout,
+    routes: [
+      {
+        path: '/',
+        name: '主页',
+        component: lazy(() => import('../pages/Tourist/BlogList')),
+      },
+      {
+        path: '/archives/*',
+        name: '归档',
+        component: lazy(() => import('../pages/Tourist/Archives')),
+      },
+      {
+        path: '/tags/*',
+        name: '标签',
+        component: lazy(() => import('../pages/Tourist/Tags')),
+      },
+      {
+        path: '/about',
+        name: '关于',
+        component: lazy(() => import('../pages/Tourist/About')),
+      },
+    ],
+  },
 ]
 
 export default routes
