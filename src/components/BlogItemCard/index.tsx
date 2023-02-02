@@ -8,7 +8,7 @@ import { Render } from '../MarkdownEditor'
 import { IBlog } from '../../../types'
 
 /** @jsxImportSource @emotion/react */
-const BlogItemCard = ({ item }: { item: IBlog }) => {
+const BlogItemCard = ({ item, setLink }: { item: IBlog; setLink: (id: string) => string }) => {
   const { title, content, description, tags, cover, createTime, words, _id } = item
   const { token } = theme.useToken()
   const navigate = useNavigate()
@@ -48,7 +48,7 @@ const BlogItemCard = ({ item }: { item: IBlog }) => {
             </Space>
           </Space>
         </div>
-        <Link to={`/blog/${_id}`} className='title'>
+        <Link to={setLink(_id)} className='title'>
           {title}
         </Link>
         <div css={css({ marginTop: 8 })}>
@@ -58,7 +58,7 @@ const BlogItemCard = ({ item }: { item: IBlog }) => {
         <Button
           size='small'
           type='text'
-          onClick={() => navigate(`/blog/${_id}`)}
+          onClick={() => navigate(setLink(_id))}
           css={css({
             background: token.colorBgLayout,
           })}

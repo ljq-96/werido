@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import ProLayout, { DefaultFooter, FooterToolbar } from '@ant-design/pro-layout'
-import { Avatar, Button, FloatButton, theme } from 'antd'
+import { Avatar, Button, FloatButton, Space, theme } from 'antd'
 import { Link, Outlet, useNavigate, useLocation, useParams } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { useUser } from '../contexts/useUser'
@@ -14,7 +14,7 @@ import { useStore } from '../contexts/useStore'
 import { IconFont } from '../utils/common'
 import Catalog from './components/Catalog'
 import TouristFooter from './components/TouristFooter'
-import { LeftOutlined, RightOutlined } from '@ant-design/icons'
+import { GithubFilled, LeftOutlined, RightOutlined } from '@ant-design/icons'
 import useStyle from './style'
 
 export default (props: PageProps) => {
@@ -29,7 +29,7 @@ export default (props: PageProps) => {
   const { people } = useParams()
   const style = useStyle()
   const {
-    token: { colorPrimary },
+    token: { colorPrimary, colorTextDescription },
   } = theme.useToken()
 
   const isInBlog = useMemo(() => /(^\/blog$)|(^\/blog\/\w{24,24}$)/.test(pathname), [pathname])
@@ -87,7 +87,37 @@ export default (props: PageProps) => {
       )}
     >
       <Suspense fallback={<Loading />}>{_id && <Outlet />}</Suspense>
-      {people ? <TouristFooter /> : <DefaultFooter copyright='京ICP备2022008343号' />}
+      <DefaultFooter
+        copyright='京ICP备2022008343号'
+        links={
+          people &&
+          ([
+            {
+              key: '1',
+              href: '/',
+              blankTarget: true,
+              title: (
+                <span>
+                  <Logo style={{ width: 16 }} color={colorTextDescription} />
+                  <span>Werido</span>
+                </span>
+              ),
+            },
+            {
+              key: '2',
+              href: 'https://github.com/ljq-96/werido',
+              blankTarget: true,
+              title: (
+                <span>
+                  <GithubFilled />
+                  <span>GitHub</span>
+                </span>
+              ),
+            },
+            {},
+          ] as any)
+        }
+      />
     </ProLayout>
   )
 }

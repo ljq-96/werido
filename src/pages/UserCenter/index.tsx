@@ -25,7 +25,7 @@ function UserCenterLayout(props: PageProps) {
               <TranslateX>
                 <UserCard user={user}>
                   <div>
-                    <Button type='primary' block shape='round' onClick={() => navigate(`/people/${user.username}/`)}>
+                    <Button type='primary' block shape='round' onClick={() => navigate(`/user/${user.username}/blog`)}>
                       我的主页
                     </Button>
                   </div>

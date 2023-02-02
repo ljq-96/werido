@@ -31,7 +31,7 @@ function CatalogCard(props: TreeProps) {
 
   const handleSelect = id => {
     if (id) {
-      navigate(`/people/${username}/blog/${id}`)
+      navigate(`/user/${username}/blog/${id}`)
       window.scrollTo({
         top: 0,
         behavior: 'smooth',
@@ -43,7 +43,7 @@ function CatalogCard(props: TreeProps) {
     <Card
       title='分类'
       loading={catalogLoading}
-      bodyStyle={{ maxHeight: 'calc(100vh - 160px)', overflow: 'auto' }}
+      bodyStyle={{ maxHeight: 'calc(100vh - 170px)', overflow: 'auto' }}
       extra={
         <Button
           size='small'

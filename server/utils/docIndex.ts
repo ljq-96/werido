@@ -17,15 +17,17 @@ export const merge = (docIndex: Doc, doc: any) => {
     return prev
   }, {})
   const walk = (item: Doc) => {
-    item.forEach((k, index) => {
-      if (docMap[k._id]) {
-        const { _id, ...reset } = docMap[k._id]
-        Object.assign(k, reset)
+    for (let i = 0; i < item.length; i++) {
+      const current = item[i]
+      if (docMap[current._id]) {
+        const { _id, ...reset } = docMap[current._id]
+        Object.assign(current, reset)
       } else {
-        item.splice(index, 1)
+        item.splice(i, 1)
+        i--
       }
-      k?.children && walk(k.children)
-    })
+      current?.children && walk(current.children)
+    }
   }
   walk(docIndex)
   return docIndex

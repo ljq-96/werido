@@ -15,7 +15,7 @@ function TagsCard({ current }: { current?: string }) {
             key={item.name}
             style={{ marginBottom: 8, cursor: 'pointer' }}
             onClick={() => {
-              navigate(`/people/${username}/tags/${item.name}`)
+              navigate(`/user/${username}/tags/${item.name}`)
             }}
           >
             {item.name}

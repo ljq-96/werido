@@ -56,7 +56,12 @@ function Bookmark() {
                             basicModalView.bookmarkModal.actions({
                               visible: true,
                               options: { group: bookmarks.map(item => item.title) },
-                              callback: { onOk: getBookmark },
+                              callback: {
+                                onOk: () => {
+                                  getBookmark()
+                                  modalDispatch(basicModalView.destroy.actions())
+                                },
+                              },
                             }),
                           )
                         },
@@ -98,7 +103,12 @@ function Bookmark() {
                                 basicModalView.bookmarkModal.actions({
                                   visible: true,
                                   options: value,
-                                  callback: { onOk: getBookmark },
+                                  callback: {
+                                    onOk: () => {
+                                      getBookmark()
+                                      modalDispatch(basicModalView.destroy.actions())
+                                    },
+                                  },
                                 }),
                               )
                               break

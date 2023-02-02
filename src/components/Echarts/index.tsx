@@ -1,5 +1,5 @@
 import { Empty, Spin } from 'antd'
-import * as echarts from 'echarts'
+import * as echarts from 'echarts/lib/echarts'
 import * as React from 'react'
 import elementResizeEvent, { unbind } from '../../utils/elementResizeEvent'
 import 'echarts-wordcloud'

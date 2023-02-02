@@ -52,6 +52,7 @@ export class BookmarkService {
       try {
         const icon = await getFavicon(reset.url)
         reset.icon = icon
+        console.log(icon)
       } catch {}
     }
     let bookmark = await bookmarkModel.create({
@@ -59,6 +60,8 @@ export class BookmarkService {
       type: DocType.文档,
       ...reset,
     })
+    console.log(bookmark)
+
     const docIndex = await this.docIndexService.getDocIndex({ user: user._id, type: DocIndexType.书签 })
     const groupDoc = (await this.getList({ creator: user._id, title: parent, type: DocType.分组 })).list[0]
     if (groupDoc) {

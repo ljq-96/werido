@@ -164,14 +164,14 @@ const routes: RouteProps[] = [
     ],
   },
   {
-    path: '/people/:people',
-    name: '123',
+    path: '/user/:people',
+    name: '博客',
     component: Layout,
     routes: [
       {
-        path: '/',
+        path: '/blog/*',
         name: '主页',
-        component: lazy(() => import('../pages/Tourist/BlogList')),
+        component: lazy(() => import('../pages/Tourist/Blog')),
       },
       {
         path: '/archives/*',

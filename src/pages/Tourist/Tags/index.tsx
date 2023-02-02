@@ -6,7 +6,7 @@ import { IBlog, Pager } from '../../../../types'
 import { request } from '../../../api'
 import { TranslateX, TranslateY } from '../../../components/Animation'
 import BlogItemCard from '../../../components/BlogItemCard'
-import UserCard from '../../../components/UserCard'
+import UserCard from '../components/UserCard'
 import { useUser } from '../../../contexts/useUser'
 import { useRequest } from '../../../hooks'
 import ArchivesCard from '../components/ArchivesCard'
@@ -63,12 +63,12 @@ const Tags = () => {
                 <Card style={{ marginBottom: 16 }}>
                   <Breadcrumb>
                     <Breadcrumb.Item>
-                      <Link to={`/people/${user.username}/tags`}>
+                      <Link to={`/user/${user.username}/tags`}>
                         <TagsFilled />
                       </Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                      <Link to={`/people/${user.username}/tags`}>标签</Link>
+                      <Link to={`/user/${user.username}/tags`}>标签</Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>{tag}</Breadcrumb.Item>
                   </Breadcrumb>
@@ -77,7 +77,7 @@ const Tags = () => {
                   <Fragment>
                     {blog.list.map((item, index) => (
                       <TranslateY delay={index * 200}>
-                        <BlogItemCard key={item._id} item={item} />
+                        <BlogItemCard key={item._id} item={item} setLink={id => `/user/${user.username}/blog/${id}`} />
                       </TranslateY>
                     ))}
                     <Pagination pageSize={SIZE} current={page} total={blog?.total} onChange={page => setPage(page)} />

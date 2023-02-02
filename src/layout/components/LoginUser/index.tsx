@@ -37,7 +37,7 @@ function LoginUser() {
         destroyPopupOnHide
         menu={{
           items: [
-            { label: '我的主页', key: 'mine', onClick: () => navigate(`/people/${username}/`) },
+            { label: '我的主页', key: 'mine', onClick: () => navigate(`/user/${username}/blog`) },
             { label: '主题设置', key: 'setting', onClick: () => setShowColorDrawer(true) },
             { label: '退出登录', key: 'logout', onClick: logout },
           ],

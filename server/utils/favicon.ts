@@ -5,7 +5,7 @@ import http from 'https'
 export const getFavicon = async (url: string) => {
   return new Promise<string | undefined>(async (resolve, reject) => {
     try {
-      const res = await axios.get(url)
+      const res = await axios.get(url, { timeout: 3000 })
       const $ = load(res.data)
       const icon = $('link[rel*="icon"]').attr('href')
       http.get(icon?.startsWith('http') ? icon : url + icon, function (res) {

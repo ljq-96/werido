@@ -20,7 +20,7 @@ function ArchivesCard({ current }: { current?: string }) {
           .map(item => (
             <Link
               key={item.time}
-              to={`/people/${username}/archives/${item.time}`}
+              to={`/user/${username}/archives/${item.time}`}
               css={css([
                 {
                   display: 'flex',

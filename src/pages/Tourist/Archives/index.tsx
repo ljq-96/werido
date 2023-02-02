@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 import { Col, Row, Card, Affix, Tag, theme, Steps, Breadcrumb, Empty } from 'antd'
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import UserCard from '../../../components/UserCard'
+import UserCard from '../components/UserCard'
 import { useStore } from '../../../contexts/useStore'
 import { useUser } from '../../../contexts/useUser'
 import { formatTime } from '../../../utils/common'
@@ -62,12 +62,12 @@ function Archives() {
                 <Card>
                   <Breadcrumb>
                     <Breadcrumb.Item>
-                      <Link to={`/people/${user.username}/archives`}>
+                      <Link to={`/user/${user.username}/archives`}>
                         <DatabaseFilled />
                       </Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
-                      <Link to={`/people/${user.username}/archives`}>归档</Link>
+                      <Link to={`/user/${user.username}/archives`}>归档</Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>{archive}</Breadcrumb.Item>
                   </Breadcrumb>
@@ -96,7 +96,7 @@ function Archives() {
                       current={-1}
                       direction='vertical'
                       items={item.blogs.map(blog => ({
-                        title: <Link to={`/people/${user.username}/blog/${blog._id}`}>{blog.title}</Link>,
+                        title: <Link to={`/user/${user.username}/blog/${blog._id}`}>{blog.title}</Link>,
                         description: formatTime(blog.createTime),
                       }))}
                     />

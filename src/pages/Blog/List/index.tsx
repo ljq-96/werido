@@ -10,7 +10,7 @@ import { TranslateX, TranslateY } from '../../../components/Animation'
 import { useStore } from '../../../contexts/useStore'
 import { useUser } from '../../../contexts/useUser'
 import { useRequest } from '../../../hooks'
-import BlogItemCard from './components/BlogItemCard'
+import BlogItemCard from '../../../components/BlogItemCard'
 
 const SIZE = 20
 const BlogList = () => {
@@ -42,6 +42,8 @@ const BlogList = () => {
     getTags()
   }, [])
 
+  console.log(123)
+
   return (
     <Fragment>
       <Row gutter={16} wrap={false}>
@@ -52,7 +54,7 @@ const BlogList = () => {
               {blog?.list?.length ? (
                 <Fragment>
                   {blog.list.map(item => (
-                    <BlogItemCard key={item._id} item={item} />
+                    <BlogItemCard key={item._id} item={item} setLink={id => `/blog/${id}`} />
                   ))}
                   <Pagination pageSize={SIZE} current={page} total={blog?.total} onChange={page => setPage(page)} />
                 </Fragment>

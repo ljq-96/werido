@@ -35,7 +35,6 @@ function BookmarkModal() {
         })
         message.success('更新成功')
       } else {
-        fields.parent = fields.parent[0]
         await request.bookmark({
           method: 'POST',
           data: fields,
@@ -82,11 +81,6 @@ function BookmarkModal() {
             <AutoComplete
               placeholder='请选择分组'
               options={options?.group?.map(item => ({ label: item, value: item }))}
-              onChange={e => {
-                if (e.length) {
-                  form.setFieldsValue({ parent: [e.pop()] })
-                }
-              }}
             />
           </Form.Item>
         )}
