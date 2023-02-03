@@ -3,10 +3,10 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { request } from '../../api'
 import { useModal } from '../../contexts/useModal'
-import { basicModalView, ModalAction } from '../../contexts/useModal/actions'
+import { basicModalView, ModalActions } from '../../contexts/useModal/actions'
 
 function TodoModal() {
-  const [{ modalAction, todoModal: options, callback }, { dispatch }] = useModal()
+  const [{ modalAction, todoModalOptions }, { dispatch }] = useModal()
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
 
@@ -23,32 +23,32 @@ function TodoModal() {
       end: end.format().replace(/(.*?)T/, dateStr + 'T'),
       description,
     }
-    if (options) {
-      await request.todo({ method: 'PUT', query: options._id, data })
+    if (todoModalOptions) {
+      await request.todo({ method: 'PUT', query: todoModalOptions._id, data })
     } else {
       await request.todo({ method: 'POST', data })
     }
-    callback?.onOk()
+    todoModalOptions?.onOk()
     form.resetFields()
     dispatch(basicModalView.destroy.actions())
     setLoading(false)
   }
 
   useEffect(() => {
-    if (modalAction === ModalAction.todoModal && options) {
-      const { start, end, description } = options
+    if (modalAction === ModalActions.todoModal && todoModalOptions) {
+      const { start, end, description } = todoModalOptions
       form.setFieldsValue({
         date: dayjs(start).startOf('day'),
         time: [dayjs(start), dayjs(end)],
         description,
       })
     }
-  }, [modalAction, options])
+  }, [modalAction, todoModalOptions])
 
   return (
     <Modal
-      title={`${options ? '编辑' : '添加'}日程`}
-      open={modalAction === ModalAction.todoModal}
+      title={`${todoModalOptions ? '编辑' : '添加'}日程`}
+      open={modalAction === ModalActions.todoModal}
       onOk={form.submit}
       width={500}
       okButtonProps={{ loading }}

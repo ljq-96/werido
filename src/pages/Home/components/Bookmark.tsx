@@ -61,10 +61,9 @@ function Bookmark() {
                   switch (action) {
                     case 'edit':
                       modalDispatch(
-                        basicModalView.bookmarkModal.actions({
-                          visible: true,
-                          options: value,
-                          callback: { onOk: getBookmark },
+                        basicModalView.bookmarkModal.actions(true, {
+                          ...value,
+                          onOk: getBookmark,
                         }),
                       )
                       break

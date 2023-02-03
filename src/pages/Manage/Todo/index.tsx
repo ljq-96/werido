@@ -88,10 +88,9 @@ function TodoManage() {
               type='link'
               onClick={() => {
                 dispatch(
-                  basicModalView.todoModal.actions({
-                    visible: true,
-                    options: record,
-                    callback: { onOk: tableRef.current.fetchData },
+                  basicModalView.todoModal.actions(true, {
+                    ...record,
+                    onOk: tableRef.current.fetchData,
                   }),
                 )
               }}

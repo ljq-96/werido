@@ -6,42 +6,39 @@ type Callback = {
   onBack?: () => void
 }
 
-export enum ModalAction {
-  bookmarkModal = 'bookmarkModal',
-  todoModal = 'todoModal',
-  destroy = 'destroy',
+export enum ModalActions {
+  bookmarkModal,
+  todoModal,
+  destroy,
 }
 
 export interface ModalState {
-  modalAction: ModalAction
-  [ModalAction.bookmarkModal]?: Partial<IBookmark> & { group?: string[] }
-  [ModalAction.todoModal]?: Partial<ITodo>
-  callback?: Callback
+  modalAction: ModalActions
+  bookmarkModalOptions?: Partial<IBookmark> & { group?: string[] } & Callback
+  todoModalOptions?: Partial<ITodo & Callback>
 }
 
 type ModalView = {
-  [key in ModalAction]: {
-    type: ModalAction
-    actions: (parasm?: {
-      visible?: boolean
-      options?: key extends keyof ModalState ? ModalState[key] : unknown
-      callback?: Callback
-    }) => ReturnType<typeof basicActions>
+  -readonly [key in keyof typeof ModalActions]: {
+    type: ModalActions
+    actions: (
+      visible?: boolean,
+      options?: `${key}Options` extends keyof ModalState ? ModalState[`${key}Options`] : unknown,
+    ) => ReturnType<typeof basicActions>
   }
 }
 
-export const basicModalView: ModalView = Object.keys(ModalAction).reduce((prev, current) => {
-  prev[ModalAction[current]] = {
-    type: ModalAction[current],
-    actions: params =>
-      basicActions(
-        ModalAction[current],
-        params && {
-          modalAction: params.visible ? ModalAction[current] : null,
-          [ModalAction[current]]: params.options,
-          callback: params.callback,
-        },
-      ),
-  }
-  return prev
-}, {} as ModalView)
+export const basicModalView: ModalView = (Object.keys(ModalActions) as (keyof typeof ModalActions)[]).reduce(
+  (prev, current) => {
+    prev[current] = {
+      type: ModalActions[current],
+      actions: (visible?: any, options?: any) =>
+        basicActions(ModalActions[current], {
+          modalAction: visible ? ModalActions[current] : null,
+          [ModalActions[current]]: options,
+        }),
+    }
+    return prev
+  },
+  {} as ModalView,
+)
