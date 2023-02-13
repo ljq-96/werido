@@ -62,7 +62,7 @@ const Blog = () => {
               <UserCard user={user} />
             </Col>
             <Col span={24}>
-              <Affix offsetBottom={200} offsetTop={80}>
+              <Affix offsetTop={80}>
                 <CatalogCard />
               </Affix>
             </Col>

@@ -1,8 +1,22 @@
 /** @jsxImportSource @emotion/react */
-import { FileTextOutlined, FolderOpenOutlined, FolderOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Empty, Form, Input, Modal, Row, Skeleton, Space, Tree, TreeProps, TreeSelect } from 'antd'
+import {
+  BlockOutlined,
+  CopyOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  ExportOutlined,
+  FileTextOutlined,
+  FolderOpenOutlined,
+  FolderOutlined,
+  LinkOutlined,
+  MoreOutlined,
+  PlusOutlined,
+  SearchOutlined,
+  SelectOutlined,
+} from '@ant-design/icons'
+import { Button, Dropdown, Empty, Form, Input, Modal, Row, Skeleton, Space, Tree, TreeProps, TreeSelect } from 'antd'
 import { DataNode } from 'antd/es/tree'
-import { Fragment, MouseEventHandler, useEffect, useMemo, useState } from 'react'
+import { Fragment, MouseEventHandler, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ICatalog } from '../../../../types'
 import { DocIndexType } from '../../../../types/enum'
@@ -24,6 +38,7 @@ function Catalog(props: TreeProps) {
   const { pathname } = useLocation()
   const [form] = Form.useForm()
   const style = useStyle()
+  const el = useRef<HTMLDivElement>(null)
   const defaultExpandedKeys = useMemo(() => {
     const keys = []
     const walk = (arr: ICatalog[]) => {
@@ -113,7 +128,7 @@ function Catalog(props: TreeProps) {
   }, [])
 
   return (
-    <div css={style}>
+    <div css={style} ref={el}>
       <Row justify='space-between' align='middle' className='head'>
         <div className='title'>知识库目录</div>
         <Space>
@@ -148,12 +163,36 @@ function Catalog(props: TreeProps) {
             titleRender={data => (
               <div className='catalog-title-container'>
                 <span className='catalog-title'>{data.title as string}</span>
-                <Button
-                  size='small'
-                  type='text'
-                  icon={<PlusOutlined className='catalog-add' />}
-                  onClick={e => handleCreate(e, data)}
-                />
+                <Space size={4} className='actions'>
+                  <Button
+                    size='small'
+                    type='text'
+                    icon={<PlusOutlined className='catalog-add' />}
+                    onClick={e => handleCreate(e, data)}
+                  />
+                  <Dropdown
+                    placement='bottomRight'
+                    getPopupContainer={() => el.current}
+                    menu={{
+                      items: [
+                        { label: '在新标签中打开', key: 0, icon: <SelectOutlined /> },
+                        { label: '复制链接', key: 1, icon: <LinkOutlined /> },
+                        { type: 'divider' },
+                        { label: '编辑', key: 2, icon: <EditOutlined /> },
+                        { label: '导出', key: 3, icon: <ExportOutlined /> },
+                        { type: 'divider' },
+                        { label: '删除', danger: true, key: 4, icon: <DeleteOutlined /> },
+                      ],
+                    }}
+                  >
+                    <Button
+                      size='small'
+                      type='text'
+                      icon={<MoreOutlined className='catalog-add' />}
+                      onClick={e => e.stopPropagation()}
+                    />
+                  </Dropdown>
+                </Space>
               </div>
             )}
             onExpand={keys => setExpandedKeys(keys)}

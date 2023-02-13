@@ -65,6 +65,7 @@ const MilkdownEditor = (props: IProps, ref) => {
   const shiki = useShiki()
   const theme = useTheme()
   const style = useStyle()
+  console.log(shiki)
 
   const { editor, getDom, loading, getInstance } = useEditor(
     (root, renderReact) => {
@@ -148,8 +149,8 @@ const MilkdownEditor = (props: IProps, ref) => {
               />
               <div className={'catalogWrapper'}>
                 <div className={'catalogTitle'}>大纲</div>
-                <Anchor affix={true} offsetTop={80}>
-                  {formatAnchor(arrToTree(catalog))}
+                <Anchor affix={true} offsetTop={80} items={formatAnchor(arrToTree(catalog))}>
+                  {}
                 </Anchor>
               </div>
             </div>
@@ -160,17 +161,12 @@ const MilkdownEditor = (props: IProps, ref) => {
   )
 }
 
-function formatAnchor(tree: any[]) {
-  return (
-    <Fragment>
-      {tree.map(item => (
-        <Anchor.Link key={item.title} href={'#' + item.title?.toLowerCase()?.replace(/\s/g, '-')} title={item.title}>
-          {item.children && formatAnchor(item.children)}
-        </Anchor.Link>
-      ))}
-    </Fragment>
-  )
-}
+const formatAnchor = (tree: any[]) =>
+  tree.map(item => ({
+    href: '#' + item.title?.toLowerCase()?.replace(/\s/g, '-'),
+    title: item.title,
+    children: item.children && formatAnchor(item.children),
+  }))
 
 export default forwardRef(MilkdownEditor)
 

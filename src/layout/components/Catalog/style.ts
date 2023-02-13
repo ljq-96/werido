@@ -24,34 +24,43 @@ export default function useStyle() {
       },
     },
     '.ant-tree-treenode': {
+      position: 'relative',
       color: colorTextSecondary,
-      padding: '4px 0 4px 4px !important',
-      // margin: '2px 0',
+      padding: '4px !important',
       border: '1px solid transparent',
       borderRadius: borderRadius,
       transition: '0.4s',
-      '.catalog-add': {
+      zIndex: 0,
+      '.actions': {
+        position: 'absolute',
+        right: -4,
+        top: -4,
+        bottom: -4,
         opacity: 0,
-        fontSize: 12,
-        width: 16,
-        height: 16,
+        padding: '0 4px',
+        transition: '0.4s',
+        backdropFilter: 'blur(8px)',
+        '.ant-btn': {
+          fontSize: 12,
+          '&:hover,&.ant-dropdown-open': {
+            backgroundColor: colorBgTextHover,
+          },
+        },
       },
       '&:hover': {
         backgroundColor: colorBgTextHover,
-        '.catalog-add': {
+        '.actions': {
           opacity: 1,
-          transition: '0.4s',
         },
       },
-      '&.ant-tree-treenode-selected': {
+      '&.ant-tree-treenode-selected,&:has(.ant-dropdown-open)': {
         backgroundColor: colorBgTextHover,
         '.ant-tree-node-selected': {
           color: colorText,
           backgroundColor: 'transparent !important',
         },
-        '.catalog-add': {
+        '.actions': {
           opacity: 1,
-          transition: '0.4s',
         },
       },
       '.ant-tree-node-content-wrapper': {
@@ -88,7 +97,7 @@ export default function useStyle() {
     },
     '.catalog-container': {
       height: 'calc(100vh - 170px)',
-      overflow: 'auto',
+      overflowY: 'auto',
     },
     '.catalog-title-container': {
       display: 'flex',

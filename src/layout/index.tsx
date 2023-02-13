@@ -58,7 +58,7 @@ export default (props: PageProps) => {
       className='layout'
       fixedHeader={true}
       collapsed={collapsed}
-      siderWidth={isInBlog ? 240 : 180}
+      siderWidth={isInBlog ? 280 : 180}
       breakpoint='md'
       title={people || 'Werido'}
       logo={people ? <Avatar src={avatar} /> : <Logo style={{ width: 32 }} color={colorPrimary} />}

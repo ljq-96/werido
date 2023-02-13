@@ -33,7 +33,7 @@ async function createServer() {
   } else {
     darukServer.app
       .use(historyApiFallback({ whiteList: ['/api', '/v7/weather', '/v2/city', '/quark'], index: '/' }))
-      .use(koaStatic(path.join(__dirname, './public'), {}) as any)
+      .use(koaStatic(path.join(__dirname, './public'), { maxAge: 2592000 }) as any)
   }
   Object.entries(proxy).reduce(
     (app, [api, conf]) => app.use(k2c(createProxyMiddleware(api, conf) as any)),

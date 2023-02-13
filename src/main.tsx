@@ -26,7 +26,11 @@ function Main() {
     <ConfigProvider
       theme={{
         algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-        token: { colorPrimary: themeColor, fontFamily: 'Ubuntu' },
+        token: {
+          colorPrimary: themeColor,
+          fontFamily: 'Ubuntu',
+          fontFamilyCode: '"JetBrains Mono" "Menlo" "Consolas"',
+        },
       }}
       locale={zh_CN}
     >

@@ -68,53 +68,53 @@ const routes: RouteProps[] = [
         hide: true,
         component: lazy(() => import('../pages/Blog/Editor')),
       },
-      {
-        path: '/user_center',
-        name: '用户中心',
-        icon: <UserOutlined />,
-        redirect: '/user_center/dashboard',
-        component: lazy(() => import('../pages/UserCenter')),
-        routes: [
-          {
-            path: 'dashboard',
-            name: '数据统计',
-            component: UserCenterOverview,
-            icon: <AreaChartOutlined />,
-          },
-          {
-            path: 'blog',
-            name: '我的知识库',
-            component: Outlet,
-            icon: <ReadOutlined />,
-            routes: [
-              {
-                path: 'list',
-                name: '文章列表',
-                icon: <TableOutlined />,
-                component: UserCenterBlogList,
-              },
-              {
-                path: 'catalog',
-                name: '文章目录',
-                icon: <UnorderedListOutlined />,
-                component: UserCenterBlogCatalog,
-              },
-            ],
-          },
-          {
-            path: 'bookmark',
-            name: '我的书签',
-            component: UserCenterBlogList,
-            icon: <TagsOutlined />,
-          },
-          {
-            path: 'detail',
-            name: '我的账号',
-            component: UserCenterDetail,
-            icon: <UserOutlined />,
-          },
-        ],
-      },
+      // {
+      //   path: '/user_center',
+      //   name: '用户中心',
+      //   icon: <UserOutlined />,
+      //   redirect: '/user_center/dashboard',
+      //   component: lazy(() => import('../pages/UserCenter')),
+      //   routes: [
+      //     {
+      //       path: 'dashboard',
+      //       name: '数据统计',
+      //       component: UserCenterOverview,
+      //       icon: <AreaChartOutlined />,
+      //     },
+      //     {
+      //       path: 'blog',
+      //       name: '我的知识库',
+      //       component: Outlet,
+      //       icon: <ReadOutlined />,
+      //       routes: [
+      //         {
+      //           path: 'list',
+      //           name: '文章列表',
+      //           icon: <TableOutlined />,
+      //           component: UserCenterBlogList,
+      //         },
+      //         {
+      //           path: 'catalog',
+      //           name: '文章目录',
+      //           icon: <UnorderedListOutlined />,
+      //           component: UserCenterBlogCatalog,
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       path: 'bookmark',
+      //       name: '我的书签',
+      //       component: UserCenterBlogList,
+      //       icon: <TagsOutlined />,
+      //     },
+      //     {
+      //       path: 'detail',
+      //       name: '我的账号',
+      //       component: UserCenterDetail,
+      //       icon: <UserOutlined />,
+      //     },
+      //   ],
+      // },
       {
         path: '/manage',
         component: Outlet,

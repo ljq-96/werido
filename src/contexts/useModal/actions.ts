@@ -1,7 +1,9 @@
 import { BasicActions, basicActions } from '../../contexts/utils'
 import { IBookmark, ITodo } from '../../../types'
 
-type Callback = {
+type ModalOptions<T = never> = {
+  [key in keyof T]?: T[key]
+} & {
   onOk?: () => void
   onBack?: () => void
 }
@@ -14,8 +16,8 @@ export enum ModalActions {
 
 export interface ModalState {
   modalAction: ModalActions
-  bookmarkModalOptions?: Partial<IBookmark> & { group?: string[] } & Callback
-  todoModalOptions?: Partial<ITodo & Callback>
+  bookmarkModalOptions?: ModalOptions<IBookmark & { group: string[] }>
+  todoModalOptions?: ModalOptions<ITodo>
 }
 
 type ModalView = {
@@ -35,7 +37,7 @@ export const basicModalView: ModalView = (Object.keys(ModalActions) as (keyof ty
       actions: (visible?: any, options?: any) =>
         basicActions(ModalActions[current], {
           modalAction: visible ? ModalActions[current] : null,
-          [ModalActions[current]]: options,
+          [current]: options,
         }),
     }
     return prev

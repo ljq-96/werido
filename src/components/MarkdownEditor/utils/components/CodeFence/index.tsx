@@ -12,26 +12,33 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
   const { node, view, getPos } = useNodeCtx<Node>()
   const copyText = useCopyText()
   const {
-    token: { colorTextTertiary, colorBorderSecondary },
+    token: { colorTextTertiary, colorBorderSecondary, fontFamilyCode },
   } = theme.useToken()
   return (
     <Collapse
-      className='code-fence'
       css={css({
         borderColor: colorBorderSecondary,
-        '.ant-collapse-content': {
+        '.ant-collapse-content,.ant-collapse-item': {
           borderColor: colorBorderSecondary,
         },
-        '.ant-collapse-item,.ant-select-selector': {
-          fontFamily:
-            'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important',
+        '.ant-btn': {
+          display: 'flex',
+          justifyContent: 'center',
         },
       })}
       expandIcon={({ isActive }) => (
         <Tooltip title={isActive ? '收起' : '展开'}>
-          <Button size='small' type='text'>
-            <CaretDownOutlined style={{ transition: '0.4s', transform: `rotate(${isActive ? '0' : '-90deg'})` }} />
-          </Button>
+          <Button
+            size='small'
+            type='text'
+            icon={
+              view.editable ? (
+                <CaretDownOutlined style={{ transition: '0.4s', transform: `rotate(${isActive ? '0' : '-90deg'})` }} />
+              ) : (
+                <img style={{ width: 18 }} src={`/languages/icons/${node.attrs['language'] || 'txt'}.svg`} />
+              )
+            }
+          ></Button>
         </Tooltip>
       )}
       defaultActiveKey={1}
@@ -45,7 +52,7 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
             <Select
               size='small'
               showSearch
-              style={{ width: 160 }}
+              style={{ width: 160, fontFamily: fontFamilyCode }}
               bordered={false}
               showArrow={false}
               defaultValue={node.attrs['language']}
@@ -95,7 +102,7 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
           )
         }
       >
-        <pre className='m-0 overflow-auto font-mono'>{children}</pre>
+        <pre className=''>{children}</pre>
       </Collapse.Panel>
     </Collapse>
   )
