@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import ProLayout, { DefaultFooter, FooterToolbar } from '@ant-design/pro-layout'
-import { Avatar, Button, FloatButton, Space, theme } from 'antd'
+import { Avatar, Button, FloatButton, Popover, Space, theme } from 'antd'
 import { Link, Outlet, useNavigate, useLocation, useParams } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { useUser } from '../contexts/useUser'
@@ -14,7 +14,7 @@ import { useStore } from '../contexts/useStore'
 import { IconFont } from '../utils/common'
 import Catalog from './components/Catalog'
 import TouristFooter from './components/TouristFooter'
-import { GithubFilled, LeftOutlined, RightOutlined } from '@ant-design/icons'
+import { GithubFilled, LeftOutlined, MenuOutlined, MoreOutlined, RightOutlined } from '@ant-design/icons'
 import useStyle from './style'
 
 export default (props: PageProps) => {
@@ -66,14 +66,14 @@ export default (props: PageProps) => {
       menu={{
         type: 'sub',
         autoClose: false,
-        hideMenuWhenCollapsed: isInBlog,
+        // hideMenuWhenCollapsed: isInBlog,
         defaultOpenAll: true,
         ignoreFlatMenu: true,
       }}
       splitMenus={true}
       route={parsedRoutes}
       menuItemRender={(item, dom) => <Link to={item.redirect || item.path.replace(':people', people)}>{dom}</Link>}
-      menuContentRender={isInBlog ? () => <Catalog /> : undefined}
+      menuContentRender={isInBlog ? () => <Catalog collpased={collapsed} /> : undefined}
       onMenuHeaderClick={() => navigate('/')}
       actionsRender={() => [
         <IconFont onClick={() => setIsDark(!isDark)} type={isDark ? 'icon-sun' : 'icon-moon'} />,

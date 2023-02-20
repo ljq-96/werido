@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { forwardRef, Fragment, useEffect, useImperativeHandle, useState } from 'react'
+import { forwardRef, Fragment, useContext, useEffect, useImperativeHandle, useState } from 'react'
 import { editorViewCtx, serializerCtx, parserCtx } from '@milkdown/core'
 import { Slice } from '@milkdown/prose/model'
 import { outline } from '@milkdown/utils'
@@ -13,10 +13,10 @@ import { arrToTree } from '../../utils/common'
 import { TranslateX, TranslateY } from '../Animation'
 import editorFactory from './utils/editorFactory'
 import rendererFactory from './utils/renderFactory'
-import useShiki from './hooks/useShiki'
 import { shikiPlugin } from './plugin/shiki'
 import useStyle from './style'
 import { css } from '@emotion/react'
+import { useShiki } from '../../contexts/useShiki'
 
 interface IProps {
   height?: number | string
@@ -58,14 +58,13 @@ const defaultControls: Controls[] = [
   'fullScreen',
 ]
 
-const MilkdownEditor = (props: IProps, ref) => {
+const MilkdownEditor = forwardRef((props: IProps, ref) => {
   const { height, onChange, controls, onFinish, value = '', readonly = false, loading: contentLoading = false } = props
   const [catalog, setCatalog] = useState<{ text: string; level: number }[]>([])
   const [showCatalog, setShowCatalog] = useState(true)
-  const shiki = useShiki()
+  const { shiki } = useShiki()
   const theme = useTheme()
   const style = useStyle()
-  console.log(shiki)
 
   const { editor, getDom, loading, getInstance } = useEditor(
     (root, renderReact) => {
@@ -149,9 +148,7 @@ const MilkdownEditor = (props: IProps, ref) => {
               />
               <div className={'catalogWrapper'}>
                 <div className={'catalogTitle'}>大纲</div>
-                <Anchor affix={true} offsetTop={80} items={formatAnchor(arrToTree(catalog))}>
-                  {}
-                </Anchor>
+                <Anchor affix={true} offsetTop={80} items={formatAnchor(arrToTree(catalog))} />
               </div>
             </div>
           </div>
@@ -159,7 +156,7 @@ const MilkdownEditor = (props: IProps, ref) => {
       </div>
     </Spin>
   )
-}
+})
 
 const formatAnchor = (tree: any[]) =>
   tree.map(item => ({
@@ -168,7 +165,7 @@ const formatAnchor = (tree: any[]) =>
     children: item.children && formatAnchor(item.children),
   }))
 
-export default forwardRef(MilkdownEditor)
+export default MilkdownEditor
 
 export function Render({ value }: { value: string }) {
   if (!value) return <></>

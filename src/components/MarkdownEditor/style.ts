@@ -17,6 +17,7 @@ export default function useStyle() {
       colorTextTertiary,
       colorBgTextHover,
       colorTextDescription,
+      fontFamilyCode,
     },
   } = theme.useToken()
   const articleStyle: CSSObject = {
@@ -295,6 +296,9 @@ export default function useStyle() {
     backgroundColor: colorBgContainer,
     border: `1px solid ${colorBorderSecondary}`,
     borderRadius: borderRadius,
+    '.ant-anchor': {
+      fontFamily: fontFamilyCode,
+    },
     '.toolBar': {
       position: 'sticky',
       top: 56,
@@ -316,12 +320,9 @@ export default function useStyle() {
       '&.hide': {
         '.container': {
           flex: 1,
-          borderRight: 'none',
+          // borderRight: 'none',
         },
         '.openCatalog': {
-          left: -16,
-          borderRight: 0,
-          borderRadius: `32px 0 0 32px`,
           "span[role='img']": {
             transform: 'rotateY(-180deg)',
           },
@@ -330,7 +331,7 @@ export default function useStyle() {
           width: '0 !important',
           marginLeft: 0,
           paddingLeft: '0 !important',
-          borderLeft: 'none',
+          // borderLeft: 'none',
         },
       },
       '.container': {
@@ -338,7 +339,7 @@ export default function useStyle() {
         flex: 1,
         width: 'calc(100% - 200px)',
         height: '100%',
-        padding: '0 8px',
+        padding: '0 24px 0 8px',
         minHeight: 300,
         borderRight: `1px solid ${colorBorderSecondary}`,
       },
@@ -349,9 +350,14 @@ export default function useStyle() {
         flex: 0,
         '.openCatalog': {
           position: 'absolute',
-          left: -16,
-          top: 12,
+          left: -11,
+          top: 10,
           transition: '0.4s',
+          width: 20,
+          height: 40,
+          minWidth: 20,
+          borderRadius: 10,
+          padding: 0,
           "span[role='img']": {
             transition: 'transform 0.4s 0.4s',
           },

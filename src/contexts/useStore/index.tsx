@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react'
+import { Highlighter } from 'shiki'
 import { IBlog, ICatalog } from '../../../types'
 import { useArchives } from './hooks/useArchives'
 import { useCatalog } from './hooks/useCatalog'

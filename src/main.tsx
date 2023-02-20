@@ -9,6 +9,7 @@ import ModalProvider from './contexts/useModal'
 import { RouteProps } from '../types'
 import { App as AntApp, ConfigProvider, theme } from 'antd'
 import Modals from './modals'
+import ShikiProvider from './contexts/useShiki'
 
 const parseRoute = (route: RouteProps, basePath = '') => {
   const path = `/${basePath}/${route.path}`.replace(/\/+/g, '/')
@@ -29,7 +30,7 @@ function Main() {
         token: {
           colorPrimary: themeColor,
           fontFamily: 'Ubuntu',
-          fontFamilyCode: '"JetBrains Mono" "Menlo" "Consolas"',
+          fontFamilyCode: '"JetBrains Mono","Menlo","Consolas"',
         },
       }}
       locale={zh_CN}
@@ -47,9 +48,11 @@ function App() {
     <StoreProvider>
       <UserProvider>
         <ModalProvider>
-          <BrowserRouter>
-            <Main />
-          </BrowserRouter>
+          <ShikiProvider>
+            <BrowserRouter>
+              <Main />
+            </BrowserRouter>
+          </ShikiProvider>
         </ModalProvider>
       </UserProvider>
     </StoreProvider>

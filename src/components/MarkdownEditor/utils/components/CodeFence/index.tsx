@@ -3,25 +3,46 @@ import { CaretDownOutlined, CopyOutlined } from '@ant-design/icons'
 import { css } from '@emotion/react'
 import { Node } from '@milkdown/prose/model'
 import { useNodeCtx } from '@milkdown/react'
-import { Button, Collapse, Row, Select, Space, theme, Tooltip } from 'antd'
-import { FC, Fragment, ReactNode } from 'react'
+import { Button, Collapse, Row, Select, Skeleton, Space, Spin, theme, Tooltip } from 'antd'
+import { FC, ReactNode, useEffect, useMemo } from 'react'
+import { useShiki } from '../../../../../contexts/useShiki'
 import { useCopyText } from '../../../../../hooks'
 import { Language } from '../../language'
 
 export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
   const { node, view, getPos } = useNodeCtx<Node>()
   const copyText = useCopyText()
+  const { loadedLanguages, backgroundColor, foregroundColor, loadLanguage } = useShiki()
+  const language = useMemo(() => node.attrs['language'], [node])
   const {
     token: { colorTextTertiary, colorBorderSecondary, fontFamilyCode },
   } = theme.useToken()
+
+  useEffect(() => {
+    loadLanguage(language)
+  }, [language])
+
   return (
     <Collapse
+      size='small'
       css={css({
+        overflow: 'hidden',
         borderColor: colorBorderSecondary,
-        '.ant-collapse-content,.ant-collapse-item': {
-          borderColor: colorBorderSecondary,
+        '.ant-collapse-content': {
+          borderColor: backgroundColor,
+          backgroundColor: backgroundColor,
         },
-        '.ant-btn': {
+        '.ant-collapse-item': {
+          borderColor: colorBorderSecondary,
+          backgroundColor: backgroundColor,
+        },
+        '.ant-collapse-content-box': {
+          paddingTop: '0px !important',
+        },
+        '.ant-select-selection-item': {
+          fontFamily: fontFamilyCode,
+        },
+        '.close-btn': {
           display: 'flex',
           justifyContent: 'center',
         },
@@ -31,11 +52,12 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
           <Button
             size='small'
             type='text'
+            className='close-btn'
             icon={
               view.editable ? (
                 <CaretDownOutlined style={{ transition: '0.4s', transform: `rotate(${isActive ? '0' : '-90deg'})` }} />
               ) : (
-                <img style={{ width: 18 }} src={`/languages/icons/${node.attrs['language'] || 'txt'}.svg`} />
+                <img style={{ width: 18 }} src={`/languages/icons/${language || 'txt'}.svg`} />
               )
             }
           ></Button>
@@ -55,7 +77,7 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
               style={{ width: 160, fontFamily: fontFamilyCode }}
               bordered={false}
               showArrow={false}
-              defaultValue={node.attrs['language']}
+              defaultValue={language}
               optionLabelProp='display'
               optionFilterProp='display'
               filterOption={(input, option) => option!.display.toLowerCase().includes(input.toLowerCase())}
@@ -82,7 +104,7 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
               }}
             />
           ) : (
-            <pre style={{ color: '#aaa', margin: 0 }}>{node.attrs['language']}</pre>
+            <pre style={{ color: foregroundColor, margin: 0, opacity: 0.65 }}>{language || 'plain text'}</pre>
           )
         }
         extra={
@@ -91,7 +113,7 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
               size='small'
               type='text'
               icon={<CopyOutlined />}
-              style={{ color: colorTextTertiary }}
+              style={{ color: foregroundColor, opacity: 0.65 }}
               onClick={e => {
                 e.stopPropagation()
                 copyText(node.textContent)
@@ -102,7 +124,11 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
           )
         }
       >
-        <pre className=''>{children}</pre>
+        {!language || loadedLanguages.includes(language) ? (
+          <pre style={{ color: foregroundColor, fontFamily: fontFamilyCode }}>{children}</pre>
+        ) : (
+          <Skeleton active />
+        )}
       </Collapse.Panel>
     </Collapse>
   )
