@@ -76,6 +76,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
         top: 0,
         behavior: 'smooth',
       })
+      if (showSearchModal) setShowSearchModal(false)
     }
   }
 
@@ -143,78 +144,86 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
     getCatalog()
   }, [])
 
-  console.log(searchedCatalog || catalog)
-
-  const CatalogTree = catalogLoading ? (
-    <Skeleton active paragraph={{ rows: 10 }} />
-  ) : (searchedCatalog || catalog)?.length ? (
-    <div className='catalog-container'>
-      <Tree
-        className='catalog-tree'
-        blockNode
-        treeData={searchedCatalog || catalog}
-        fieldNames={{ key: '_id' }}
-        titleRender={(data: any) => (
-          <div className='catalog-title-container'>
-            <span className='catalog-title'>{data.title as string}</span>
-            <Space size={4} className='actions'>
-              <Button
-                size='small'
-                type='text'
-                icon={<PlusOutlined className='catalog-add' />}
-                onClick={e => handleCreate(e, data)}
-              />
-              <Dropdown
-                placement='bottomRight'
-                getPopupContainer={() => el.current}
-                menu={{
-                  items: [
-                    {
-                      label: '在新标签中打开',
-                      key: 0,
-                      icon: <SelectOutlined />,
-                      onClick: () => window.open(`/blog/${data._id}`, '_blank'),
-                    },
-                    { label: '复制链接', key: 1, icon: <LinkOutlined />, onClick: () => copytext(`/blog/${data._id}`) },
-                    { type: 'divider' },
-                    { label: '编辑', key: 2, icon: <EditOutlined /> },
-                    { label: '导出', key: 3, icon: <ExportOutlined /> },
-                    { type: 'divider' },
-                    { label: '删除', danger: true, key: 4, icon: <DeleteOutlined /> },
-                  ],
-                }}
-              >
-                <Button
-                  size='small'
-                  type='text'
-                  icon={<MoreOutlined className='catalog-add' />}
-                  onClick={e => e.stopPropagation()}
-                />
-              </Dropdown>
-            </Space>
-          </div>
-        )}
-        onExpand={keys => setExpandedKeys(keys)}
-        expandedKeys={expandedKeys || defaultExpandedKeys}
-        selectedKeys={[pathname.split('/')[2]]}
-        showLine={{ showLeafIcon: <FileTextOutlined /> }}
-        switcherIcon={e =>
-          e?.expanded ? (
-            <FolderOpenOutlined style={{ fontSize: 16, color: 'unset', transform: 'translateY(3px)' }} />
-          ) : (
-            <FolderOutlined style={{ fontSize: 16, color: 'inherit', transform: 'translateY(3px) rotate(90deg)' }} />
-          )
-        }
-        onSelect={([id]) => handleSelect(id)}
-        {...props}
-      />
-    </div>
-  ) : (
-    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}></Empty>
-  )
+  const CatalogTree = ({ actions }: { actions: boolean }) => {
+    return catalogLoading ? (
+      <Skeleton active paragraph={{ rows: 10 }} />
+    ) : (searchedCatalog || catalog)?.length ? (
+      <div className='catalog-container' ref={el}>
+        <Tree
+          className='catalog-tree'
+          blockNode
+          treeData={searchedCatalog || catalog}
+          fieldNames={{ key: '_id' }}
+          titleRender={(data: any) => (
+            <div className='catalog-title-container'>
+              <span className='catalog-title'>{data.title as string}</span>
+              {actions && (
+                <Space size={4} className='actions'>
+                  <Button
+                    size='small'
+                    type='text'
+                    icon={<PlusOutlined className='catalog-add' />}
+                    onClick={e => handleCreate(e, data)}
+                  />
+                  <Dropdown
+                    placement='bottomRight'
+                    destroyPopupOnHide
+                    getPopupContainer={() => el.current}
+                    menu={{
+                      items: [
+                        {
+                          label: '在新标签中打开',
+                          key: 0,
+                          icon: <SelectOutlined />,
+                          onClick: () => window.open(`/blog/${data._id}`, '_blank'),
+                        },
+                        {
+                          label: '复制链接',
+                          key: 1,
+                          icon: <LinkOutlined />,
+                          onClick: () => copytext(`/blog/${data._id}`),
+                        },
+                        { type: 'divider' },
+                        { label: '编辑', key: 2, icon: <EditOutlined /> },
+                        { label: '导出', key: 3, icon: <ExportOutlined /> },
+                        { type: 'divider' },
+                        { label: '删除', danger: true, key: 4, icon: <DeleteOutlined /> },
+                      ],
+                    }}
+                  >
+                    <Button
+                      size='small'
+                      type='text'
+                      icon={<MoreOutlined className='catalog-add' />}
+                      onClick={e => e.stopPropagation()}
+                    />
+                  </Dropdown>
+                </Space>
+              )}
+            </div>
+          )}
+          onExpand={keys => setExpandedKeys(keys)}
+          expandedKeys={expandedKeys || defaultExpandedKeys}
+          selectedKeys={[pathname.split('/')[2]]}
+          showLine={{ showLeafIcon: <FileTextOutlined /> }}
+          switcherIcon={e =>
+            e?.expanded ? (
+              <FolderOpenOutlined style={{ fontSize: 16, color: 'unset', transform: 'translateY(3px)' }} />
+            ) : (
+              <FolderOutlined style={{ fontSize: 16, color: 'inherit', transform: 'translateY(3px) rotate(90deg)' }} />
+            )
+          }
+          onSelect={([id]) => handleSelect(id)}
+          {...props}
+        />
+      </div>
+    ) : (
+      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}></Empty>
+    )
+  }
 
   return (
-    <div css={style} ref={el}>
+    <div css={style}>
       {props.collpased ? (
         <Space direction='vertical' className='colpased-btns'>
           <Button
@@ -228,7 +237,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
           <Popover
             arrow={false}
             placement='rightBottom'
-            content={CatalogTree}
+            content={<CatalogTree actions />}
             trigger={['click']}
             overlayStyle={{ width: 280 }}
             getPopupContainer={el => el.parentElement!}
@@ -262,7 +271,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
             allowClear
             placeholder='搜索'
           />
-          {CatalogTree}
+          <CatalogTree actions />
         </Fragment>
       )}
       <Modal
@@ -301,7 +310,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
           allowClear
           placeholder='搜索'
         />
-        {CatalogTree}
+        <CatalogTree actions />
       </Modal>
     </div>
   )

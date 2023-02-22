@@ -124,11 +124,11 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
           )
         }
       >
-        {!language || loadedLanguages.includes(language) ? (
-          <pre style={{ color: foregroundColor, fontFamily: fontFamilyCode }}>{children}</pre>
-        ) : (
-          <Skeleton active />
-        )}
+        {
+          <Spin spinning={language && !loadedLanguages.includes(language)}>
+            <pre style={{ color: foregroundColor, fontFamily: fontFamilyCode }}>{children}</pre>
+          </Spin>
+        }
       </Collapse.Panel>
     </Collapse>
   )
