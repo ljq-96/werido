@@ -2,42 +2,45 @@
 import { CaretDownOutlined, CopyOutlined } from '@ant-design/icons'
 import { css } from '@emotion/react'
 import { Node } from '@milkdown/prose/model'
-import { useNodeCtx } from '@milkdown/react'
-import { Button, Collapse, Row, Select, Skeleton, Space, Spin, theme, Tooltip } from 'antd'
+import { Button, Collapse, ConfigProvider, Row, Select, Skeleton, Space, Spin, theme, Tooltip } from 'antd'
 import { FC, ReactNode, useEffect, useMemo } from 'react'
-import { useShiki } from '../../../../../contexts/useShiki'
-import { useCopyText } from '../../../../../hooks'
-import { Language } from '../../language'
+import { useCopyText } from '../../../../hooks'
+import { Language } from '../../utils/language'
+import { useNodeViewContext } from '@prosemirror-adapter/react'
+import { useShiki } from '../../../../contexts/useShiki'
+import { useUser } from '../../../../contexts/useUser'
+import { useStore } from '../../../../contexts/useStore'
+import { useInstance } from '@milkdown/react'
 
-export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
-  const { node, view, getPos } = useNodeCtx<Node>()
+export function CodeBlock() {
+  const { contentRef, selected, node, setAttrs, view } = useNodeViewContext()
   const copyText = useCopyText()
-  const { loadedLanguages, backgroundColor, foregroundColor, loadLanguage } = useShiki()
   const language = useMemo(() => node.attrs['language'], [node])
+  const [_, get] = useInstance()
   const {
-    token: { colorTextTertiary, colorBorderSecondary, fontFamilyCode },
+    token: { colorTextTertiary, colorPrimaryBorderHover, colorBorderSecondary, fontFamilyCode, colorPrimary },
   } = theme.useToken()
-
-  useEffect(() => {
-    loadLanguage(language)
-  }, [language])
 
   return (
     <Collapse
+      // @ts-ignore
+      contentEditable={false}
       size='small'
       css={css({
         overflow: 'hidden',
         borderColor: colorBorderSecondary,
+        transition: '0.4s',
         '.ant-collapse-content': {
-          borderColor: backgroundColor,
-          backgroundColor: backgroundColor,
+          borderColor: colorBorderSecondary,
+          backgroundColor: '#fff',
         },
         '.ant-collapse-item': {
           borderColor: colorBorderSecondary,
-          backgroundColor: backgroundColor,
+          transition: '0.4s',
+          // backgroundColor: backgroundColor,
         },
         '.ant-collapse-content-box': {
-          paddingTop: '0px !important',
+          // paddingTop: '0px !important',
         },
         '.ant-select-selection-item': {
           fontFamily: fontFamilyCode,
@@ -45,6 +48,12 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
         '.close-btn': {
           display: 'flex',
           justifyContent: 'center',
+        },
+        '&:hover': {
+          borderColor: colorPrimaryBorderHover,
+          '.ant-collapse-item': {
+            borderColor: colorPrimaryBorderHover,
+          },
         },
       })}
       expandIcon={({ isActive }) => (
@@ -72,6 +81,8 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
         header={
           view.editable ? (
             <Select
+              // @ts-ignore
+              contentEditable={false}
               size='small'
               showSearch
               style={{ width: 160, fontFamily: fontFamilyCode }}
@@ -93,18 +104,12 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
                   value: lan,
                 })),
               ]}
-              onChange={event => {
-                const { tr } = view.state
-                view.dispatch(
-                  tr.setNodeMarkup(getPos(), undefined, {
-                    ...node.attrs,
-                    language: event,
-                  }),
-                )
+              onChange={lan => {
+                setAttrs({ language: lan })
               }}
             />
           ) : (
-            <pre style={{ color: foregroundColor, margin: 0, opacity: 0.65 }}>{language || 'plain text'}</pre>
+            <pre style={{ margin: 0, opacity: 0.65 }}>{language || 'plain text'}</pre>
           )
         }
         extra={
@@ -113,7 +118,7 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
               size='small'
               type='text'
               icon={<CopyOutlined />}
-              style={{ color: foregroundColor, opacity: 0.65 }}
+              style={{ opacity: 0.65 }}
               onClick={e => {
                 e.stopPropagation()
                 copyText(node.textContent)
@@ -125,9 +130,9 @@ export const CodeFence: FC<{ children: ReactNode }> = ({ children }) => {
         }
       >
         {
-          <Spin spinning={language && !loadedLanguages.includes(language)}>
-            <pre style={{ color: foregroundColor, fontFamily: fontFamilyCode }}>{children}</pre>
-          </Spin>
+          <pre style={{ fontFamily: fontFamilyCode }}>
+            <code ref={contentRef} />
+          </pre>
         }
       </Collapse.Panel>
     </Collapse>

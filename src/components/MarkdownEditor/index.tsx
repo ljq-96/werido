@@ -1,22 +1,49 @@
 /** @jsxImportSource @emotion/react */
 import { forwardRef, Fragment, useContext, useEffect, useImperativeHandle, useState } from 'react'
-import { editorViewCtx, serializerCtx, parserCtx } from '@milkdown/core'
+import {
+  editorViewCtx,
+  serializerCtx,
+  parserCtx,
+  Editor,
+  rootCtx,
+  defaultValueCtx,
+  editorViewOptionsCtx,
+} from '@milkdown/core'
 import { Slice } from '@milkdown/prose/model'
-import { outline } from '@milkdown/utils'
-import { ReactEditor, useEditor } from '@milkdown/react'
-import { Anchor, Button, Space, Spin, Tooltip } from 'antd'
+import { $view, outline } from '@milkdown/utils'
+import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react'
+import { Anchor, Button, ConfigProvider, Space, Spin, Tooltip } from 'antd'
 import useControls, { Controls } from './hooks/useControls'
-import useTheme from './hooks/useTheme'
 import { RightOutlined, SaveOutlined } from '@ant-design/icons'
 import clsx from 'clsx'
 import { arrToTree } from '../../utils/common'
 import { TranslateX, TranslateY } from '../Animation'
-import editorFactory from './utils/editorFactory'
 import rendererFactory from './utils/renderFactory'
-import { shikiPlugin } from './plugin/shiki'
+import { shiki } from './plugins/shiki'
 import useStyle from './style'
 import { css } from '@emotion/react'
-import { useShiki } from '../../contexts/useShiki'
+import { nord } from '@milkdown/theme-nord'
+import { codeBlockSchema, commonmark, imageSchema, listItemSchema } from '@milkdown/preset-commonmark'
+import { gfm } from '@milkdown/preset-gfm'
+import { tooltip, TooltipView } from './components/Tooltip'
+import { useNodeViewFactory, usePluginViewFactory, useWidgetViewFactory } from '@prosemirror-adapter/react'
+import { block } from '@milkdown/plugin-block'
+import { BlockView } from './components/Block'
+import { diagram, diagramSchema } from '@milkdown/plugin-diagram'
+import { CodeBlock } from './components/CodeBlock'
+import { ImageTooltip, imageTooltip } from './components/ImageTooltip'
+import { Diagram } from './components/Diagram'
+import { Image } from './components/Image'
+import { ListItem } from './components/ListItem'
+import { linkPlugin } from './components/LinkWidget'
+import { tableSelectorPlugin, TableTooltip, tableTooltip, tableTooltipCtx } from './components/TableWidget'
+import { Ctx } from '@milkdown/ctx'
+import { indent } from '@milkdown/plugin-indent'
+import { history } from '@milkdown/plugin-history'
+import { iframe, iframeSchema } from './plugins/iframe'
+import { Iframe } from './components/Iframe'
+import { clipboard } from '@milkdown/plugin-clipboard'
+import useMyEditor from './hooks/useMyEditor'
 
 interface IProps {
   height?: number | string
@@ -50,6 +77,7 @@ const defaultControls: Controls[] = [
   'inlineCode',
   // 'codeFence',
   // 'blockquote',
+  'table',
   'image',
   // 'iframe',
   'hr',
@@ -58,56 +86,66 @@ const defaultControls: Controls[] = [
   'fullScreen',
 ]
 
-const MilkdownEditor = forwardRef((props: IProps, ref) => {
+const markdown = `# Milkdown React Block
+> You're scared of a world where you're needed.
+This is a demo for using Milkdown with **React**.
+Hover the cursor on the editor to see the block handle.
+
+::iframe{src="https://saul-mirone.github.io"}
+
+| First Header   |    Second Header   |
+| -------------- | :----------------: |
+| Content Cell 1 |  \`Content\` Cell 1  |
+| Content Cell 2 | **Content** Cell 2 |
+
+我是一段文字
+![greeting bear](https://fanyi-cdn.cdn.bcebos.com/static/translation/img/header/logo_e835568.png)
+
+\`\`\`javascript
+const a = 10;
+console.log(a);
+\`\`\`
+
+*   Features
+    *   [x] 📝 **WYSIWYG Markdown** - Write markdown in an elegant way
+    *   [x] 🎨 **Themable** - Theme can be shared and used with npm packages
+    *   [x] 🎮 **Hackable** - Support your awesome idea by plugin
+    *   [x] 🦾 **Reliable** - Built on top of [prosemirror](https://prosemirror.net/) and [remark](https://github.com/remarkjs/remark)
+    *   [x] ⚡ **Slash & Tooltip** - Write fast for everyone, driven by plugin
+    *   [x] 🧮 **Math** - LaTeX math equations support, driven by plugin
+    *   [x] 📊 **Table** - Table support with fluent ui, driven by plugin
+    *   [x] 📰 **Diagram** - Diagram support with [mermaid](https://mermaid-js.github.io/mermaid/#/), driven by plugin
+    *   [x] 🍻 **Collaborate** - Shared editing support with [yjs](https://docs.yjs.dev/), driven by plugin
+    *   [x] 💾 **Clipboard** - Support copy and paste markdown, driven by plugin
+    *   [x] 👍 **Emoji** - Support emoji shortcut and picker, driven by plugin
+*   Made by
+    1.   Programmer: [Mirone](https://github.com/Milkdown)
+    2.   Designer: [Mirone](https://github.com/Milkdown)
+
+\`\`\`mermaid
+graph TD;
+EditorState-->EditorView;
+EditorView-->DOMEvent;
+DOMEvent-->Transaction;
+Transaction-->EditorState;
+\`\`\`
+`
+
+const MilkdownEditor = (props: IProps, ref) => {
   const { height, onChange, controls, onFinish, value = '', readonly = false, loading: contentLoading = false } = props
   const [catalog, setCatalog] = useState<{ text: string; level: number }[]>([])
   const [showCatalog, setShowCatalog] = useState(true)
-  const { shiki } = useShiki()
-  const theme = useTheme()
+  const pluginViewFactory = usePluginViewFactory()
+  const nodeViewFactory = useNodeViewFactory()
+  const widgetViewFactory = useWidgetViewFactory()
   const style = useStyle()
+  const control = useControls(controls || defaultControls)
 
-  const { editor, getDom, loading, getInstance } = useEditor(
-    (root, renderReact) => {
-      if (shiki) {
-        return editorFactory(root, renderReact, value, readonly, onChange, setCatalog)
-          .use(theme)
-          .use(shikiPlugin(shiki))
-      }
-    },
-    [readonly, value, onChange, theme, setCatalog, shiki],
-  )
-
-  const control = useControls({ editor: getInstance(), dom: getDom() })
-
-  const getValue = () =>
-    getInstance().action(ctx => {
-      const editorView = ctx.get(editorViewCtx)
-      const serializer = ctx.get(serializerCtx)
-      return serializer(editorView.state.doc)
-    })
-
-  useImperativeHandle<any, EditorIntance>(ref, () => {
-    return {
-      getValue: getValue,
-      setValue: markdown => {
-        if (loading) return
-        const editor = getInstance()
-        editor?.action(ctx => {
-          const view = ctx.get(editorViewCtx)
-          const parser = ctx.get(parserCtx)
-          const doc = parser(markdown)
-          if (!doc) return
-          const state = view.state
-          view.dispatch(state.tr.replace(0, state.doc.content.size, new Slice(doc.content, 0, 0)))
-          setCatalog(outline()(ctx))
-        })
-      },
-    }
-  })
+  const { get, loading } = useMyEditor({ value, onChange })
 
   useEffect(() => {
     return () => {
-      getInstance()?.destroy()
+      get()?.destroy()
     }
   }, [])
 
@@ -117,16 +155,16 @@ const MilkdownEditor = forwardRef((props: IProps, ref) => {
         {!readonly && (
           <div className={clsx('toolBar')}>
             <Space wrap>
-              {(controls || defaultControls).map((item, index) => (
+              {control.map((item, index) => (
                 <TranslateX key={index} delay={index * 30}>
-                  {control[item].element}
+                  {item}
                 </TranslateX>
               ))}
-              {onFinish && (
+              {/* {onFinish && (
                 <Tooltip title='保存' placement='bottom'>
                   <Button type='text' onClick={() => onFinish(getValue())} icon={<SaveOutlined />} />
                 </Tooltip>
-              )}
+              )} */}
             </Space>
             <div></div>
           </div>
@@ -137,7 +175,7 @@ const MilkdownEditor = forwardRef((props: IProps, ref) => {
             style={{ height: typeof height === 'number' ? height + 'px' : height }}
           >
             <div className={'container'}>
-              <ReactEditor editor={editor} />
+              <Milkdown />
             </div>
             <div className={'catalogContainer'} style={{ top: readonly ? 56 : 104 }}>
               <Button
@@ -156,7 +194,9 @@ const MilkdownEditor = forwardRef((props: IProps, ref) => {
       </div>
     </Spin>
   )
-})
+}
+
+export default MilkdownEditor
 
 const formatAnchor = (tree: any[]) =>
   tree.map(item => ({
@@ -165,22 +205,21 @@ const formatAnchor = (tree: any[]) =>
     children: item.children && formatAnchor(item.children),
   }))
 
-export default MilkdownEditor
-
 export function Render({ value }: { value: string }) {
   if (!value) return <></>
-  const theme = useTheme()
   const { articleStyle } = useStyle()
-  const { editor, getInstance } = useEditor(root => rendererFactory(root, value).use(theme), [value])
+  const { get } = useMyEditor({ value, readonly: true })
   useEffect(() => {
     return () => {
-      getInstance()?.destroy()
+      get()?.destroy()
     }
   }, [value])
 
+  console.log(value)
+
   return (
     <div css={css(articleStyle)}>
-      <ReactEditor editor={editor} />
+      <Milkdown />
     </div>
   )
 }

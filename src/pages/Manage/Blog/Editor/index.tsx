@@ -10,6 +10,7 @@ import MarkdownEditor, { EditorIntance } from '../../../../components/MarkdownEd
 const BlogEditor = () => {
   const [loading, setLoading] = useState(false)
   const [tagOptions, setTagOptions] = useState<{ label: string; value: string }[]>([])
+  const [blog, setBlog] = useState('')
   const id = useSearchParam('id')
   const editor = useRef<EditorIntance>(null)
   const navigate = useNavigate()
@@ -31,7 +32,8 @@ const BlogEditor = () => {
   useEffect(() => {
     if (id) {
       request.blog({ method: 'GET', query: id }).then(res => {
-        editor.current.setValue(res.content)
+        // editor.current.setValue(res.content)
+        setBlog(res.content)
         form.setFieldsValue(res)
       })
     }
@@ -71,7 +73,7 @@ const BlogEditor = () => {
           </Button>,
         ]}
       />
-      <MarkdownEditor ref={editor} />
+      <MarkdownEditor value={blog} onChange={setBlog} />
     </div>
   )
 }

@@ -10,6 +10,8 @@ import { RouteProps } from '../types'
 import { App as AntApp, ConfigProvider, theme } from 'antd'
 import Modals from './modals'
 import ShikiProvider from './contexts/useShiki'
+import { MilkdownProvider } from '@milkdown/react'
+import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
 
 const parseRoute = (route: RouteProps, basePath = '') => {
   const path = `/${basePath}/${route.path}`.replace(/\/+/g, '/')
@@ -36,8 +38,12 @@ function Main() {
       locale={zh_CN}
     >
       <AntApp>
-        <Routes>{routes.map(r => parseRoute(r))}</Routes>
-        <Modals />
+        <MilkdownProvider>
+          <ProsemirrorAdapterProvider>
+            <Routes>{routes.map(r => parseRoute(r))}</Routes>
+            <Modals />
+          </ProsemirrorAdapterProvider>
+        </MilkdownProvider>
       </AntApp>
     </ConfigProvider>
   )
@@ -48,11 +54,9 @@ function App() {
     <StoreProvider>
       <UserProvider>
         <ModalProvider>
-          <ShikiProvider>
-            <BrowserRouter>
-              <Main />
-            </BrowserRouter>
-          </ShikiProvider>
+          <BrowserRouter>
+            <Main />
+          </BrowserRouter>
         </ModalProvider>
       </UserProvider>
     </StoreProvider>

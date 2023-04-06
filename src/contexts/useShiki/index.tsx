@@ -4,7 +4,7 @@ import { getHighlighter, Highlighter, setCDN } from 'shiki'
 interface ShikiState {
   shiki: Highlighter
   loading: boolean
-  loadLanguage: (lan: string) => void
+  loadLanguage: (lan: string) => Promise<void>
   loadedLanguages: string[]
   backgroundColor: string
   foregroundColor: string
@@ -28,7 +28,7 @@ export default function ShikiProvider({ children }: { children: ReactElement }) 
     language => {
       if (shiki && language && !shiki.getLoadedLanguages().includes(language)) {
         setLoading(true)
-        shiki
+        return shiki
           .loadLanguage(language)
           .then(() => {
             setShiki({ ...shiki })
@@ -37,6 +37,7 @@ export default function ShikiProvider({ children }: { children: ReactElement }) 
             setLoading(false)
           })
       }
+      return Promise.resolve()
     },
     [shiki],
   )

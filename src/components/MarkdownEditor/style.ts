@@ -130,8 +130,8 @@ export default function useStyle() {
     },
 
     '.tableWrapper': {
-      overflowX: 'auto',
-      margin: 0,
+      // overflowX: 'auto',
+      padding: 16,
       width: '100%',
       '*': {
         margin: 0,
@@ -143,7 +143,7 @@ export default function useStyle() {
       borderCollapse: 'collapse',
       tableLayout: 'fixed',
       width: '100%',
-      overflow: 'auto',
+      overflow: 'visible !important',
       borderRadius: borderRadius,
       p: {
         lineHeight: 'unset',
@@ -175,13 +175,13 @@ export default function useStyle() {
       bottom: 0,
       zIndex: 20,
       pointerEvents: 'none',
-      background: colorPrimaryBg,
-      width: 1,
+      background: colorPrimary,
+      transition: '0.4s',
+      width: 4,
     },
     '.resize-cursor': {
       cursor: 'col-resize',
     },
-
     '.selectedCell': {
       '&::after': {
         zIndex: 2,
@@ -205,7 +205,7 @@ export default function useStyle() {
         background: 'transparent',
       },
     },
-    '.iframe': {
+    iframe: {
       width: '100%',
       border: `1px solid ${colorBorderSecondary}`,
       borderRadius: borderRadius,

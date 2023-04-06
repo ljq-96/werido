@@ -1,10 +1,13 @@
-// import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import proxy from './proxy'
 import { visualizer } from 'rollup-plugin-visualizer'
+import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
-export default {
+export default defineConfig({
+  resolve: {
+    preserveSymlinks: true,
+  },
   plugins: [
     react(),
     visualizer({
@@ -25,4 +28,4 @@ export default {
   server: {
     proxy,
   },
-}
+})

@@ -2,7 +2,7 @@ import { defaultValueCtx, Editor, editorViewOptionsCtx, rootCtx } from '@milkdow
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
 import { gfm } from '@milkdown/preset-gfm'
 import { outline } from '@milkdown/utils'
-import { iframe } from '../plugin/iframe'
+// import { iframe } from '../plugin/iframe'
 
 export default function rendererFactory(
   root: HTMLElement,
@@ -18,7 +18,7 @@ export default function rendererFactory(
         setOutlines?.(outline()(ctx))
       })
     })
-    .use(iframe)
+    // .use(iframe)
     .use(gfm)
     .use(listener)
 

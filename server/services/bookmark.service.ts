@@ -67,7 +67,7 @@ export class BookmarkService {
     if (groupDoc) {
       docIndex.forEach(item => {
         if (item._id === groupDoc._id.toString()) {
-          item.children.push({ _id: bookmark._id, children: [] })
+          item.children.push({ _id: bookmark._id as any, children: [] })
         }
       })
     } else {
@@ -77,10 +77,10 @@ export class BookmarkService {
         type: DocType.分组,
       })
       docIndex.push({
-        _id: groupDoc._id,
+        _id: groupDoc._id as any,
         children: [
           {
-            _id: bookmark._id,
+            _id: bookmark._id as any,
             children: [],
           },
         ],

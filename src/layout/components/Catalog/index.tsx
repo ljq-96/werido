@@ -166,9 +166,9 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
                     onClick={e => handleCreate(e, data)}
                   />
                   <Dropdown
-                    placement='bottomRight'
+                    // placement='bottomRight'
                     destroyPopupOnHide
-                    getPopupContainer={() => el.current}
+                    // getPopupContainer={() => el.current}
                     menu={{
                       items: [
                         {
