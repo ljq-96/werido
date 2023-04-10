@@ -6,6 +6,7 @@ export default function useStyle() {
     token: {
       colorBgContainer,
       colorPrimary,
+      colorBorder,
       colorBorderSecondary,
       borderRadius,
       colorText,
@@ -23,6 +24,8 @@ export default function useStyle() {
   const articleStyle: CSSObject = {
     '.ProseMirror-selectednode': {
       outline: 'none',
+      background: colorPrimaryBg,
+      borderRadius: borderRadius,
     },
     outline: 'none',
     color: colorText,
@@ -31,6 +34,7 @@ export default function useStyle() {
       lineHeight: 1.5,
       letterSpacing: 0.5,
       margin: '0.5em 0',
+      transition: '0.4s',
       '&.empty-node': {
         color: colorTextDescription,
       },
@@ -41,6 +45,7 @@ export default function useStyle() {
       borderLeft: `4px solid ${colorBorderSecondary}`,
       marginLeft: 0,
       marginRight: 0,
+      transition: '0.4s',
     },
     h1: {
       borderBottom: `2px solid ${colorBorderSecondary}`,
@@ -48,6 +53,7 @@ export default function useStyle() {
       lineHeight: 1,
       padding: '0 0 10px',
       margin: '15px 0',
+      transition: '0.4s',
     },
     h2: {
       borderBottom: `1px solid ${colorBorderSecondary}`,
@@ -55,21 +61,25 @@ export default function useStyle() {
       lineHeight: 1,
       padding: '0 0 10px',
       margin: '15px 0',
+      transition: '0.4s',
     },
     h3: {
       fontSize: '1.25em',
       lineHeight: 1,
       margin: '15px 0',
+      transition: '0.4s',
     },
     h4: {
       fontSize: '1.125em',
       lineHeight: 1,
       margin: '15px 0',
+      transition: '0.4s',
     },
     h5: {
       fontSize: '1em',
       lineHeight: 1,
       margin: '15px 0',
+      transition: '0.4s',
     },
     '.heading': {
       fontWeight: 500,
@@ -79,8 +89,9 @@ export default function useStyle() {
       backgroundColor: colorBgLayout,
       borderWidth: 0,
     },
-    '.ordered-list,.bullet-list': {
+    'ol,ul': {
       paddingLeft: 0,
+      transition: '0.4s',
     },
     '.list-item': {
       display: 'flex',
@@ -89,13 +100,8 @@ export default function useStyle() {
         marginRight: '0.5em',
       },
     },
-
-    ul: {
-      listStyleType: 'circle',
-    },
-
     li: {
-      // listStyle: 'none',
+      transition: '0.4s',
     },
 
     '.task-list-item': {
@@ -116,13 +122,14 @@ export default function useStyle() {
       height: 'auto',
       textAlign: 'center',
     },
-    '.code-inline': {
+    code: {
       backgroundColor: colorBgTextHover,
-      borderRadius: borderRadius,
-      padding: '0 0.2em',
+      borderRadius: 3,
+      paddingInline: '0.4em',
+      paddingBlock: '0.2em 0.1em',
       margin: '0 0.2em',
-      fontSize: '1em',
-      border: `1px solid ${colorBorderSecondary}`,
+      fontSize: 'smaller',
+      border: `1px solid ${colorBorder}`,
     },
 
     '.strong': {
@@ -145,6 +152,7 @@ export default function useStyle() {
       width: '100%',
       overflow: 'visible !important',
       borderRadius: borderRadius,
+      transition: '0.4s',
       p: {
         lineHeight: 'unset',
       },
@@ -210,6 +218,7 @@ export default function useStyle() {
       border: `1px solid ${colorBorderSecondary}`,
       borderRadius: borderRadius,
       margin: '16px 0',
+      transition: '0.4s',
     },
     '.block-handle': {
       display: 'flex',
@@ -224,6 +233,7 @@ export default function useStyle() {
       fontSize: 16,
       transform: 'translateY(-2px)',
       cursor: 'pointer',
+      transition: '0',
       '&:hover': {
         color: colorPrimary,
         backgroundColor: colorPrimaryBg,
@@ -296,6 +306,15 @@ export default function useStyle() {
     backgroundColor: colorBgContainer,
     border: `1px solid ${colorBorderSecondary}`,
     borderRadius: borderRadius,
+    '[data-tippy-root]': {
+      zIndex: '99 !important',
+    },
+    '.milkdown': {
+      padding: '16px 48px',
+      '.editor': {
+        outline: 'none',
+      },
+    },
     '.ant-anchor': {
       fontFamily: fontFamilyCode,
     },

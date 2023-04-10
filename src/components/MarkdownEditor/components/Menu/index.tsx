@@ -1,3 +1,22 @@
+import { MoreOutlined } from '@ant-design/icons'
+import { useInstance } from '@milkdown/react'
+import { usePluginViewContext } from '@prosemirror-adapter/react'
+import {
+  Button,
+  Divider,
+  Dropdown,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Popconfirm,
+  Space,
+  Tooltip,
+  TooltipProps,
+  theme,
+} from 'antd'
+import { Fragment, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { MenuControls, MenuProvider } from '../../plugins/menu'
 import { Editor, commandsCtx, editorViewCtx } from '@milkdown/core'
 import { IconFont, isSameSet } from '../../../../utils/common'
 import { callCommand, insert, replaceAll } from '@milkdown/utils'
@@ -39,59 +58,21 @@ import {
   CodeSandboxOutlined,
   RedoOutlined,
 } from '@ant-design/icons'
-import { Fragment, ReactElement, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
-import {
-  Button,
-  Divider,
-  Dropdown,
-  Form,
-  Input,
-  InputNumber,
-  Menu,
-  Modal,
-  Popconfirm,
-  Tooltip,
-  TooltipProps,
-  Typography,
-  Upload,
-} from 'antd'
-import { mermaidExample } from './utils'
 import { template } from '../../components/Diagram/utils'
-import { useInstance } from '@milkdown/react'
 import defaultImage from './default-image.jpg'
+import { listenerCtx } from '@milkdown/plugin-listener'
+import TooltipButton from '../basic/TooltipButton'
 
-export type Controls =
-  | 'undo'
-  | 'redo'
-  | 'blod'
-  | 'italic'
-  | 'strikeThrough'
-  | 'link'
-  | 'image'
-  | 'inlineCode'
-  | 'blockquote'
-  | 'bulletList'
-  | 'orderedList'
-  | 'taskList'
-  | 'codeFence'
-  | 'text'
-  | 'hr'
-  | 'divider'
-  | 'clear'
-  | 'iframe'
-  | 'fullScreen'
-  | 'more'
-  | 'table'
+type ActivedButton = 'strong' | 'link' | 'emphasis' | 'inlineCode' | 'strike_through'
 
-type Options = {
-  tip?: {
-    placement?: TooltipProps['placement']
-  }
+const MenuItem = ({ title, subTitle }: { title: string; subTitle: string }) => {
+  return (
+    <div className='flex justify-between items-end'>
+      <div>{title}</div>
+      <div className='text-gray-500 ml-4 text-xs'>{subTitle}</div>
+    </div>
+  )
 }
-
-type ActivedButton = 'strong' | 'link' | 'em' | 'code_inline' | 'strike_through'
-
-const { Text } = Typography
 
 const hasMark = (state, type): boolean => {
   // const hasMark = (state: EditorState, type: MarkType): boolean => {
@@ -103,53 +84,21 @@ const hasMark = (state, type): boolean => {
   return state.doc.rangeHasMark(from, to, type)
 }
 
-const MenuItem = ({ title, subTitle }: { title: string; subTitle: string }) => {
-  return (
-    <div className='flex justify-between items-end'>
-      <div>{title}</div>
-      <div className='text-gray-500 ml-4 text-xs'>{subTitle}</div>
-    </div>
-  )
-}
-
-function TooltipButton({
-  title,
-  icon,
-  onClick,
-  disabled,
-  active,
-  tip,
-}: {
-  title: string
-  icon: ReactNode
-  onClick: () => void
-  disabled?: boolean
-  active?: boolean
-  tip?: TooltipProps
-}) {
-  return (
-    <Tooltip title={title} placement='bottom' {...tip}>
-      <Button
-        type='text'
-        onMouseDown={onClick}
-        icon={icon}
-        disabled={disabled}
-        style={{ background: active ? 'pink' : '' }}
-      />
-    </Tooltip>
-  )
-}
-
-function useControls(controls: Controls[], options?: Options) {
-  const { tip } = options || {}
-  const [loading, getEditor] = useInstance()
+export const MenuView = (props: { menuControls: MenuControls[] }) => {
+  const { menuControls } = props
+  const ref = useRef<HTMLDivElement>(null)
+  const menuProvider = useRef<MenuProvider>()
   const [activeBtns, setActiveBtns] = useState<Set<ActivedButton>>(new Set())
   const [activeText, setActiveText] = useState('0')
   const [showIframe, setShowIframe] = useState(false)
-  const [isFullScreen, setIsFullScreen] = useState(false)
   const [iframeForm] = Form.useForm()
+  const { view } = usePluginViewContext()
+  const [loading, getEditor] = useInstance()
+  const {
+    token: { colorBorderSecondary, colorBgContainer },
+  } = theme.useToken()
 
-  const getState = () => {
+  const getState = useCallback(() => {
     getEditor()?.action(ctx => {
       const _activeBtns = new Set<ActivedButton>()
       const { state } = ctx.get(editorViewCtx)
@@ -158,6 +107,7 @@ function useControls(controls: Controls[], options?: Options) {
           _activeBtns.add(k as ActivedButton)
         }
       })
+
       if (!isSameSet(activeBtns, _activeBtns)) {
         setActiveBtns(_activeBtns)
       }
@@ -169,11 +119,7 @@ function useControls(controls: Controls[], options?: Options) {
         setActiveText('0')
       }
     })
-  }
-
-  useEffect(() => {
-    getState()
-  })
+  }, [activeBtns, getEditor])
 
   const call = useCallback(
     (key, payload?) => {
@@ -183,41 +129,50 @@ function useControls(controls: Controls[], options?: Options) {
     [loading],
   )
 
-  const handleActive = (k: ActivedButton) => {
-    activeBtns.has(k) ? activeBtns.delete(k) : activeBtns.add(k)
-    setActiveBtns(new Set([...activeBtns]))
-  }
+  const toggleText = useCallback(
+    (level: string) => {
+      if (level === '0') {
+        call(turnIntoTextCommand.key)
+        return
+      } else {
+        call(wrapInHeadingCommand.key, Number(level))
+      }
+    },
+    [call],
+  )
 
-  const insertValue = str => {
-    getEditor().action(insert(str))
-  }
+  const insertValue = useCallback(
+    str => {
+      getEditor().action(insert(str))
+    },
+    [getEditor],
+  )
 
-  const handleMoreMenu = (keys: string[]) => {
-    const k1 = keys.pop()
-    const k2 = keys.pop()
-    switch (k1) {
-      case 'iframe':
-        setShowIframe(true)
-        break
-      case 'quote':
-        call(wrapInBlockquoteCommand.key)
-        break
-      case 'code':
-        call(createCodeBlockCommand.key)
-        break
-      // case 'mermaid':
-      //   insertValue(`\`\`\`mermaid${mermaidExample[k2]}\`\`\``)
-      //   break
-    }
-  }
+  const handleMoreMenu = useCallback(
+    (keys: string[]) => {
+      const k1 = keys.pop()
+      const k2 = keys.pop()
+      switch (k1) {
+        case 'iframe':
+          setShowIframe(true)
+          break
+        case 'quote':
+          call(wrapInBlockquoteCommand.key)
+          break
+        case 'code':
+          call(createCodeBlockCommand.key)
+          break
+      }
+    },
+    [setShowIframe],
+  )
 
-  const controlBtns: { [key in Controls]?: ReactNode } = {
-    undo: <TooltipButton title='撤回' tip={tip} icon={<UndoOutlined />} onClick={() => call(undoCommand.key)} />,
-    redo: <TooltipButton title='撤回' tip={tip} icon={<RedoOutlined />} onClick={() => call(redoCommand.key)} />,
+  const controlBtns: { [key in MenuControls]?: ReactNode } = {
+    undo: <TooltipButton title='撤回' icon={<UndoOutlined />} onClick={() => call(undoCommand.key)} />,
+    redo: <TooltipButton title='撤回' icon={<RedoOutlined />} onClick={() => call(redoCommand.key)} />,
     blod: (
       <TooltipButton
         title={[...activeBtns].toString()}
-        tip={tip}
         icon={<BoldOutlined />}
         active={activeBtns.has('strong')}
         onClick={() => call(toggleStrongCommand.key)}
@@ -226,16 +181,14 @@ function useControls(controls: Controls[], options?: Options) {
     italic: (
       <TooltipButton
         title='倾斜'
-        tip={tip}
         icon={<ItalicOutlined />}
-        active={activeBtns.has('em')}
+        active={activeBtns.has('emphasis')}
         onClick={() => call(toggleEmphasisCommand.key)}
       />
     ),
     strikeThrough: (
       <TooltipButton
         title='删除线'
-        tip={tip}
         icon={<StrikethroughOutlined />}
         active={activeBtns.has('strike_through')}
         onClick={() => call(toggleStrikethroughCommand.key)}
@@ -244,7 +197,6 @@ function useControls(controls: Controls[], options?: Options) {
     link: (
       <TooltipButton
         title='链接'
-        tip={tip}
         icon={<LinkOutlined />}
         active={activeBtns.has('link')}
         onClick={() => call(toggleLinkCommand.key)}
@@ -253,7 +205,6 @@ function useControls(controls: Controls[], options?: Options) {
     image: (
       <TooltipButton
         title='图片'
-        tip={tip}
         icon={<PictureOutlined />}
         onClick={() => insertValue(`![图片描述](${defaultImage})`)}
       />
@@ -261,16 +212,14 @@ function useControls(controls: Controls[], options?: Options) {
     inlineCode: (
       <TooltipButton
         title='行内代码'
-        tip={tip}
-        icon={<CodeOutlined />}
-        active={activeBtns.has('code_inline')}
+        icon={<IconFont type='icon-inlinecode' />}
+        active={activeBtns.has('inlineCode')}
         onClick={() => call(toggleInlineCodeCommand.key)}
       />
     ),
     blockquote: (
       <TooltipButton
         title='引用'
-        tip={tip}
         icon={<IconFont type='icon-quote' />}
         onClick={() => call(wrapInBlockquoteCommand.key)}
       />
@@ -278,7 +227,6 @@ function useControls(controls: Controls[], options?: Options) {
     bulletList: (
       <TooltipButton
         title='无序列表'
-        tip={tip}
         icon={<UnorderedListOutlined />}
         onClick={() => call(wrapInBulletListCommand.key)}
       />
@@ -286,28 +234,19 @@ function useControls(controls: Controls[], options?: Options) {
     orderedList: (
       <TooltipButton
         title='有序列表'
-        tip={tip}
         icon={<OrderedListOutlined />}
         onClick={() => call(wrapInOrderedListCommand.key)}
       />
     ),
-    taskList: <TooltipButton title='任务列表' tip={tip} icon={<IconFont type='icon-checklist' />} onClick={() => {}} />,
+    taskList: <TooltipButton title='任务列表' icon={<IconFont type='icon-checklist' />} onClick={() => {}} />,
     codeFence: (
-      <TooltipButton
-        title='代码块'
-        tip={tip}
-        icon={<CodeSandboxOutlined />}
-        onClick={() => call(createCodeBlockCommand.key)}
-      />
+      <TooltipButton title='代码块' icon={<CodeSandboxOutlined />} onClick={() => call(createCodeBlockCommand.key)} />
     ),
-    table: (
-      <TooltipButton title='表格' tip={tip} icon={<TableOutlined />} onClick={() => call(insertTableCommand.key)} />
-    ),
-    hr: <TooltipButton title='分割线' tip={tip} icon={<LineOutlined />} onClick={() => call(insertHrCommand.key)} />,
+    table: <TooltipButton title='表格' icon={<TableOutlined />} onClick={() => call(insertTableCommand.key)} />,
+    hr: <TooltipButton title='分割线' icon={<LineOutlined />} onClick={() => call(insertHrCommand.key)} />,
     more: (
       <Fragment>
         <Dropdown
-          overlayClassName='aaaa'
           placement='bottomLeft'
           arrow={{ pointAtCenter: true }}
           menu={{
@@ -360,9 +299,88 @@ function useControls(controls: Controls[], options?: Options) {
         </Modal>
       </Fragment>
     ),
+    text: (
+      <Dropdown
+        menu={{
+          accessKey: activeText,
+          onClick: ({ key }) => toggleText(key),
+          items: [
+            { label: <MenuItem title='正文' subTitle='Ctrl+Alt+0' />, key: '0' },
+            { label: <MenuItem title='标题1' subTitle='Ctrl+Alt+1' />, key: '1' },
+            { label: <MenuItem title='标题2' subTitle='Ctrl+Alt+2' />, key: '2' },
+            { label: <MenuItem title='标题3' subTitle='Ctrl+Alt+3' />, key: '3' },
+            { label: <MenuItem title='标题4' subTitle='Ctrl+Alt+4' />, key: '4' },
+            { label: <MenuItem title='标题5' subTitle='Ctrl+Alt+5' />, key: '5' },
+          ],
+        }}
+      >
+        <Button
+          type='text'
+          icon={<IconFont type={activeText === '0' ? 'icon-paragraph' : `icon-h-${activeText}`} />}
+          style={{ width: 90, textAlign: 'left' }}
+        >
+          {activeText === '0' ? '正文' : `标题${activeText}`}
+        </Button>
+      </Dropdown>
+    ),
+    clear: (
+      <Popconfirm
+        title='此操作会清空所有内容'
+        onConfirm={() => getEditor()?.action(replaceAll(''))}
+        placement='bottom'
+        okButtonProps={{ danger: true }}
+        zIndex={10000}
+      >
+        <Tooltip title='清空' placement='bottom'>
+          <Button type='text' icon={<DeleteOutlined />} />
+        </Tooltip>
+      </Popconfirm>
+    ),
+
+    divider: <Divider type='vertical' />,
   }
 
-  return () => controls.map(key => controlBtns[key]).filter(Boolean)
-}
+  useEffect(() => {
+    const div = ref.current
+    if (loading || !div) return
 
-export default useControls
+    const editor = getEditor()
+    if (!editor) return
+
+    menuProvider.current = new MenuProvider({
+      ctx: editor.ctx,
+      content: div,
+    })
+
+    return () => {
+      menuProvider.current?.destroy()
+    }
+  }, [loading])
+
+  useEffect(() => {
+    getState()
+  })
+
+  return (
+    <div data-desc='meun-wrapper'>
+      <div
+        ref={ref}
+        style={{
+          position: 'sticky',
+          top: 55,
+          margin: '-14px -48px 16px',
+          padding: 16,
+          background: colorBgContainer,
+          borderBottom: `1px solid ${colorBorderSecondary}`,
+          zIndex: 98,
+        }}
+      >
+        <Space>
+          {menuControls.map((key, index) => (
+            <Fragment key={index}>{controlBtns[key]}</Fragment>
+          ))}
+        </Space>
+      </div>
+    </div>
+  )
+}

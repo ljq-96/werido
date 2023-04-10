@@ -38,12 +38,8 @@ function Main() {
       locale={zh_CN}
     >
       <AntApp>
-        <MilkdownProvider>
-          <ProsemirrorAdapterProvider>
-            <Routes>{routes.map(r => parseRoute(r))}</Routes>
-            <Modals />
-          </ProsemirrorAdapterProvider>
-        </MilkdownProvider>
+        <Routes>{routes.map(r => parseRoute(r))}</Routes>
+        <Modals />
       </AntApp>
     </ConfigProvider>
   )
@@ -55,7 +51,9 @@ function App() {
       <UserProvider>
         <ModalProvider>
           <BrowserRouter>
-            <Main />
+            <ShikiProvider>
+              <Main />
+            </ShikiProvider>
           </BrowserRouter>
         </ModalProvider>
       </UserProvider>

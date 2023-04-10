@@ -18,6 +18,14 @@ export const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/c/font_3208498_4j8romdlta.js',
 })
 
+export const sleep = (time: number) => {
+  return new Promise<'sleep'>(resolve => {
+    setTimeout(() => {
+      resolve('sleep')
+    }, time)
+  })
+}
+
 /** qs */
 export const querystring = {
   parse: (search: string = '') => {

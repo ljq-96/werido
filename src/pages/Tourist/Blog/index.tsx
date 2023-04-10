@@ -12,6 +12,8 @@ import ArchivesCard from '../components/ArchivesCard'
 import CatalogCard from '../components/CatalogCard'
 import TagsCard from '../components/TagsCard'
 import UserCard from '../components/UserCard'
+import { MilkdownProvider } from '@milkdown/react'
+import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
 
 const SIZE = 20
 const GUTTER: any = [16, 16]
@@ -71,7 +73,11 @@ const Blog = () => {
         <Col span={id ? 18 : 12}>
           <Spin spinning={listLoading || detailLoading}>
             {id ? (
-              <MarkdownEditor readonly value={detailData?.content} />
+              <MilkdownProvider>
+                <ProsemirrorAdapterProvider>
+                  <MarkdownEditor readonly value={detailData?.content} />
+                </ProsemirrorAdapterProvider>
+              </MilkdownProvider>
             ) : listData?.list?.length ? (
               <Fragment>
                 {listData.list.map((item, index) => (

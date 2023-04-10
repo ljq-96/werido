@@ -40,8 +40,6 @@ export const TooltipView = () => {
           setShow(false)
           return false
         }
-        // console.log(view.state.doc.nodeAt(from)?.type)
-        console.log(selection)
 
         const isShow = selection instanceof TextSelection && view.state.doc.nodeAt(from)?.type.name === 'text'
         setShow(isShow)
@@ -64,7 +62,7 @@ export const TooltipView = () => {
       <div ref={ref}>
         <Popover
           open={show}
-          content={<Space size={4}>{Controls}</Space>}
+          content={<Space size={4}>{Controls()}</Space>}
           getPopupContainer={el => el.parentElement}
           style={{ padding: 0 }}
           overlayInnerStyle={{ padding: 4 }}

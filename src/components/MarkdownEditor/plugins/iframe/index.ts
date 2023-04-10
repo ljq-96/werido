@@ -16,12 +16,14 @@ export const iframeSchema = $nodeSchema('iframe', () => ({
   marks: '',
   attrs: {
     src: { default: null },
+    height: { default: 360 },
   },
   parseDOM: [
     {
       tag: 'iframe',
       getAttrs: dom => ({
         src: (dom as HTMLElement).getAttribute('src'),
+        height: (dom as HTMLElement).getAttribute('height'),
       }),
     },
   ],
@@ -29,7 +31,10 @@ export const iframeSchema = $nodeSchema('iframe', () => ({
   parseMarkdown: {
     match: node => node.type === 'leafDirective' && node.name === 'iframe',
     runner: (state, node, type) => {
-      state.addNode(type, { src: (node.attributes as { src: string }).src })
+      state.addNode(type, {
+        src: (node.attributes as { src: string }).src,
+        height: (node.attributes as { height: string }).height,
+      })
     },
   },
   toMarkdown: {
@@ -37,7 +42,7 @@ export const iframeSchema = $nodeSchema('iframe', () => ({
     runner: (state, node) => {
       state.addNode('leafDirective', undefined, undefined, {
         name: 'iframe',
-        attributes: { src: node.attrs.src },
+        attributes: { src: node.attrs.src, height: node.attrs.height },
       })
     },
   },
@@ -45,11 +50,11 @@ export const iframeSchema = $nodeSchema('iframe', () => ({
 
 const inputRule = $inputRule(
   () =>
-    new InputRule(/::iframe\{src\="(?<src>[^"]+)?"?\}/, (state, match, start, end) => {
-      const [okay, src = ''] = match
+    new InputRule(/:iframe\{src\="(?<src>[^"]+)?"?height\="(?<height>[^"]+)?"?\}/, (state, match, start, end) => {
+      const [okay, src = '', height = ''] = match
       const { tr } = state
       if (okay) {
-        tr.replaceWith(start - 1, end, iframeSchema.type().create({ src }))
+        tr.replaceWith(start - 1, end, iframeSchema.type().create({ src, height }))
       }
 
       return tr

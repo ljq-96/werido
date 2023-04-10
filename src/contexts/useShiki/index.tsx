@@ -1,5 +1,6 @@
 import { createContext, ReactElement, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { getHighlighter, Highlighter, setCDN } from 'shiki'
+import { sleep } from '../../utils/common'
 
 interface ShikiState {
   shiki: Highlighter
@@ -25,17 +26,12 @@ export default function ShikiProvider({ children }: { children: ReactElement }) 
   const foregroundColor = useMemo(() => shiki?.getForegroundColor(), [shiki])
 
   const loadLanguage = useCallback(
-    language => {
+    async (language: any) => {
       if (shiki && language && !shiki.getLoadedLanguages().includes(language)) {
         setLoading(true)
-        return shiki
-          .loadLanguage(language)
-          .then(() => {
-            setShiki({ ...shiki })
-          })
-          .finally(() => {
-            setLoading(false)
-          })
+        await shiki.loadLanguage(language)
+        await sleep(500)
+        setLoading(false)
       }
       return Promise.resolve()
     },

@@ -17,9 +17,18 @@ export function CodeBlock() {
   const copyText = useCopyText()
   const language = useMemo(() => node.attrs['language'], [node])
   const [_, get] = useInstance()
+  const { loading, loadLanguage, loadedLanguages } = useShiki()
   const {
     token: { colorTextTertiary, colorPrimaryBorderHover, colorBorderSecondary, fontFamilyCode, colorPrimary },
   } = theme.useToken()
+
+  // useEffect(() => {
+  //   if (language) {
+  //     loadLanguage(language).then(() => setAttrs({ language }))
+  //   }
+  // }, [language])
+
+  console.log(123123)
 
   return (
     <Collapse
@@ -48,12 +57,6 @@ export function CodeBlock() {
         '.close-btn': {
           display: 'flex',
           justifyContent: 'center',
-        },
-        '&:hover': {
-          borderColor: colorPrimaryBorderHover,
-          '.ant-collapse-item': {
-            borderColor: colorPrimaryBorderHover,
-          },
         },
       })}
       expandIcon={({ isActive }) => (
@@ -105,7 +108,9 @@ export function CodeBlock() {
                 })),
               ]}
               onChange={lan => {
-                setAttrs({ language: lan })
+                // loadLanguage(lan).then(() => {
+                //   setAttrs({ language: lan })
+                // })
               }}
             />
           ) : (
@@ -130,9 +135,9 @@ export function CodeBlock() {
         }
       >
         {
-          <pre style={{ fontFamily: fontFamilyCode }}>
-            <code ref={contentRef} />
-          </pre>
+          <Spin spinning={loading}>
+            <pre style={{ fontFamily: fontFamilyCode }} ref={contentRef}></pre>
+          </Spin>
         }
       </Collapse.Panel>
     </Collapse>

@@ -7,6 +7,8 @@ import { findChildren } from '@milkdown/prose'
 import { codeBlockSchema } from '@milkdown/preset-commonmark'
 import { Language } from '../../utils/language'
 
+let highlighter: Highlighter = undefined
+
 function getDecorations(doc: Node, highlighter: Highlighter) {
   const decorations: Decoration[] = []
 
@@ -15,7 +17,7 @@ function getDecorations(doc: Node, highlighter: Highlighter) {
   children.forEach(async block => {
     let from = block.pos + 1
     const { language } = block.node.attrs
-    if (!language) return
+    if (!language || !highlighter.getLoadedLanguages().includes(language)) return
     // if (!highlighter.getLoadedLanguages().includes(language)) {
     //   await highlighter.loadLanguage(language)
     // }
@@ -41,42 +43,41 @@ function getDecorations(doc: Node, highlighter: Highlighter) {
   return DecorationSet.create(doc, decorations)
 }
 export const shikiKey = new PluginKey('shiki')
-export const shiki = $proseAsync(async () => {
-  setCDN('/shiki')
-  const langs = Object.keys(Language).filter(v => v)
-  const highlighter = await getHighlighter({
-    theme: 'ayu',
-    langs: langs as any,
-  })
-  return new Plugin({
-    key: shikiKey,
-    state: {
-      init: (_, { doc }) => getDecorations(doc, highlighter),
-      apply: (tr, value, oldState, newState) => {
-        const codeBlockType = codeBlockSchema.type()
-        const isNodeName = newState.selection.$head.parent.type === codeBlockType
-        const isPreviousNodeName = oldState.selection.$head.parent.type === codeBlockType
-        const oldNode = findChildren(node => node.type === codeBlockType)(oldState.doc)
-        const newNode = findChildren(node => node.type === codeBlockType)(newState.doc)
+export const shikiPlugin = (highlighter: Highlighter) =>
+  $prose(() => {
+    // setCDN('/shiki')
+    // const langs = Object.keys(Language).filter(v => v)
+    // if (!highlighter) highlighter = await getHighlighter({ theme: 'ayu', langs: langs as any })
+    // const children = findChildren(node => node.type === codeBlockSchema.type())(doc)
+    return new Plugin({
+      key: shikiKey,
+      state: {
+        init: (_, { doc }) => getDecorations(doc, highlighter),
+        apply: (tr, value, oldState, newState) => {
+          const codeBlockType = codeBlockSchema.type()
+          const isNodeName = newState.selection.$head.parent.type === codeBlockType
+          const isPreviousNodeName = oldState.selection.$head.parent.type === codeBlockType
+          const oldNode = findChildren(node => node.type === codeBlockType)(oldState.doc)
+          const newNode = findChildren(node => node.type === codeBlockType)(newState.doc)
 
-        const codeBlockChanged =
-          tr.docChanged &&
-          (isNodeName ||
-            isPreviousNodeName ||
-            oldNode.length !== newNode.length ||
-            oldNode[0]?.node.attrs.language !== newNode[0]?.node.attrs.language)
+          const codeBlockChanged =
+            tr.docChanged &&
+            (isNodeName ||
+              isPreviousNodeName ||
+              oldNode.length !== newNode.length ||
+              oldNode[0]?.node.attrs.language !== newNode[0]?.node.attrs.language)
 
-        if (codeBlockChanged) {
-          return getDecorations(tr.doc, highlighter)
-        }
+          if (codeBlockChanged) {
+            return getDecorations(tr.doc, highlighter)
+          }
 
-        return value.map(tr.mapping, tr.doc)
+          return value.map(tr.mapping, tr.doc)
+        },
       },
-    },
-    props: {
-      decorations(state) {
-        return shikiKey.getState(state)
+      props: {
+        decorations(state) {
+          return shikiKey.getState(state)
+        },
       },
-    },
+    })
   })
-})

@@ -8,11 +8,14 @@ import { IBlog } from '../../../../types'
 import { request } from '../../../api'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
 import { useStore } from '../../../contexts/useStore'
+import { MilkdownProvider } from '@milkdown/react'
+import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
 
 function BlogDetail() {
   const [{ tags }, { getTags }] = useStore()
   const { state } = useLocation()
-  const [onEdit, setOnEdit] = useState(() => !!(state as any)?.isEdit)
+  // const [onEdit, setOnEdit] = useState(() => !!(state as any)?.isEdit)
+  const [onEdit, setOnEdit] = useState(true)
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<IBlog>(null)
   const [form] = Form.useForm()
@@ -122,7 +125,11 @@ function BlogDetail() {
         )
       }
     >
-      <MarkdownEditor ref={editor} readonly={!onEdit} value={detail?.content} />
+      <MilkdownProvider>
+        <ProsemirrorAdapterProvider>
+          <MarkdownEditor readonly={!onEdit} value={detail?.content} />
+        </ProsemirrorAdapterProvider>
+      </MilkdownProvider>
     </PageContainer>
   )
 }

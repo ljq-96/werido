@@ -79,7 +79,7 @@ const BlogEditor = () => {
           </Affix>
         }
       />
-      <MarkdownEditor ref={editor} value={detail?.content} />
+      <MarkdownEditor value={detail?.content} />
     </div>
   )
 }

@@ -6,11 +6,14 @@ import { useSearchParam } from 'react-use'
 import { StatisticsType } from '../../../../../types/enum'
 import { request } from '../../../../api'
 import MarkdownEditor, { EditorIntance } from '../../../../components/MarkdownEditor'
+import { MilkdownProvider } from '@milkdown/react'
+import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
+import { IBlog } from '../../../../../types'
 
 const BlogEditor = () => {
   const [loading, setLoading] = useState(false)
   const [tagOptions, setTagOptions] = useState<{ label: string; value: string }[]>([])
-  const [blog, setBlog] = useState('')
+  const [detail, setDetail] = useState<IBlog>()
   const id = useSearchParam('id')
   const editor = useRef<EditorIntance>(null)
   const navigate = useNavigate()
@@ -33,7 +36,7 @@ const BlogEditor = () => {
     if (id) {
       request.blog({ method: 'GET', query: id }).then(res => {
         // editor.current.setValue(res.content)
-        setBlog(res.content)
+        setDetail(res)
         form.setFieldsValue(res)
       })
     }
@@ -73,7 +76,17 @@ const BlogEditor = () => {
           </Button>,
         ]}
       />
-      <MarkdownEditor value={blog} onChange={setBlog} />
+      {detail && (
+        <MilkdownProvider>
+          <ProsemirrorAdapterProvider>
+            <MarkdownEditor
+              readonly={false}
+              value={detail.content}
+              // onChange={e => setDetail({ ...detail, content: e })}
+            />
+          </ProsemirrorAdapterProvider>
+        </MilkdownProvider>
+      )}
     </div>
   )
 }

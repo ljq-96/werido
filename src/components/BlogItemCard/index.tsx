@@ -2,16 +2,27 @@ import { ArrowRightOutlined, FieldTimeOutlined, FileTextOutlined } from '@ant-de
 import { Button, Card, Divider, Row, Space, theme } from 'antd'
 import { Link, useNavigate } from 'react-router-dom'
 import { css, jsx } from '@emotion/react'
-import { Fragment } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import dayjs from 'dayjs'
-import { Render } from '../MarkdownEditor'
+import { EditorIntance, Render } from '../MarkdownEditor'
 import { IBlog } from '../../../types'
+import { MilkdownProvider } from '@milkdown/react'
+import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
 
 /** @jsxImportSource @emotion/react */
 const BlogItemCard = ({ item, setLink }: { item: IBlog; setLink: (id: string) => string }) => {
   const { title, content, description, tags, cover, createTime, words, _id } = item
   const { token } = theme.useToken()
   const navigate = useNavigate()
+  const editorRef = useRef<EditorIntance>(null)
+
+  // useEffect(() => {
+  //   if (editorRef.current) {
+  //     console.log(description)
+
+  //     editorRef.current.setValue(description)
+  //   }
+  // }, [description])
 
   return (
     <Fragment>
@@ -52,7 +63,11 @@ const BlogItemCard = ({ item, setLink }: { item: IBlog; setLink: (id: string) =>
           {title}
         </Link>
         <div css={css({ marginTop: 8 })}>
-          <Render key={_id} value={description} />
+          <MilkdownProvider>
+            <ProsemirrorAdapterProvider>
+              <Render ref={editorRef} key={_id} value={description} />
+            </ProsemirrorAdapterProvider>
+          </MilkdownProvider>
           <div></div>
         </div>
         <Button
