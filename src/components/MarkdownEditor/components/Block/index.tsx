@@ -20,6 +20,8 @@ export const BlockView = () => {
   const { view } = usePluginViewContext()
   const [loading, get] = useInstance()
 
+  if (view.editable === false) return null
+
   const {
     token: { borderRadius, boxShadow, colorBgElevated },
   } = theme.useToken()
@@ -89,7 +91,6 @@ export const BlockView = () => {
                 </Space>
                 <Divider style={{ margin: '4px 0' }} />
                 <Menu
-                  mode='inline'
                   style={{ boxShadow: 'none', margin: '0 -4px' }}
                   items={[
                     {

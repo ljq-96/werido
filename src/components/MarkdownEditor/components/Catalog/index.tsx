@@ -36,8 +36,6 @@ export const CatalogView = () => {
     token: { colorBorderSecondary, colorPrimary, colorPrimaryHover },
   } = theme.useToken()
 
-  if (!view.editable) return <></>
-
   useEffect(() => {
     console.log(123)
 

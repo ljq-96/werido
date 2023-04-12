@@ -7,8 +7,6 @@ export const HeadTitle: FC = () => {
   const { contentRef, node, view } = useNodeViewContext()
   const level = useMemo(() => node.attrs['level'], [node])
   const textContent = useMemo(() => node['textContent'], [node])
-  const alt = useMemo(() => node.attrs['alt'], [node])
-  console.log(node)
 
   return (
     <Head level={level} id={textContent}>

@@ -61,7 +61,7 @@ export default (props: PageProps) => {
       siderWidth={isInBlog ? 280 : 180}
       breakpoint='md'
       title={people || 'Werido'}
-      logo={people ? <Avatar src={avatar} /> : <Logo style={{ width: 32 }} color={colorPrimary} />}
+      logo={people ? <Avatar src={avatar} /> : <Logo style={{ height: 24 }} color={colorPrimary} />}
       layout={'mix'}
       menu={{
         type: 'sub',

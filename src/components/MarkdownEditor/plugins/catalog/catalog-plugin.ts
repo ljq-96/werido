@@ -2,7 +2,7 @@ import { Plugin, PluginKey, PluginSpec } from '@milkdown/prose/state'
 import { $ctx, $prose } from '@milkdown/utils'
 import { CatalogService } from './catalog-service'
 
-export const catalogConfig = $ctx<{ show: boolean }, 'catalogConfig'>({ show: false }, 'catalogConfig')
+export const catalogConfig = $ctx<{}, 'catalogConfig'>({}, 'catalogConfig')
 
 export const catalogSpec = $ctx<PluginSpec<any>, 'catalogSpec'>({}, 'catalogSpec')
 export const catalogService = $ctx(new CatalogService(), 'catalogService')
@@ -20,9 +20,6 @@ export const catalogPlugin = $prose(ctx => {
       handleDOMEvents: {
         keydown: view => {
           return service.keydownCallback(view)
-        },
-        scroll: () => {
-          return service.scrollCallback()
         },
       },
     },

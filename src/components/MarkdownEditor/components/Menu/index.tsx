@@ -93,7 +93,7 @@ export const MenuView = () => {
   const [loading, getEditor] = useInstance()
   const [{ isDark }] = useStore()
   const {
-    token: { colorBorderSecondary, colorBgContainer, fontFamilyCode, colorTextTertiary },
+    token: { colorBorderSecondary, colorBgContainer, fontFamilyCode, colorTextTertiary, colorSplit },
   } = theme.useToken()
 
   if (!view.editable) return <></>
@@ -404,7 +404,7 @@ export const MenuView = () => {
       </Popconfirm>
     ),
 
-    divider: <div style={{ width: 1, height: 18, backgroundColor: colorBorderSecondary }} />,
+    divider: <div style={{ width: 1, height: 18, backgroundColor: colorSplit }} />,
   }
 
   useEffect(() => {
@@ -449,9 +449,9 @@ export const MenuView = () => {
           padding: '8px 16px',
           background: isDark ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.6)',
           backdropFilter: 'blur(8px)',
-          borderBottom: `1px solid ${colorBorderSecondary}`,
-          transition: '0.4s',
-          zIndex: 98,
+          borderBottom: `1px solid ${colorSplit}`,
+          transition: '0.2s',
+          zIndex: 100,
         }}
       >
         <Space>

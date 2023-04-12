@@ -14,8 +14,7 @@ import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
 function BlogDetail() {
   const [{ tags }, { getTags }] = useStore()
   const { state } = useLocation()
-  // const [onEdit, setOnEdit] = useState(() => !!(state as any)?.isEdit)
-  const [onEdit, setOnEdit] = useState(true)
+  const [onEdit, setOnEdit] = useState(() => !!(state as any)?.isEdit)
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<IBlog>(null)
   const [form] = Form.useForm()
@@ -37,7 +36,7 @@ function BlogDetail() {
   const extra = useMemo(() => {
     return onEdit
       ? [
-          <Affix offsetTop={64} style={{ position: 'relative', zIndex: 999 }}>
+          <Affix offsetTop={64} style={{ position: 'relative', zIndex: 999 }} key={1}>
             <Space>
               <Button type='default' onClick={() => setOnEdit(!onEdit)}>
                 取消
@@ -49,8 +48,9 @@ function BlogDetail() {
           </Affix>,
         ]
       : [
-          <Button type='text' icon={<ShareAltOutlined />} />,
+          <Button type='text' icon={<ShareAltOutlined />} key={2} />,
           <Dropdown
+            key={3}
             placement='bottomRight'
             menu={{
               items: [

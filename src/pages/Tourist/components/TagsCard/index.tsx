@@ -12,6 +12,7 @@ function TagsCard({ current }: { current?: string }) {
       {tags.length ? (
         tags.map(item => (
           <Tag
+            bordered={false}
             key={item.name}
             style={{ marginBottom: 8, cursor: 'pointer' }}
             onClick={() => {

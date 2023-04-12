@@ -17,8 +17,8 @@ const BlogList = () => {
   const [{ tags }, { getTags }] = useStore()
   const [page, setPage] = useState(1)
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const tag = searchParams.get('tag')
+  // const [searchParams] = useSearchParams()
+  const [currentTag, setCurrentTag] = useState('')
   const [{ themeColor }] = useUser()
   const {
     loading,
@@ -71,7 +71,7 @@ const BlogList = () => {
               <Card
                 title='标签'
                 extra={
-                  tag && (
+                  currentTag && (
                     <Button type='link' size='small' onClick={() => navigate('/blog', { replace: true })}>
                       全部
                     </Button>
@@ -84,9 +84,10 @@ const BlogList = () => {
                       key={item.name}
                       bordered={false}
                       style={{ marginBottom: 8, cursor: 'pointer' }}
-                      color={tag === item.name ? themeColor : undefined}
+                      color={currentTag === item.name ? themeColor : undefined}
                       onClick={() => {
-                        navigate(`/blog?tag=${item.name}`)
+                        setCurrentTag(item.name)
+                        // navigate(`/blog?tag=${item.name}`)
                       }}
                     >
                       {item.name}

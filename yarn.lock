@@ -2366,10 +2366,10 @@ ansi-styles@^4.0.0:
   dependencies:
     color-convert "^2.0.1"
 
-antd-img-crop@^4.10.2:
-  version "4.11.0"
-  resolved "https://registry.npmmirror.com/antd-img-crop/-/antd-img-crop-4.11.0.tgz#b9b79d738ccf6589c4c781c85510b78880cc66d3"
-  integrity sha512-DWf72AsFc8r2BKRfNMhUrMDh3xg2PvYB6b0gCYPrBEkVbQE1VP7Qt3HnthdeWDapSGdnmUPKFTcMgzML/FyuTA==
+antd-img-crop@^4.12.2:
+  version "4.12.2"
+  resolved "https://registry.npmmirror.com/antd-img-crop/-/antd-img-crop-4.12.2.tgz#28d3fe752d0b0b6d6bae1bb8303f3aefe04e0470"
+  integrity sha512-xgxR3x2sg+tCBHMfx1gejEfhhvnIL2mpZ4OIPfQDJZTTfm9YpMqaqLF9qWbF9Nf83bXCdaQywYihcVGyw3niDg==
   dependencies:
     compare-versions "6.0.0-rc.1"
     react-easy-crop "^4.7.4"

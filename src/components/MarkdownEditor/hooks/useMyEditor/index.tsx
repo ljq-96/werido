@@ -56,28 +56,18 @@ const useMyEditor = (options: IOptions) => {
           ctx.set(rootCtx, root)
           ctx.set(defaultValueCtx, value)
           ctx.set(editorViewOptionsCtx, { editable: () => (type === 'render' ? false : !readonly) })
-          // ctx.update(editorViewOptionsCtx, prev => ({
-          //   ...prev,
-          //   editable: () => (type === 'render' ? false : !readonly),
-          // }))
         })
         .use(commonmark)
         .use(gfm)
-        .use(tooltip)
         .use(shikiPlugin(shiki))
         .use(indent)
         .use(history)
         .use(iframe)
         .use(cursor)
-        .use(imageTooltip)
-        .use(tableTooltip)
-        .use(tableTooltipCtx)
-        .use(linkPlugin(widgetViewFactory))
-        .use(tableSelectorPlugin(widgetViewFactory))
-        .use($view(codeBlockSchema.node, () => nodeViewFactory({ component: CodeBlock })))
         .use($view(imageSchema.node, () => nodeViewFactory({ component: Image })))
         .use($view(listItemSchema.node, () => nodeViewFactory({ component: ListItem })))
         .use($view(headingSchema.node, () => nodeViewFactory({ component: HeadTitle })))
+        .use($view(codeBlockSchema.node, () => nodeViewFactory({ component: CodeBlock })))
         // .use($view(iframeSchema.node, () => nodeViewFactory({ component: Iframe })))
         .use(diagram)
         .use(
@@ -106,6 +96,12 @@ const useMyEditor = (options: IOptions) => {
           .use(block)
           .use(menu)
           .use(catalog)
+          .use(tooltip)
+          .use(imageTooltip)
+          .use(tableTooltip)
+          .use(tableTooltipCtx)
+          .use(linkPlugin(widgetViewFactory))
+          .use(tableSelectorPlugin(widgetViewFactory))
       }
       return editor
     },

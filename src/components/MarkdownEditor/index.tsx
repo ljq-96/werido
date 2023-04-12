@@ -72,54 +72,10 @@ const MilkdownEditor = (props: IProps) => {
     }
   }, [])
 
-  // useImperativeHandle(ref, () => ({
-  //   // getValue: () => get()?.getValue() || '',
-  //   setValue: (markdown: string) => {
-  //     if (loading) return
-  //     const editor = get()
-  //     editor?.action(ctx => {
-  //       const view = ctx.get(editorViewCtx)
-  //       const parser = ctx.get(parserCtx)
-  //       const doc = parser(markdown)
-  //       if (!doc) return
-  //       const state = view.state
-  //       view.dispatch(state.tr.replace(0, state.doc.content.size, new Slice(doc.content, 0, 0)))
-  //     })
-  //   },
-  // }))
-
   return (
     <Spin spinning={loading || contentLoading} delay={200}>
       <div css={css([style.articleStyle, style.editorStyle])}>
         <Milkdown />
-        {/* {!readonly && (
-          <div className={clsx('toolBar')}>
-            <Meun controls={controls || defaultControls} />
-            <div></div>
-          </div>
-        )} */}
-        {/* <TranslateY key={String(readonly)} delay={!readonly && (controls || defaultControls).length * 30} distance={15}>
-          <div
-            className={clsx('content', !showCatalog && 'hide')}
-            style={{ height: typeof height === 'number' ? height + 'px' : height }}
-          >
-            <div className={'container'}>
-              <Milkdown />
-            </div>
-            <div className={'catalogContainer'} style={{ top: readonly ? 56 : 104 }}>
-              <Button
-                className={'openCatalog'}
-                shape='circle'
-                icon={<RightOutlined />}
-                onClick={() => setShowCatalog(!showCatalog)}
-              />
-              <div className={'catalogWrapper'}>
-                <div className={'catalogTitle'}>大纲</div>
-                <Anchor affix={true} offsetTop={80} items={formatAnchor(arrToTree(catalog))} />
-              </div>
-            </div>
-          </div>
-        </TranslateY> */}
       </div>
     </Spin>
   )

@@ -1,6 +1,5 @@
 import type { Ctx } from '@milkdown/ctx'
 import { editorViewCtx } from '@milkdown/core'
-import type { EditorView } from '@milkdown/prose/view'
 import { catalogConfig, catalogService } from './catalog-plugin'
 import { CatalogService } from './catalog-service'
 
@@ -23,7 +22,6 @@ export class CatalogProvider {
     this.#ctx = options.ctx
     this.#element = options.content
     this.#setCatalog = options.setCatalog
-    this.show = this.#ctx.get(catalogConfig.key).show
     this.#init()
   }
 
