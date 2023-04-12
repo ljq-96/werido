@@ -12,7 +12,7 @@ import { usePluginViewContext } from '@prosemirror-adapter/react'
 import { Button, Divider, Dropdown, Menu, Space, theme } from 'antd'
 import { Fragment, useCallback, useEffect, useRef } from 'react'
 import TooltipButton from '../basic/TooltipButton'
-import { IconFont } from '../../../../utils/common'
+import IconFont from '../../../IconFont'
 
 export const BlockView = () => {
   const ref = useRef<HTMLDivElement>(null)
@@ -66,7 +66,7 @@ export const BlockView = () => {
                     title='正文'
                     tip={{ placement: 'top' }}
                     onClick={() => call(turnIntoTextCommand.key)}
-                    icon={<IconFont type='icon-paragraph' />}
+                    icon={<IconFont type='icon-text' />}
                   />
                   <TooltipButton
                     title='一级标题'

@@ -1,26 +1,27 @@
-import { MoreOutlined } from '@ant-design/icons'
 import { useInstance } from '@milkdown/react'
 import { usePluginViewContext } from '@prosemirror-adapter/react'
 import {
+  Affix,
   Button,
-  Divider,
+  Col,
   Dropdown,
   Form,
   Input,
   InputNumber,
   Modal,
   Popconfirm,
+  Row,
   Space,
   Tooltip,
-  TooltipProps,
   theme,
 } from 'antd'
 import { Fragment, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
-import { MenuControls, MenuProvider } from '../../plugins/menu'
-import { Editor, commandsCtx, editorViewCtx } from '@milkdown/core'
-import { IconFont, isSameSet } from '../../../../utils/common'
+import { MenuControls, MenuProvider, menu, menuConfig } from '../../plugins/menu'
+import { editorViewCtx } from '@milkdown/core'
+import { isSameSet } from '../../../../utils/common'
+import IconFont from '../../../IconFont'
 import { callCommand, insert, replaceAll } from '@milkdown/utils'
-import { historyKeymap, redoCommand, undoCommand } from '@milkdown/plugin-history'
+import { redoCommand, undoCommand } from '@milkdown/plugin-history'
 import {
   toggleEmphasisCommand,
   toggleStrongCommand,
@@ -35,6 +36,7 @@ import {
   insertImageCommand,
   wrapInHeadingCommand,
   liftListItemCommand,
+  codeBlockSchema,
 } from '@milkdown/preset-commonmark'
 import { insertTableCommand, toggleStrikethroughCommand } from '@milkdown/preset-gfm'
 import {
@@ -62,17 +64,10 @@ import { template } from '../../components/Diagram/utils'
 import defaultImage from './default-image.jpg'
 import { listenerCtx } from '@milkdown/plugin-listener'
 import TooltipButton from '../basic/TooltipButton'
+import { TranslateX, TranslateY } from '../../../Animation'
+import { useStore } from '../../../../contexts/useStore'
 
 type ActivedButton = 'strong' | 'link' | 'emphasis' | 'inlineCode' | 'strike_through'
-
-const MenuItem = ({ title, subTitle }: { title: string; subTitle: string }) => {
-  return (
-    <div className='flex justify-between items-end'>
-      <div>{title}</div>
-      <div className='text-gray-500 ml-4 text-xs'>{subTitle}</div>
-    </div>
-  )
-}
 
 const hasMark = (state, type): boolean => {
   // const hasMark = (state: EditorState, type: MarkType): boolean => {
@@ -84,42 +79,68 @@ const hasMark = (state, type): boolean => {
   return state.doc.rangeHasMark(from, to, type)
 }
 
-export const MenuView = (props: { menuControls: MenuControls[] }) => {
-  const { menuControls } = props
+export const MenuView = () => {
   const ref = useRef<HTMLDivElement>(null)
   const menuProvider = useRef<MenuProvider>()
+  const [isFixed, setIsFixed] = useState(false)
+  const [isBlock, setIsBlock] = useState(false)
+  const [history, setHistory] = useState<{ undo: number; redo: number }>({ undo: 0, redo: 0 })
   const [activeBtns, setActiveBtns] = useState<Set<ActivedButton>>(new Set())
   const [activeText, setActiveText] = useState('0')
   const [showIframe, setShowIframe] = useState(false)
   const [iframeForm] = Form.useForm()
   const { view } = usePluginViewContext()
   const [loading, getEditor] = useInstance()
+  const [{ isDark }] = useStore()
   const {
-    token: { colorBorderSecondary, colorBgContainer },
+    token: { colorBorderSecondary, colorBgContainer, fontFamilyCode, colorTextTertiary },
   } = theme.useToken()
+
+  if (!view.editable) return <></>
+
+  const MenuItem = ({ title, subTitle }: { title: string; subTitle: string }) => {
+    return (
+      <Row justify='space-between' align='bottom'>
+        <Col>{title}</Col>
+        <Col style={{ fontSize: 'smaller', color: colorTextTertiary, marginLeft: 16 }}>{subTitle}</Col>
+      </Row>
+    )
+  }
 
   const getState = useCallback(() => {
     getEditor()?.action(ctx => {
-      const _activeBtns = new Set<ActivedButton>()
       const { state } = ctx.get(editorViewCtx)
+
+      /** 高亮当前状态 */
+      const _activeBtns = new Set<ActivedButton>()
       Object.keys(state.schema.marks).forEach(k => {
         if (hasMark(state, state.schema.marks[k])) {
           _activeBtns.add(k as ActivedButton)
         }
       })
-
       if (!isSameSet(activeBtns, _activeBtns)) {
         setActiveBtns(_activeBtns)
       }
-      const { $from, $to } = state.selection
 
+      /** 当前标题级别 */
+      const { $from, $to } = state.selection
       if ($from.parent.attrs?.level === $to.parent.attrs?.level) {
         setActiveText($from.parent.attrs?.level?.toString() || '0')
       } else {
         setActiveText('0')
       }
+
+      /** 撤销 & 恢复 */
+      const undo = (state as any).history$.done.eventCount
+      const redo = (state as any).history$.undone.eventCount
+      if (undo !== history.undo || redo !== history.redo) {
+        setHistory({ undo, redo })
+      }
+      // console.log(state)
+      const isBlock = [codeBlockSchema.type()].includes(state.selection.$from.parent.type)
+      setIsBlock(isBlock)
     })
-  }, [activeBtns, getEditor])
+  }, [activeBtns, activeText, history, getEditor])
 
   const call = useCallback(
     (key, payload?) => {
@@ -168,38 +189,60 @@ export const MenuView = (props: { menuControls: MenuControls[] }) => {
   )
 
   const controlBtns: { [key in MenuControls]?: ReactNode } = {
-    undo: <TooltipButton title='撤回' icon={<UndoOutlined />} onClick={() => call(undoCommand.key)} />,
-    redo: <TooltipButton title='撤回' icon={<RedoOutlined />} onClick={() => call(redoCommand.key)} />,
+    undo: (
+      <TooltipButton
+        title='撤销'
+        icon={<IconFont type='icon-undo' />}
+        onClick={() => call(undoCommand.key)}
+        disabled={history.undo === 0}
+      />
+    ),
+    redo: (
+      <TooltipButton
+        title='恢复'
+        icon={<IconFont type='icon-redo' />}
+        onClick={() => call(redoCommand.key)}
+        disabled={history.redo === 0}
+      />
+    ),
     blod: (
       <TooltipButton
-        title={[...activeBtns].toString()}
+        title='加粗'
+        shortcut='⌘ B'
         icon={<BoldOutlined />}
         active={activeBtns.has('strong')}
         onClick={() => call(toggleStrongCommand.key)}
+        disabled={isBlock}
       />
     ),
     italic: (
       <TooltipButton
         title='倾斜'
+        shortcut='⌘ I'
         icon={<ItalicOutlined />}
         active={activeBtns.has('emphasis')}
         onClick={() => call(toggleEmphasisCommand.key)}
+        disabled={isBlock}
       />
     ),
     strikeThrough: (
       <TooltipButton
         title='删除线'
+        shortcut='⌘ D'
         icon={<StrikethroughOutlined />}
         active={activeBtns.has('strike_through')}
         onClick={() => call(toggleStrikethroughCommand.key)}
+        disabled={isBlock}
       />
     ),
     link: (
       <TooltipButton
         title='链接'
+        shortcut='⌘ K'
         icon={<LinkOutlined />}
         active={activeBtns.has('link')}
         onClick={() => call(toggleLinkCommand.key)}
+        disabled={isBlock}
       />
     ),
     image: (
@@ -207,6 +250,7 @@ export const MenuView = (props: { menuControls: MenuControls[] }) => {
         title='图片'
         icon={<PictureOutlined />}
         onClick={() => insertValue(`![图片描述](${defaultImage})`)}
+        disabled={isBlock}
       />
     ),
     inlineCode: (
@@ -215,6 +259,7 @@ export const MenuView = (props: { menuControls: MenuControls[] }) => {
         icon={<IconFont type='icon-inlinecode' />}
         active={activeBtns.has('inlineCode')}
         onClick={() => call(toggleInlineCodeCommand.key)}
+        disabled={isBlock}
       />
     ),
     blockquote: (
@@ -222,6 +267,7 @@ export const MenuView = (props: { menuControls: MenuControls[] }) => {
         title='引用'
         icon={<IconFont type='icon-quote' />}
         onClick={() => call(wrapInBlockquoteCommand.key)}
+        disabled={isBlock}
       />
     ),
     bulletList: (
@@ -229,6 +275,7 @@ export const MenuView = (props: { menuControls: MenuControls[] }) => {
         title='无序列表'
         icon={<UnorderedListOutlined />}
         onClick={() => call(wrapInBulletListCommand.key)}
+        disabled={isBlock}
       />
     ),
     orderedList: (
@@ -236,17 +283,40 @@ export const MenuView = (props: { menuControls: MenuControls[] }) => {
         title='有序列表'
         icon={<OrderedListOutlined />}
         onClick={() => call(wrapInOrderedListCommand.key)}
+        disabled={isBlock}
       />
     ),
-    taskList: <TooltipButton title='任务列表' icon={<IconFont type='icon-checklist' />} onClick={() => {}} />,
-    codeFence: (
-      <TooltipButton title='代码块' icon={<CodeSandboxOutlined />} onClick={() => call(createCodeBlockCommand.key)} />
+    taskList: (
+      <TooltipButton title='任务列表' icon={<IconFont type='icon-checklist' />} onClick={() => {}} disabled={isBlock} />
     ),
-    table: <TooltipButton title='表格' icon={<TableOutlined />} onClick={() => call(insertTableCommand.key)} />,
-    hr: <TooltipButton title='分割线' icon={<LineOutlined />} onClick={() => call(insertHrCommand.key)} />,
+    codeFence: (
+      <TooltipButton
+        title='代码块'
+        icon={<CodeSandboxOutlined />}
+        onClick={() => call(createCodeBlockCommand.key)}
+        disabled={isBlock}
+      />
+    ),
+    table: (
+      <TooltipButton
+        title='表格'
+        icon={<TableOutlined />}
+        onClick={() => call(insertTableCommand.key)}
+        disabled={isBlock}
+      />
+    ),
+    hr: (
+      <TooltipButton
+        title='分割线'
+        icon={<LineOutlined />}
+        onClick={() => call(insertHrCommand.key)}
+        disabled={isBlock}
+      />
+    ),
     more: (
       <Fragment>
         <Dropdown
+          disabled={isBlock}
           placement='bottomLeft'
           arrow={{ pointAtCenter: true }}
           menu={{
@@ -305,18 +375,16 @@ export const MenuView = (props: { menuControls: MenuControls[] }) => {
           accessKey: activeText,
           onClick: ({ key }) => toggleText(key),
           items: [
-            { label: <MenuItem title='正文' subTitle='Ctrl+Alt+0' />, key: '0' },
-            { label: <MenuItem title='标题1' subTitle='Ctrl+Alt+1' />, key: '1' },
-            { label: <MenuItem title='标题2' subTitle='Ctrl+Alt+2' />, key: '2' },
-            { label: <MenuItem title='标题3' subTitle='Ctrl+Alt+3' />, key: '3' },
-            { label: <MenuItem title='标题4' subTitle='Ctrl+Alt+4' />, key: '4' },
-            { label: <MenuItem title='标题5' subTitle='Ctrl+Alt+5' />, key: '5' },
+            { label: <MenuItem title='正文' subTitle='⌥ ⌘ 0' />, key: '0' },
+            { label: <MenuItem title='标题1' subTitle='⌥ ⌘ 1' />, key: '1' },
+            { label: <MenuItem title='标题2' subTitle='⌥ ⌘ 2' />, key: '2' },
+            { label: <MenuItem title='标题3' subTitle='⌥ ⌘ 3' />, key: '3' },
           ],
         }}
       >
         <Button
           type='text'
-          icon={<IconFont type={activeText === '0' ? 'icon-paragraph' : `icon-h-${activeText}`} />}
+          icon={<IconFont type={activeText === '0' ? 'icon-text' : `icon-h-${activeText}`} />}
           style={{ width: 90, textAlign: 'left' }}
         >
           {activeText === '0' ? '正文' : `标题${activeText}`}
@@ -329,7 +397,6 @@ export const MenuView = (props: { menuControls: MenuControls[] }) => {
         onConfirm={() => getEditor()?.action(replaceAll(''))}
         placement='bottom'
         okButtonProps={{ danger: true }}
-        zIndex={10000}
       >
         <Tooltip title='清空' placement='bottom'>
           <Button type='text' icon={<DeleteOutlined />} />
@@ -337,7 +404,7 @@ export const MenuView = (props: { menuControls: MenuControls[] }) => {
       </Popconfirm>
     ),
 
-    divider: <Divider type='vertical' />,
+    divider: <div style={{ width: 1, height: 18, backgroundColor: colorBorderSecondary }} />,
   }
 
   useEffect(() => {
@@ -361,6 +428,16 @@ export const MenuView = (props: { menuControls: MenuControls[] }) => {
     getState()
   })
 
+  useEffect(() => {
+    const scroll = () => {
+      setIsFixed(ref.current.offsetTop > 2)
+    }
+    window.addEventListener('scroll', scroll)
+    return () => {
+      window.removeEventListener('scroll', scroll)
+    }
+  }, [])
+
   return (
     <div data-desc='meun-wrapper'>
       <div
@@ -368,17 +445,21 @@ export const MenuView = (props: { menuControls: MenuControls[] }) => {
         style={{
           position: 'sticky',
           top: 55,
-          margin: '-14px -48px 16px',
-          padding: 16,
-          background: colorBgContainer,
+          margin: `-14px ${isFixed ? -88 : -48}px 16px`,
+          padding: '8px 16px',
+          background: isDark ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.6)',
+          backdropFilter: 'blur(8px)',
           borderBottom: `1px solid ${colorBorderSecondary}`,
+          transition: '0.4s',
           zIndex: 98,
         }}
       >
         <Space>
-          {menuControls.map((key, index) => (
-            <Fragment key={index}>{controlBtns[key]}</Fragment>
-          ))}
+          {getEditor()
+            ?.ctx.get(menuConfig.key)
+            .controls.map((key, index) => (
+              <Fragment key={index}>{controlBtns[key]}</Fragment>
+            ))}
         </Space>
       </div>
     </div>

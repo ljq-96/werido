@@ -37,7 +37,7 @@ function BlogDetail() {
   const extra = useMemo(() => {
     return onEdit
       ? [
-          <Affix offsetTop={64}>
+          <Affix offsetTop={64} style={{ position: 'relative', zIndex: 999 }}>
             <Space>
               <Button type='default' onClick={() => setOnEdit(!onEdit)}>
                 取消

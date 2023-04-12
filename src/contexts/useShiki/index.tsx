@@ -1,6 +1,7 @@
 import { createContext, ReactElement, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { getHighlighter, Highlighter, setCDN } from 'shiki'
 import { sleep } from '../../utils/common'
+import { Language } from '../../components/MarkdownEditor/utils/language'
 
 interface ShikiState {
   shiki: Highlighter
@@ -30,7 +31,7 @@ export default function ShikiProvider({ children }: { children: ReactElement }) 
       if (shiki && language && !shiki.getLoadedLanguages().includes(language)) {
         setLoading(true)
         await shiki.loadLanguage(language)
-        await sleep(500)
+        // await sleep(500)
         setLoading(false)
       }
       return Promise.resolve()
@@ -42,8 +43,8 @@ export default function ShikiProvider({ children }: { children: ReactElement }) 
     setCDN('/shiki')
     setLoading(true)
     getHighlighter({
-      theme: 'ayu',
-      langs: [],
+      theme: 'min-light',
+      langs: Object.keys(Language).filter(v => v) as any,
     })
       .then(v => {
         if (!shiki) setShiki(v)

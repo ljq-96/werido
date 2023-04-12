@@ -62,13 +62,7 @@ const defaultControls: Controls[] = [
 
 const MilkdownEditor = (props: IProps) => {
   const { height, onChange, controls, onFinish, value = '', readonly = false, loading: contentLoading = false } = props
-  const [catalog, setCatalog] = useState<{ text: string; level: number }[]>([])
-  const [showCatalog, setShowCatalog] = useState(true)
-  const pluginViewFactory = usePluginViewFactory()
-  const nodeViewFactory = useNodeViewFactory()
-  const widgetViewFactory = useWidgetViewFactory()
   const style = useStyle()
-  const control = useControls(controls || defaultControls)
 
   const { get, loading } = useMyEditor({ value, onChange, readonly })
 
@@ -145,7 +139,7 @@ export const Render = memo(
     if (!value) return <></>
     const { articleStyle } = useStyle()
 
-    const { loading, get } = useMyEditor({ value, readonly: true })
+    const { loading, get } = useMyEditor({ value, readonly: true, type: 'render' })
     useEffect(() => {
       return () => {
         if (loading) return

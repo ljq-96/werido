@@ -7,7 +7,7 @@ import { request } from '../../../api'
 import { Number, TranslateX } from '../../../components/Animation'
 import CityCascader from '../../../components/CityCascader'
 import { useUser } from '../../../contexts/useUser'
-import { IconFont } from '../../../utils/common'
+import IconFont from '../../../components/IconFont'
 import TempChart from './TempChart'
 import { iconMap } from './utils'
 

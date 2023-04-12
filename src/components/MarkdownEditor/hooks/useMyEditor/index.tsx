@@ -4,7 +4,7 @@ import { Editor, rootCtx, defaultValueCtx, editorViewOptionsCtx } from '@milkdow
 import { $view, outline } from '@milkdown/utils'
 import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react'
 import { shikiPlugin } from '../../plugins/shiki'
-import { codeBlockSchema, commonmark, imageSchema, listItemSchema } from '@milkdown/preset-commonmark'
+import { codeBlockSchema, commonmark, headingSchema, imageSchema, listItemSchema } from '@milkdown/preset-commonmark'
 import { gfm } from '@milkdown/preset-gfm'
 import { tooltip, TooltipView } from '../../components/Tooltip'
 import { useNodeViewFactory, usePluginViewFactory, useWidgetViewFactory } from '@prosemirror-adapter/react'
@@ -28,6 +28,10 @@ import { useShiki } from '../../../../contexts/useShiki'
 import { cursor } from '@milkdown/plugin-cursor'
 import { MenuControls, menu } from '../../plugins/menu'
 import { MenuView } from '../../components/Menu'
+import { catalog } from '../../plugins/catalog'
+import { Button } from 'antd'
+import { CatalogView } from '../../components/Catalog'
+import { HeadTitle } from '../../components/HeadTitle'
 
 interface IOptions {
   type?: 'editor' | 'render'
@@ -36,35 +40,8 @@ interface IOptions {
   readonly?: boolean
 }
 
-const defaultControls: MenuControls[] = [
-  'more',
-  'divider',
-  'undo',
-  'text',
-  'blod',
-  'italic',
-  'strikeThrough',
-  'link',
-  'divider',
-  'bulletList',
-  'orderedList',
-  'taskList',
-  'divider',
-  'inlineCode',
-  // 'codeFence',
-  // 'blockquote',
-  'table',
-  'image',
-  // 'iframe',
-  'hr',
-  'divider',
-  'clear',
-  'fullScreen',
-]
-
 const useMyEditor = (options: IOptions) => {
   const { value, onChange, readonly, type = 'editor' } = options
-  const [catalog, setCatalog] = useState<{ text: string; level: number }[]>([])
   const [showCatalog, setShowCatalog] = useState(true)
   const { shiki } = useShiki()
   const pluginViewFactory = usePluginViewFactory()
@@ -74,60 +51,65 @@ const useMyEditor = (options: IOptions) => {
   return useEditor(
     root => {
       if (!shiki) return
-      return (
-        Editor.make()
+      const editor = Editor.make()
+        .config(ctx => {
+          ctx.set(rootCtx, root)
+          ctx.set(defaultValueCtx, value)
+          ctx.set(editorViewOptionsCtx, { editable: () => (type === 'render' ? false : !readonly) })
+          // ctx.update(editorViewOptionsCtx, prev => ({
+          //   ...prev,
+          //   editable: () => (type === 'render' ? false : !readonly),
+          // }))
+        })
+        .use(commonmark)
+        .use(gfm)
+        .use(tooltip)
+        .use(shikiPlugin(shiki))
+        .use(indent)
+        .use(history)
+        .use(iframe)
+        .use(cursor)
+        .use(imageTooltip)
+        .use(tableTooltip)
+        .use(tableTooltipCtx)
+        .use(linkPlugin(widgetViewFactory))
+        .use(tableSelectorPlugin(widgetViewFactory))
+        .use($view(codeBlockSchema.node, () => nodeViewFactory({ component: CodeBlock })))
+        .use($view(imageSchema.node, () => nodeViewFactory({ component: Image })))
+        .use($view(listItemSchema.node, () => nodeViewFactory({ component: ListItem })))
+        .use($view(headingSchema.node, () => nodeViewFactory({ component: HeadTitle })))
+        // .use($view(iframeSchema.node, () => nodeViewFactory({ component: Iframe })))
+        .use(diagram)
+        .use(
+          $view(diagramSchema.node, () =>
+            nodeViewFactory({
+              component: Diagram,
+              stopEvent: () => true,
+            }),
+          ),
+        )
+      if (type === 'editor') {
+        editor
           .config(ctx => {
-            ctx.set(rootCtx, root)
-            ctx.set(defaultValueCtx, value)
-            ctx.update(editorViewOptionsCtx, prev => ({
-              ...prev,
-              editable: () => !readonly,
-            }))
             ctx.get(listenerCtx).markdownUpdated((ctx, markdown, prevMarkdown) => {
               onChange?.(markdown)
             })
             ctx.set(tooltip.key, { view: pluginViewFactory({ component: TooltipView }) })
             ctx.set(imageTooltip.key, { view: pluginViewFactory({ component: ImageTooltip }) })
             ctx.set(tableTooltip.key, { view: pluginViewFactory({ component: TableTooltip }) })
-
             ctx.set(block.key, { view: pluginViewFactory({ component: BlockView }) })
-            ctx.set(menu.key, {
-              view: pluginViewFactory({ component: () => <MenuView menuControls={defaultControls} /> }),
-            })
+            ctx.set(menu.key, { view: pluginViewFactory({ component: MenuView }) })
+            ctx.set(catalog.key, { view: pluginViewFactory({ component: CatalogView }) })
           })
-          .use(commonmark)
-          .use(gfm)
-          .use(tooltip)
-          .use(shikiPlugin(shiki))
-          .use(indent)
-          .use(history)
           .use(listener)
-          .use(iframe)
           .use(clipboard)
           .use(block)
           .use(menu)
-          .use(cursor)
-          .use(imageTooltip)
-          .use(tableTooltip)
-          .use(tableTooltipCtx)
-          .use(linkPlugin(widgetViewFactory))
-          .use(tableSelectorPlugin(widgetViewFactory))
-          .use($view(codeBlockSchema.node, () => nodeViewFactory({ component: CodeBlock })))
-          .use($view(imageSchema.node, () => nodeViewFactory({ component: Image })))
-          .use($view(listItemSchema.node, () => nodeViewFactory({ component: ListItem })))
-          // .use($view(iframeSchema.node, () => nodeViewFactory({ component: Iframe })))
-          .use(diagram)
-          .use(
-            $view(diagramSchema.node, () =>
-              nodeViewFactory({
-                component: Diagram,
-                stopEvent: () => true,
-              }),
-            ),
-          )
-      )
+          .use(catalog)
+      }
+      return editor
     },
-    [value, onChange, readonly],
+    [value, onChange],
   )
 }
 

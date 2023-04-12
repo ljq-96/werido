@@ -38,6 +38,7 @@ import { usePluginViewContext, useWidgetViewContext } from '@prosemirror-adapter
 import { Button, Space, theme } from 'antd'
 import type { FC, ReactNode } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import IconFont from '../../../IconFont'
 
 export const tableTooltipCtx = $ctx<TooltipProvider | null, 'tableTooltip'>(null, 'tableTooltip')
 
@@ -95,7 +96,7 @@ export const TableTooltip: FC = () => {
         <Space.Compact>
           {!isWholeTable && !isHeading && isRow && (
             <TooltipButton
-              icon={<ArrowUpOutlined />}
+              icon={<IconFont type='icon-insertrowabove' />}
               onClick={() => {
                 if (loading) return
 
@@ -108,7 +109,7 @@ export const TableTooltip: FC = () => {
           )}
           {!isWholeTable && isCol && (
             <TooltipButton
-              icon={<ArrowLeftOutlined />}
+              icon={<IconFont type='icon-insertrowleft' />}
               onClick={() => {
                 if (loading) return
                 getEditor().action(ctx => {
@@ -134,7 +135,7 @@ export const TableTooltip: FC = () => {
           )}
           {!isWholeTable && isRow && (
             <TooltipButton
-              icon={<ArrowDownOutlined />}
+              icon={<IconFont type='icon-insertrowbelow' />}
               onClick={() => {
                 if (loading) return
 
@@ -147,7 +148,7 @@ export const TableTooltip: FC = () => {
           )}
           {!isWholeTable && isCol && (
             <TooltipButton
-              icon={<ArrowRightOutlined />}
+              icon={<IconFont type='icon-insertrowright' />}
               onClick={() => {
                 if (loading) return
                 getEditor().action(ctx => {

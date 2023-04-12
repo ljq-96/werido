@@ -1,5 +1,6 @@
 import { Editor, commandsCtx, editorViewCtx } from '@milkdown/core'
-import { IconFont, isSameSet } from '../../../../utils/common'
+import { isSameSet } from '../../../../utils/common'
+import IconFont from '../../../IconFont'
 import { callCommand, insert, replaceAll } from '@milkdown/utils'
 import { historyKeymap, redoCommand, undoCommand } from '@milkdown/plugin-history'
 import {

@@ -8,6 +8,8 @@ import { StatisticsType } from '../../../../types/enum'
 import { request } from '../../../api'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
 import { useStore } from '../../../contexts/useStore'
+import { MilkdownProvider } from '@milkdown/react'
+import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
 
 const BlogEditor = () => {
   const [{ tags }, { getTags }] = useStore()
@@ -22,16 +24,16 @@ const BlogEditor = () => {
   }, [tags])
 
   const handleFinish = async fields => {
-    setLoading(true)
-    if (id) {
-      await request.blog({ method: 'PUT', query: id, data: { content: editor.current.getValue(), ...fields } })
-      message.success('已更新')
-    } else {
-      await request.blog({ method: 'POST', data: { content: editor.current.getValue(), ...fields } })
-      navigate(-1)
-      message.success('已创建')
-    }
-    setLoading(false)
+    // setLoading(true)
+    // if (id) {
+    //   await request.blog({ method: 'PUT', query: id, data: { content: editor.current.getValue(), ...fields } })
+    //   message.success('已更新')
+    // } else {
+    //   await request.blog({ method: 'POST', data: { content: editor.current.getValue(), ...fields } })
+    //   navigate(-1)
+    //   message.success('已创建')
+    // }
+    // setLoading(false)
   }
 
   useEffect(() => {
@@ -79,7 +81,11 @@ const BlogEditor = () => {
           </Affix>
         }
       />
-      <MarkdownEditor value={detail?.content} />
+      <MilkdownProvider>
+        <ProsemirrorAdapterProvider>
+          <MarkdownEditor value={detail?.content} />
+        </ProsemirrorAdapterProvider>
+      </MilkdownProvider>
     </div>
   )
 }

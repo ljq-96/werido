@@ -1,5 +1,6 @@
 import { Editor, commandsCtx, editorViewCtx } from '@milkdown/core'
-import { IconFont, isSameSet } from '../../../../utils/common'
+import { isSameSet } from '../../../../utils/common'
+import IconFont from '../../../IconFont'
 import { callCommand, insert, replaceAll } from '@milkdown/utils'
 import { historyKeymap } from '@milkdown/plugin-history'
 import {
@@ -436,7 +437,7 @@ function useControls({ editor, dom }: { editor: Editor; dom: HTMLElement }) {
           >
             <Button
               type='text'
-              icon={<IconFont type={activeText === '0' ? 'icon-paragraph' : `icon-h-${activeText}`} />}
+              icon={<IconFont type={activeText === '0' ? 'icon-text' : `icon-h-${activeText}`} />}
               style={{ width: 90, textAlign: 'left' }}
             >
               {activeText === '0' ? '正文' : `标题${activeText}`}

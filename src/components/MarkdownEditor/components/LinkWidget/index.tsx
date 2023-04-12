@@ -31,7 +31,7 @@ export const LinkWidgetAfter: FC = () => {
           <Input.Search
             size='small'
             placeholder='无'
-            addonBefore='地址：'
+            addonBefore='地址:'
             onBlur={e => {
               if (loading) return
               editor().action(ctx => {
@@ -48,7 +48,7 @@ export const LinkWidgetAfter: FC = () => {
           <Input
             size='small'
             placeholder='无'
-            addonBefore='标题：'
+            addonBefore='标题:'
             onBlur={e => {
               if (loading) return
               editor().action(ctx => {

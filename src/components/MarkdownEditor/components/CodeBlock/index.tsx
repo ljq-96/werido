@@ -11,12 +11,13 @@ import { useShiki } from '../../../../contexts/useShiki'
 import { useUser } from '../../../../contexts/useUser'
 import { useStore } from '../../../../contexts/useStore'
 import { useInstance } from '@milkdown/react'
+import { forceUpdate, outline } from '@milkdown/utils'
 
 export function CodeBlock() {
   const { contentRef, selected, node, setAttrs, view } = useNodeViewContext()
   const copyText = useCopyText()
   const language = useMemo(() => node.attrs['language'], [node])
-  const [_, get] = useInstance()
+  const [_, getEditor] = useInstance()
   const { loading, loadLanguage, loadedLanguages } = useShiki()
   const {
     token: { colorTextTertiary, colorPrimaryBorderHover, colorBorderSecondary, fontFamilyCode, colorPrimary },
@@ -24,11 +25,9 @@ export function CodeBlock() {
 
   // useEffect(() => {
   //   if (language) {
-  //     loadLanguage(language).then(() => setAttrs({ language }))
+  //     loadLanguage(language)
   //   }
   // }, [language])
-
-  console.log(123123)
 
   return (
     <Collapse
@@ -108,9 +107,8 @@ export function CodeBlock() {
                 })),
               ]}
               onChange={lan => {
-                // loadLanguage(lan).then(() => {
-                //   setAttrs({ language: lan })
-                // })
+                // loadLanguage(lan)
+                setAttrs({ language: lan })
               }}
             />
           ) : (

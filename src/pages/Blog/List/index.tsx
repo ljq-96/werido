@@ -82,8 +82,8 @@ const BlogList = () => {
                   tags.map(item => (
                     <Tag
                       key={item.name}
-                      className='werido-tag'
-                      style={{ marginBottom: 8 }}
+                      bordered={false}
+                      style={{ marginBottom: 8, cursor: 'pointer' }}
                       color={tag === item.name ? themeColor : undefined}
                       onClick={() => {
                         navigate(`/blog?tag=${item.name}`)

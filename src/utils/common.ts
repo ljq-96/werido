@@ -13,11 +13,6 @@ Ho/79WFtkL09lHnd8/r+2KsuGozvjWu1Glsh6qO6VQGHwgUxNs7QaPL00jITlkZp
 dG0ndYJg2zfdF/dhgQIDAQAB
 -----END PUBLIC KEY-----`)
 
-/** 自定义图标 */
-export const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_3208498_4j8romdlta.js',
-})
-
 export const sleep = (time: number) => {
   return new Promise<'sleep'>(resolve => {
     setTimeout(() => {

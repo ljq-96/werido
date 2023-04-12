@@ -132,13 +132,12 @@ export default function useStyle() {
       border: `1px solid ${colorBorder}`,
     },
 
-    '.strong': {
+    strong: {
       fontWeight: 600,
     },
 
     '.tableWrapper': {
-      // overflowX: 'auto',
-      padding: 16,
+      overflow: 'unset !important',
       width: '100%',
       '*': {
         margin: 0,
@@ -161,7 +160,7 @@ export default function useStyle() {
       border: `1px solid ${colorBorderSecondary}`,
     },
     'td,th': {
-      padding: '0 1em',
+      padding: '0 1em !important',
       verticalAlign: 'top',
       boxSizing: 'border-box',
       position: 'relative',
@@ -220,85 +219,6 @@ export default function useStyle() {
       margin: '16px 0',
       transition: '0.4s',
     },
-    '.block-handle': {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: 24,
-      height: 24,
-      color: colorTextTertiary,
-      backgroundColor: colorBgLayout,
-      borderRadius: '50%',
-      border: `1px solid ${colorBorderSecondary}`,
-      fontSize: 16,
-      transform: 'translateY(-2px)',
-      cursor: 'pointer',
-      transition: '0',
-      '&:hover': {
-        color: colorPrimary,
-        backgroundColor: colorPrimaryBg,
-      },
-    },
-    '.block-menu': {
-      background: colorBgElevated,
-      border: 'none',
-      borderRadius: borderRadius,
-      padding: '0 4px',
-      boxShadow: boxShadowSecondary,
-      marginTop: 16,
-      animation: 'transform-y 200ms',
-
-      '.block-menu_item': {
-        color: colorTextSecondary,
-        borderRadius: borderRadius,
-        margin: '4px 0',
-        '&:hover': {
-          color: colorText,
-          background: colorBgTextHover,
-        },
-      },
-    },
-    '.tooltip,.tooltip-input,.table-tooltip': {
-      border: 'none',
-      background: colorBgElevated,
-      padding: 4,
-      borderRadius: borderRadius,
-      boxShadow: boxShadowSecondary,
-      animation: 'transform-y 200ms',
-      transition: '0.2s',
-      zIndex: 5,
-      '.icon': {
-        width: 32,
-        height: 32,
-        color: colorText,
-        border: 'none',
-        borderRadius: borderRadius,
-        '&:not(:last-child)': {
-          marginRight: 4,
-        },
-        '&:hover': {
-          background: colorBgLayout,
-        },
-        '&::after': {
-          display: 'none',
-        },
-        '&.hide': {
-          display: 'none !important',
-        },
-      },
-    },
-    '.tooltip-input': {
-      padding: '8px 8px 8px 16px',
-      borderRadius: borderRadius,
-      background: colorBgElevated,
-      button: {
-        color: colorText,
-        borderRadius: borderRadius,
-        '&:hover': {
-          background: colorBgLayout,
-        },
-      },
-    },
   }
 
   const editorStyle: CSSObject = {
@@ -311,6 +231,7 @@ export default function useStyle() {
     },
     '.milkdown': {
       padding: '16px 48px',
+      minHeight: 'calc(100vh - 256px)',
       '.editor': {
         outline: 'none',
       },
