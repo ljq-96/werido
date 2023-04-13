@@ -1,8 +1,9 @@
+/** @jsxImportSource @emotion/react */
 import { useRef, useState, useEffect, ReactNode, memo } from 'react'
 import { getRandomNumberByRange, sum, square } from './tool'
-import './index.less'
 import { Button, Spin } from 'antd'
-import { SyncOutlined } from '@ant-design/icons'
+import { ArrowRightOutlined, SyncOutlined } from '@ant-design/icons'
+import useStyle from './style'
 
 interface VerifyType {
   spliced: boolean
@@ -96,6 +97,7 @@ export default memo(
     const originYRef = useRef<number>(0)
     const xRef = useRef<number>(0)
     const yRef = useRef<number>(0)
+    const style = useStyle()
     const PI = Math.PI
     const L = l + r * 2 + 3 // 滑块实际边长
 
@@ -268,6 +270,7 @@ export default memo(
     }, [visible])
     return (
       <div
+        css={style}
         className='vertifyWrap'
         style={{
           width: width + 'px',
@@ -301,14 +304,14 @@ export default memo(
           }}
         >
           <div className='sliderMask' style={{ width: sliderLeft + 'px' }}>
-            <div
+            <Button
               className='slider'
+              type='text'
               style={{ left: sliderLeft + 'px' }}
               onMouseDown={handleDragStart}
               onTouchStart={handleDragStart}
-            >
-              <div className='sliderIcon'>&rarr;</div>
-            </div>
+              icon={<ArrowRightOutlined />}
+            ></Button>
           </div>
           <div className='sliderText'>{textTip}</div>
         </div>
