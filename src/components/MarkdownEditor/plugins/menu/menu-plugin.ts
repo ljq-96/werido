@@ -20,7 +20,6 @@ const defaultControls: MenuControls[] = [
   'taskList',
   'divider',
   'inlineCode',
-  'table',
   'image',
   'hr',
   'divider',

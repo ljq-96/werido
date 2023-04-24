@@ -1,29 +1,21 @@
 /** @jsxImportSource @emotion/react */
-import { forwardRef, Fragment, memo, useContext, useEffect, useImperativeHandle, useState } from 'react'
-import { Milkdown, MilkdownProvider } from '@milkdown/react'
-import { Anchor, Button, Space, Spin, Tooltip } from 'antd'
-import useControls, { Controls } from './hooks/useControls'
-import { RightOutlined } from '@ant-design/icons'
-import clsx from 'clsx'
-import { arrToTree } from '../../utils/common'
-import { TranslateX, TranslateY } from '../Animation'
+import { forwardRef, memo, useEffect, useImperativeHandle, useState } from 'react'
+import { Milkdown } from '@milkdown/react'
+import { Spin } from 'antd'
 import useStyle from './style'
 import { css } from '@emotion/react'
-import {
-  ProsemirrorAdapterProvider,
-  useNodeViewFactory,
-  usePluginViewFactory,
-  useWidgetViewFactory,
-} from '@prosemirror-adapter/react'
 import useMyEditor from './hooks/useMyEditor'
-import { editorView, editorViewCtx, parserCtx } from '@milkdown/core'
+import { editorViewCtx, parserCtx } from '@milkdown/core'
 import { Slice } from '@milkdown/prose/model'
+import 'prosemirror-view/style/prosemirror.css'
+import 'prosemirror-tables/style/tables.css'
+import { MenuControls } from './plugins/menu'
 
 interface IProps {
   height?: number | string
   value?: string
   onChange?: (v: string) => void
-  controls?: Controls[]
+  controls?: MenuControls[]
   readonly?: boolean
   onFinish?: (v: string) => void
   loading?: boolean
@@ -33,32 +25,6 @@ export interface EditorIntance {
   getValue: () => string
   setValue: (markdown: string) => void
 }
-
-const defaultControls: Controls[] = [
-  'more',
-  'divider',
-  'undo',
-  'text',
-  'blod',
-  'italic',
-  'strikeThrough',
-  'link',
-  'divider',
-  'bulletList',
-  'orderedList',
-  'taskList',
-  'divider',
-  'inlineCode',
-  // 'codeFence',
-  // 'blockquote',
-  'table',
-  'image',
-  // 'iframe',
-  'hr',
-  'divider',
-  'clear',
-  'fullScreen',
-]
 
 const MilkdownEditor = (props: IProps) => {
   const { height, onChange, controls, onFinish, value = '', readonly = false, loading: contentLoading = false } = props
@@ -127,13 +93,3 @@ export const Render = memo(
   }),
   (prev, next) => prev.value === next.value,
 )
-
-// export function Render({ value }: { value: string }) {
-//   return (
-//     <MilkdownProvider>
-//       <ProsemirrorAdapterProvider>
-//         <RenderFn value={value} />
-//       </ProsemirrorAdapterProvider>
-//     </MilkdownProvider>
-//   )
-// }

@@ -10,6 +10,7 @@ import {
   InputNumber,
   Modal,
   Popconfirm,
+  Popover,
   Row,
   Space,
   Tooltip,
@@ -66,6 +67,7 @@ import { listenerCtx } from '@milkdown/plugin-listener'
 import TooltipButton from '../basic/TooltipButton'
 import { TranslateX, TranslateY } from '../../../Animation'
 import { useStore } from '../../../../contexts/useStore'
+import TableSizeSelector from './TableSizeSelector'
 
 type ActivedButton = 'strong' | 'link' | 'emphasis' | 'inlineCode' | 'strike_through'
 
@@ -298,12 +300,13 @@ export const MenuView = () => {
       />
     ),
     table: (
-      <TooltipButton
-        title='表格'
-        icon={<TableOutlined />}
-        onClick={() => call(insertTableCommand.key)}
-        disabled={isBlock}
-      />
+      <Popover
+        destroyTooltipOnHide
+        placement='bottom'
+        content={() => <TableSizeSelector onChange={(row, col) => call(insertTableCommand.key, { row, col })} />}
+      >
+        <Button icon={<TableOutlined />} disabled={isBlock} type='text' />
+      </Popover>
     ),
     hr: (
       <TooltipButton
@@ -331,9 +334,20 @@ export const MenuView = () => {
                   label,
                   key: label,
                   onClick: () => {
-                    insertValue(`\`\`\`mermaid ${value}\`\`\``)
+                    insertValue(`\`\`\`mermaid\r\n${value}\r\n\`\`\``)
                   },
                 })),
+              },
+              {
+                icon: <TableOutlined />,
+                label: '表格',
+                key: 'table',
+                children: [
+                  {
+                    key: '1',
+                    label: <TableSizeSelector onChange={(row, col) => call(insertTableCommand.key, { row, col })} />,
+                  },
+                ],
               },
               { icon: <CodeOutlined />, label: '代码块', key: 'code' },
               { icon: <GatewayOutlined />, label: '嵌入页面', key: 'iframe' },

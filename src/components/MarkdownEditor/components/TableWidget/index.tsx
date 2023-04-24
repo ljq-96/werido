@@ -10,7 +10,7 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons'
 import { css } from '@emotion/react'
-import { commandsCtx } from '@milkdown/core'
+import { commandsCtx, editorViewCtx } from '@milkdown/core'
 import { TooltipProvider, tooltipFactory } from '@milkdown/plugin-tooltip'
 import {
   addColAfterCommand,
@@ -29,7 +29,7 @@ import {
 } from '@milkdown/preset-gfm'
 import { Plugin, PluginKey } from '@milkdown/prose/state'
 import { CellSelection } from '@milkdown/prose/tables'
-import type { Decoration } from '@milkdown/prose/view'
+import { Decoration, EditorView } from '@milkdown/prose/view'
 import { DecorationSet } from '@milkdown/prose/view'
 import { useInstance } from '@milkdown/react'
 import { $ctx, $prose } from '@milkdown/utils'
@@ -206,6 +206,8 @@ const TableSelectorWidget: FC = () => {
   const ref = useRef<HTMLDivElement>(null)
 
   const [dragOver, setDragOver] = useState(false)
+
+  if (!getEditor().ctx.get(editorViewCtx).editable) return null
 
   const {
     token: { colorPrimary, colorBorder },

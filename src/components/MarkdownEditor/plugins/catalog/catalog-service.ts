@@ -43,7 +43,6 @@ export class CatalogService {
 
   /// @internal
   keydownCallback = (view: EditorView, event?) => {
-    if (!view.editable) return
     // if (event && event?.target?.classList?.contains('item')) {
     //   console.log(event.target)
     // } else {

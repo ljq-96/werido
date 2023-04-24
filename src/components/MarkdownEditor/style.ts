@@ -139,6 +139,7 @@ export default function useStyle() {
     '.tableWrapper': {
       overflow: 'unset !important',
       width: '100%',
+      margin: '16px auto',
       '*': {
         margin: 0,
         boxSizing: 'border-box',
@@ -157,16 +158,34 @@ export default function useStyle() {
       },
     },
     tr: {
-      border: `1px solid ${colorBorderSecondary}`,
+      borderBottom: `1px solid ${colorBorderSecondary}`,
+      transition: '0.4s',
+      '&:first-child': {
+        'td:first-child, th:first-child': {
+          borderTopLeftRadius: borderRadius,
+        },
+        'td:last-child, th:last-child': {
+          borderTopRightRadius: borderRadius,
+        },
+      },
+      '&:last-child': {
+        'td:first-child, th:first-child': {
+          borderBottomLeftRadius: borderRadius,
+        },
+        'td:last-child, th:last-child': {
+          borderBottomRightRadius: borderRadius,
+        },
+      },
+      '&:hover': {
+        background: colorBgLayout,
+      },
     },
     'td,th': {
       padding: '0 1em !important',
       verticalAlign: 'top',
       boxSizing: 'border-box',
       position: 'relative',
-
       minWidth: 100,
-      border: `1px solid ${colorBorderSecondary}`,
       textAlign: 'left',
       lineHeight: 3,
       height: '3em',
@@ -174,43 +193,6 @@ export default function useStyle() {
     th: {
       background: colorBgLayout,
       fontWeight: 400,
-    },
-    '.column-resize-handle': {
-      position: 'absolute',
-      right: -2,
-      top: 0,
-      bottom: 0,
-      zIndex: 20,
-      pointerEvents: 'none',
-      background: colorPrimary,
-      transition: '0.4s',
-      width: 4,
-    },
-    '.resize-cursor': {
-      cursor: 'col-resize',
-    },
-    '.selectedCell': {
-      '&::after': {
-        zIndex: 2,
-        position: 'absolute',
-        content: '""',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        background: colorPrimaryBg,
-        pointerEvents: 'none',
-      },
-      p: {
-        position: 'relative',
-        color: colorText,
-        zIndex: 3,
-      },
-
-      '&::selection': {
-        color: 'unset',
-        background: 'transparent',
-      },
     },
     iframe: {
       width: '100%',
