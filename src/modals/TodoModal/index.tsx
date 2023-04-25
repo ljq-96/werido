@@ -10,6 +10,8 @@ function TodoModal() {
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
 
+  console.log(todoModalOptions)
+
   const handleFinish = async fields => {
     setLoading(true)
     const {

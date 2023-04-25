@@ -96,14 +96,21 @@ function Bookmark() {
                               modalDispatch(
                                 basicModalView.bookmarkModal.actions(true, {
                                   ...value,
-                                  onOk: getBookmark,
+                                  onOk: newVal => {
+                                    Object.assign(value, newVal)
+                                    setBookmarks([...bookmarks])
+                                  },
                                 }),
                               )
                               break
                             case 'pin':
                               request
                                 .bookmark({ method: 'PUT', query: value._id, data: { pin: !value.pin } })
-                                .then(getBookmark)
+                                .then(() => {
+                                  value.pin = !value.pin
+                                  setBookmarks([...bookmarks])
+                                })
+                              break
                             case 'delete':
                               request.bookmark({ method: 'DELETE', query: value._id }).then(getBookmark)
                           }

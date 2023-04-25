@@ -44,7 +44,7 @@ function BookmarkModal() {
 
       form.resetFields()
       setOnSubmit(false)
-      bookmarkModalOptions?.onOk()
+      bookmarkModalOptions?.onOk(fields)
       dispatch(basicModalView.destroy.actions())
     } catch {
       setOnSubmit(false)
@@ -91,8 +91,8 @@ function BookmarkModal() {
         <Form.Item label='地址' name='url' rules={[{ required: true, message: '请输入地址' }]}>
           <Input placeholder='请输入地址' />
         </Form.Item>
-        <Form.Item label='图标'>
-          <ImgCrop rotate>
+        <Form.Item label='图标' name='icon'>
+          <ImgCrop>
             <Upload
               fileList={icon && [icon]}
               listType='picture-card'

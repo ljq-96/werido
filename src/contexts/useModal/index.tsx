@@ -24,6 +24,8 @@ function reducer(state: any, { type, payload }: any) {
 export default function Provider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
 
+  console.log(state)
+
   useEffect(() => {
     const destroy = () => {
       dispatch(basicModalView.destroy.actions())

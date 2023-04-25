@@ -4,7 +4,7 @@ import { IBookmark, ITodo } from '../../../types'
 type ModalOptions<T = never> = {
   [key in keyof T]?: T[key]
 } & {
-  onOk?: () => void
+  onOk?: (fields?: T) => void
   onBack?: () => void
 }
 
@@ -37,7 +37,7 @@ export const basicModalView: ModalView = (Object.keys(ModalActions) as (keyof ty
       actions: (visible?: any, options?: any) =>
         basicActions(ModalActions[current], {
           modalAction: visible ? ModalActions[current] : null,
-          [current]: options,
+          [current + 'Options']: options,
         }),
     }
     return prev

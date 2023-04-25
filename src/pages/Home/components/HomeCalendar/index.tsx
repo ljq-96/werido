@@ -35,6 +35,8 @@ function HomeCalendar() {
         onAction={({ type, todo }) => {
           switch (type) {
             case 'edit':
+              console.log(type, todo)
+
               dispatch(basicModalView.todoModal.actions(true, { ...todo, onOk: getTodoList }))
               break
             case 'delete':
