@@ -16,6 +16,7 @@ import Catalog from './components/Catalog'
 import TouristFooter from './components/TouristFooter'
 import { GithubFilled, LeftOutlined, MenuOutlined, MoreOutlined, RightOutlined } from '@ant-design/icons'
 import useStyle from './style'
+import BookmarkNav from './components/BookmarkNav'
 
 export default (props: PageProps) => {
   const { route } = props
@@ -33,6 +34,7 @@ export default (props: PageProps) => {
   } = theme.useToken()
 
   const isInBlog = useMemo(() => /(^\/blog$)|(^\/blog\/\w{24,24}$)/.test(pathname), [pathname])
+  const isInBookmark = useMemo(() => /^\/bookmark$/.test(pathname), [pathname])
 
   const getMyProfile = () => {
     setLoading(true)
@@ -73,7 +75,9 @@ export default (props: PageProps) => {
       splitMenus={true}
       route={parsedRoutes}
       menuItemRender={(item, dom) => <Link to={item.redirect || item.path.replace(':people', people)}>{dom}</Link>}
-      menuContentRender={isInBlog ? () => <Catalog collpased={collapsed} /> : undefined}
+      menuContentRender={
+        isInBlog ? () => <Catalog collpased={collapsed} /> : isInBookmark ? () => <BookmarkNav /> : undefined
+      }
       onMenuHeaderClick={() => navigate('/')}
       actionsRender={() => [
         <IconFont onClick={() => setIsDark(!isDark)} type={isDark ? 'icon-sun' : 'icon-moon'} />,
@@ -85,6 +89,26 @@ export default (props: PageProps) => {
           <div className={`icon ${collapsed ? 'collapsed' : ''}`}>{<LeftOutlined />}</div>
         </div>
       )}
+      bgLayoutImgList={[
+        {
+          src: 'https://img.alicdn.com/imgextra/i2/O1CN01O4etvp1DvpFLKfuWq_!!6000000000279-2-tps-609-606.png',
+          left: 85,
+          bottom: 100,
+          height: '303px',
+        },
+        {
+          src: 'https://img.alicdn.com/imgextra/i2/O1CN01O4etvp1DvpFLKfuWq_!!6000000000279-2-tps-609-606.png',
+          bottom: -68,
+          right: -45,
+          height: '303px',
+        },
+        {
+          src: 'https://img.alicdn.com/imgextra/i3/O1CN018NxReL1shX85Yz6Cx_!!6000000005798-2-tps-884-496.png',
+          bottom: 0,
+          left: 0,
+          width: '331px',
+        },
+      ]}
     >
       <Suspense fallback={<Loading />}>{_id && <Outlet />}</Suspense>
       <DefaultFooter

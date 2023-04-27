@@ -1,24 +1,5 @@
 .Container {
-  display: flex;
-  flex-direction: column;
-  grid-auto-rows: max-content;
-  overflow: hidden;
-  box-sizing: border-box;
-  appearance: none;
-  outline: none;
-  min-width: 350px;
-  background-color: #fff;
-  border-radius: 2px;
-  transition: background-color 350ms ease;
-
   ul {
-    padding: 0;
-    display: grid;
-    grid-gap: 8px;
-    grid-template-columns: repeat(var(--columns, 1), 1fr);
-    list-style: none;
-    padding: 12px;
-    margin: 0;
   }
 
   &.scrollable {
@@ -42,9 +23,9 @@
     }
   }
 
-  &.hover {
-    background-color: #f5f5f5;
-  }
+  // &.hover {
+  //   background-color: #f5f5f5;
+  // }
 
   &.unstyled {
     overflow: visible;
@@ -71,8 +52,4 @@
 }
 
 .Header {
-  display: flex;
-  padding: 12px 12px 0;
-  align-items: center;
-  justify-content: space-between;
 }

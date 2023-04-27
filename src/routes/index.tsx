@@ -42,7 +42,14 @@ const routes: RouteProps[] = [
         path: '/bookmark',
         name: '书签',
         icon: <TagOutlined />,
-        component: lazy(() => import('../pages/Bookmark')),
+        component: Outlet,
+        routes: [
+          {
+            path: '/',
+            name: '书签',
+            component: lazy(() => import('../pages/Bookmark')),
+          },
+        ],
       },
       {
         path: '/blog',

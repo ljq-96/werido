@@ -35,7 +35,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { coordinateGetter as multipleContainersCoordinateGetter } from './multipleContainersKeyboardCoordinates'
 
 import { Item, Container, ContainerProps } from '../components'
-import { IBookmark } from '../../../../server/types'
+import { IBookmark } from '../../../../types'
 
 export default {
   title: 'Presets/Sortable/Multiple Containers',
@@ -131,6 +131,7 @@ interface Props {
   trashable?: boolean
   scrollable?: boolean
   vertical?: boolean
+  gray?: boolean
 }
 
 export function MultipleContainers({
@@ -151,6 +152,7 @@ export function MultipleContainers({
   strategy = verticalListSortingStrategy,
   vertical = false,
   scrollable,
+  gray = true,
 }: Props) {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
   const lastOverId = useRef<UniqueIdentifier | null>(null)
@@ -410,6 +412,7 @@ export function MultipleContainers({
               scrollable={scrollable}
               style={containerStyle}
               unstyled={minimal}
+              gray={gray}
             >
               <SortableContext items={items[containerId]} strategy={strategy}>
                 {items[containerId].map((value, index) => {
@@ -418,6 +421,7 @@ export function MultipleContainers({
                       disabled={disabled || isSortingContainer}
                       key={value}
                       id={value}
+                      gray={gray}
                       value={itemMap[value]}
                       index={index}
                       handle={handle}
@@ -452,6 +456,7 @@ export function MultipleContainers({
       <Item
         value={value}
         handle={handle}
+        gray={gray}
         style={getItemStyles({
           containerId: findContainer(id) as UniqueIdentifier,
           overIndex: -1,
@@ -484,6 +489,7 @@ export function MultipleContainers({
             key={item}
             value={itemMap[item]}
             handle={handle}
+            gray={gray}
             style={getItemStyles({
               containerId,
               overIndex: -1,
@@ -516,6 +522,7 @@ interface SortableItemProps {
   handle: boolean
   disabled?: boolean
   value?: any
+  gray?: boolean
   style(args: any): React.CSSProperties
   getIndex(id: UniqueIdentifier): number
   renderItem(): React.ReactElement
@@ -533,6 +540,7 @@ function SortableItem({
   containerId,
   getIndex,
   wrapperStyle,
+  gray,
 }: SortableItemProps) {
   const { setNodeRef, setActivatorNodeRef, listeners, isDragging, isSorting, over, overIndex, transform, transition } =
     useSortable({
@@ -544,6 +552,7 @@ function SortableItem({
   return (
     <Item
       ref={disabled ? undefined : setNodeRef}
+      gray={gray}
       value={value}
       dragging={isDragging}
       sorting={isSorting}

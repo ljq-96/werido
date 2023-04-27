@@ -2,12 +2,14 @@ import { AutoComplete, Button, Card, Input, Menu, Tabs } from 'antd'
 import { useEffect, useState } from 'react'
 import { TranslateX } from '../../../../components/Animation'
 import './style.less'
+import { DoubleLeftOutlined, GoogleOutlined, ZhihuOutlined } from '@ant-design/icons'
+import IconFont from '../../../../components/IconFont'
 
 const searchTab = [
-  { title: '百度', action: 'https://www.baidu.com/s', name: 'wd' },
-  { title: 'Google', action: 'https://www.google.com/search', name: 'q' },
-  { title: '豆瓣', action: 'https://www.douban.com/search', name: 'q' },
-  { title: '知乎', action: 'https://www.zhihu.com/search', name: 'q' },
+  { title: '百度', action: 'https://www.baidu.com/s', name: 'wd', icon: <IconFont type='icon-baidu' /> },
+  { title: 'Google', action: 'https://www.google.com/search', name: 'q', icon: <GoogleOutlined /> },
+  { title: '豆瓣', action: 'https://www.douban.com/search', name: 'q', icon: <IconFont type='icon-douban' /> },
+  { title: '知乎', action: 'https://www.zhihu.com/search', name: 'q', icon: <ZhihuOutlined /> },
 ]
 function Search() {
   const [current, setCurrent] = useState(searchTab[0])
@@ -46,6 +48,7 @@ function Search() {
         <Input.Search
           allowClear
           size='large'
+          prefix={current.icon}
           enterButton='搜索'
           onSearch={value => value && window.open(`${current.action}?${current.name}=${value}`)}
         />

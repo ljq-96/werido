@@ -22,5 +22,5 @@ export function useCatalog() {
     },
     [catalog],
   )
-  return { catalog, getCatalog, catalogLoading: loading }
+  return { catalog, getCatalog, catalogLoading: loading, setCatalog }
 }

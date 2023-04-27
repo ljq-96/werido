@@ -43,6 +43,7 @@ function Bookmark() {
           <MultipleContainers
             vertical
             containerDisabled
+            gray={false}
             value={bookmarks}
             onChange={value => {
               setBookmarks(value)

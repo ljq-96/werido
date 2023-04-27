@@ -53,9 +53,7 @@ const BlogEditor = () => {
   return (
     <div>
       <PageHeader
-        ghost={false}
         onBack={() => navigate(-1)}
-        style={{ border: '1px solid #f0f0f0', borderBottom: 'none' }}
         subTitle={
           <Form form={form} onFinish={handleFinish} layout='inline'>
             <Form.Item name='title' rules={[{ required: true, message: '' }]}>

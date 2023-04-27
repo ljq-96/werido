@@ -1,9 +1,9 @@
+/** @jsxImportSource @emotion/react */
 import React, { forwardRef } from 'react'
-import classNames from 'classnames'
 
-import styles from './Container.module.less'
-import { Button } from 'antd'
+import { Button, theme } from 'antd'
 import { HolderOutlined } from '@ant-design/icons'
+import { css } from '@emotion/react'
 
 export interface Props {
   children: React.ReactNode
@@ -20,6 +20,7 @@ export interface Props {
   unstyled?: boolean
   onClick?(): void
   onRemove?(): void
+  gray?: boolean
 }
 
 export const Container = forwardRef<HTMLDivElement, Props>(
@@ -39,10 +40,14 @@ export const Container = forwardRef<HTMLDivElement, Props>(
       shadow,
       unstyled,
       disabled,
+      gray,
       ...props
     }: Props,
     ref,
   ) => {
+    const {
+      token: { colorBgLayout, borderRadius, boxShadow, colorBgContainer, colorBorderSecondary, colorBorder },
+    } = theme.useToken()
     return (
       <div
         {...props}
@@ -53,27 +58,57 @@ export const Container = forwardRef<HTMLDivElement, Props>(
             '--columns': columns,
           } as React.CSSProperties
         }
-        className={classNames(
-          styles.Container,
-          unstyled && styles.unstyled,
-          horizontal && styles.horizontal,
-          hover && styles.hover,
-          placeholder && styles.placeholder,
-          scrollable && styles.scrollable,
-          shadow && styles.shadow,
-        )}
+        css={[
+          css({
+            display: 'flex',
+            flexDirection: 'column',
+            gridAutoRows: 'max-content',
+            overflow: 'hidden',
+            boxSizing: 'border-box',
+            appearance: 'none',
+            outline: 'none',
+            minWidth: 350,
+            transition: 'background-color 350ms ease',
+            borderRadius,
+            backgroundColor: colorBgContainer,
+            '.header': {
+              display: 'flex',
+              padding: '12px 12px 0',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            },
+            ul: {
+              display: 'grid',
+              gridGap: 8,
+              gridTemplateColumns: 'repeat(var(--columns, 1), 1fr)',
+              listStyle: 'none',
+              padding: 12,
+              margin: 0,
+              borderRadius,
+              backgroundColor: gray ? colorBgLayout : colorBgContainer,
+              border: `1px solid ${gray ? colorBorderSecondary : 'transparent'}`,
+            },
+          }),
+          shadow && css({ boxShadow, border: `1px solid ${colorBorder}` }),
+        ]}
         onClick={onClick}
         tabIndex={onClick ? 0 : undefined}
       >
         {label && !disabled ? (
-          <div className={styles.Header}>
-            <div>{label}</div>
-            <div className={styles.Actions}>
+          <div className='header'>
+            <div id={label}>{label}</div>
+            <div>
               <Button type='text' icon={<HolderOutlined />} {...handleProps} />
             </div>
           </div>
         ) : null}
-        {placeholder ? children : <ul>{children}</ul>}
+        {placeholder ? (
+          children
+        ) : (
+          <div style={{ padding: '8px 12px' }}>
+            <ul>{children}</ul>
+          </div>
+        )}
       </div>
     )
   },

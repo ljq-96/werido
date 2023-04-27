@@ -14,6 +14,8 @@ import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
 function BlogDetail() {
   const [{ tags }, { getTags }] = useStore()
   const { state } = useLocation()
+  console.log(state)
+
   const [onEdit, setOnEdit] = useState(() => !!(state as any)?.isEdit)
   // const [onEdit, setOnEdit] = useState(true)
   const [loading, setLoading] = useState(false)

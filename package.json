@@ -61,7 +61,7 @@
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.0.1",
     "allotment": "^1.18.1",
-    "antd": "^5.4.2",
+    "antd": "^5.4.5",
     "antd-img-crop": "^4.12.2",
     "clsx": "^1.2.1",
     "copy-to-clipboard": "^3.3.3",
