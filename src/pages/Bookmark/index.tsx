@@ -1,4 +1,4 @@
-import { Button, Card, Col, Dropdown, Empty, Menu, Row, Segmented, Space, Spin } from 'antd'
+import { Button, Card, Col, Dropdown, Empty, Menu, Row, Segmented, Space, Spin, Typography } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { IBookmark } from '../../../types'
 import { request } from '../../api'
@@ -81,6 +81,21 @@ function Bookmark() {
                 }}
                 columns={8}
                 strategy={rectSortingStrategy}
+                renderTitle={(title, index) => (
+                  <Typography.Paragraph
+                    editable={{
+                      text: title,
+                      triggerType: ['text'],
+                      onChange: value => {
+                        bookmarks[index].title = value
+                        setBookmarks([...bookmarks])
+                        request.bookmark({ method: 'PUT', query: bookmarks[index]._id, data: { title: value } })
+                      },
+                    }}
+                  >
+                    {title}
+                  </Typography.Paragraph>
+                )}
                 renderItem={value => (
                   <BookmarkItem
                     item={value}

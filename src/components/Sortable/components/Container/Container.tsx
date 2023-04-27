@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { forwardRef } from 'react'
+import React, { ReactNode, forwardRef } from 'react'
 
 import { Button, theme } from 'antd'
 import { HolderOutlined } from '@ant-design/icons'
@@ -21,6 +21,7 @@ export interface Props {
   onClick?(): void
   onRemove?(): void
   gray?: boolean
+  renderTitle?: (title: string) => ReactNode
 }
 
 export const Container = forwardRef<HTMLDivElement, Props>(
@@ -41,6 +42,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
       unstyled,
       disabled,
       gray,
+      renderTitle,
       ...props
     }: Props,
     ref,
@@ -96,7 +98,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
       >
         {label && !disabled ? (
           <div className='header'>
-            <div id={label}>{label}</div>
+            <div id={label}>{renderTitle ? renderTitle(label) : label}</div>
             <div>
               <Button type='text' icon={<HolderOutlined />} {...handleProps} />
             </div>

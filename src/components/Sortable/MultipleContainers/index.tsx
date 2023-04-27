@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import {
   CancelDrop,
@@ -125,6 +125,7 @@ interface Props {
   items?: Items
   handle?: boolean
   renderItem?: any
+  renderTitle?: (title: string, index: number) => ReactNode
   strategy?: SortingStrategy
   modifiers?: Modifiers
   minimal?: boolean
@@ -149,6 +150,7 @@ export function MultipleContainers({
   minimal = false,
   modifiers,
   renderItem,
+  renderTitle,
   strategy = verticalListSortingStrategy,
   vertical = false,
   scrollable,
@@ -401,7 +403,7 @@ export function MultipleContainers({
           items={containers}
           strategy={vertical ? verticalListSortingStrategy : horizontalListSortingStrategy}
         >
-          {containers.map(containerId => (
+          {containers.map((containerId, index) => (
             <DroppableContainer
               key={containerId}
               id={containerId}
@@ -413,6 +415,7 @@ export function MultipleContainers({
               style={containerStyle}
               unstyled={minimal}
               gray={gray}
+              renderTitle={title => renderTitle(title, index)}
             >
               <SortableContext items={items[containerId]} strategy={strategy}>
                 {items[containerId].map((value, index) => {
@@ -483,6 +486,7 @@ export function MultipleContainers({
         }}
         shadow
         unstyled={false}
+        renderTitle={title => renderTitle(title, containers.indexOf(containerId))}
       >
         {items[containerId].map((item, index) => (
           <Item

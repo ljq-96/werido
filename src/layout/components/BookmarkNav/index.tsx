@@ -1,9 +1,9 @@
-import { Anchor, Badge, Menu, Skeleton, theme } from 'antd'
+import { Anchor, Badge, Empty, Menu, Skeleton, theme } from 'antd'
 import { useBookmarks } from '../../../contexts/useStore/hooks/useBookmarks'
 import { useStore } from '../../../contexts/useStore'
 
 function BookmarkNav() {
-  const [{ bookmarks, bookmarksLoading }, { getBookmarks }] = useStore()
+  const [{ bookmarks, bookmarksLoading }] = useStore()
 
   return (
     <div>
@@ -11,7 +11,7 @@ function BookmarkNav() {
         <div style={{ padding: 12 }}>
           <Skeleton active paragraph={{ rows: 10 }} />
         </div>
-      ) : (
+      ) : bookmarks.length ? (
         <Menu
           selectable={false}
           onClick={e => {
@@ -33,6 +33,8 @@ function BookmarkNav() {
             label: `${item.title} (${item.children.length})`,
           }))}
         />
+      ) : (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       )}
     </div>
   )
