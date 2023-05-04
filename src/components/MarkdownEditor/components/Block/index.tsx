@@ -1,4 +1,4 @@
-import { CodeOutlined, MoreOutlined } from '@ant-design/icons'
+import { CodeOutlined, HolderOutlined } from '@ant-design/icons'
 import { BlockProvider } from '@milkdown/plugin-block'
 import {
   createCodeBlockCommand,
@@ -10,7 +10,7 @@ import { useInstance } from '@milkdown/react'
 import { callCommand } from '@milkdown/utils'
 import { usePluginViewContext } from '@prosemirror-adapter/react'
 import { Button, Divider, Dropdown, Menu, Space, theme } from 'antd'
-import { Fragment, useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import TooltipButton from '../basic/TooltipButton'
 import IconFont from '../../../IconFont'
 
@@ -111,7 +111,7 @@ export const BlockView = () => {
             )
           }}
         >
-          <Button icon={<MoreOutlined />} shape='circle' size='small' style={{ cursor: 'grab' }} />
+          <Button icon={<HolderOutlined />} shape='circle' size='small' style={{ cursor: 'grab' }} />
         </Dropdown>
       </div>
     </div>

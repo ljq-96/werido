@@ -32,6 +32,7 @@ import { catalog } from '../../plugins/catalog'
 import { Button } from 'antd'
 import { CatalogView } from '../../components/Catalog'
 import { HeadTitle } from '../../components/HeadTitle'
+import { useSlash } from '../../components/SlashMenu'
 
 interface IOptions {
   type?: 'editor' | 'render'
@@ -47,6 +48,7 @@ const useMyEditor = (options: IOptions) => {
   const pluginViewFactory = usePluginViewFactory()
   const nodeViewFactory = useNodeViewFactory()
   const widgetViewFactory = useWidgetViewFactory()
+  const slash = useSlash()
 
   return useEditor(
     root => {
@@ -56,6 +58,7 @@ const useMyEditor = (options: IOptions) => {
           ctx.set(rootCtx, root)
           ctx.set(defaultValueCtx, value)
           ctx.set(editorViewOptionsCtx, { editable: () => (type === 'render' ? false : !readonly) })
+          slash.config(ctx)
         })
         .use(commonmark)
         .use(gfm)
@@ -68,7 +71,7 @@ const useMyEditor = (options: IOptions) => {
         .use($view(listItemSchema.node, () => nodeViewFactory({ component: ListItem })))
         .use($view(headingSchema.node, () => nodeViewFactory({ component: HeadTitle })))
         .use($view(codeBlockSchema.node, () => nodeViewFactory({ component: CodeBlock })))
-        // .use($view(iframeSchema.node, () => nodeViewFactory({ component: Iframe })))
+        .use($view(iframeSchema.node, () => nodeViewFactory({ component: Iframe })))
         .use(diagram)
         .use(
           $view(diagramSchema.node, () =>
@@ -96,6 +99,7 @@ const useMyEditor = (options: IOptions) => {
           .use(block)
           .use(menu)
           .use(catalog)
+          .use(slash.plugins)
           .use(tooltip)
           .use(imageTooltip)
           .use(tableTooltip)

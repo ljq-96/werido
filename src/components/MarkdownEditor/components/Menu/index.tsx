@@ -194,6 +194,7 @@ export const MenuView = () => {
     undo: (
       <TooltipButton
         title='撤销'
+        shortcut='⌘ Z'
         icon={<IconFont type='icon-undo' />}
         onClick={() => call(undoCommand.key)}
         disabled={history.undo === 0}
@@ -202,6 +203,7 @@ export const MenuView = () => {
     redo: (
       <TooltipButton
         title='恢复'
+        shortcut='⌘ Y'
         icon={<IconFont type='icon-redo' />}
         onClick={() => call(redoCommand.key)}
         disabled={history.redo === 0}

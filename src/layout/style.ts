@@ -3,10 +3,18 @@ import { theme } from 'antd'
 
 export default () => {
   const {
-    token: { colorBgContainer, colorBgLayout, colorBorder },
+    token: { colorBgContainer, colorBgLayout, colorBorder, colorTextSecondary },
   } = theme.useToken()
 
   return css({
+    '#logo': {
+      cursor: 'pointer',
+      ':hover': {
+        path: {
+          fill: colorTextSecondary,
+        },
+      },
+    },
     '.collapsed-btn': {
       position: 'absolute',
       right: -11,
