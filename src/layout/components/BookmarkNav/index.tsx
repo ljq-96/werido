@@ -14,6 +14,7 @@ function BookmarkNav() {
       ) : bookmarks.length ? (
         <Menu
           selectable={false}
+          style={{ backgroundColor: 'transparent' }}
           onClick={e => {
             let el = document.getElementById(e.key)
             let top = 0

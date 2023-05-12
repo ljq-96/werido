@@ -12,6 +12,7 @@ import SS from './components/Search copy'
 import { useStore } from '../../contexts/useStore'
 import Space from '../../components/Canvas/Space'
 import { useUser } from '../../contexts/useUser'
+import Cat from '../../components/Cat'
 
 interface IProps {}
 

@@ -20,7 +20,7 @@ import { linkPlugin } from '../../components/LinkWidget'
 import { tableSelectorPlugin, TableTooltip, tableTooltip, tableTooltipCtx } from '../../components/TableWidget'
 import { indent } from '@milkdown/plugin-indent'
 import { history } from '@milkdown/plugin-history'
-import { iframe, iframeSchema } from '../../plugins/iframe'
+import { iframe } from '../../plugins/iframe'
 import { Iframe } from '../../components/Iframe'
 import { clipboard } from '@milkdown/plugin-clipboard'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
@@ -71,7 +71,7 @@ const useMyEditor = (options: IOptions) => {
         .use($view(listItemSchema.node, () => nodeViewFactory({ component: ListItem })))
         .use($view(headingSchema.node, () => nodeViewFactory({ component: HeadTitle })))
         .use($view(codeBlockSchema.node, () => nodeViewFactory({ component: CodeBlock })))
-        .use($view(iframeSchema.node, () => nodeViewFactory({ component: Iframe })))
+        // .use($view(iframeSchema.node, () => nodeViewFactory({ component: Iframe })))
         .use(diagram)
         .use(
           $view(diagramSchema.node, () =>

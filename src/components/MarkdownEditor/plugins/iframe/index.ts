@@ -9,10 +9,8 @@ import { InputRule } from '@milkdown/prose/inputrules'
 const remarkDirective = $remark(() => directive)
 export const iframeSchema = $nodeSchema('iframe', () => ({
   group: 'block',
-  selectable: true,
-  draggable: false,
-  // atom: true,
-  // isolating: true,
+  atom: true,
+  isolating: true,
   marks: '',
   attrs: {
     src: { default: null },
@@ -27,14 +25,11 @@ export const iframeSchema = $nodeSchema('iframe', () => ({
       }),
     },
   ],
-  toDOM: (node: Node) => ['iframe', { ...node.attrs }, 0],
+  toDOM: (node: Node) => ['iframe', { ...node.attrs, contenteditable: false }, 0],
   parseMarkdown: {
     match: node => node.type === 'leafDirective' && node.name === 'iframe',
     runner: (state, node, type) => {
-      state.addNode(type, {
-        src: (node.attributes as { src: string }).src,
-        height: (node.attributes as { height: string }).height,
-      })
+      state.addNode(type, { src: (node.attributes as { src: string }).src })
     },
   },
   toMarkdown: {
@@ -42,7 +37,7 @@ export const iframeSchema = $nodeSchema('iframe', () => ({
     runner: (state, node) => {
       state.addNode('leafDirective', undefined, undefined, {
         name: 'iframe',
-        attributes: { src: node.attrs.src, height: node.attrs.height },
+        attributes: { src: node.attrs.src },
       })
     },
   },
@@ -50,11 +45,11 @@ export const iframeSchema = $nodeSchema('iframe', () => ({
 
 const inputRule = $inputRule(
   () =>
-    new InputRule(/:iframe\{src\="(?<src>[^"]+)?"?height\="(?<height>[^"]+)?"?\}/, (state, match, start, end) => {
-      const [okay, src = '', height = ''] = match
+    new InputRule(/:iframe\{src\="(?<src>[^"]+)?"?\}/, (state, match, start, end) => {
+      const [okay, src = ''] = match
       const { tr } = state
       if (okay) {
-        tr.replaceWith(start - 1, end, iframeSchema.type().create({ src, height }))
+        tr.replaceWith(start - 1, end, iframeSchema.type().create({ src }))
       }
 
       return tr

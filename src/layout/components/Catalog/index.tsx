@@ -102,10 +102,9 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
 
   const handleCreate = (e, data) => {
     e.stopPropagation()
-    navigate(`editor`)
-    // setCurrentParent(data._id)
-    // form.setFieldsValue({ parent: data.key })
-    // setShowCreateModal(true)
+    setCurrentParent(data._id)
+    form.setFieldsValue({ parent: data.key })
+    setShowCreateModal(true)
   }
 
   const handleSubmit = async ({ title }) => {
@@ -307,7 +306,13 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
                         { label: '编辑', key: 'edit', icon: <EditOutlined /> },
                         { label: '导出', key: 'export', icon: <ExportOutlined /> },
                         { type: 'divider' },
-                        { label: '删除', danger: true, key: 'delete', icon: <DeleteOutlined /> },
+                        {
+                          label: '删除',
+                          danger: true,
+                          key: 'delete',
+                          icon: <DeleteOutlined />,
+                          disabled: data.children?.length,
+                        },
                       ],
                     }}
                   >
@@ -334,7 +339,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
     <div css={style}>
       {props.collpased ? (
         <Space direction='vertical' className='colpased-btns'>
-          {/* <Button
+          <Button
             type='text'
             icon={<SearchOutlined />}
             onClick={() => {
@@ -352,7 +357,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
           >
             <Button type='text' icon={<MenuOutlined />} />
           </Popover>
-          <Button type='text' icon={<PlusOutlined />} onClick={e => handleCreate(e, {})} /> */}
+          <Button type='text' icon={<PlusOutlined />} onClick={e => handleCreate(e, {})} />
         </Space>
       ) : (
         <Fragment>
@@ -424,4 +429,4 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
   )
 }
 
-export default memo(Catalog)
+export default Catalog

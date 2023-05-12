@@ -4,6 +4,7 @@ import { CSSProperties, memo } from 'react'
 import { useUser } from '../../../contexts/useUser'
 import ReactEcharts from '../../../components/Echarts'
 import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
+import { theme } from 'antd'
 
 interface IProps {
   loading?: boolean
@@ -17,8 +18,9 @@ interface IProps {
 
 function TempChart(props: IProps) {
   const { data, loading, style } = props
-  const [{ themeColor }] = useUser()
-  const plate = generate(themeColor)
+  const {
+    token: { colorTextDisabled, colorTextDescription, colorBgContainer },
+  } = theme.useToken()
 
   return (
     <ReactEcharts
@@ -46,6 +48,7 @@ function TempChart(props: IProps) {
           trigger: 'axis',
           formatter: value => {
             const cur = data[value[0].dataIndex]
+            if (!cur) return
             return `${cur.name}<br/> ${cur.info.text} ${cur.value}°C`
           },
         },
@@ -57,17 +60,17 @@ function TempChart(props: IProps) {
             type: 'line',
             smooth: true,
             itemStyle: {
-              color: '#7a7a7a',
+              color: colorTextDescription,
             },
             areaStyle: {
               color: new graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 0,
-                  color: '#ccc',
+                  color: colorTextDisabled,
                 },
                 {
                   offset: 1,
-                  color: '#fff',
+                  color: colorBgContainer,
                 },
               ]),
             },

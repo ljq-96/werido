@@ -9,22 +9,24 @@ export const Iframe: FC = () => {
   const src = useMemo(() => node.attrs['src'], [node])
   const alt = useMemo(() => node.attrs['alt'], [node])
 
+  console.log(node)
+
   return (
     <Card
-      title={
-        <Input
-          defaultValue={src}
-          size='small'
-          // onInput={e => {
-          //   console.log(e)
-          //   setAttrs({ src: e.target.value })
-          //   // setValue(e.target.value)
-          // }}
-          // onBlur={e => {
-          //   setAttrs({ src: e.target.value })
-          // }}
-        />
-      }
+      // title={
+      //   <Input
+      //     defaultValue={src}
+      //     size='small'
+      //     // onInput={e => {
+      //     //   console.log(e)
+      //     //   setAttrs({ src: e.target.value })
+      //     //   // setValue(e.target.value)
+      //     // }}
+      //     // onBlur={e => {
+      //     //   setAttrs({ src: e.target.value })
+      //     // }}
+      //   />
+      // }
       size='small'
       type='inner'
       extra={<Button size='small'>确定</Button>}

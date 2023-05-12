@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { MoreOutlined, ShareAltOutlined } from '@ant-design/icons'
 import { PageContainer } from '@ant-design/pro-layout'
-import { Button, Form, Input, message, Select, Space, Tag, Affix, Dropdown, theme } from 'antd'
+import { Button, Form, Input, message, Select, Space, Tag, Affix, Dropdown, theme, Popover, QRCode } from 'antd'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { IBlog } from '../../../../types'
@@ -10,6 +10,7 @@ import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEdito
 import { useStore } from '../../../contexts/useStore'
 import { MilkdownProvider } from '@milkdown/react'
 import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
+import logo from '../../../favicon.svg'
 
 function BlogDetail() {
   const [{ tags }, { getTags }] = useStore()
@@ -51,7 +52,9 @@ function BlogDetail() {
           </Affix>,
         ]
       : [
-          <Button type='text' icon={<ShareAltOutlined />} key={2} />,
+          <Popover overlayInnerStyle={{ padding: 0 }} content={<QRCode value={location.href} bordered={false} />}>
+            <Button type='text' icon={<ShareAltOutlined />} key={2} />
+          </Popover>,
           <Dropdown
             key={3}
             placement='bottomRight'
