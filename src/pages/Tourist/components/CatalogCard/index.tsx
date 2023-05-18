@@ -59,6 +59,7 @@ function CatalogCard(props: TreeProps) {
       {catalog?.length ? (
         <Tree
           blockNode
+          className='catalog-tree'
           treeData={catalog as any}
           fieldNames={{ key: '_id' }}
           onExpand={keys => setExpandedKeys(keys)}

@@ -81,9 +81,7 @@ const Blog = () => {
             ) : listData?.list?.length ? (
               <Fragment>
                 {listData.list.map((item, index) => (
-                  <TranslateY delay={index * 200}>
-                    <BlogItemCard key={item._id} item={item} setLink={id => `/user/${user.username}/blog/${id}`} />
-                  </TranslateY>
+                  <BlogItemCard key={item._id} item={item} setLink={id => `/user/${user.username}/blog/${id}`} />
                 ))}
                 <Pagination pageSize={SIZE} current={page} total={listData?.total} onChange={page => setPage(page)} />
               </Fragment>

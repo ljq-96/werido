@@ -12,6 +12,8 @@ import Modals from './modals'
 import ShikiProvider from './contexts/useShiki'
 import { MilkdownProvider } from '@milkdown/react'
 import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
+import { Global } from '@emotion/react'
+import useGlobalStyle from './globalStyle'
 
 const parseRoute = (route: RouteProps, basePath = '') => {
   const path = `/${basePath}/${route.path}`.replace(/\/+/g, '/')
@@ -37,6 +39,7 @@ function Main() {
       }}
       locale={zh_CN}
     >
+      <Global styles={useGlobalStyle()} />
       <AntApp>
         <Routes>{routes.map(r => parseRoute(r))}</Routes>
         <Modals />
