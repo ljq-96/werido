@@ -35,15 +35,20 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { IBlog, ICatalog } from '../../../../types'
 import { DocIndexType } from '../../../../types/enum'
 import { request } from '../../../api'
-import { useStore } from '../../../contexts/useStore'
 import { useCopyText } from '../../../hooks'
 import { extract, treeWalk } from '../../../utils/common'
 import CatalogIcon from '../CatalogIcon'
 import useStyle from './style'
+import { useStore } from '../../../store'
 
 function Catalog(props: TreeProps & { collpased?: boolean }) {
   const navigate = useNavigate()
-  const [{ catalog, catalogLoading }, { getCatalog, setCatalog }] = useStore()
+  const { catalog, catalogLoading, getCatalog, setCatalog } = useStore(state => ({
+    catalog: state.catalog,
+    catalogLoading: state.catalogLoading,
+    getCatalog: state.getCatalog,
+    setCatalog: state.setCatalog,
+  }))
   const [expandedKeys, setExpandedKeys] = useState(undefined)
   const [expandCatalog, setExpandCatalog] = useState(true)
   const [searchedCatalog, setSearchedCatalog] = useState(null)
@@ -255,6 +260,8 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
   useEffect(() => {
     getCatalog()
   }, [])
+
+  console.log(catalog)
 
   const CatalogTree = ({ actions }: { actions: boolean }) => {
     return catalogLoading ? (

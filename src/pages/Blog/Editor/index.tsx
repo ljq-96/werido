@@ -7,12 +7,12 @@ import { IBlog } from '../../../../types'
 import { StatisticsType } from '../../../../types/enum'
 import { request } from '../../../api'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
-import { useStore } from '../../../contexts/useStore'
 import { MilkdownProvider } from '@milkdown/react'
 import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
+import { useStore } from '../../../store'
 
 const BlogEditor = () => {
-  const [{ tags }, { getTags }] = useStore()
+  const { tags, getTags } = useStore(({ tags, getTags }) => ({ tags, getTags }))
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<IBlog>()
   const id = useSearchParam('id')

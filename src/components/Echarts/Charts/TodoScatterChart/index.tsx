@@ -1,11 +1,11 @@
 import Echarts from '../..'
 import { EChartsOption, graphic } from 'echarts'
-import { useUser } from '../../../../contexts/useUser'
 import { generate } from '@ant-design/colors'
 import { memo } from 'react'
 import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { theme } from 'antd'
 dayjs.extend(utc)
 
 interface IProps {
@@ -15,8 +15,9 @@ interface IProps {
 
 function TodoScatterChart(props: IProps) {
   const { data = [], loading } = props
-  const [{ themeColor }] = useUser()
-  const plate = generate(themeColor)
+  const {
+    token: { colorPrimary },
+  } = theme.useToken()
 
   return (
     <Echarts
@@ -76,7 +77,7 @@ function TodoScatterChart(props: IProps) {
         },
         series: [
           {
-            color: themeColor,
+            color: colorPrimary,
             symbolSize: 10,
             data: data,
             type: 'scatter',

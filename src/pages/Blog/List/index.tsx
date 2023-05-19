@@ -1,25 +1,26 @@
 import { CloseOutlined, SettingOutlined } from '@ant-design/icons'
 import { PageContainer } from '@ant-design/pro-layout'
-import { Col, Row, Card, Spin, Affix, Tag, Divider, Pagination, Button, Space, Tooltip, Empty } from 'antd'
+import { Col, Row, Card, Spin, Affix, Tag, Divider, Pagination, Button, Space, Tooltip, Empty, theme } from 'antd'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { IBlog, IBookmark, Pager } from '../../../../types'
 import { StatisticsType } from '../../../../types/enum'
 import { request } from '../../../api'
 import { TranslateX, TranslateY } from '../../../components/Animation'
-import { useStore } from '../../../contexts/useStore'
-import { useUser } from '../../../contexts/useUser'
 import { useRequest } from '../../../hooks'
 import BlogItemCard from '../../../components/BlogItemCard'
+import { useStore } from '../../../store'
 
 const SIZE = 20
 const BlogList = () => {
-  const [{ tags }, { getTags }] = useStore()
+  const { tags, getTags } = useStore(({ tags, getTags }) => ({ tags, getTags }))
   const [page, setPage] = useState(1)
   const navigate = useNavigate()
   // const [searchParams] = useSearchParams()
   const [currentTag, setCurrentTag] = useState('')
-  const [{ themeColor }] = useUser()
+  const {
+    token: { colorPrimary },
+  } = theme.useToken()
   const {
     loading,
     data: blog,
@@ -84,7 +85,7 @@ const BlogList = () => {
                       key={item.name}
                       bordered={false}
                       style={{ marginBottom: 8, cursor: 'pointer' }}
-                      color={currentTag === item.name ? themeColor : undefined}
+                      color={currentTag === item.name ? colorPrimary : undefined}
                       onClick={() => {
                         setCurrentTag(item.name)
                         // navigate(`/blog?tag=${item.name}`)

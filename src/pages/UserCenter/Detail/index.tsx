@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react'
 import { request } from '../../../api'
 import { TranslateX, TranslateY } from '../../../components/Animation'
 import CityCascader from '../../../components/CityCascader'
-import { useUser } from '../../../contexts/useUser'
 import { getBase64 } from '../../../utils/common'
+import { useStore } from '../../../store'
 
 function UserCenterDetail() {
   const [avatar, setAvatar] = useState<UploadFile>()
-  const [user, { getUser }] = useUser()
+  const { user, getUser } = useStore(({ user, getUser }) => ({ user, getUser }))
   const [form] = Form.useForm()
   const currentPassword = Form.useWatch('currentPassword')
 

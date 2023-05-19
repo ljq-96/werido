@@ -7,17 +7,17 @@ import { request } from '../../../api'
 import { TranslateX, TranslateY } from '../../../components/Animation'
 import BlogItemCard from '../../../components/BlogItemCard'
 import UserCard from '../components/UserCard'
-import { useUser } from '../../../contexts/useUser'
 import { useRequest } from '../../../hooks'
 import ArchivesCard from '../components/ArchivesCard'
 import CatalogCard from '../components/CatalogCard'
 import TagsCard from '../components/TagsCard'
+import { useStore } from '../../../store'
 
 const SIZE = 20
 const GUTTER: any = [16, 16]
 const Tags = () => {
   const [page, setPage] = useState(1)
-  const [user] = useUser()
+  const user = useStore(state => state.user)
   const params = useParams()
   const tag = params['*']
   const {
@@ -47,7 +47,7 @@ const Tags = () => {
         <Col span={6}>
           <Row gutter={GUTTER}>
             <Col span={24}>
-              <UserCard user={user} />
+              <UserCard />
             </Col>
             <Col span={24}>
               <Affix offsetTop={80}>

@@ -4,17 +4,16 @@ import { Button, Card, Empty, Tree, TreeProps } from 'antd'
 import { useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ICatalog } from '../../../../../types'
-import { useStore } from '../../../../contexts/useStore'
-import { useUser } from '../../../../contexts/useUser'
 import CatalogIcon from '../../../../layout/components/CatalogIcon'
+import { useStore } from '../../../../store'
 
 function CatalogCard(props: TreeProps) {
   const navigate = useNavigate()
-  const [{ catalog, catalogLoading }] = useStore()
+  const { catalog, catalogLoading } = useStore(({ catalog, catalogLoading }) => ({ catalog, catalogLoading }))
+  const { username } = useStore(state => state.user)
   const [expandedKeys, setExpandedKeys] = useState(undefined)
   const [expandCatalog, setExpandCatalog] = useState(true)
   const { pathname } = useLocation()
-  const [{ username }] = useUser()
   const defaultExpandedKeys = useMemo(() => {
     const keys = []
     const walk = (arr: ICatalog[]) => {

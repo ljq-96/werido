@@ -2,14 +2,14 @@ import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons
 import { Avatar, Button, Card, Drawer, Dropdown, message, Space } from 'antd'
 import { Fragment, useState } from 'react'
 import { request } from '../../../api'
-import { useUser } from '../../../contexts/useUser'
-import { basicUserView } from '../../../contexts/useUser/actions'
 import { CirclePicker, MaterialPicker, SliderPicker } from 'react-color'
 import * as colors from '@ant-design/colors'
 import { useNavigate } from 'react-router-dom'
+import { useStore } from '../../../store'
 
 function LoginUser() {
-  const [{ username, avatar, themeColor }, { dispatch }] = useUser()
+  const { username, avatar, themeColor } = useStore(state => state.user)
+  const updateUser = useStore(state => state.updateUser)
   const [showColorDrawer, setShowColorDrawer] = useState(false)
   const navigate = useNavigate()
 
@@ -17,12 +17,11 @@ function LoginUser() {
     request.logout({ method: 'POST' }).then(res => {
       navigate('/login')
       message.success('已退出')
-      dispatch(basicUserView.destroy.actions())
     })
   }
 
   const changeColor = ({ hex }) => {
-    dispatch(basicUserView.update.actions({ themeColor: hex }))
+    updateUser({ themeColor: hex })
   }
 
   const handleDrawer = () => {

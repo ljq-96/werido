@@ -4,17 +4,19 @@ import { ReactElement, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IUser } from '../../../../../types'
 import { Number } from '../../../../components/Animation'
-import { useStore } from '../../../../contexts/useStore'
-import { useUser } from '../../../../contexts/useUser'
+import { useStore } from '../../../../store'
 
 interface IProps {
-  user: IUser
   children?: ReactElement
 }
 
-function UserCard({ children, user }: IProps) {
-  const [{ username }] = useUser()
-  const [{ tags, archives, catalog }] = useStore()
+function UserCard({ children }: IProps) {
+  const { tags, archives, catalog, user } = useStore(({ tags, archives, catalog, user }) => ({
+    tags,
+    archives,
+    catalog,
+    user,
+  }))
   const navigate = useNavigate()
 
   const blogCount = useMemo(() => archives?.reduce((a, b) => a + b.blogs.length, 0), [archives])
@@ -32,7 +34,7 @@ function UserCard({ children, user }: IProps) {
       <div className='flex my-4'>
         <div
           className='flex-1 py-2 cursor-pointer transition-all rounded-sm hover:bg-gray-100'
-          onClick={() => navigate(`/user/${username}/blog`)}
+          onClick={() => navigate(`/user/${user.username}/blog`)}
         >
           <div className='text-gray-500'>文章</div>
           <div className='text-lg'>
@@ -47,7 +49,7 @@ function UserCard({ children, user }: IProps) {
         </div>
         <div
           className='flex-1 py-2 cursor-pointer transition-all rounded-sm hover:bg-gray-100'
-          onClick={() => navigate(`/user/${username}/tags`)}
+          onClick={() => navigate(`/user/${user.username}/tags`)}
         >
           <div className='text-gray-500'>标签</div>
           <div className='text-lg'>

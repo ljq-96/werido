@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
 import { RouteProps } from '../../types'
-import { useUser } from '../contexts/useUser'
+import { useStore } from '../store'
 
 export function useParseRoute(route: RouteProps, oprions?: { showAll: boolean }) {
-  const [{ status }] = useUser()
+  const status = useStore(state => state.user.status)
 
   const parsedRoute = useMemo(() => {
     function parseRoute(item: RouteProps, basePath = '') {
       const { routes, name, icon, path, redirect } = item
-      const _path = `/${basePath}${path ? '/' + path : ''}`.replace(/\/+/g, '/')
+      const _path = `/${basePath}${path ? '/' + path : ''}`.replace(/\/+/g, '/').replace('/*', '')
       if (routes) {
         return {
           name,

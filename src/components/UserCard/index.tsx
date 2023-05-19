@@ -3,7 +3,6 @@ import { Avatar, Button, Card, Skeleton } from 'antd'
 import { ReactElement, useEffect, useState } from 'react'
 import { IUser } from '../../../types'
 import { request } from '../../api'
-import { useUser } from '../../contexts/useUser'
 import { Number } from '../Animation'
 
 interface IProps {

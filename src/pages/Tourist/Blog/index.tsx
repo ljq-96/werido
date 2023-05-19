@@ -6,7 +6,6 @@ import { request } from '../../../api'
 import { TranslateX, TranslateY } from '../../../components/Animation'
 import BlogItemCard from '../../../components/BlogItemCard'
 import MarkdownEditor from '../../../components/MarkdownEditor'
-import { useUser } from '../../../contexts/useUser'
 import { useRequest } from '../../../hooks'
 import ArchivesCard from '../components/ArchivesCard'
 import CatalogCard from '../components/CatalogCard'
@@ -14,12 +13,13 @@ import TagsCard from '../components/TagsCard'
 import UserCard from '../components/UserCard'
 import { MilkdownProvider } from '@milkdown/react'
 import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
+import { useStore } from '../../../store'
 
 const SIZE = 20
 const GUTTER: any = [16, 16]
 const Blog = () => {
   const [page, setPage] = useState(1)
-  const [user] = useUser()
+  const user = useStore(state => state.user)
   const params = useParams()
   const id = params['*']
   const {

@@ -1,9 +1,9 @@
 import Echarts from '../..'
 import { EChartsOption, graphic } from 'echarts'
-import { useUser } from '../../../../contexts/useUser'
 import { generate } from '@ant-design/colors'
 import { CSSProperties, memo } from 'react'
 import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
+import { theme } from 'antd'
 
 interface IProps {
   loading?: boolean
@@ -16,8 +16,10 @@ interface IProps {
 
 function LineChart(props: IProps) {
   const { data = [], loading, style } = props
-  const [{ themeColor }] = useUser()
-  const plate = generate(themeColor)
+  const {
+    token: { colorPrimary },
+  } = theme.useToken()
+  const plate = generate(colorPrimary)
 
   return (
     <Echarts
@@ -51,7 +53,7 @@ function LineChart(props: IProps) {
             smooth: true,
             showSymbol: false,
             itemStyle: {
-              color: themeColor,
+              color: colorPrimary,
             },
             areaStyle: {
               color: new graphic.LinearGradient(0, 0, 0, 1, [

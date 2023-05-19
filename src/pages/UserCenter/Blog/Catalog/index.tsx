@@ -5,11 +5,11 @@ import { Fragment, useEffect, useMemo, useState } from 'react'
 import { DocIndexType } from '../../../../../types/enum'
 import { request } from '../../../../api'
 import { TranslateY } from '../../../../components/Animation'
-import { useStore } from '../../../../contexts/useStore'
 import { extract } from '../../../../utils/common'
+import { useStore } from '../../../../store'
 
 function UserCenterBlogCatalog() {
-  const [, { getCatalog }] = useStore()
+  const getCatalog = useStore(state => state.getCatalog)
   const [targetKeys, setTargetKeys] = useState<string[]>([])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   const [dataSource, setDataSoure] = useState<{ _id: string; title: string }[]>([])

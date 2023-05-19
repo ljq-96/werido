@@ -1,9 +1,9 @@
 import Echarts from '../..'
 import { EChartsOption, graphic } from 'echarts'
-import { useUser } from '../../../../contexts/useUser'
 import { generate } from '@ant-design/colors'
 import { memo } from 'react'
 import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
+import { theme } from 'antd'
 
 interface IProps {
   loading?: boolean
@@ -15,15 +15,16 @@ interface IProps {
 
 function WordCloudChart(props: IProps) {
   const { data = [], loading } = props
-  const [{ themeColor }] = useUser()
-  const plate = generate(themeColor)
+  const {
+    token: { colorPrimary },
+  } = theme.useToken()
 
   return (
     <Echarts
       loading={loading}
       noData={!loading && !data.length}
       option={{
-        color: [themeColor],
+        color: [colorPrimary],
         grid: {
           left: 0,
           top: 30,

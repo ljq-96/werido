@@ -3,17 +3,14 @@ import { DeleteOutlined, EditOutlined, PushpinOutlined } from '@ant-design/icons
 import { Avatar, Dropdown, Menu, theme } from 'antd'
 import { Fragment, useState } from 'react'
 import { IBookmark } from '../../../types'
-import { useUser } from '../../contexts/useUser'
-import BookmarkModal from '../Modal/BookmarkModal'
 import { css } from '@emotion/react'
 
 type Action = 'pin' | 'edit' | 'delete'
 
 function BookmarkItem({ item, onMenu }: { item: IBookmark; onMenu: (action: Action) => void }) {
   const { title, icon, url } = item
-  const [{ themeColor }] = useUser()
   const {
-    token: { colorBgElevated, borderRadius, colorBorderSecondary },
+    token: { colorPrimary, colorBgElevated, borderRadius, colorBorderSecondary },
   } = theme.useToken()
 
   return (
@@ -59,7 +56,7 @@ function BookmarkItem({ item, onMenu }: { item: IBookmark; onMenu: (action: Acti
             // },
           })}
         >
-          <Avatar shape='square' size='large' src={icon} style={{ backgroundColor: !icon && themeColor }}>
+          <Avatar shape='square' size='large' src={icon} style={{ backgroundColor: !icon && colorPrimary }}>
             {title?.[0]}
           </Avatar>
           <div className='title'>{title}</div>

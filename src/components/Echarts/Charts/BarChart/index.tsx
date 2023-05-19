@@ -1,9 +1,9 @@
 import Echarts from '../..'
 import { EChartsOption, graphic } from 'echarts'
-import { useUser } from '../../../../contexts/useUser'
 import { generate } from '@ant-design/colors'
 import { memo } from 'react'
 import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
+import { theme } from 'antd'
 
 interface IProps {
   loading?: boolean
@@ -15,8 +15,10 @@ interface IProps {
 
 function BarChart(props: IProps) {
   const { data = [], loading } = props
-  const [{ themeColor }] = useUser()
-  const plate = generate(themeColor)
+  const {
+    token: { colorPrimary },
+  } = theme.useToken()
+  const plate = generate(colorPrimary)
 
   return (
     <Echarts
@@ -52,7 +54,7 @@ function BarChart(props: IProps) {
               color: new graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 0,
-                  color: themeColor,
+                  color: colorPrimary,
                 },
                 {
                   offset: 1,

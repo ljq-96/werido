@@ -6,10 +6,10 @@ import { useEffect, useRef, useState } from 'react'
 import { request } from '../../../api'
 import { Number, TranslateX } from '../../../components/Animation'
 import CityCascader from '../../../components/CityCascader'
-import { useUser } from '../../../contexts/useUser'
 import IconFont from '../../../components/IconFont'
 import TempChart from './TempChart'
 import { iconMap } from './utils'
+import { useStore } from '../../../store'
 
 const KEY = 'b00752c7fa154b01ad1653d41ecf5c0b'
 const weekMap = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
@@ -27,7 +27,7 @@ function Weather() {
   const [hours, setHours] = useState<any>([])
   const [location, setLocation] = useState([])
   const [sunDeg, setSunDeg] = useState({ isSun: true, rotate: 0 })
-  const [user] = useUser()
+  const user = useStore(state => state.user)
   const timer = useRef<any>()
   const {
     token: { colorBgLayout },

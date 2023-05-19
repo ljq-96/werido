@@ -1,9 +1,11 @@
 import { Anchor, Badge, Empty, Menu, Skeleton, theme } from 'antd'
-import { useBookmarks } from '../../../contexts/useStore/hooks/useBookmarks'
-import { useStore } from '../../../contexts/useStore'
+import { useStore } from '../../../store'
 
 function BookmarkNav() {
-  const [{ bookmarks, bookmarksLoading }] = useStore()
+  const { bookmarks, bookmarksLoading } = useStore(({ bookmarks, bookmarksLoading }) => ({
+    bookmarks,
+    bookmarksLoading,
+  }))
 
   return (
     <div>

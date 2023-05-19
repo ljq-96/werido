@@ -3,7 +3,7 @@ import { theme } from 'antd'
 
 export default () => {
   const {
-    token: { colorBgContainer, colorBgLayout, colorBorder, colorTextSecondary },
+    token: { colorBgContainer, colorBgLayout, colorBorder, colorTextSecondary, borderRadius },
   } = theme.useToken()
 
   return css({
@@ -37,6 +37,9 @@ export default () => {
           transform: 'rotateY(-180deg)',
         },
       },
+    },
+    '.ant-layout-header .ant-menu-item': {
+      borderRadius: borderRadius,
     },
   })
 }

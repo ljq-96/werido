@@ -1,8 +1,8 @@
 import { generate } from '@ant-design/colors'
 import { memo } from 'react'
 import Echarts from '../..'
-import { useUser } from '../../../../contexts/useUser'
 import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
+import { theme } from 'antd'
 
 interface IProps {
   loading?: boolean
@@ -14,8 +14,9 @@ interface IProps {
 
 function RiverChart(props: IProps) {
   const { data = [], loading } = props
-  const [{ themeColor }] = useUser()
-  const plate = generate(themeColor).slice(0, 6).reverse()
+  const {
+    token: { colorPrimary },
+  } = theme.useToken()
   const max = Math.max(...data?.map(item => item.value))
   const step = max / 10
 
@@ -24,7 +25,7 @@ function RiverChart(props: IProps) {
       loading={loading}
       noData={!loading && !data.length}
       option={{
-        color: [themeColor],
+        color: [colorPrimary],
         tooltip: {
           trigger: 'item',
           formatter: (val: any) => {
@@ -57,7 +58,7 @@ function RiverChart(props: IProps) {
               return {
                 gt: index,
                 lt: index + 1,
-                color: themeColor + (opacity.length <= 1 ? `0${opacity}` : opacity),
+                color: colorPrimary + (opacity.length <= 1 ? `0${opacity}` : opacity),
               }
             }),
           },
@@ -79,7 +80,7 @@ function RiverChart(props: IProps) {
             emphasis: { disabled: true },
             smooth: 0.6,
             smoothMonotone: 'x',
-            areaStyle: { color: themeColor + '14' },
+            areaStyle: { color: colorPrimary + '14' },
             showSymbol: false,
             data: [...data?.map(item => item.value + step), step],
           },
@@ -89,7 +90,7 @@ function RiverChart(props: IProps) {
             emphasis: { disabled: true },
             smooth: 0.6,
             smoothMonotone: 'x',
-            areaStyle: { color: themeColor + '14' },
+            areaStyle: { color: colorPrimary + '14' },
             showSymbol: false,
             data: [...data?.map(item => -item.value - step), -step],
           },
@@ -99,7 +100,7 @@ function RiverChart(props: IProps) {
             emphasis: { disabled: true },
             smooth: 0.6,
             smoothMonotone: 'x',
-            areaStyle: { color: themeColor + '28' },
+            areaStyle: { color: colorPrimary + '28' },
             showSymbol: false,
             data: [...data?.map(item => item.value + 2 * step), 2 * step],
           },
@@ -109,7 +110,7 @@ function RiverChart(props: IProps) {
             emphasis: { disabled: true },
             smooth: 0.6,
             smoothMonotone: 'x',
-            areaStyle: { color: themeColor + '28' },
+            areaStyle: { color: colorPrimary + '28' },
             showSymbol: false,
             data: [...data?.map(item => -item.value - 2 * step), -2 * step],
           },
@@ -191,7 +192,7 @@ function RiverChart(props: IProps) {
                   textColored: {
                     align: 'left',
                     fontSize: 16,
-                    color: themeColor,
+                    color: colorPrimary,
                     padding: [0, 0, 0, 40],
                     fontWeight: 'bold',
                   },

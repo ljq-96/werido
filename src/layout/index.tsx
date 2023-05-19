@@ -3,20 +3,19 @@ import ProLayout, { DefaultFooter, FooterToolbar } from '@ant-design/pro-layout'
 import { Avatar, Button, FloatButton, Popover, Space, theme } from 'antd'
 import { Link, Outlet, useNavigate, useLocation, useParams } from 'react-router-dom'
 import Logo from '../components/Logo'
-import { useUser } from '../contexts/useUser'
 import { PageProps } from '../../types'
 import Loading from '../components/Loading'
 import '../assets/css/index.less'
 import { useParseRoute } from '../hooks'
 import Weather from './components/Weather'
 import LoginUser from './components/LoginUser'
-import { useStore } from '../contexts/useStore'
 import IconFont from '../components/IconFont'
 import Catalog from './components/Catalog'
 import TouristFooter from './components/TouristFooter'
 import { GithubFilled, LeftOutlined, MenuOutlined, MoreOutlined, RightOutlined } from '@ant-design/icons'
 import useStyle from './style'
 import BookmarkNav from './components/BookmarkNav'
+import { useStore } from '../store'
 
 export default (props: PageProps) => {
   const { route } = props
@@ -24,13 +23,21 @@ export default (props: PageProps) => {
   const [loading, setLoading] = useState(false)
   const { pathname } = useLocation()
   const [collapsed, setCollapsed] = useState(false)
-  const [{ _id, avatar }, { getUser }] = useUser()
   const parsedRoutes = useParseRoute(route)
-  const [{ isDark }, { setIsDark, getCatalog, getTags, getArchives }] = useStore()
+  const { _id, avatar, isDark, getUser, setIsDark, getCatalog, getTags, getArchives } = useStore(state => ({
+    isDark: state.isDark,
+    setIsDark: state.setIsDark,
+    getCatalog: state.getCatalog,
+    getTags: state.getTags,
+    getArchives: state.getArchives,
+    _id: state.user._id,
+    avatar: state.user.avatar,
+    getUser: state.getUser,
+  }))
   const { people } = useParams()
   const style = useStyle()
   const {
-    token: { colorPrimary, colorTextDescription },
+    token: { colorPrimary, colorTextDescription, colorBgLayout, colorFillContent },
   } = theme.useToken()
 
   const isInBlog = useMemo(() => /(^\/blog$)|(^\/blog\/\w{24,24}$)/.test(pathname), [pathname])
@@ -89,6 +96,12 @@ export default (props: PageProps) => {
           <div className={`icon ${collapsed ? 'collapsed' : ''}`}>{<LeftOutlined />}</div>
         </div>
       )}
+      token={{
+        header: {
+          colorTextMenuSelected: colorPrimary,
+          // colorBgMenuItemSelected: colorFillContent,
+        },
+      }}
       bgLayoutImgList={[
         {
           src: 'https://img.alicdn.com/imgextra/i2/O1CN01O4etvp1DvpFLKfuWq_!!6000000000279-2-tps-609-606.png',

@@ -9,10 +9,7 @@ import HomeCalendar from './components/HomeCalendar'
 import Shortcuts from './components/Shortcuts'
 import { TranslateX, TranslateY } from '../../components/Animation'
 import SS from './components/Search copy'
-import { useStore } from '../../contexts/useStore'
 import Space from '../../components/Canvas/Space'
-import { useUser } from '../../contexts/useUser'
-import Cat from '../../components/Cat'
 
 interface IProps {}
 

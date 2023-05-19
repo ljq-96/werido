@@ -1,19 +1,16 @@
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import routes from './routes'
-import UserProvider, { useUser } from './contexts/useUser'
-import 'dayjs/locale/zh-cn'
 import zh_CN from 'antd/lib/locale/zh_CN'
-import StoreProvider, { useStore } from './contexts/useStore'
 import ModalProvider from './contexts/useModal'
 import { RouteProps } from '../types'
 import { App as AntApp, ConfigProvider, theme } from 'antd'
 import Modals from './modals'
 import ShikiProvider from './contexts/useShiki'
-import { MilkdownProvider } from '@milkdown/react'
-import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
 import { Global } from '@emotion/react'
 import useGlobalStyle from './globalStyle'
+import { useStore } from './store'
+import 'dayjs/locale/zh-cn'
 
 const parseRoute = (route: RouteProps, basePath = '') => {
   const path = `/${basePath}/${route.path}`.replace(/\/+/g, '/')
@@ -24,43 +21,33 @@ const parseRoute = (route: RouteProps, basePath = '') => {
   )
 }
 
-function Main() {
-  const [{ themeColor }] = useUser()
-  const [{ isDark }] = useStore()
-  return (
-    <ConfigProvider
-      theme={{
-        algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-        token: {
-          colorPrimary: themeColor,
-          fontFamily: 'Ubuntu',
-          fontFamilyCode: '"JetBrains Mono","Menlo","Consolas"',
-        },
-      }}
-      locale={zh_CN}
-    >
-      <Global styles={useGlobalStyle()} />
-      <AntApp>
-        <Routes>{routes.map(r => parseRoute(r))}</Routes>
-        <Modals />
-      </AntApp>
-    </ConfigProvider>
-  )
-}
-
 function App() {
+  const isDark = useStore(state => state.isDark)
+  const themeColor = useStore(state => state.user.themeColor)
   return (
-    <StoreProvider>
-      <UserProvider>
-        <ModalProvider>
-          <BrowserRouter>
-            <ShikiProvider>
-              <Main />
-            </ShikiProvider>
-          </BrowserRouter>
-        </ModalProvider>
-      </UserProvider>
-    </StoreProvider>
+    <ModalProvider>
+      <BrowserRouter>
+        <ShikiProvider>
+          <ConfigProvider
+            theme={{
+              algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+              token: {
+                colorPrimary: themeColor,
+                fontFamily: 'Ubuntu',
+                fontFamilyCode: '"JetBrains Mono","Menlo","Consolas"',
+              },
+            }}
+            locale={zh_CN}
+          >
+            <Global styles={useGlobalStyle()} />
+            <AntApp>
+              <Routes>{routes.map(r => parseRoute(r))}</Routes>
+              <Modals />
+            </AntApp>
+          </ConfigProvider>
+        </ShikiProvider>
+      </BrowserRouter>
+    </ModalProvider>
   )
 }
 

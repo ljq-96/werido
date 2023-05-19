@@ -66,8 +66,8 @@ import defaultImage from './default-image.jpg'
 import { listenerCtx } from '@milkdown/plugin-listener'
 import TooltipButton from '../basic/TooltipButton'
 import { TranslateX, TranslateY } from '../../../Animation'
-import { useStore } from '../../../../contexts/useStore'
 import TableSizeSelector from './TableSizeSelector'
+import { useStore } from '../../../../store'
 
 type ActivedButton = 'strong' | 'link' | 'emphasis' | 'inlineCode' | 'strike_through'
 
@@ -93,7 +93,7 @@ export const MenuView = () => {
   const [iframeForm] = Form.useForm()
   const { view } = usePluginViewContext()
   const [loading, getEditor] = useInstance()
-  const [{ isDark }] = useStore()
+  const isDark = useStore(state => state.isDark)
   const {
     token: { colorBorderSecondary, colorBgContainer, fontFamilyCode, colorTextTertiary, colorSplit },
   } = theme.useToken()

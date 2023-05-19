@@ -3,15 +3,12 @@ import { CaretDownOutlined, CopyOutlined } from '@ant-design/icons'
 import { css } from '@emotion/react'
 import { Node } from '@milkdown/prose/model'
 import { Button, Collapse, ConfigProvider, Row, Select, Skeleton, Space, Spin, theme, Tooltip } from 'antd'
-import { FC, ReactNode, useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useCopyText } from '../../../../hooks'
 import { Language } from '../../utils/language'
 import { useNodeViewContext } from '@prosemirror-adapter/react'
 import { useShiki } from '../../../../contexts/useShiki'
-import { useUser } from '../../../../contexts/useUser'
-import { useStore } from '../../../../contexts/useStore'
 import { useInstance } from '@milkdown/react'
-import { forceUpdate, outline } from '@milkdown/utils'
 
 export function CodeBlock() {
   const { contentRef, selected, node, setAttrs, view } = useNodeViewContext()

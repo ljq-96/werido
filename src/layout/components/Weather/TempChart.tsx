@@ -1,7 +1,6 @@
 import { EChartsOption, graphic } from 'echarts'
 import { generate } from '@ant-design/colors'
 import { CSSProperties, memo } from 'react'
-import { useUser } from '../../../contexts/useUser'
 import ReactEcharts from '../../../components/Echarts'
 import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
 import { theme } from 'antd'

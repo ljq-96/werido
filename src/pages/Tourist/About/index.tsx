@@ -2,10 +2,10 @@
 import { EnvironmentOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons'
 import { css } from '@emotion/react'
 import { Avatar, Col, Row, Space, theme } from 'antd'
-import { useUser } from '../../../contexts/useUser'
+import { useStore } from '../../../store'
 
 function About() {
-  const [user] = useUser()
+  const user = useStore(state => state.user)
   const {
     token: { boxShadow, colorBgContainer, borderRadius, colorPrimary, colorPrimaryHover, colorBorderSecondary },
   } = theme.useToken()

@@ -1,12 +1,11 @@
 import { Card, Divider, Empty, Tag } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { useStore } from '../../../../contexts/useStore'
-import { useUser } from '../../../../contexts/useUser'
+import { useStore } from '../../../../store'
 
 function TagsCard({ current }: { current?: string }) {
-  const [{ tags }] = useStore()
+  const tags = useStore(state => state.tags)
+  const { username } = useStore(state => state.user)
   const navigate = useNavigate()
-  const [{ username }] = useUser()
   return (
     <Card title='标签'>
       {tags.length ? (

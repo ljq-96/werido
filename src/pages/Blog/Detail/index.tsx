@@ -7,13 +7,12 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { IBlog } from '../../../../types'
 import { request } from '../../../api'
 import MarkdownEditor, { EditorIntance } from '../../../components/MarkdownEditor'
-import { useStore } from '../../../contexts/useStore'
 import { MilkdownProvider } from '@milkdown/react'
 import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
-import logo from '../../../favicon.svg'
+import { useStore } from '../../../store'
 
 function BlogDetail() {
-  const [{ tags }, { getTags }] = useStore()
+  const { tags, getTags } = useStore(({ tags, getTags }) => ({ tags, getTags }))
   const { state } = useLocation()
   console.log(state)
 

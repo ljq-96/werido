@@ -4,15 +4,15 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { PageProps } from '../../../types'
 import { TranslateX } from '../../components/Animation'
 import UserCard from '../../components/UserCard'
-import { useUser } from '../../contexts/useUser'
 import { useParseRoute } from '../../hooks'
 import './style.less'
+import { useStore } from '../../store'
 
 function UserCenterLayout(props: PageProps) {
   const { route } = props
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const [user] = useUser()
+  const user = useStore(state => state.user)
 
   const parsedRoute = useParseRoute(route, { showAll: true })
 
@@ -23,7 +23,7 @@ function UserCenterLayout(props: PageProps) {
           <Affix offsetTop={80}>
             <div>
               <TranslateX>
-                <UserCard user={user}>
+                <UserCard user={user as any}>
                   <div>
                     <Button type='primary' block shape='round' onClick={() => navigate(`/user/${user.username}/blog`)}>
                       我的主页

@@ -7,8 +7,8 @@ import { request } from '../../../../api'
 import CommonTable, { CommonTableInstance, ToolItem } from '../../../../components/CommonTable'
 import { formatTime } from '../../../../utils/common'
 import { TranslateX } from '../../../../components/Animation'
-import { useStore } from '../../../../contexts/useStore'
 import { ColumnsType } from 'antd/es/table'
+import { useStore } from '../../../../store'
 
 // TODO 导出
 function UserCenterBlogList(props) {
@@ -17,7 +17,7 @@ function UserCenterBlogList(props) {
   const [form] = Form.useForm()
   const tableRef = useRef<CommonTableInstance>(null)
   const navigate = useNavigate()
-  const [{ tags }, { getTags }] = useStore()
+  const { tags, getTags } = useStore(({ tags, getTags }) => ({ tags, getTags }))
 
   const toolList: ToolItem[] = [
     {

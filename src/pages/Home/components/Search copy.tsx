@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Card, Input, Popover, Tooltip, ConfigProvider } from 'antd'
+import { Card, Input, Popover, Tooltip, ConfigProvider, theme } from 'antd'
 import { FieldTimeOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import Space from '../../../components/Canvas/Space'
 import { debounce } from '../../../utils/common'
-import { useUser } from '../../../contexts/useUser'
 import LandScape1 from '../../../components/Wallpaper/LandScape1'
 import { useWindowScroll } from 'react-use'
 import dayjs from 'dayjs'
+import { useStore } from '../../../store'
 
 declare global {
   interface Window {
@@ -18,7 +18,9 @@ const Search = props => {
   const [time, setTime] = useState(dayjs().format('YYYY-MM-DD HH:mm:ss'))
   const [sugList, setSugList] = useState<string[]>([])
   const [isOnSearch, setIsOnSearch] = useState(false)
-  const [loginUser] = useUser()
+  const {
+    token: { colorPrimary },
+  } = theme.useToken()
 
   const height = useMemo(() => {
     if (isOnSearch) {
@@ -83,7 +85,7 @@ const Search = props => {
           overflow: 'hidden',
         }}
       >
-        <Space color={loginUser?.themeColor} starColors={['#fff']} sunColor='#ffa940' animate />
+        <Space color={colorPrimary} starColors={['#fff']} sunColor='#ffa940' animate />
         {/* <LandScape1 color={loginUser?.themeColor} style={{ position: 'absolute', bottom: '-10%', width: '100%' }} /> */}
         <div className={`search ${isOnSearch ? 'onsearch' : ''}`} style={{ height: height }}>
           <input

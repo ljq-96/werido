@@ -1,6 +1,6 @@
+import { theme } from 'antd'
 import Echarts from '../..'
 import { EChartsOption } from 'echarts'
-import { useUser } from '../../../../contexts/useUser'
 import { memo } from 'react'
 import isDeepEqual from 'react-use/lib/misc/isDeepEqual'
 
@@ -14,7 +14,9 @@ interface IProps {
 
 function RoseChart(props: IProps) {
   const { data = [], loading } = props
-  const [{ themeColor }] = useUser()
+  const {
+    token: { colorPrimary },
+  } = theme.useToken()
 
   return (
     <Echarts
@@ -59,7 +61,7 @@ function RoseChart(props: IProps) {
               },
             },
             itemStyle: {
-              color: themeColor,
+              color: colorPrimary,
             },
             data: data?.filter(item => !!item.value),
           },

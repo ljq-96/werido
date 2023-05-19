@@ -14,12 +14,16 @@ import { TranslateX } from '../../components/Animation'
 import { MoreOutlined } from '@ant-design/icons'
 import { useModalDispatch } from '../../contexts/useModal/hooks'
 import { basicModalView } from '../../contexts/useModal/actions'
-import { useBookmarks } from '../../contexts/useStore/hooks/useBookmarks'
-import { useStore } from '../../contexts/useStore'
+import { useStore } from '../../store'
 
 function Bookmark() {
   const modalDispatch = useModalDispatch()
-  const [{ bookmarks, bookmarksLoading: loading }, { getBookmarks, setBookmarks }] = useStore()
+  const { bookmarks, bookmarksLoading, getBookmarks, setBookmarks } = useStore(state => ({
+    bookmarks: state.bookmarks,
+    bookmarksLoading: state.bookmarksLoading,
+    getBookmarks: state.getBookmarks,
+    setBookmarks: state.setBookmarks,
+  }))
 
   useEffect(() => {
     getBookmarks()
@@ -62,7 +66,7 @@ function Bookmark() {
             </Dropdown>
           }
         >
-          <Spin spinning={loading}>
+          <Spin spinning={bookmarksLoading}>
             {bookmarks.length > 0 ? (
               <MultipleContainers
                 vertical

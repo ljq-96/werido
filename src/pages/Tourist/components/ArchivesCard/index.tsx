@@ -2,12 +2,11 @@
 import { css } from '@emotion/react'
 import { Card, Empty, theme } from 'antd'
 import { Link } from 'react-router-dom'
-import { useStore } from '../../../../contexts/useStore'
-import { useUser } from '../../../../contexts/useUser'
+import { useStore } from '../../../../store'
 
 function ArchivesCard({ current }: { current?: string }) {
-  const [{ archives }] = useStore()
-  const [{ username }] = useUser()
+  const archives = useStore(state => state.archives)
+  const { username } = useStore(state => state.user)
   const {
     token: { colorBgLayout, borderRadius, colorText, colorTextDescription },
   } = theme.useToken()

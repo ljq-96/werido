@@ -7,9 +7,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Allotment } from 'allotment'
 import 'allotment/dist/style.css'
 import { css } from '@emotion/react'
-import { useUser } from '../../../../contexts/useUser'
-import { useStore } from '../../../../contexts/useStore'
 import { template } from './utils'
+import { useStore } from '../../../../store'
 
 export const Diagram: FC = () => {
   const [showPreview, setShowPreview] = useState(true)
@@ -20,8 +19,7 @@ export const Diagram: FC = () => {
   const codeInput = useRef<HTMLTextAreaElement>(null)
   const codePanel = useRef<HTMLDivElement>(null)
   const rendering = useRef(false)
-  const [{ themeColor }] = useUser()
-  const [{ isDark }] = useStore()
+  const isDark = useStore(state => state.isDark)
 
   const {
     token: { colorPrimary, colorBorder, colorPrimaryBorderHover },
@@ -57,7 +55,7 @@ export const Diagram: FC = () => {
   return (
     <div
       css={css({
-        '--focus-border': themeColor,
+        '--focus-border': colorPrimary,
         '--separator-border': colorBorder,
         textarea: {
           fontFamily: '"JetBrains Mono","Menlo","Consolas"',

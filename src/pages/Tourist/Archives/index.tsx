@@ -5,18 +5,17 @@ import { Col, Row, Card, Affix, Tag, theme, Steps, Breadcrumb, Empty } from 'ant
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import UserCard from '../components/UserCard'
-import { useStore } from '../../../contexts/useStore'
-import { useUser } from '../../../contexts/useUser'
 import { formatTime } from '../../../utils/common'
 import ArchivesCard from '../components/ArchivesCard'
 import CatalogCard from '../components/CatalogCard'
 import TagsCard from '../components/TagsCard'
+import { useStore } from '../../../store'
 
 const GUTTER: any = [16, 16]
 
 function Archives() {
-  const [user] = useUser()
-  const [{ archives }] = useStore()
+  const user = useStore(state => state.user)
+  const archives = useStore(state => state.archives)
   const params = useParams()
   const archive = params['*']
   const {
@@ -27,7 +26,7 @@ function Archives() {
     if (archive) {
       return archives.filter(item => item.blogs.length && item.time === archive).reverse()
     }
-    const _temp = archives.map(item => ({ ...item, time: item.time.split('-')[0] })).reverse()
+    const _temp = archives.map(item => ({ ...item, time: item.time.split('-')[0], blogs: [...item.blogs] })).reverse()
     for (let i = 0; i < _temp.length; i++) {
       for (let j = i + 1; j < _temp.length; j++) {
         if (_temp[i].time === _temp[j].time) {

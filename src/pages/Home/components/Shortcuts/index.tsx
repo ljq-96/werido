@@ -11,7 +11,7 @@ import { css } from '@emotion/react'
 import { Card, Col, Row, theme } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { UserStatus } from '../../../../../types/enum'
-import { useUser } from '../../../../contexts/useUser'
+import { useStore } from '../../../../store'
 
 const actions = [
   { title: '新增文章', icon: <EditOutlined />, path: '/editor' },
@@ -27,7 +27,7 @@ const adminActions = [
 
 function Shortcuts() {
   const navigate = useNavigate()
-  const [{ status }] = useUser()
+  const { status } = useStore(({ user }) => user)
   const {
     token: { colorPrimary, colorPrimaryBg, borderRadius, colorBgLayout },
   } = theme.useToken()
