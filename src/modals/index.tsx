@@ -5,8 +5,8 @@ import TodoModal from './TodoModal'
 export default function Modals() {
   return (
     <Fragment>
-      <BookmarkModal />
-      <TodoModal />
+      {/* <BookmarkModal />
+      <TodoModal /> */}
     </Fragment>
   )
 }

@@ -7,13 +7,12 @@ import { MultipleContainers } from '../../../components/Sortable/MultipleContain
 import { rectSortingStrategy } from '@dnd-kit/sortable'
 import { DocIndexType } from '../../../../types/enum'
 import { extract } from '../../../utils/common'
-import { useModalDispatch } from '../../../contexts/useModal/hooks'
-import { basicModalView } from '../../../contexts/useModal/actions'
+import EasyModal from '../../../utils/easyModal'
+import BookmarkModal from '../../../modals/BookmarkModal'
 
 function Bookmark() {
   const [bookmarks, setBookmarks] = useState<IBookmark[]>([])
   const [loading, setLoading] = useState(false)
-  const modalDispatch = useModalDispatch()
 
   const getBookmark = () => {
     setLoading(true)
@@ -61,15 +60,10 @@ function Bookmark() {
                 onMenu={action => {
                   switch (action) {
                     case 'edit':
-                      modalDispatch(
-                        basicModalView.bookmarkModal.actions(true, {
-                          ...value,
-                          onOk: newVal => {
-                            Object.assign(value, newVal)
-                            setBookmarks([...bookmarks])
-                          },
-                        }),
-                      )
+                      EasyModal.show(BookmarkModal, { ...value }).then(newVal => {
+                        Object.assign(value, newVal)
+                        setBookmarks([...bookmarks])
+                      })
                       break
                     case 'pin':
                       request

@@ -2,15 +2,13 @@ import { DatePicker, Form, Input, Modal, Space } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { request } from '../../api'
-import { useModal } from '../../contexts/useModal'
-import { basicModalView, ModalActions } from '../../contexts/useModal/actions'
+import EasyModal from '../../utils/easyModal'
+import { ITodo } from '../../../types'
 
-function TodoModal() {
-  const [{ modalAction, todoModalOptions }, { dispatch }] = useModal()
+const TodoModal = EasyModal.create<ITodo>(() => {
+  const modal = EasyModal.useModal<ITodo>()
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm()
-
-  console.log(todoModalOptions)
 
   const handleFinish = async fields => {
     setLoading(true)
@@ -25,37 +23,37 @@ function TodoModal() {
       end: end.format().replace(/(.*?)T/, dateStr + 'T'),
       description,
     }
-    if (todoModalOptions) {
-      await request.todo({ method: 'PUT', query: todoModalOptions._id, data })
+    if (modal.props?._id) {
+      await request.todo({ method: 'PUT', query: modal.props._id, data })
     } else {
       await request.todo({ method: 'POST', data })
     }
-    todoModalOptions?.onOk()
+    modal.resolve()
     form.resetFields()
-    dispatch(basicModalView.destroy.actions())
+    modal.hide()
     setLoading(false)
   }
 
   useEffect(() => {
-    if (modalAction === ModalActions.todoModal && todoModalOptions) {
-      const { start, end, description } = todoModalOptions
+    if (modal.open && modal.props?._id) {
+      const { start, end, description } = modal.props
       form.setFieldsValue({
         date: dayjs(start).startOf('day'),
         time: [dayjs(start), dayjs(end)],
         description,
       })
     }
-  }, [modalAction, todoModalOptions])
+  }, [modal.open, modal.props])
 
   return (
     <Modal
-      title={`${todoModalOptions ? '编辑' : '添加'}日程`}
-      open={modalAction === ModalActions.todoModal}
+      title={`${modal.props?._id ? '编辑' : '添加'}日程`}
+      open={modal.open}
       onOk={form.submit}
       width={500}
       okButtonProps={{ loading }}
       onCancel={() => {
-        dispatch(basicModalView.destroy.actions())
+        modal.hide()
         form.resetFields()
       }}
     >
@@ -76,6 +74,6 @@ function TodoModal() {
       </Form>
     </Modal>
   )
-}
+})
 
 export default TodoModal

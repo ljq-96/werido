@@ -3,7 +3,6 @@ import { Fragment, useEffect, useState } from 'react'
 import { IBookmark } from '../../../types'
 import { request } from '../../api'
 import BookmarkItem from '../../components/BookmarkItem'
-import BookmarkModal from '../../components/Modal/BookmarkModal'
 import { MultipleContainers } from '../../components/Sortable/MultipleContainers'
 import { rectSortingStrategy } from '@dnd-kit/sortable'
 import './style.less'
@@ -12,12 +11,11 @@ import { extract } from '../../utils/common'
 import Tops from '../../components/Tops'
 import { TranslateX } from '../../components/Animation'
 import { MoreOutlined } from '@ant-design/icons'
-import { useModalDispatch } from '../../contexts/useModal/hooks'
-import { basicModalView } from '../../contexts/useModal/actions'
 import { useStore } from '../../store'
+import EasyModal from '../../utils/easyModal'
+import BookmarkModal from '../../modals/BookmarkModal'
 
 function Bookmark() {
-  const modalDispatch = useModalDispatch()
   const { bookmarks, bookmarksLoading, getBookmarks, setBookmarks } = useStore(state => ({
     bookmarks: state.bookmarks,
     bookmarksLoading: state.bookmarksLoading,
@@ -50,12 +48,7 @@ function Bookmark() {
                     label: '添加书签',
                     key: 1,
                     onClick: () => {
-                      modalDispatch(
-                        basicModalView.bookmarkModal.actions(true, {
-                          group: bookmarks.map(item => item.title),
-                          onOk: getBookmarks,
-                        }),
-                      )
+                      EasyModal.show(BookmarkModal, { group: bookmarks.map(item => item.title) }).then(getBookmarks)
                     },
                   },
                   { label: '导入书签', key: 2 },
@@ -106,15 +99,10 @@ function Bookmark() {
                     onMenu={action => {
                       switch (action) {
                         case 'edit':
-                          modalDispatch(
-                            basicModalView.bookmarkModal.actions(true, {
-                              ...value,
-                              onOk: newVal => {
-                                Object.assign(value, newVal)
-                                setBookmarks([...bookmarks])
-                              },
-                            }),
-                          )
+                          EasyModal.show(BookmarkModal, { ...value }).then(newVal => {
+                            Object.assign(value, newVal)
+                            setBookmarks([...bookmarks])
+                          })
                           break
                         case 'pin':
                           request.bookmark({ method: 'PUT', query: value._id, data: { pin: !value.pin } }).then(() => {

@@ -4,8 +4,11 @@ import { RcFile, UploadFile } from 'antd/es/upload'
 import { useEffect, useRef, useState } from 'react'
 import { IBookmark } from '../../../types'
 import { request } from '../../api'
-import { useModal } from '../../contexts/useModal'
-import { basicModalView, ModalActions } from '../../contexts/useModal/actions'
+import EasyModal, { useModal } from '../../utils/easyModal'
+
+interface IProps extends Partial<IBookmark> {
+  group?: string[]
+}
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -16,8 +19,9 @@ const getBase64 = (file: RcFile): Promise<string> =>
     reader.onerror = error => reject(error)
   })
 
-function BookmarkModal() {
-  const [{ modalAction, bookmarkModalOptions }, { dispatch }] = useModal()
+const BookmarkModal = EasyModal.create<IProps>(() => {
+  const modal = useModal<IProps>()
+  const { props, hide, resolve, open } = modal
   const [onSubmit, setOnSubmit] = useState(false)
   const [icon, setIcon] = useState<UploadFile>()
   const [form] = Form.useForm()
@@ -27,10 +31,10 @@ function BookmarkModal() {
       setOnSubmit(true)
       const iconStr = icon ? (icon?.originFileObj ? await getBase64(icon?.originFileObj) : icon?.thumbUrl) : null
       fields.icon = iconStr
-      if (bookmarkModalOptions._id) {
+      if (props._id) {
         await request.bookmark({
           method: 'PUT',
-          query: bookmarkModalOptions._id,
+          query: props._id,
           data: fields,
         })
         message.success('更新成功')
@@ -44,44 +48,44 @@ function BookmarkModal() {
 
       form.resetFields()
       setOnSubmit(false)
-      bookmarkModalOptions?.onOk(fields)
-      dispatch(basicModalView.destroy.actions())
+      resolve(fields)
+      hide()
     } catch {
       setOnSubmit(false)
     }
   }
 
   useEffect(() => {
-    if (bookmarkModalOptions?._id) {
+    if (props?._id) {
       form.setFieldsValue({
-        ...bookmarkModalOptions,
+        ...props,
       })
       setIcon({
         uid: '1',
         name: 'icon',
-        thumbUrl: bookmarkModalOptions.icon,
+        thumbUrl: props.icon,
       })
     }
-  }, [bookmarkModalOptions])
+  }, [props])
 
   return (
     <Modal
       title='书签'
-      open={modalAction === ModalActions.bookmarkModal}
+      open={open}
       onOk={form.submit}
       okButtonProps={{ loading: onSubmit }}
       onCancel={() => {
         form.resetFields()
         setIcon(null)
-        dispatch(basicModalView.destroy.actions())
+        hide()
       }}
     >
       <Form form={form} onFinish={handleCreate} labelCol={{ style: { width: 60 } }}>
-        {!bookmarkModalOptions?._id && (
+        {!props?._id && (
           <Form.Item label='分组' name='parent' rules={[{ required: true, message: '请选择分组' }]}>
             <AutoComplete
               placeholder='请选择分组'
-              options={bookmarkModalOptions?.group?.map(item => ({ label: item, value: item }))}
+              options={props?.group?.map(item => ({ label: item, value: item }))}
             />
           </Form.Item>
         )}
@@ -116,6 +120,6 @@ function BookmarkModal() {
       </Form>
     </Modal>
   )
-}
+})
 
 export default BookmarkModal

@@ -3,11 +3,10 @@ import { Fragment, useEffect, useState } from 'react'
 import { ITodo } from '../../../../../types'
 import { request } from '../../../../api'
 import Calendar from '../../../../components/Calendar'
-import { useModal } from '../../../../contexts/useModal'
-import { basicModalView } from '../../../../contexts/useModal/actions'
+import EasyModal from '../../../../utils/easyModal'
+import TodoModal from '../../../../modals/TodoModal'
 
 function HomeCalendar() {
-  const [_, { dispatch }] = useModal()
   const [todoList, setTodoList] = useState<ITodo[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -28,16 +27,14 @@ function HomeCalendar() {
         todo={todoList}
         loading={loading}
         extra={
-          <Button type='dashed' onClick={() => dispatch(basicModalView.todoModal.actions(true, { onOk: getTodoList }))}>
+          <Button type='dashed' onClick={() => EasyModal.show(TodoModal, null).then(getTodoList)}>
             添加日程
           </Button>
         }
         onAction={({ type, todo }) => {
           switch (type) {
             case 'edit':
-              console.log(type, todo)
-
-              dispatch(basicModalView.todoModal.actions(true, { ...todo, onOk: getTodoList }))
+              EasyModal.show(TodoModal, todo).then(getTodoList)
               break
             case 'delete':
               Modal.confirm({

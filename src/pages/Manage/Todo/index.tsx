@@ -6,9 +6,9 @@ import { Fragment, useRef } from 'react'
 import { ITodo } from '../../../../types'
 import { request } from '../../../api'
 import CommonTable, { CommonTableInstance, ToolItem } from '../../../components/CommonTable'
-import { useModal } from '../../../contexts/useModal'
-import { basicModalView } from '../../../contexts/useModal/actions'
 import { formatTime } from '../../../utils/common'
+import EasyModal from '../../../utils/easyModal'
+import TodoModal from '../../../modals/TodoModal'
 
 const toolList: ToolItem[] = [
   {
@@ -34,7 +34,6 @@ const toolList: ToolItem[] = [
 ]
 
 function TodoManage() {
-  const [_, { dispatch }] = useModal()
   const tableRef = useRef<CommonTableInstance>(null)
 
   const handleDelete = (id: string) => {
@@ -87,12 +86,7 @@ function TodoManage() {
             <Button
               type='link'
               onClick={() => {
-                dispatch(
-                  basicModalView.todoModal.actions(true, {
-                    ...record,
-                    onOk: tableRef.current.fetchData,
-                  }),
-                )
+                EasyModal.show(TodoModal, record).then(() => tableRef.current.fetchData())
               }}
             >
               编辑
