@@ -10,6 +10,10 @@ export class BlogService {
     return await this.blogModel.findById(id)
   }
 
+  public async findOne(params: Blog) {
+    return await this.blogModel.findOne(params)
+  }
+
   public async getList(params: Blog, pageInfo?: { page: number; size: number }) {
     const { page, size } = pageInfo || { page: 1, size: 100000 }
     const list = await this.blogModel

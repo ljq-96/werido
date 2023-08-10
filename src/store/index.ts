@@ -8,8 +8,8 @@ type Actions = {
   setIsDark: (isDark: boolean) => void
   getTags: (name?: string) => Promise<{ name: string; value: number }[]>
   getArchives: (name?: string) => Promise<{ name: string; value: number }[]>
-  getCatalog: (name?: string) => Promise<ICatalog[]>
-  setCatalog: (catalog: ICatalog[]) => void
+  getBlog: (name?: string) => Promise<IBlog[]>
+  setBlog: (catalog: IBlog[]) => void
   getBookmarks: () => Promise<IBookmark[]>
   setBookmarks: (catalog: IBookmark[]) => void
   getUser: (name?: string) => Promise<Partial<IUser>>
@@ -50,16 +50,16 @@ export const useStore = create<State & Actions>((set, get) => {
         return res
       })
     },
-    setCatalog: (catalog: ICatalog[]) => set({ catalog }),
-    getCatalog: (name?: string) => {
-      const catalog = get().catalog
-      if (!catalog.length) set({ catalogLoading: true })
+    setBlog: (blog: IBlog[]) => set({ blog }),
+    getBlog: (name?: string) => {
+      const blog = get().blog
+      if (!blog.length) set({ catalogLoading: true })
       const execute = name
         ? request.tourist({ method: 'GET', query: `${name}/catalog` })
         : request.blog({ method: 'GET', query: 'catalog' })
       return execute
         .then(res => {
-          set({ catalog: res })
+          set({ blog: res })
           return res
         })
         .finally(() => set({ catalogLoading: false }))
@@ -80,3 +80,23 @@ export const useStore = create<State & Actions>((set, get) => {
     },
   }
 })
+
+function formatCatalogTree(arr: IBlog[]) {
+  const map = arr.reduce((a, b) => {
+    a[b._id] = b
+    return a
+  }, {})
+
+  const fn = (current: IBlog) => {
+    const res = []
+    while (current) {
+      const children = current.child ? fn(map[current.child]) : []
+
+      res.push({ ...current, children })
+      current = map[current.sibling]
+    }
+    return res
+  }
+
+  return fn(arr.find(item => item.parent === 'root'))
+}

@@ -15,10 +15,10 @@ export class Blog {
   @prop({ type: String })
   cover?: string
 
-  @prop({ type: Number })
+  @prop({ type: Number, default: 0 })
   words?: number
 
-  @prop({ type: Array })
+  @prop({ type: Array, default: [] })
   tags?: string[]
 
   @prop({ ref: () => User })
@@ -33,14 +33,14 @@ export class Blog {
   @prop({ type: String, default: dayjs().format() })
   updateTime?: string
 
-  @prop({ ref: () => Blog })
-  prev?: Ref<Blog>
+  @prop({ ref: () => Blog, type: String })
+  parent?: Ref<Blog> | 'root'
 
   @prop({ ref: () => Blog })
-  next?: Ref<Blog>
+  child?: Ref<Blog>
 
   @prop({ ref: () => Blog })
-  parent?: Ref<Blog>
+  sibling?: Ref<Blog>
 }
 
 export const blogModel = getModelForClass(Blog)

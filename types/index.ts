@@ -106,8 +106,8 @@ export interface IBookmark {
 
 export interface IBlog {
   _id: string
-  prev: string
-  next: string
+  child: string
+  sibling: string
   parent: string
   createTime: number
   updateTime: number
@@ -121,7 +121,8 @@ export interface IBlog {
   inCatalog: boolean
 }
 
-export interface ICatalog extends Pick<IBlog, '_id' | 'title' | 'createTime' | 'updateTime'> {
+export interface ICatalog
+  extends Pick<IBlog, '_id' | 'title' | 'createTime' | 'updateTime' | 'parent' | 'child' | 'sibling'> {
   children: ICatalog[]
 }
 

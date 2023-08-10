@@ -24,8 +24,34 @@ export class BlogController {
   public async getBlogCatalog(ctx: DarukContext) {
     const { _id } = ctx.app.context.user
     const data = (await this.blogService.getList({ creator: _id })).list
-    const docIndex = await this.docIndexService.getDocIndex({ user: _id, type: DocIndexType.文章 })
-    ctx.body = merge(docIndex, data)
+    // const docIndex = await this.docIndexService.getDocIndex({ user: _id, type: DocIndexType.文章 })
+    // const body = merge(docIndex, data)
+
+    // const walk = async (arr, parent) => {
+    //   for (let i = 0; i < arr.length; i++) {
+    //     console.log(arr[i]._id)
+
+    //     if (parent) {
+    //       if (i === 0) {
+    //         await this.blogService.updateOne(parent, { child: arr[i]._id })
+    //       }
+    //       await this.blogService.updateOne(arr[i]._id, { parent: parent })
+    //     }
+    //     if (!parent && i == 0) {
+    //       await this.blogService.updateOne(arr[i]._id, { parent: 'root' as any })
+    //     }
+    //     if (i < arr.length - 1) {
+    //       await this.blogService.updateOne(arr[i]._id, { sibling: arr[i + 1]._id })
+    //     }
+    //     if (arr[i].children?.length) {
+    //       walk(arr[i].children, arr[i]._id)
+    //     }
+    //   }
+    // }
+
+    // walk(body, undefined)
+
+    ctx.body = data
   }
 
   @middleware('validateToken')
@@ -38,7 +64,31 @@ export class BlogController {
   @middleware('validateToken')
   @post('')
   public async createBlog(ctx: DarukContext) {
-    ctx.body = await this.blogService.createOne(ctx.request.body)
+    const parent = ctx.request.body.parent
+    const blog = await this.blogService.createOne(ctx.request.body)
+    if (parent) {
+      await this.blogService.updateOne(blog._id.toString(), { parent: parent })
+      const parentDoc = await this.blogService.getDetail(parent)
+      if (parentDoc?.child) {
+        const prev = await this.blogService.findOne({ parent, sibling: undefined })
+        await this.blogService.updateOne(prev!._id.toString(), { sibling: blog._id })
+      } else {
+        await this.blogService.updateOne(parentDoc!._id.toString(), { child: blog._id })
+      }
+    } else {
+      const root = await this.blogService.findOne({ creator: blog.creator, parent: 'root' })
+      if (root) {
+        if (root.sibling) {
+          const prev = await this.blogService.findOne({ creator: blog.creator, parent: undefined, sibling: undefined })
+          await this.blogService.updateOne(prev!._id.toString(), { sibling: blog._id })
+        } else {
+          await this.blogService.updateOne(root._id.toString(), { sibling: blog._id })
+        }
+      } else {
+        await this.blogService.updateOne(blog._id.toString(), { parent: 'root' })
+      }
+    }
+    ctx.body = blog
   }
 
   @middleware('validateToken')

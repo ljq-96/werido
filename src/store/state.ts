@@ -4,7 +4,7 @@ export type State = {
   user: Partial<IUser>
   isDark: boolean
   tags: { name: string; value: number }[]
-  catalog: ICatalog[]
+  blog: IBlog[]
   catalogLoading: boolean
   bookmarks: IBookmark[]
   bookmarksLoading: boolean
@@ -15,7 +15,7 @@ export const initState: State = {
   user: { themeColor: '#1677ff' },
   isDark: false,
   tags: [],
-  catalog: [],
+  blog: [],
   catalogLoading: false,
   bookmarks: [],
   bookmarksLoading: false,

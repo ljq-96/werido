@@ -14,10 +14,7 @@ import { useStore } from '../../../store'
 function BlogDetail() {
   const { tags, getTags } = useStore(({ tags, getTags }) => ({ tags, getTags }))
   const { state } = useLocation()
-  console.log(state)
-
   const [onEdit, setOnEdit] = useState(() => !!(state as any)?.isEdit)
-  // const [onEdit, setOnEdit] = useState(true)
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<IBlog>(null)
   const [form] = Form.useForm()
@@ -51,8 +48,12 @@ function BlogDetail() {
           </Affix>,
         ]
       : [
-          <Popover overlayInnerStyle={{ padding: 0 }} content={<QRCode value={location.href} bordered={false} />}>
-            <Button type='text' icon={<ShareAltOutlined />} key={2} />
+          <Popover
+            key={2}
+            overlayInnerStyle={{ padding: 0 }}
+            content={<QRCode value={location.href} bordered={false} />}
+          >
+            <Button type='text' icon={<ShareAltOutlined />} />
           </Popover>,
           <Dropdown
             key={3}
@@ -132,7 +133,7 @@ function BlogDetail() {
     >
       <MilkdownProvider>
         <ProsemirrorAdapterProvider>
-          <MarkdownEditor readonly={!onEdit} value={detail?.content} />
+          <MarkdownEditor readonly={!onEdit} value={detail?.content} onChange={e => console.log(e)} />
         </ProsemirrorAdapterProvider>
       </MilkdownProvider>
     </PageContainer>

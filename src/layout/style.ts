@@ -7,14 +7,14 @@ export default () => {
   } = theme.useToken()
 
   return css({
-    '#logo': {
-      cursor: 'pointer',
-      ':hover': {
-        path: {
-          fill: colorTextSecondary,
-        },
-      },
-    },
+    // '#logo': {
+    //   cursor: 'pointer',
+    //   ':hover': {
+    //     path: {
+    //       fill: colorTextSecondary,
+    //     },
+    //   },
+    // },
     '.collapsed-btn': {
       position: 'absolute',
       right: -11,

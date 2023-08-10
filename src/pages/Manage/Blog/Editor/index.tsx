@@ -22,10 +22,10 @@ const BlogEditor = () => {
   const handleFinish = async fields => {
     setLoading(true)
     if (id) {
-      await request.blog({ method: 'PUT', query: id, data: { content: editor.current.getValue(), ...fields } })
+      await request.blog({ method: 'PUT', query: id, data: { content: detail?.content, ...fields } })
       message.success('已更新')
     } else {
-      await request.blog({ method: 'POST', data: { content: editor.current.getValue(), ...fields } })
+      await request.blog({ method: 'POST', data: { content: detail?.content, ...fields } })
       navigate(-1)
       message.success('已创建')
     }
@@ -82,7 +82,7 @@ const BlogEditor = () => {
             <MarkdownEditor
               readonly={false}
               value={detail.content}
-              // onChange={e => setDetail({ ...detail, content: e })}
+              onChange={e => setDetail({ ...detail, content: e })}
             />
           </ProsemirrorAdapterProvider>
         </MilkdownProvider>

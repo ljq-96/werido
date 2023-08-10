@@ -37,8 +37,6 @@ export const CatalogView = () => {
   } = theme.useToken()
 
   useEffect(() => {
-    console.log(123)
-
     const div = ref.current
     if (loading || !div) return
 

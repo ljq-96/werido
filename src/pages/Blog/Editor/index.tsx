@@ -15,8 +15,8 @@ const BlogEditor = () => {
   const { tags, getTags } = useStore(({ tags, getTags }) => ({ tags, getTags }))
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<IBlog>()
+  const valueCache = useRef<string>('')
   const id = useSearchParam('id')
-  const editor = useRef<EditorIntance>(null)
   const navigate = useNavigate()
   const [form] = Form.useForm()
   const tagOptions = useMemo(() => {
@@ -24,16 +24,16 @@ const BlogEditor = () => {
   }, [tags])
 
   const handleFinish = async fields => {
-    // setLoading(true)
-    // if (id) {
-    //   await request.blog({ method: 'PUT', query: id, data: { content: editor.current.getValue(), ...fields } })
-    //   message.success('已更新')
-    // } else {
-    //   await request.blog({ method: 'POST', data: { content: editor.current.getValue(), ...fields } })
-    //   navigate(-1)
-    //   message.success('已创建')
-    // }
-    // setLoading(false)
+    setLoading(true)
+    if (id) {
+      await request.blog({ method: 'PUT', query: id, data: { content: valueCache.current, ...fields } })
+      message.success('已更新')
+    } else {
+      await request.blog({ method: 'POST', data: { content: valueCache.current, ...fields } })
+      navigate(-1)
+      message.success('已创建')
+    }
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -44,6 +44,7 @@ const BlogEditor = () => {
     if (id) {
       request.blog({ method: 'GET', query: id }).then(res => {
         setDetail(res)
+        valueCache.current = res.content
         // editor.current.setValue(res.content)
         form.setFieldsValue(res)
       })
@@ -81,7 +82,7 @@ const BlogEditor = () => {
       />
       <MilkdownProvider>
         <ProsemirrorAdapterProvider>
-          <MarkdownEditor value={detail?.content} />
+          <MarkdownEditor value={detail?.content} onChange={e => (valueCache.current = e)} />
         </ProsemirrorAdapterProvider>
       </MilkdownProvider>
     </div>

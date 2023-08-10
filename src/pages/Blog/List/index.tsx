@@ -43,8 +43,6 @@ const BlogList = () => {
     getTags()
   }, [])
 
-  console.log(123)
-
   return (
     <Fragment>
       <Row gutter={16} wrap={false}>

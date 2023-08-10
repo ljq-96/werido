@@ -30,7 +30,7 @@ import {
   TreeSelect,
 } from 'antd'
 import { DataNode } from 'antd/es/tree'
-import { Fragment, MouseEventHandler, memo, useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, MouseEventHandler, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { IBlog, ICatalog } from '../../../../types'
 import { DocIndexType } from '../../../../types/enum'
@@ -41,13 +41,33 @@ import CatalogIcon from '../CatalogIcon'
 import useStyle from './style'
 import { useStore } from '../../../store'
 
+function formatCatalogTree(arr: IBlog[]) {
+  const map = arr.reduce((a, b) => {
+    a[b._id] = b
+    return a
+  }, {})
+
+  const fn = (current: IBlog) => {
+    const res = []
+    while (current) {
+      const children = current.child ? fn(map[current.child]) : []
+
+      res.push({ ...current, children })
+      current = map[current.sibling]
+    }
+    return res
+  }
+
+  return fn(arr.find(item => item.parent === 'root'))
+}
+
 function Catalog(props: TreeProps & { collpased?: boolean }) {
   const navigate = useNavigate()
-  const { catalog, catalogLoading, getCatalog, setCatalog } = useStore(state => ({
-    catalog: state.catalog,
+  const { blog, catalogLoading, getBlog, setBlog } = useStore(state => ({
+    blog: state.blog,
     catalogLoading: state.catalogLoading,
-    getCatalog: state.getCatalog,
-    setCatalog: state.setCatalog,
+    getBlog: state.getBlog,
+    setBlog: state.setBlog,
   }))
   const [expandedKeys, setExpandedKeys] = useState(undefined)
   const [expandCatalog, setExpandCatalog] = useState(true)
@@ -62,6 +82,9 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
   const [form] = Form.useForm()
   const style = useStyle()
   const el = useRef<HTMLDivElement>(null)
+
+  const catalog = useMemo(() => formatCatalogTree(blog), [blog])
+
   const defaultExpandedKeys = useMemo(() => {
     const keys = []
     const walk = (arr: ICatalog[]) => {
@@ -101,7 +124,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
         }
       })
     }
-    walk(catalog)
+    // walk(catalog)
     setSearchedCatalog(res)
   }
 
@@ -113,38 +136,20 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
   }
 
   const handleSubmit = async ({ title }) => {
-    const res = await request.blog({
+    await request.blog({
       method: 'POST',
       data: {
         title,
-        inCatalog: true,
+        parent: currentParent,
       },
     })
-    if (currentParent) {
-      treeWalk(catalog, item => {
-        if (item._id === currentParent) {
-          item.children.push({ ...res, children: [] })
-        }
-      })
-      await request.docIndex({
-        method: 'PUT',
-        query: DocIndexType.文章,
-        data: extract(catalog),
-      })
-    } else {
-      await request.docIndex({
-        method: 'PUT',
-        query: DocIndexType.文章,
-        data: extract([...catalog, { ...res, children: [] }]),
-      })
-    }
-    await getCatalog()
+    await getBlog()
     form.resetFields()
     setShowCreateModal(false)
     setCreateLoading(false)
     setCurrentParent(null)
     setSearchedCatalog(null)
-    navigate(`/blog/${res._id}`, { state: { isEdit: true } })
+    // navigate(`/blog/${res._id}`, { state: { isEdit: true } })
   }
 
   const handleMenu = (actions, data: IBlog) => {
@@ -188,7 +193,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
               method: 'DELETE',
               query: data._id,
             })
-            await getCatalog()
+            await getBlog()
             message.success('删除成功')
           },
         })
@@ -196,72 +201,72 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
     }
   }
 
-  const onDrop = info => {
-    const dropKey = info.node._id
-    const dragKey = info.dragNode._id
-    const dropPos = info.node.pos.split('-')
-    const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1])
+  const onDrop = useCallback(
+    info => {
+      const dropKey = info.node._id
+      const dragKey = info.dragNode._id
+      const dropPos = info.node.pos.split('-')
+      const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1])
 
-    const loop = (data, _id, callback: (node: DataNode, i: number, data: DataNode[]) => void) => {
-      for (let i = 0; i < data.length; i++) {
-        if (data[i]._id === _id) {
-          return callback(data[i], i, data)
-        }
-        if (data[i].children) {
-          loop(data[i].children!, _id, callback)
-        }
+      const dragObj = blog.find(item => item._id === dragKey)
+      const dropObj = blog.find(item => item._id === dropKey)
+
+      console.log(dragObj.title, dropObj.title, dropPosition)
+
+      // 移除自己
+      const drapParent = blog.find(item => item._id === dragObj.parent)
+      const dragPrev = blog.find(item => item.sibling === dragObj._id)
+      const dragNext = blog.find(item => item._id === dragObj.sibling)
+
+      if (drapParent && drapParent.child === dragObj._id) {
+        drapParent.child = dragObj.sibling
+        request.blog({ method: 'PUT', query: drapParent._id, data: { child: drapParent.child ?? null } })
       }
-    }
-    const data = [...catalog]
 
-    // Find dragObject
-    let dragObj: DataNode
-    loop(data, dragKey, (item, index, arr) => {
-      arr.splice(index, 1)
-      dragObj = item
-    })
+      if (dragPrev) {
+        dragPrev.sibling = dragObj.sibling
+        request.blog({ method: 'PUT', query: dragPrev._id, data: { sibling: dragPrev.sibling ?? null } })
+      }
+      if (!drapParent && !dragPrev && dragNext) {
+        dragNext.parent = dragObj.parent
+        request.blog({ method: 'PUT', query: dragNext._id, data: { parent: dragNext.parent ?? null } })
+      }
 
-    if (!info.dropToGap) {
-      // Drop on the content
-      loop(data, dropKey, item => {
-        item.children = item.children || []
-        // where to insert 示例添加到头部，可以是随意位置
-        item.children.unshift(dragObj)
-      })
-    } else if (
-      ((info.node as any).props.children || []).length > 0 && // Has children
-      (info.node as any).props.expanded && // Is expanded
-      dropPosition === 1 // On the bottom gap
-    ) {
-      loop(data, dropKey, item => {
-        item.children = item.children || []
-        // where to insert 示例添加到头部，可以是随意位置
-        item.children.unshift(dragObj)
-        // in previous version, we use item.children.push(dragObj) to insert the
-        // item to the tail of the children
-      })
-    } else {
-      let ar: DataNode[] = []
-      let i: number
-      loop(data, dropKey, (_item, index, arr) => {
-        ar = arr
-        i = index
-      })
-      if (dropPosition === -1) {
-        ar.splice(i!, 0, dragObj!)
+      // 插入
+      if (info.dropToGap) {
+        if (dropPosition === 1) {
+          dragObj.sibling = dropObj.sibling
+          dropObj.sibling = dragObj._id
+        }
+        if (dropPosition === -1) {
+          dragObj.parent = 'root'
+          dropObj.parent = null
+          dragObj.sibling = dropObj._id
+        }
       } else {
-        ar.splice(i! + 1, 0, dragObj!)
+        dragObj.parent = dropObj._id
+        dragObj.sibling = dropObj.child
+        dropObj.child = dragObj._id
       }
-    }
-    request.docIndex({ method: 'PUT', query: DocIndexType.文章, data: extract(data) })
-    setCatalog(data)
-  }
+
+      setBlog([...blog])
+      request.blog({
+        method: 'PUT',
+        query: dragObj._id,
+        data: { parent: dragObj.parent ?? null, sibling: dragObj.sibling ?? null },
+      })
+      request.blog({
+        method: 'PUT',
+        query: dropObj._id,
+        data: { parent: dropObj.parent ?? null, sibling: dropObj.sibling ?? null, child: dropObj.child ?? null },
+      })
+    },
+    [blog, setBlog],
+  )
 
   useEffect(() => {
-    getCatalog()
+    getBlog()
   }, [])
-
-  console.log(catalog)
 
   const CatalogTree = ({ actions }: { actions: boolean }) => {
     return catalogLoading ? (
@@ -293,7 +298,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
               {actions && (
                 <Space size={4} className='actions'>
                   <Button
-                    size='small'
+                    // size='small'
                     type='text'
                     icon={<PlusOutlined className='catalog-add' />}
                     onClick={e => handleCreate(e, data)}
@@ -324,7 +329,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
                     }}
                   >
                     <Button
-                      size='small'
+                      // size='small'
                       type='text'
                       icon={<MoreOutlined className='catalog-add' />}
                       onClick={e => e.stopPropagation()}
@@ -430,7 +435,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
           allowClear
           placeholder='搜索'
         />
-        <CatalogTree actions />
+        <CatalogTree actions={false} />
       </Modal>
     </div>
   )

@@ -1,5 +1,6 @@
 import { Button, Modal } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
+import { HappyProvider } from '@ant-design/happy-work-theme'
 import { ITodo } from '../../../../../types'
 import { request } from '../../../../api'
 import Calendar from '../../../../components/Calendar'
@@ -27,9 +28,11 @@ function HomeCalendar() {
         todo={todoList}
         loading={loading}
         extra={
-          <Button type='dashed' onClick={() => EasyModal.show(TodoModal, null).then(getTodoList)}>
-            添加日程
-          </Button>
+          <HappyProvider>
+            <Button type='dashed' onClick={() => EasyModal.show(TodoModal, null).then(getTodoList)}>
+              添加日程
+            </Button>
+          </HappyProvider>
         }
         onAction={({ type, todo }) => {
           switch (type) {
