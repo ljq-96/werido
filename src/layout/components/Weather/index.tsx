@@ -99,7 +99,6 @@ function Weather() {
           <CityCascader
             style={{ width: '100%' }}
             allowClear={false}
-            showArrow={false}
             bordered={false}
             onChange={setLocation}
             getPopupContainer={el => el.parentElement}

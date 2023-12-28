@@ -380,7 +380,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
               <Button
                 size='small'
                 type='text'
-                icon={<CatalogIcon open={expandCatalog} />}
+                icon={expandCatalog ? <ExportOutlined /> : <ExportOutlined />}
                 onClick={() => {
                   setExpandedKeys(expandCatalog ? [] : defaultExpandedKeys)
                   setExpandCatalog(!expandCatalog)

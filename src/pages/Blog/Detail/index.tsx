@@ -74,18 +74,21 @@ function BlogDetail() {
         ]
   }, [onEdit, id, detail])
 
-  useEffect(() => {
+  const getData = () => {
     setLoading(true)
     request
       .blog({ method: 'GET', query: id })
       .then(res => {
         setDetail(res)
         form.setFieldsValue({ title: res.title, tags: res.tags })
+        editor.current?.setValue(res.content)
       })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [id, onEdit])
+      .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    getData()
+  }, [id])
 
   // useEffect(() => {
   //   if ((state as any)?.isEdit) setOnEdit(true)
@@ -97,8 +100,8 @@ function BlogDetail() {
 
   return (
     <PageContainer
-      loading={loading}
       title={!onEdit && detail?.title}
+      ghost={false}
       onBack={() => navigate('/blog', { replace: true })}
       tags={
         !onEdit &&
@@ -131,11 +134,14 @@ function BlogDetail() {
         )
       }
     >
-      <MilkdownProvider>
-        <ProsemirrorAdapterProvider>
-          <MarkdownEditor readonly={!onEdit} value={detail?.content} onChange={e => console.log(e)} />
-        </ProsemirrorAdapterProvider>
-      </MilkdownProvider>
+      <MarkdownEditor
+        ref={editor}
+        readonly={!onEdit}
+        loading={loading}
+        onReady={() => {
+          getData()
+        }}
+      />
     </PageContainer>
   )
 }

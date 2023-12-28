@@ -40,13 +40,13 @@ const routes: RouteProps[] = [
       },
       {
         path: '/bookmark',
-        name: '书签',
+        name: '收藏夹',
         icon: <TagOutlined />,
         component: Outlet,
         routes: [
           {
             path: '/',
-            name: '书签',
+            name: '收藏夹',
             component: lazy(() => import('../pages/Bookmark')),
           },
         ],

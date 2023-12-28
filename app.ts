@@ -16,6 +16,9 @@ async function createServer() {
     notFound(ctx) {
       ctx.body = '404 notFound'
     },
+    loggerOptions: {
+      disable: true,
+    },
     errorOptions: {
       all(err, ctx) {
         ctx.body = err.message

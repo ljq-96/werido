@@ -25,12 +25,7 @@ export default () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      border: `1px solid ${colorBorder}`,
-      background: colorBgContainer,
       cursor: 'pointer',
-      '&:hover': {
-        background: colorBgLayout,
-      },
       '.icon': {
         transition: '0.4s',
         '&.collapsed': {

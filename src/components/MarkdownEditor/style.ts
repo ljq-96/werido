@@ -50,8 +50,6 @@ export default function useStyle() {
     h1: {
       borderBottom: `2px solid ${colorBorderSecondary}`,
       fontSize: '2em',
-      height: '2.5em',
-      lineHeight: '2.5em',
       padding: '0 0 10px',
       margin: '15px 0',
       transition: '0.4s',
@@ -60,8 +58,6 @@ export default function useStyle() {
     h2: {
       borderBottom: `1px solid ${colorBorderSecondary}`,
       fontSize: '1.5em',
-      height: '2em',
-      lineHeight: '2em',
       padding: '0 0 10px',
       margin: '15px 0',
       transition: '0.4s',
@@ -69,24 +65,18 @@ export default function useStyle() {
     },
     h3: {
       fontSize: '1.25em',
-      height: '1.75em',
-      lineHeight: '1.75em',
       margin: '15px 0',
       transition: '0.4s',
       fontWeight: 500,
     },
     h4: {
       fontSize: '1.125em',
-      height: '1.625em',
-      lineHeight: '1.625em',
       margin: '15px 0',
       transition: '0.4s',
       fontWeight: 500,
     },
     h5: {
       fontSize: '1em',
-      height: '1.5em',
-      lineHeight: '1.5em',
       margin: '15px 0',
       transition: '0.4s',
       fontWeight: 500,
@@ -220,7 +210,7 @@ export default function useStyle() {
       zIndex: '99 !important',
     },
     '.milkdown': {
-      padding: '16px 48px',
+      padding: '16px 48px 16px 24px',
       minHeight: 'calc(100vh - 256px)',
       '.editor': {
         outline: 'none',

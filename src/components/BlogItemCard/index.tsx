@@ -4,10 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { css, jsx } from '@emotion/react'
 import { Fragment, useEffect, useRef } from 'react'
 import dayjs from 'dayjs'
-import { EditorIntance, Render } from '../MarkdownEditor'
+import MarkdownEditor, { EditorIntance } from '../MarkdownEditor'
 import { IBlog } from '../../../types'
-import { MilkdownProvider } from '@milkdown/react'
-import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
 
 /** @jsxImportSource @emotion/react */
 const BlogItemCard = ({ item, setLink }: { item: IBlog; setLink: (id: string) => string }) => {
@@ -15,14 +13,6 @@ const BlogItemCard = ({ item, setLink }: { item: IBlog; setLink: (id: string) =>
   const { token } = theme.useToken()
   const navigate = useNavigate()
   const editorRef = useRef<EditorIntance>(null)
-
-  // useEffect(() => {
-  //   if (editorRef.current) {
-  //     console.log(description)
-
-  //     editorRef.current.setValue(description)
-  //   }
-  // }, [description])
 
   return (
     <Fragment>
@@ -63,12 +53,7 @@ const BlogItemCard = ({ item, setLink }: { item: IBlog; setLink: (id: string) =>
           {title}
         </Link>
         <div css={css({ marginTop: 8 })}>
-          <MilkdownProvider>
-            <ProsemirrorAdapterProvider>
-              <Render ref={editorRef} key={_id} value={description} />
-            </ProsemirrorAdapterProvider>
-          </MilkdownProvider>
-          <div></div>
+          <MarkdownEditor type='render' ref={editorRef} value={description} />
         </div>
         <Button
           size='small'
