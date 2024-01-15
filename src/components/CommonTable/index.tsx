@@ -85,7 +85,13 @@ function CommonTable(props: TableProps<any> & IProps, ref) {
           <Col span={24}>
             <TranslateY>
               <Card bodyStyle={{ paddingBottom: 0 }}>
-                <Form form={form} onFinish={execute} labelWrap labelCol={{ style: { width: toolLabelWidth } }}>
+                <Form
+                  form={form}
+                  variant='filled'
+                  onFinish={execute}
+                  labelWrap
+                  labelCol={{ style: { width: toolLabelWidth } }}
+                >
                   <Row gutter={16}>
                     {toolList.map(item => (
                       <Col key={item.name} xxl={6} xl={8} lg={8} md={12} sm={24}>

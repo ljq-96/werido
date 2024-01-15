@@ -50,7 +50,7 @@ const BlogEditor = () => {
       <PageHeader
         subTitle={
           <div style={{ height: 32 }}>
-            <Form form={form} onFinish={handleFinish} layout='inline'>
+            <Form form={form} variant='filled' onFinish={handleFinish} layout='inline'>
               <Form.Item name='title' rules={[{ required: true, message: '' }]}>
                 <Input placeholder='请输入标题' style={{ width: 256 }} allowClear />
               </Form.Item>

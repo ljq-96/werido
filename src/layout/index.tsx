@@ -64,7 +64,7 @@ export default (props: PageProps) => {
     <ProLayout
       css={style}
       loading={loading}
-      className='layout'
+      className={`layout ${/^\/blog\/\w{24,24}$/.test(pathname) ? 'no-padding' : ''}`}
       fixedHeader={true}
       collapsed={collapsed}
       siderWidth={isInBlog ? 280 : 180}

@@ -26,6 +26,7 @@ function App() {
     <BrowserRouter>
       <ConfigProvider
         theme={{
+          cssVar: true,
           algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
           token: {
             colorPrimary: themeColor,

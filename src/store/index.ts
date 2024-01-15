@@ -8,6 +8,7 @@ type Actions = {
   setIsDark: (isDark: boolean) => void
   getTags: (name?: string) => Promise<{ name: string; value: number }[]>
   getArchives: (name?: string) => Promise<{ name: string; value: number }[]>
+  getCatalog?: (name?: string) => Promise<any[]>
   getBlog: (name?: string) => Promise<IBlog[]>
   setBlog: (catalog: IBlog[]) => void
   getBookmarks: () => Promise<IBookmark[]>

@@ -6,6 +6,7 @@ import path from 'path'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import k2c from 'koa-connect'
 import proxy from './proxy'
+import { connect } from './server/utils/gfs'
 require('dotenv').config()
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -18,6 +19,15 @@ async function createServer() {
     },
     loggerOptions: {
       disable: true,
+    },
+    bodyOptions: {
+      multipart: true,
+      formidable: {
+        // 上传目录
+        uploadDir: __dirname,
+        // 保留文件扩展名
+        keepExtensions: true,
+      },
     },
     errorOptions: {
       all(err, ctx) {
@@ -44,6 +54,7 @@ async function createServer() {
   )
 
   await mongoose.connect(process.env.MONGO!)
+  connect()
   console.log(`running at http://localhost:${PORT}`)
   darukServer.listen(PORT)
 }

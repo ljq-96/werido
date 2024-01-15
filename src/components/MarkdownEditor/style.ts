@@ -1,7 +1,7 @@
 import { css, CSSObject } from '@emotion/react'
 import { theme } from 'antd'
 
-export default function useStyle() {
+export default function useStyle({ bordered = true }: { bordered?: boolean }) {
   const {
     token: {
       colorBgContainer,
@@ -204,13 +204,13 @@ export default function useStyle() {
   const editorStyle: CSSObject = {
     position: 'relative',
     backgroundColor: colorBgContainer,
-    border: `1px solid ${colorBorderSecondary}`,
+    border: `1px solid ${bordered ? colorBorderSecondary : 'transparent'}`,
     borderRadius: borderRadius,
     '[data-tippy-root]': {
       zIndex: '99 !important',
     },
     '.milkdown': {
-      padding: '16px 48px 16px 24px',
+      padding: bordered ? '16px 48px 16px 24px' : 'none',
       minHeight: 'calc(100vh - 256px)',
       '.editor': {
         outline: 'none',

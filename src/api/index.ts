@@ -15,6 +15,7 @@ const apiList = {
   detail: '/api/detail',
   todo: '/api/todo',
   tourist: '/api/tourist',
+  file: '/api/file/blob',
 }
 
 const adminApi = {

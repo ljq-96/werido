@@ -2,7 +2,7 @@ import { EASY_MODAL_ID } from './utils'
 
 type ModalPromise<V> = {
   resolve: BuildFnInterfaceCheck<V>
-  reject: (reason: any) => void
+  reject: (reason?: any) => void
 }
 
 type ItemConfig = {
@@ -17,6 +17,11 @@ type EasyModalItem<P = any, V = any> = {
   promise: ModalPromise<V>
   config: ItemConfig
 }
+type ModalComProps<P, V> = Omit<EasyModalItem<P, V>, 'promise'> &
+  ModalPromise<V> & {
+    hide: BuildFnInterfaceCheck<V>
+    remove: () => void
+  }
 type innerDispatch = <P, V>(action: EasyModalAction<P, V>) => void
 
 type ActionPayload<P, V> = {
@@ -34,14 +39,14 @@ type EasyModalAction<P = any, V = any> =
 
 type NoVoidValue<T> = T extends void ? never : T /* if else */
 // type Get Generics Type
-type BuildFnInterfaceCheck<V> = NoVoidValue<V> extends never ? () => void : (result: V | null /* hack */) => void
+type BuildFnInterfaceCheck<V> = NoVoidValue<V> extends never ? () => void : (result?: V | null /* hack */) => void
 
 type InnerModalProps<V = never> = {
   id: string
   open: boolean
   hide: BuildFnInterfaceCheck<V>
   resolve: BuildFnInterfaceCheck<V>
-  reject: (reason: any) => void
+  reject: (reason?: any) => void
   remove: () => void
   config?: ItemConfig
 }
@@ -68,6 +73,7 @@ type ModalResolveType<V> = NoVoidValue<V> extends never
 
 export type {
   EasyModalItem,
+  ModalComProps,
   EasyModalHOC,
   innerDispatch,
   EasyModalAction,

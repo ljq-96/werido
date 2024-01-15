@@ -46,7 +46,7 @@ function UserCenterDetail() {
 
   return (
     <Card>
-      <Form form={form} labelCol={{ style: { width: 100 } }} onFinish={handleFinish}>
+      <Form form={form} variant='filled' labelCol={{ style: { width: 100 } }} onFinish={handleFinish}>
         <TranslateX.List interval={100}>
           <Form.Item label='用户名' name='username' rules={[{ required: true, message: '请输入用户名！' }]}>
             <Input autoComplete='new-password' placeholder='请输入用户名' />

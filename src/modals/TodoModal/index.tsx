@@ -57,7 +57,7 @@ const TodoModal = EasyModal.create<ITodo>(() => {
         form.resetFields()
       }}
     >
-      <Form form={form} onFinish={handleFinish}>
+      <Form form={form} variant='filled' onFinish={handleFinish}>
         <Form.Item label='起止时间' required>
           <Space>
             <Form.Item name='date' noStyle rules={[{ required: true, message: '请选择日期' }]}>

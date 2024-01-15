@@ -90,9 +90,9 @@ function BlogDetail() {
     getData()
   }, [id])
 
-  // useEffect(() => {
-  //   if ((state as any)?.isEdit) setOnEdit(true)
-  // }, [state])
+  useEffect(() => {
+    if ((state as any)?.isEdit) setOnEdit(true)
+  }, [state])
 
   useEffect(() => {
     getTags()
@@ -115,7 +115,7 @@ function BlogDetail() {
       subTitle={
         onEdit && (
           <div style={{ height: 32 }}>
-            <Form form={form} onFinish={handleFinish} layout='inline'>
+            <Form form={form} variant='filled' onFinish={handleFinish} layout='inline'>
               <Form.Item name='title' rules={[{ required: true, message: '' }]} initialValue={detail?.title}>
                 <Input placeholder='请输入标题' style={{ width: 256 }} allowClear />
               </Form.Item>
@@ -136,6 +136,7 @@ function BlogDetail() {
     >
       <MarkdownEditor
         ref={editor}
+        bordered={false}
         readonly={!onEdit}
         loading={loading}
         onReady={() => {

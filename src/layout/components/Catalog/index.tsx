@@ -298,7 +298,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
               {actions && (
                 <Space size={4} className='actions'>
                   <Button
-                    // size='small'
+                    size='small'
                     type='text'
                     icon={<PlusOutlined className='catalog-add' />}
                     onClick={e => handleCreate(e, data)}
@@ -329,7 +329,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
                     }}
                   >
                     <Button
-                      // size='small'
+                      size='small'
                       type='text'
                       icon={<MoreOutlined className='catalog-add' />}
                       onClick={e => e.stopPropagation()}
@@ -409,7 +409,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
           setShowCreateModal(false)
         }}
       >
-        <Form form={form} onFinish={handleSubmit}>
+        <Form form={form} variant='filled' onFinish={handleSubmit}>
           <Form.Item label='文章标题' name='title' rules={[{ required: true, message: '请输入文章标题!' }]}>
             <Input placeholder='请输入文章标题' />
           </Form.Item>

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { forwardRef, memo, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { Milkdown, MilkdownProvider } from '@milkdown/react'
-import { Spin } from 'antd'
+import { Skeleton, Spin } from 'antd'
 import useStyle from './style'
 import { css } from '@emotion/react'
 import { editorViewCtx, editorViewOptionsCtx, parserCtx } from '@milkdown/core'
@@ -15,6 +15,7 @@ import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react'
 
 interface IProps {
   value?: string
+  bordered?: boolean
   height?: number | string
   controls?: MenuControls[]
   readonly?: boolean
@@ -29,8 +30,16 @@ export interface EditorIntance {
 }
 
 const M = forwardRef((props: IProps, ref) => {
-  const { height, controls, value, onReady, readonly = false, loading: contentLoading = false, type = 'editor' } = props
-  const style = useStyle()
+  const {
+    bordered,
+    controls,
+    value,
+    onReady,
+    readonly = false,
+    loading: contentLoading = false,
+    type = 'editor',
+  } = props
+  const style = useStyle({ bordered })
 
   const { get, loading } = useEditor({ readonly, onReady, value, type })
 

@@ -17,7 +17,7 @@ export const useCustomNode = () => {
   return [
     $view(imageSchema.node, () => nodeViewFactory({ component: Image })),
     $view(listItemSchema.node, () => nodeViewFactory({ component: ListItem })),
-    $view(headingSchema.node, () => nodeViewFactory({ component: HeadTitle })),
+    // $view(headingSchema.node, () => nodeViewFactory({ component: HeadTitle })),
     $view(codeBlockSchema.node, () => nodeViewFactory({ component: CodeBlock })),
     $view(diagramSchema.node, () => nodeViewFactory({ component: Diagram, stopEvent: () => true })),
     linkPlugin(widgetViewFactory),

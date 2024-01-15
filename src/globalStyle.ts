@@ -5,8 +5,19 @@ import { useMemo } from 'react'
 export default function useGlobalStyle(): Interpolation<Theme> {
   const { token } = theme.useToken()
   return useMemo(() => {
-    const { colorTextSecondary, borderRadius, colorBgTextHover, colorText } = token
+    const { colorTextSecondary, borderRadius, colorBgTextHover, colorText, colorBgContainer, colorBorder } = token
     return {
+      '.no-padding': {
+        '.ant-pro-page-container': {
+          '.ant-page-header': {
+            backgroundColor: colorBgContainer,
+          },
+          '.ant-pro-page-container-children-container': {
+            backgroundColor: colorBgContainer,
+          },
+        },
+      },
+
       '.catalog-tree': {
         '.ant-tree-treenode': {
           position: 'relative',

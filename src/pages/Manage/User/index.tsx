@@ -128,7 +128,13 @@ function UsersManage() {
           form.resetFields()
         }}
       >
-        <Form form={form} labelCol={{ style: { width: 70 } }} onFinish={handleSubmit} autoComplete={'false'}>
+        <Form
+          form={form}
+          variant='filled'
+          labelCol={{ style: { width: 70 } }}
+          onFinish={handleSubmit}
+          autoComplete={'false'}
+        >
           <Form.Item label='用户名' name='username' rules={[{ required: true, message: '请输入用户名！' }]}>
             <Input placeholder='请输入用户名' />
           </Form.Item>

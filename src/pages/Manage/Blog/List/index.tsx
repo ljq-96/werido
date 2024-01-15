@@ -143,7 +143,7 @@ function BlogManage() {
           form.resetFields()
         }}
       >
-        <Form form={form} labelCol={{ style: { width: 70 } }} onFinish={handleSubmit}>
+        <Form form={form} variant='filled' labelCol={{ style: { width: 70 } }} onFinish={handleSubmit}>
           <Form.Item label='用户名' name='username' rules={[{ required: true, message: '请输入用户名！' }]}>
             <Input placeholder='请输入用户名' />
           </Form.Item>

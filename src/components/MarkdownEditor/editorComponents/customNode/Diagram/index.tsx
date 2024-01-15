@@ -13,7 +13,7 @@ import { useStore } from '../../../../../store'
 export const Diagram: FC = () => {
   const [showPreview, setShowPreview] = useState(true)
   const [activeTab, setActiveTab] = useState<'preview' | 'code'>('preview')
-  const { node, setAttrs, selected } = useNodeViewContext()
+  const { node, setAttrs, view } = useNodeViewContext()
   const [code, setCode] = useState(() => node.attrs.value)
   const id = node.attrs.identity
   const codeInput = useRef<HTMLTextAreaElement>(null)
@@ -69,50 +69,56 @@ export const Diagram: FC = () => {
     >
       <Card
         contentEditable={false}
-        title={<span style={{ fontWeight: 'normal' }}>文本绘图</span>}
+        title={view.editable && <span style={{ fontWeight: 'normal' }}>文本绘图</span>}
         type='inner'
         size='small'
         extra={
-          <Space>
-            <Select
-              size='small'
-              placeholder='模板'
-              options={template}
-              style={{ width: 80 }}
-              onChange={e => {
-                setAttrs({ value: e })
-                setCode(e)
-              }}
-            />
-            <Button size='small' onClick={() => setShowPreview(!showPreview)}>
-              预览
-            </Button>
-          </Space>
+          view.editable && (
+            <Space>
+              <Select
+                size='small'
+                placeholder='模板'
+                options={template}
+                style={{ width: 80 }}
+                onChange={e => {
+                  setAttrs({ value: e })
+                  setCode(e)
+                }}
+              />
+              <Button size='small' onClick={() => setShowPreview(!showPreview)}>
+                预览
+              </Button>
+            </Space>
+          )
         }
       >
-        <div style={{ height: 300 }}>
-          <Allotment>
-            <Allotment.Pane>
-              <Input.TextArea
-                style={{ height: 300, padding: 0 }}
-                bordered={false}
-                ref={codeInput}
-                value={code}
-                onChange={e => {
-                  setCode(e.target.value || '')
-                  setAttrs({ value: e.target.value || '' })
-                }}
-              >
-                {code}
-              </Input.TextArea>
-            </Allotment.Pane>
-            <Allotment.Pane visible={showPreview}>
-              <div style={{ height: 300, overflow: 'auto', textAlign: 'center' }}>
-                <div style={{ minWidth: 400 }} ref={codePanel} />
-              </div>
-            </Allotment.Pane>
-          </Allotment>
-        </div>
+        {view.editable ? (
+          <div style={{ height: 300 }}>
+            <Allotment>
+              <Allotment.Pane>
+                <Input.TextArea
+                  style={{ height: 300, padding: 0 }}
+                  bordered={false}
+                  ref={codeInput}
+                  value={code}
+                  onChange={e => {
+                    setCode(e.target.value || '')
+                    setAttrs({ value: e.target.value || '' })
+                  }}
+                >
+                  {code}
+                </Input.TextArea>
+              </Allotment.Pane>
+              <Allotment.Pane visible={showPreview}>
+                <div style={{ height: 300, overflow: 'auto', textAlign: 'center' }}>
+                  <div style={{ minWidth: 400 }} ref={codePanel} />
+                </div>
+              </Allotment.Pane>
+            </Allotment>
+          </div>
+        ) : (
+          <div style={{ textAlign: 'center' }} ref={codePanel} />
+        )}
       </Card>
     </div>
   )
