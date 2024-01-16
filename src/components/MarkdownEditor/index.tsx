@@ -22,6 +22,9 @@ interface IProps {
   loading?: boolean
   onReady?: () => void
   type?: 'editor' | 'render'
+  upload?: {
+    url?: string
+  }
 }
 
 export interface EditorIntance {

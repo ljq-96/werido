@@ -9,14 +9,16 @@ export default function TooltipButton({
   disabled,
   active,
   tip,
+  loading,
 }: {
   title: string
   shortcut?: string
   icon: ReactNode
-  onClick: () => void
+  onClick?: () => void
   disabled?: boolean
   active?: boolean
   tip?: TooltipProps
+  loading?: boolean
 }) {
   const {
     token: { colorInfoActive, colorBgTextActive },
@@ -35,6 +37,7 @@ export default function TooltipButton({
     >
       <Button
         type='text'
+        loading={loading}
         onClick={onClick}
         icon={icon}
         disabled={disabled}

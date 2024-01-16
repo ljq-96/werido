@@ -10,8 +10,9 @@ export const ListItem: FC = () => {
   const checked = attrs?.checked
   const isBullet = attrs?.listType === 'bullet'
   const {
-    token: { colorText },
+    token: { colorTextTertiary },
   } = theme.useToken()
+
   return (
     <li
       css={css({
@@ -20,11 +21,11 @@ export const ListItem: FC = () => {
           margin: '0.5em 0.5em 0.5em 0',
         },
         '.bullet-dot': {
-          width: '0.5em',
-          height: '0.5em',
-          margin: '0.5em 0',
+          width: '0.32em',
+          height: '0.32em',
+          margin: '0.6em 0',
           borderRadius: '50%',
-          backgroundColor: colorText,
+          backgroundColor: colorTextTertiary,
         },
       })}
     >

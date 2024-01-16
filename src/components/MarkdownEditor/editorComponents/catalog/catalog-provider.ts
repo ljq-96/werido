@@ -38,7 +38,7 @@ export class CatalogProvider {
     this.#setvice.bind(this.#ctx, data => {
       this.#setCatalog(data)
       setTimeout(() => {
-        view.dom.style.marginRight = this.#element.offsetWidth - 32 + 'px'
+        view.dom.style.marginRight = this.#element.offsetWidth + 16 + 'px'
       }, 200)
     })
 

@@ -66,6 +66,7 @@ export const CatalogView = () => {
         className={`catalog ${show ? 'catalog-show' : 'catalog-hide'}`}
         ref={ref}
         css={css({
+          maxWidth: 160,
           '.ant-btn': {
             borderTopRightRadius: '0 !important',
             borderBottomRightRadius: '0 !important',

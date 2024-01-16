@@ -14,6 +14,7 @@ import {
   Row,
   Space,
   Tooltip,
+  Upload,
   theme,
 } from 'antd'
 import { Fragment, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
@@ -68,6 +69,7 @@ import TooltipButton from '../components/TooltipButton'
 import { TranslateX, TranslateY } from '../../../Animation'
 import TableSizeSelector from './TableSizeSelector'
 import { useStore } from '../../../../store'
+import ImageButton from '../components/ImageButton'
 
 type ActivedButton = 'strong' | 'link' | 'emphasis' | 'inlineCode' | 'strike_through'
 
@@ -275,14 +277,7 @@ export const MenuView = () => {
         disabled={isBlock}
       />
     ),
-    image: (
-      <TooltipButton
-        title='图片'
-        icon={<PictureOutlined />}
-        onClick={() => insertValue(`![图片描述](${defaultImage})`)}
-        disabled={isBlock}
-      />
-    ),
+    image: <ImageButton onFinish={e => insertValue(`![](${e})`)} disabled={isBlock} />,
     inlineCode: (
       <TooltipButton
         title='行内代码'
