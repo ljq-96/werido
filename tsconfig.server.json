@@ -9,5 +9,5 @@
     "experimentalDecorators": true
   },
   "exclude": ["src"],
-  "include": ["server", "types", "app.ts"]
+  "include": ["server", "types", "scripts", "app.ts"]
 }

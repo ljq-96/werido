@@ -5,15 +5,23 @@ import { RequestConfig } from './types'
 export async function Fetch<F = any, T = any>({
   url,
   method,
-  data,
+  body,
   query,
   params,
   responseType,
 }: RequestConfig<F>): Promise<T> {
-  const pasedUrl = (query !== undefined ? `${url}/${query}` : url) + (params ? `?${querystring.stringify(params)}` : '')
-  const response = await fetch(pasedUrl, {
-    method: method || (data ? 'POST' : 'GET'),
-    body: data && JSON.stringify(data),
+  if (params) {
+    Object.keys(params).forEach(key => {
+      const reg = new RegExp(`/\\:{${key}}/`, 'g')
+      url.replace(reg, params[key])
+    })
+  }
+  if (query) {
+    url += `?${querystring.stringify(query)}`
+  }
+  const response = await fetch(url, {
+    method: method || (body ? 'POST' : 'GET'),
+    body: body && JSON.stringify(body),
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',

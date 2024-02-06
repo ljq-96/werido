@@ -1,42 +1,24 @@
 import { Fetch, paseRequest } from './utils'
+import { API_REQ_FUNCTION } from './types'
+import * as serverApi from './serverApi'
+import * as api from './api'
 
-const apiList = {
-  login: '/api/login',
-  register: '/api/register',
-  logout: '/api/logout',
-  myProfile: '/api/myProfile',
-  blog: '/api/blog',
-  blogExport: '/api/blog/export',
-  bookmark: '/api/bookmark',
-  icon: '/api/icon',
-  statistics: '/api/statistics',
-  docIndex: '/api/docIndex',
-  tops: '/quark/toplist',
-  detail: '/api/detail',
-  todo: '/api/todo',
-  tourist: '/api/tourist',
-  file: '/api/file/blob',
-}
-
-const adminApi = {
-  statistics: '/api/admin/statistics',
-  user: '/api/admin/user',
-  blog: '/api/admin/blog',
-  bookmark: '/api/admin/bookmark',
-  todo: '/api/admin/todo',
-}
-
-const weatherApi = {
-  forecast: '/v7/weather/3d',
-  now: '/v7/weather/now',
-  oneDay: '/v7/weather/24h',
-  getCityId: '/v2/city/lookup',
+type API<T> = {
+  [X in keyof T]: {
+    [K in keyof T[X]]: API_REQ_FUNCTION
+  }
 }
 
 const request = {
-  ...paseRequest(apiList),
-  admin: paseRequest(adminApi),
-  weather: paseRequest(weatherApi),
+  ...Object.keys(serverApi).reduce((prev, next) => {
+    prev[next] = paseRequest(serverApi[next])
+    return prev
+  }, {} as API<typeof serverApi>),
+
+  ...Object.keys(api).reduce((prev, next) => {
+    prev[next] = paseRequest(api[next])
+    return prev
+  }, {} as API<typeof api>),
 }
 
 export { Fetch, request }

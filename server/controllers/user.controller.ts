@@ -7,7 +7,7 @@ import { TodoService } from '../services/todo.service'
 import { UserService } from '../services/user.service'
 
 @controller('/api/myProfile')
-export class MyProfileControler {
+export class MyProfileController {
   @inject('UserService') public userService: UserService
 
   @middleware('validateToken')

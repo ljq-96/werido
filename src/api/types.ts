@@ -3,8 +3,8 @@ export type Methods = 'GET' | 'POST' | 'DELETE' | 'PUT'
 export interface RequestConfig<T = any> {
   url: string
   method?: Methods
-  query?: string | number
-  data?: T
+  query?: T
+  body?: T
   params?: T
   responseType?: 'blob'
 }
