@@ -12,8 +12,8 @@ export async function Fetch<F = any, T = any>({
 }: RequestConfig<F>): Promise<T> {
   if (params) {
     Object.keys(params).forEach(key => {
-      const reg = new RegExp(`/\\:{${key}}/`, 'g')
-      url.replace(reg, params[key])
+      const reg = new RegExp(`/:${key}`, 'g')
+      url = url.replace(reg, `/${params[key]}`)
     })
   }
   if (query) {

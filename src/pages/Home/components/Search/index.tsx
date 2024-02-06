@@ -48,6 +48,7 @@ function Search() {
         <Input.Search
           allowClear
           size='large'
+          variant='filled'
           prefix={current.icon}
           enterButton='搜索'
           onSearch={value => value && window.open(`${current.action}?${current.name}=${value}`)}

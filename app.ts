@@ -7,7 +7,11 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 import k2c from 'koa-connect'
 import proxy from './proxy'
 import { connect } from './server/utils/gfs'
-require('dotenv').config()
+// require('dotenv').config('./.env')
+require('dotenv').config({ path: '.env', override: true })
+require('dotenv').config({ path: '.env.local', override: true })
+
+console.log(process.env)
 
 const isDev = process.env.NODE_ENV === 'development'
 const PORT = process.env.PORT
