@@ -15,8 +15,8 @@ function Tops() {
 
   useEffect(() => {
     setLoading(true)
-    request
-      .tops({ method: 'GET', query: current })
+    request.information
+      .getNews({ method: 'GET', params: { type: current } })
       .then(res => setList(res.data))
       .finally(() => setLoading(false))
   }, [current])

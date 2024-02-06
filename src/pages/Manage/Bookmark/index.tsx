@@ -45,7 +45,7 @@ function UsersManage() {
       content: '确定要删除此用户吗？',
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
-        return request.admin.user({ method: 'DELETE', query: id }).then(() => {
+        return request.adminUser.deleteUser({ method: 'DELETE', params: { id } }).then(() => {
           setShowModal(false)
           message.success('删除成功')
           tableRef.current.fetchData()
@@ -114,7 +114,7 @@ function UsersManage() {
     <Fragment>
       <CommonTable
         ref={tableRef}
-        request={request.admin.bookmark}
+        request={request.adminBookmark.getBookmarkList}
         title={() => '书签管理'}
         toolList={toolList}
         columns={columns}

@@ -44,7 +44,7 @@ function TodoManage() {
       content: '确定要删除此日程吗？',
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
-        return request.admin.todo({ method: 'DELETE', query: id }).then(() => {
+        return request.adminTodo.deleteTodo({ method: 'DELETE', params: { id } }).then(() => {
           message.success('删除成功')
           tableRef.current.fetchData()
         })
@@ -104,7 +104,7 @@ function TodoManage() {
     <Fragment>
       <CommonTable
         ref={tableRef}
-        request={request.admin.todo}
+        request={request.adminStatistics.getTodo}
         title={() => '日程管理'}
         toolList={toolList}
         columns={columns}

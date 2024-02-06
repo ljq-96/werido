@@ -69,13 +69,13 @@ function Bookmark() {
                 onChange={value => {
                   const _value = value.filter(item => {
                     if (item.children?.length) return true
-                    request.bookmark({ method: 'DELETE', query: item._id })
+                    request.bookmark.deleteBoolmark({ method: 'DELETE', params: { id: item._id } })
                   })
                   setBookmarks(_value)
-                  request.docIndex({
+                  request.docIndex.putDocIndex({
                     method: 'PUT',
-                    query: DocIndexType.书签,
-                    data: extract(_value),
+                    query: { type: DocIndexType.书签 },
+                    body: extract(_value),
                   })
                 }}
                 columns={8}
@@ -88,7 +88,11 @@ function Bookmark() {
                       onChange: value => {
                         bookmarks[index].title = value
                         setBookmarks([...bookmarks])
-                        request.bookmark({ method: 'PUT', query: bookmarks[index]._id, data: { title: value } })
+                        request.bookmark.updateBookmark({
+                          method: 'PUT',
+                          params: { id: bookmarks[index]._id },
+                          body: { title: value },
+                        })
                       },
                     }}
                   >
@@ -107,13 +111,17 @@ function Bookmark() {
                           })
                           break
                         case 'pin':
-                          request.bookmark({ method: 'PUT', query: value._id, data: { pin: !value.pin } }).then(() => {
-                            value.pin = !value.pin
-                            setBookmarks([...bookmarks])
-                          })
+                          request.bookmark
+                            .updateBookmark({ method: 'PUT', params: { id: value._id }, body: { pin: !value.pin } })
+                            .then(() => {
+                              value.pin = !value.pin
+                              setBookmarks([...bookmarks])
+                            })
                           break
                         case 'delete':
-                          request.bookmark({ method: 'DELETE', query: value._id }).then(getBookmarks)
+                          request.bookmark
+                            .deleteBoolmark({ method: 'DELETE', params: { id: value._id } })
+                            .then(getBookmarks)
                       }
                     }}
                   />

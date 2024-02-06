@@ -136,9 +136,9 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
   }
 
   const handleSubmit = async ({ title }) => {
-    await request.blog({
+    await request.blog.createBlog({
       method: 'POST',
-      data: {
+      body: {
         title,
         parent: currentParent,
       },
@@ -173,9 +173,9 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
           okText: '确定',
           cancelText: '取消',
           onOk: async () => {
-            await request.blogExport({
+            await request.blog.exportBlog({
               method: 'POST',
-              data: { blogId: data._id },
+              body: { blogId: data._id },
               responseType: 'blob',
             })
           },
@@ -189,9 +189,9 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
           okButtonProps: { danger: true, children: '删除' },
           cancelText: '取消',
           onOk: async () => {
-            await request.blog({
+            await request.blog.deleteBlog({
               method: 'DELETE',
-              query: data._id,
+              query: { id: data._id },
             })
             await getBlog()
             message.success('删除成功')
@@ -220,16 +220,28 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
 
       if (drapParent && drapParent.child === dragObj._id) {
         drapParent.child = dragObj.sibling
-        request.blog({ method: 'PUT', query: drapParent._id, data: { child: drapParent.child ?? null } })
+        request.blog.updateBlog({
+          method: 'PUT',
+          params: { id: drapParent._id },
+          body: { child: drapParent.child ?? null },
+        })
       }
 
       if (dragPrev) {
         dragPrev.sibling = dragObj.sibling
-        request.blog({ method: 'PUT', query: dragPrev._id, data: { sibling: dragPrev.sibling ?? null } })
+        request.blog.updateBlog({
+          method: 'PUT',
+          params: { id: dragPrev._id },
+          body: { sibling: dragPrev.sibling ?? null },
+        })
       }
       if (!drapParent && !dragPrev && dragNext) {
         dragNext.parent = dragObj.parent
-        request.blog({ method: 'PUT', query: dragNext._id, data: { parent: dragNext.parent ?? null } })
+        request.blog.updateBlog({
+          method: 'PUT',
+          params: { id: dragNext._id },
+          body: { parent: dragNext.parent ?? null },
+        })
       }
 
       // 插入
@@ -250,15 +262,15 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
       }
 
       setBlog([...blog])
-      request.blog({
+      request.blog.updateBlog({
         method: 'PUT',
-        query: dragObj._id,
-        data: { parent: dragObj.parent ?? null, sibling: dragObj.sibling ?? null },
+        params: { id: dragObj._id },
+        body: { parent: dragObj.parent ?? null, sibling: dragObj.sibling ?? null },
       })
-      request.blog({
+      request.blog.updateBlog({
         method: 'PUT',
-        query: dropObj._id,
-        data: { parent: dropObj.parent ?? null, sibling: dropObj.sibling ?? null, child: dropObj.child ?? null },
+        params: { id: dropObj._id },
+        body: { parent: dropObj.parent ?? null, sibling: dropObj.sibling ?? null, child: dropObj.child ?? null },
       })
     },
     [blog, setBlog],

@@ -14,7 +14,7 @@ function LoginUser() {
   const navigate = useNavigate()
 
   const logout = () => {
-    request.logout({ method: 'POST' }).then(res => {
+    request.account.logout({ method: 'POST' }).then(res => {
       navigate('/login')
       message.success('已退出')
     })
@@ -27,7 +27,7 @@ function LoginUser() {
   const handleDrawer = () => {
     setShowColorDrawer(!showColorDrawer)
     if (showColorDrawer) {
-      request.myProfile({ method: 'PUT', data: { themeColor } })
+      request.myProfile.updateMyProfile({ method: 'PUT', body: { themeColor } })
     }
   }
   return (

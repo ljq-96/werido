@@ -1,4 +1,4 @@
-export const weatherApi = {
+export const weather = {
   /**
    * @query
    *  name: string

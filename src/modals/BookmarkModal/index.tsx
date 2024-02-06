@@ -20,16 +20,16 @@ const BookmarkModal = EasyModal.create<IProps, any>(modal => {
       setOnSubmit(true)
       fields.icon = fields.icon?.fileList?.[0]?.response
       if (props._id) {
-        await request.bookmark({
+        await request.bookmark.updateBookmark({
           method: 'PUT',
-          query: props._id,
-          data: fields,
+          params: { id: props._id },
+          body: fields,
         })
         message.success('更新成功')
       } else {
-        await request.bookmark({
+        await request.bookmark.createBookmark({
           method: 'POST',
-          data: fields,
+          body: fields,
         })
         message.success('添加成功')
       }

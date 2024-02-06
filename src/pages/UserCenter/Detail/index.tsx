@@ -24,7 +24,7 @@ function UserCenterDetail() {
     fields.avatar = avatarStr
     fields.location = location?.join('/')
     const { _id, ...reset } = fields
-    request.myProfile({ method: 'PUT', query: _id, data: reset }).then(() => {
+    request.myProfile.updateMyProfile({ method: 'PUT', params: { id: _id }, body: reset }).then(() => {
       message.success('更新成功')
       getUser()
     })

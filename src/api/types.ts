@@ -1,7 +1,7 @@
 export type Methods = 'GET' | 'POST' | 'DELETE' | 'PUT'
 
 export interface RequestConfig<T = any> {
-  url: string
+  url?: string
   method?: Methods
   query?: T
   body?: T
@@ -13,4 +13,4 @@ export type BaseConfig = string | { target: string; baseConfig: RequestConfig }
 
 export type UrlObj = { [key: string]: BaseConfig }
 
-export type API_REQ_FUNCTION = (method: Methods, config?: RequestConfig) => Promise<any>
+export type API_REQ_FUNCTION = (config: RequestConfig) => Promise<any>

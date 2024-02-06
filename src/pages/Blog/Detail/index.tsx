@@ -27,7 +27,11 @@ function BlogDetail() {
 
   const handleFinish = async fields => {
     setLoading(true)
-    await request.blog({ method: 'PUT', query: id, data: { content: editor.current.getValue(), ...fields } })
+    await request.blog.updateBlog({
+      method: 'PUT',
+      params: { id },
+      body: { content: editor.current.getValue(), ...fields },
+    })
     message.success('已更新')
     setOnEdit(false)
     setLoading(false)
@@ -63,7 +67,8 @@ function BlogDetail() {
                 {
                   label: '导出',
                   key: 1,
-                  onClick: () => request.blogExport({ method: 'POST', data: { blogId: id }, responseType: 'blob' }),
+                  onClick: () =>
+                    request.blog.exportBlog({ method: 'POST', body: { blogId: id }, responseType: 'blob' }),
                 },
                 { label: '编辑', key: 2, onClick: () => setOnEdit(!onEdit) },
               ],
@@ -76,8 +81,8 @@ function BlogDetail() {
 
   const getData = () => {
     setLoading(true)
-    request
-      .blog({ method: 'GET', query: id })
+    request.blog
+      .getBlogById({ method: 'GET', params: { id } })
       .then(res => {
         setDetail(res)
         form.setFieldsValue({ title: res.title, tags: res.tags })

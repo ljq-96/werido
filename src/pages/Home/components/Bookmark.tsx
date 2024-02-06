@@ -16,8 +16,8 @@ function Bookmark() {
 
   const getBookmark = () => {
     setLoading(true)
-    request
-      .bookmark({ method: 'GET', query: 'favorite' })
+    request.bookmark
+      .getMyFavBookmarks({ method: 'GET' })
       .then(res => {
         setBookmarks([
           {
@@ -46,10 +46,10 @@ function Bookmark() {
             value={bookmarks}
             onChange={value => {
               setBookmarks(value)
-              request.docIndex({
+              request.docIndex.putDocIndex({
                 method: 'PUT',
-                query: DocIndexType.首页书签,
-                data: extract(value[0].children),
+                params: { type: DocIndexType.首页书签 },
+                body: extract(value[0].children),
               })
             }}
             columns={5}
@@ -66,11 +66,11 @@ function Bookmark() {
                       })
                       break
                     case 'pin':
-                      request
-                        .bookmark({
+                      request.bookmark
+                        .updateBookmark({
                           method: 'PUT',
-                          query: value._id,
-                          data: { pin: !value.pin },
+                          params: { id: value._id },
+                          body: { pin: !value.pin },
                         })
                         .then(() => {
                           value.pin = !value.pin
@@ -78,7 +78,7 @@ function Bookmark() {
                         })
                       break
                     case 'delete':
-                      request.bookmark({ method: 'DELETE', query: value._id }).then(getBookmark)
+                      request.bookmark.deleteBoolmark({ method: 'DELETE', params: { id: value._id } }).then(getBookmark)
                   }
                 }}
               />

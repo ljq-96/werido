@@ -15,9 +15,7 @@ function BlogManage() {
   const [form] = Form.useForm()
   const tableRef = useRef<CommonTableInstance>(null)
   const navigate = useNavigate()
-  const { data: tags, execute: getTags } = useRequest(() =>
-    request.admin.statistics({ method: 'GET', query: StatisticsType.文章标签 }),
-  )
+  const { data: tags, execute: getTags } = useRequest(() => request.statistics.getBlogTags({ method: 'GET' }))
 
   const toolList = useMemo<ToolItem[]>(() => {
     return [
@@ -50,7 +48,7 @@ function BlogManage() {
       content: '确定要删除此文章吗？',
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
-        return request.blog({ method: 'DELETE', query: id }).then(() => {
+        return request.blog.deleteBlog({ method: 'DELETE', params: { id } }).then(() => {
           // setShowModal(false)
           message.success('删除成功')
           tableRef.current.fetchData()
@@ -120,7 +118,7 @@ function BlogManage() {
     <Fragment>
       <CommonTable
         ref={tableRef}
-        request={request.admin.blog}
+        request={request.adminBlog.getBlogList}
         title={() => '文章管理'}
         extra={
           <Space>

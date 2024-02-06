@@ -27,10 +27,10 @@ const Blog = () => {
     data: listData,
     execute: getList,
   } = useRequest<Pager<IBlog>>(() =>
-    request.tourist({
+    request.tourist.getBlogs({
       method: 'GET',
-      query: `${user.username}/blog`,
-      params: {
+      params: { name: user.username },
+      query: {
         page: page,
         size: SIZE,
       },
@@ -41,9 +41,9 @@ const Blog = () => {
     data: detailData,
     execute: getDetail,
   } = useRequest<IBlog>(() =>
-    request.tourist({
+    request.tourist.getBlogById({
       method: 'GET',
-      query: `${user.username}/blog/${id}`,
+      params: { name: user.username, id: id },
     }),
   )
 

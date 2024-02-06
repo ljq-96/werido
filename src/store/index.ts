@@ -24,8 +24,8 @@ export const useStore = create<State & Actions>((set, get) => {
     setIsDark: (isDark: boolean) => set({ isDark }),
     getUser: (name?: string) => {
       const execute = name
-        ? request.tourist({ method: 'GET', query: `${name}/profile` })
-        : request.myProfile({ method: 'GET' })
+        ? request.tourist.getProfile({ method: 'GET', params: { name } })
+        : request.myProfile.getMyProfile({ method: 'GET' })
 
       return execute.then(res => {
         set({ user: res })
@@ -35,8 +35,8 @@ export const useStore = create<State & Actions>((set, get) => {
     updateUser: (user: Partial<IUser>) => set({ user: { ...get().user, ...user } }),
     getTags: (name?: string) => {
       const execute = name
-        ? request.tourist({ method: 'GET', query: `${name}/tags` })
-        : request.statistics({ method: 'GET', query: StatisticsType.文章标签 })
+        ? request.tourist.getBlogTags({ method: 'GET', params: { name } })
+        : request.statistics.getBlogTags({ method: 'GET' })
       return execute.then(res => {
         set({ tags: res })
         return res
@@ -44,8 +44,8 @@ export const useStore = create<State & Actions>((set, get) => {
     },
     getArchives: (name?: string) => {
       const execute = name
-        ? request.tourist({ method: 'GET', query: `${name}/archives` })
-        : request.statistics({ method: 'GET', query: StatisticsType.文章时间 })
+        ? request.tourist.getBlogArchives({ method: 'GET', params: { name } })
+        : request.statistics.getBlogTime({ method: 'GET' })
       return execute.then(res => {
         set({ archives: res })
         return res
@@ -56,8 +56,8 @@ export const useStore = create<State & Actions>((set, get) => {
       const blog = get().blog
       if (!blog.length) set({ catalogLoading: true })
       const execute = name
-        ? request.tourist({ method: 'GET', query: `${name}/catalog` })
-        : request.blog({ method: 'GET', query: 'catalog' })
+        ? request.tourist.getBlogCatalog({ method: 'GET', params: { name } })
+        : request.blog.getBlogCatalog({ method: 'GET' })
       return execute
         .then(res => {
           set({ blog: res })
@@ -69,8 +69,8 @@ export const useStore = create<State & Actions>((set, get) => {
     getBookmarks: () => {
       const bookmarks = get().bookmarks
       !bookmarks.length && set({ bookmarksLoading: true })
-      return request
-        .bookmark({ method: 'GET' })
+      return request.bookmark
+        .getMyBookmarks({ method: 'GET' })
         .then(res => {
           set({ bookmarks: res })
           return res
