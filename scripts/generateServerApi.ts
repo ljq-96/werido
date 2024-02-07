@@ -6,17 +6,19 @@ import prettier from 'prettier'
 ;(async function () {
   let code = ''
   const darukServer = DarukServer()
-  await darukServer.loadFile('../server/services')
   await darukServer.loadFile('../server/controllers')
-  await darukServer.loadFile('../server/middlewares')
 
   const controllers = Reflect.getMetadata('daruk:controller_class', Reflect) || []
+  controllers.sort((a, b) => a.name.localeCompare(b.name))
 
   for (const controller of controllers) {
     const controllerName = controller.name.replace(/Controller$/, '').replace(/^[A-Z]/, first => first.toLowerCase())
+    console.log(controllerName)
+
     const apis = {}
     const prefix = Reflect.getMetadata('daruk:controller_class_prefix', controller)
     const fnName = Reflect.getMetadata('daruk:controller_func_name', controller) || []
+    fnName.sort((a, b) => a.localeCompare(b))
 
     fnName.forEach(item => {
       const metaRouters = Reflect.getMetadata('daruk:controller_path', controller, item)?.[0]
