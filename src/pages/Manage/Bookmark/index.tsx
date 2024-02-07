@@ -45,7 +45,7 @@ function UsersManage() {
       content: '确定要删除此用户吗？',
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
-        return request.adminUser.deleteUser({ method: 'DELETE', params: { id } }).then(() => {
+        return request.adminUser.deleteUser({ params: { id } }).then(() => {
           setShowModal(false)
           message.success('删除成功')
           tableRef.current.fetchData()

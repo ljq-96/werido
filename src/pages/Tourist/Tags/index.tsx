@@ -26,12 +26,8 @@ const Tags = () => {
     execute: getBlogList,
   } = useRequest<Pager<IBlog>>(() =>
     request.tourist.getBlogs({
-      method: 'GET',
       params: { name: user.username },
-      query: {
-        page: page,
-        size: SIZE,
-      },
+      query: { page: page, size: SIZE },
     }),
   )
 

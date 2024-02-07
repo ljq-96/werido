@@ -13,4 +13,4 @@ export type BaseConfig = string | { target: string; baseConfig: RequestConfig }
 
 export type UrlObj = { [key: string]: BaseConfig }
 
-export type API_REQ_FUNCTION = (config: RequestConfig) => Promise<any>
+export type API_REQ_FUNCTION = (config?: RequestConfig) => Promise<any>

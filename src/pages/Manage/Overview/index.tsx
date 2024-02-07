@@ -17,32 +17,28 @@ function Dashboard() {
     data: blogTime,
     execute: getBlogTime,
     loading: blogTimeLoading,
-  } = useRequest(() => request.adminStatistics.getBlogTime({ method: 'GET' }))
+  } = useRequest(() => request.adminStatistics.getBlogTime())
   const {
     data: blogWords,
     execute: getBlogWords,
     loading: blogWordsLoading,
-  } = useRequest(() => request.adminStatistics.getBlogWords({ method: 'GET' }))
+  } = useRequest(() => request.adminStatistics.getBlogWords())
   const {
     data: statistics,
     execute: getStatistics,
     loading: statisticsLoading,
-  } = useRequest(() => request.adminStatistics.statistic({ method: 'GET' }))
+  } = useRequest(() => request.adminStatistics.statistic())
   const {
     data: userActive,
     execute: getUserActive,
     loading: userActiveLoading,
-  } = useRequest(() => request.adminStatistics.userActive({ method: 'GET' }))
-  const {
-    data: todo,
-    execute: getTodo,
-    loading: todoLoading,
-  } = useRequest(() => request.adminStatistics.getTodo({ method: 'GET' }))
+  } = useRequest(() => request.adminStatistics.userActive())
+  const { data: todo, execute: getTodo, loading: todoLoading } = useRequest(() => request.adminStatistics.getTodo())
   const {
     data: tagCount,
     execute: getTagCount,
     loading: tagCountLoading,
-  } = useRequest(() => request.adminStatistics.getBlogTags({ method: 'GET' }))
+  } = useRequest(() => request.adminStatistics.getBlogTags())
 
   useEffect(() => {
     getBlogTime()

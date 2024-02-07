@@ -13,7 +13,7 @@ function HomeCalendar() {
 
   const getTodoList = async () => {
     setLoading(true)
-    const todo = await request.todo.getTodoList({ method: 'GET' })
+    const todo = await request.todo.getTodoList()
     setTodoList(todo)
     setLoading(false)
   }
@@ -44,7 +44,7 @@ function HomeCalendar() {
                 type: 'error',
                 content: '是否删除此日程，不可恢复！',
                 onOk: async () => {
-                  await request.todo.deleteTodo({ method: 'DELETE', params: { id: todo._id } })
+                  await request.todo.deleteTodo({ params: { id: todo._id } })
                   await getTodoList()
                 },
               })

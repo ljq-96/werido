@@ -44,7 +44,7 @@ function TodoManage() {
       content: '确定要删除此日程吗？',
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
-        return request.adminTodo.deleteTodo({ method: 'DELETE', params: { id } }).then(() => {
+        return request.adminTodo.deleteTodo({ params: { id } }).then(() => {
           message.success('删除成功')
           tableRef.current.fetchData()
         })

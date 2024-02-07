@@ -17,7 +17,7 @@ function Bookmark() {
   const getBookmark = () => {
     setLoading(true)
     request.bookmark
-      .getMyFavBookmarks({ method: 'GET' })
+      .getMyFavBookmarks()
       .then(res => {
         setBookmarks([
           {
@@ -47,7 +47,6 @@ function Bookmark() {
             onChange={value => {
               setBookmarks(value)
               request.docIndex.putDocIndex({
-                method: 'PUT',
                 params: { type: DocIndexType.首页书签 },
                 body: extract(value[0].children),
               })
@@ -68,7 +67,6 @@ function Bookmark() {
                     case 'pin':
                       request.bookmark
                         .updateBookmark({
-                          method: 'PUT',
                           params: { id: value._id },
                           body: { pin: !value.pin },
                         })
@@ -78,7 +76,7 @@ function Bookmark() {
                         })
                       break
                     case 'delete':
-                      request.bookmark.deleteBoolmark({ method: 'DELETE', params: { id: value._id } }).then(getBookmark)
+                      request.bookmark.deleteBoolmark({ params: { id: value._id } }).then(getBookmark)
                   }
                 }}
               />

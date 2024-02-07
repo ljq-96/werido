@@ -1,11 +1,18 @@
 export const weather = {
-  /**
-   * @query
-   *  name: string
-   *  id: string
-   */
-  forecast: '/v7/weather/3d',
-  now: '/v7/weather/now',
-  oneDay: '/v7/weather/24h',
-  getCityId: '/v2/city/lookup',
+  forecast: {
+    method: 'GET',
+    url: '/v7/weather/3d',
+  },
+  now: {
+    method: 'GET',
+    url: '/v7/weather/now',
+  },
+  oneDay: {
+    method: 'GET',
+    url: '/v7/weather/24h',
+  },
+  getCityId: {
+    method: 'GET',
+    url: '/v2/city/lookup',
+  },
 }

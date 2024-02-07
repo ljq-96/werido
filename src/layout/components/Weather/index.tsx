@@ -34,21 +34,21 @@ function Weather() {
   } = theme.useToken()
   const getWeather = async () => {
     const city = location[location.length - 1]
-    const cityInfo = await request.weather.getCityId({ method: 'GET', params: { location: city, key: KEY } })
+    const cityInfo = await request.weather.getCityId({ params: { location: city, key: KEY } })
     if (cityInfo.code === '200') {
       setPosition(cityInfo.location[0])
       const query = { location: cityInfo.location[0]?.id, key: KEY }
-      request.weather.forecast({ method: 'GET', query }).then(res => {
+      request.weather.forecast({ query }).then(res => {
         if (res.code === '200') {
           setForecast(res.daily)
         }
       })
-      request.weather.now({ method: 'GET', query }).then(res => {
+      request.weather.now({ query }).then(res => {
         if (res.code === '200') {
           setNow(res.now)
         }
       })
-      request.weather.oneDay({ method: 'GET', query }).then(res => {
+      request.weather.oneDay({ query }).then(res => {
         if (res.code === '200') {
           setHours(res.hourly)
         }

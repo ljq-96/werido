@@ -1,6 +1,6 @@
 import { message } from 'antd'
 import { downloadFile, querystring } from '../utils/common'
-import { RequestConfig } from './types'
+import { Methods, RequestConfig } from './types'
 
 export async function Fetch<F = any, T = any>({
   url,
@@ -57,13 +57,19 @@ export async function Fetch<F = any, T = any>({
   throw errMsg
 }
 
-export const getBaseRequest = url => (config: Partial<RequestConfig>) => Fetch({ url, ...config })
-export type BaseRequest = (config: Partial<RequestConfig>) => Promise<any>
+export const getBaseRequest = (url: string | { method?: Methods; url: string }) => (config: Partial<RequestConfig>) => {
+  const _conf = typeof url === 'string' ? { url: url } : url
+  return Fetch({ ..._conf, ...config })
+}
+export type BaseRequest = (config?: Partial<RequestConfig>) => Promise<any>
 
 export function paseRequest<T, K extends keyof T>(apis: T) {
-  return Object.entries(apis).reduce((prev, next) => {
-    const [name, url] = next
-    prev[name] = getBaseRequest(url)
-    return prev
-  }, {} as { [x in K]: BaseRequest })
+  return Object.entries(apis).reduce(
+    (prev, next) => {
+      const [name, url] = next
+      prev[name] = getBaseRequest(url)
+      return prev
+    },
+    {} as { [x in K]: BaseRequest },
+  )
 }

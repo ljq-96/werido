@@ -1,11 +1,10 @@
 import { DarukServer } from 'daruk'
 import urljoin from 'url-join'
-import { writeFile } from 'fs-extra'
+import { readFile, writeFile } from 'fs-extra'
 import path from 'path'
-import ts from 'typescript'
+import prettier from 'prettier'
 ;(async function () {
   let code = ''
-
   const darukServer = DarukServer()
   await darukServer.loadFile('../server/services')
   await darukServer.loadFile('../server/controllers')
@@ -20,11 +19,18 @@ import ts from 'typescript'
     const fnName = Reflect.getMetadata('daruk:controller_func_name', controller) || []
 
     fnName.forEach(item => {
-      const path = Reflect.getMetadata('daruk:controller_path', controller, item)
-      apis[item] = urljoin('/', prefix, path[0].path).replace(/\/\//g, '/').replace(/\/+$/, '')
+      const metaRouters = Reflect.getMetadata('daruk:controller_path', controller, item)?.[0]
+      if (metaRouters) {
+        const { method, path } = metaRouters
+        apis[item] = {
+          method: method.toUpperCase(),
+          url: urljoin('/', prefix, path).replace(/\/\//g, '/').replace(/\/+$/, ''),
+        }
+      }
     })
     code += `export const ${controllerName} = ${JSON.stringify(apis)}\n\n`
   }
-
-  writeFile(path.join(__dirname, '../src/api/serverApi.ts'), code)
+  const conf = JSON.parse((await readFile('./.prettierrc')).toString())
+  const res = await prettier.format(code, { ...conf, parser: 'typescript' })
+  writeFile(path.join(__dirname, '../src/api/serverApi.ts'), res)
 })()

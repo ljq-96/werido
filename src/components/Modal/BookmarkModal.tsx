@@ -35,7 +35,6 @@ function BookmarkModal(props: IProps) {
       fields.icon = iconStr
       if (typeof visible === 'object') {
         await request.bookmark.updateBookmark({
-          method: 'PUT',
           params: { id: visible._id },
           body: fields,
         })
@@ -44,7 +43,6 @@ function BookmarkModal(props: IProps) {
       } else {
         fields.parent = fields.parent[0]
         await request.bookmark.createBookmark({
-          method: 'POST',
           body: fields,
         })
         message.success('添加成功')

@@ -22,10 +22,10 @@ const BlogEditor = () => {
   const handleFinish = async fields => {
     setLoading(true)
     if (id) {
-      await request.blog.updateBlog({ method: 'PUT', params: { id }, body: { content: detail?.content, ...fields } })
+      await request.blog.updateBlog({ params: { id }, body: { content: detail?.content, ...fields } })
       message.success('已更新')
     } else {
-      await request.blog.createBlog({ method: 'POST', body: { content: detail?.content, ...fields } })
+      await request.blog.createBlog({ body: { content: detail?.content, ...fields } })
       navigate(-1)
       message.success('已创建')
     }
@@ -34,13 +34,13 @@ const BlogEditor = () => {
 
   useEffect(() => {
     if (id) {
-      request.blog.getBlogById({ method: 'GET', params: { id } }).then(res => {
+      request.blog.getBlogById({ params: { id } }).then(res => {
         // editor.current.setValue(res.content)
         setDetail(res)
         form.setFieldsValue(res)
       })
     }
-    request.statistics.getBlogTags({ method: 'GET' }).then(res => {
+    request.statistics.getBlogTags().then(res => {
       setTagOptions(res.map(item => ({ label: item.name, value: item.name })))
     })
   }, [id])

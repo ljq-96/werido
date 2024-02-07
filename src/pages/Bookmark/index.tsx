@@ -69,11 +69,10 @@ function Bookmark() {
                 onChange={value => {
                   const _value = value.filter(item => {
                     if (item.children?.length) return true
-                    request.bookmark.deleteBoolmark({ method: 'DELETE', params: { id: item._id } })
+                    request.bookmark.deleteBoolmark({ params: { id: item._id } })
                   })
                   setBookmarks(_value)
                   request.docIndex.putDocIndex({
-                    method: 'PUT',
                     query: { type: DocIndexType.书签 },
                     body: extract(_value),
                   })
@@ -89,7 +88,6 @@ function Bookmark() {
                         bookmarks[index].title = value
                         setBookmarks([...bookmarks])
                         request.bookmark.updateBookmark({
-                          method: 'PUT',
                           params: { id: bookmarks[index]._id },
                           body: { title: value },
                         })
@@ -112,16 +110,14 @@ function Bookmark() {
                           break
                         case 'pin':
                           request.bookmark
-                            .updateBookmark({ method: 'PUT', params: { id: value._id }, body: { pin: !value.pin } })
+                            .updateBookmark({ params: { id: value._id }, body: { pin: !value.pin } })
                             .then(() => {
                               value.pin = !value.pin
                               setBookmarks([...bookmarks])
                             })
                           break
                         case 'delete':
-                          request.bookmark
-                            .deleteBoolmark({ method: 'DELETE', params: { id: value._id } })
-                            .then(getBookmarks)
+                          request.bookmark.deleteBoolmark({ params: { id: value._id } }).then(getBookmarks)
                       }
                     }}
                   />

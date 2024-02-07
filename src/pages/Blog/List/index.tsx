@@ -25,15 +25,7 @@ const BlogList = () => {
     loading,
     data: blog,
     execute: getBlogList,
-  } = useRequest<Pager<IBlog>>(() =>
-    request.blog.getBlogs({
-      method: 'GET',
-      query: {
-        page: page,
-        size: SIZE,
-      },
-    }),
-  )
+  } = useRequest<Pager<IBlog>>(() => request.blog.getBlogs({ query: { page: page, size: SIZE } }))
 
   useEffect(() => {
     getBlogList()

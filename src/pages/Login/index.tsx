@@ -26,20 +26,18 @@ function Login() {
   const onFinish = () => {
     const { username, password } = data
     if (isLogin) {
-      request.account.login({ method: 'POST', body: { username, password: encryptor.encrypt(password) } }).then(res => {
+      request.account.login({ body: { username, password: encryptor.encrypt(password) } }).then(res => {
         navigator('/')
       })
     } else {
-      request.account
-        .register({ method: 'POST', body: { username, password: encryptor.encrypt(password) } })
-        .then(res => {
-          message.success('注册成功，请登录！')
-          setIsLogin(true)
-          form.setFields([
-            { name: 'username', value: username },
-            { name: 'password', value: '' },
-          ])
-        })
+      request.account.register({ body: { username, password: encryptor.encrypt(password) } }).then(res => {
+        message.success('注册成功，请登录！')
+        setIsLogin(true)
+        form.setFields([
+          { name: 'username', value: username },
+          { name: 'password', value: '' },
+        ])
+      })
     }
     modalVerifyRef.current.close()
   }

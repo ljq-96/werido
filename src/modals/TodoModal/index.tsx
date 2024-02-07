@@ -24,9 +24,9 @@ const TodoModal = EasyModal.create<ITodo>(() => {
       description,
     }
     if (modal.props?._id) {
-      await request.todo.updateTodo({ method: 'PUT', params: { id: modal.props._id }, body: data })
+      await request.todo.updateTodo({ params: { id: modal.props._id }, body: data })
     } else {
-      await request.todo.createTodo({ method: 'POST', body: data })
+      await request.todo.createTodo({ body: data })
     }
     modal.resolve()
     form.resetFields()

@@ -34,7 +34,7 @@ function UsersManage() {
       content: '确定要删除此用户吗？',
       okButtonProps: { danger: true, children: '删除' },
       onOk() {
-        return request.adminUser.deleteUser({ method: 'DELETE', params: { id } }).then(() => {
+        return request.adminUser.deleteUser({ params: { id } }).then(() => {
           setShowModal(false)
           message.success('删除成功')
           tableRef.current.fetchData()
@@ -46,11 +46,11 @@ function UsersManage() {
   const handleSubmit = async (fields: Partial<IUser>) => {
     if (typeof showModal === 'boolean') {
       const { username, password } = fields
-      await request.adminUser.createUser({ method: 'POST', body: { username, password } })
+      await request.adminUser.createUser({ body: { username, password } })
       message.success('新增成功')
     } else {
       const { _id, ...reset } = fields
-      await request.adminUser.updateUser({ method: 'PUT', params: { id: _id }, body: reset })
+      await request.adminUser.updateUser({ params: { id: _id }, body: reset })
       message.success('修改成功')
     }
     setShowModal(false)
@@ -71,9 +71,7 @@ function UsersManage() {
           defaultValue={val}
           options={getListfromEnum(UserStatus)}
           disabled={record.username === 'admin'}
-          onChange={status =>
-            request.adminUser.updateUser({ method: 'PUT', params: { id: record._id }, body: { status } })
-          }
+          onChange={status => request.adminUser.updateUser({ params: { id: record._id }, body: { status } })}
         />
       ),
     },

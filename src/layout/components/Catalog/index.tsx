@@ -137,7 +137,6 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
 
   const handleSubmit = async ({ title }) => {
     await request.blog.createBlog({
-      method: 'POST',
       body: {
         title,
         parent: currentParent,
@@ -174,7 +173,6 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
           cancelText: '取消',
           onOk: async () => {
             await request.blog.exportBlog({
-              method: 'POST',
               body: { blogId: data._id },
               responseType: 'blob',
             })
@@ -190,7 +188,6 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
           cancelText: '取消',
           onOk: async () => {
             await request.blog.deleteBlog({
-              method: 'DELETE',
               query: { id: data._id },
             })
             await getBlog()
@@ -221,7 +218,6 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
       if (drapParent && drapParent.child === dragObj._id) {
         drapParent.child = dragObj.sibling
         request.blog.updateBlog({
-          method: 'PUT',
           params: { id: drapParent._id },
           body: { child: drapParent.child ?? null },
         })
@@ -230,7 +226,6 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
       if (dragPrev) {
         dragPrev.sibling = dragObj.sibling
         request.blog.updateBlog({
-          method: 'PUT',
           params: { id: dragPrev._id },
           body: { sibling: dragPrev.sibling ?? null },
         })
@@ -238,7 +233,6 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
       if (!drapParent && !dragPrev && dragNext) {
         dragNext.parent = dragObj.parent
         request.blog.updateBlog({
-          method: 'PUT',
           params: { id: dragNext._id },
           body: { parent: dragNext.parent ?? null },
         })
@@ -263,12 +257,10 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
 
       setBlog([...blog])
       request.blog.updateBlog({
-        method: 'PUT',
         params: { id: dragObj._id },
         body: { parent: dragObj.parent ?? null, sibling: dragObj.sibling ?? null },
       })
       request.blog.updateBlog({
-        method: 'PUT',
         params: { id: dropObj._id },
         body: { parent: dropObj.parent ?? null, sibling: dropObj.sibling ?? null, child: dropObj.child ?? null },
       })

@@ -16,17 +16,13 @@ function Dashboard() {
     data: blogTime,
     loading: blogTimeLoading,
     execute: getBlogTime,
-  } = useRequest(() => request.statistics.getBlogTime({ method: 'GET' }))
+  } = useRequest(() => request.statistics.getBlogTime())
   const {
     data: blogWords,
     loading: blogWordsLoading,
     execute: getBlogWords,
-  } = useRequest(() => request.statistics.getBlogWords({ method: 'GET' }))
-  const {
-    data: todo,
-    loading: todoLoading,
-    execute: getTodo,
-  } = useRequest(() => request.statistics.getTodo({ method: 'GET' }))
+  } = useRequest(() => request.statistics.getBlogWords())
+  const { data: todo, loading: todoLoading, execute: getTodo } = useRequest(() => request.statistics.getTodo())
   useEffect(() => {
     getBlogTime()
     getBlogWords()
