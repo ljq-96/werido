@@ -12,6 +12,7 @@
     "@typegoose/typegoose": "^10.1.1",
     "antd": "^5.13.1",
     "axios": "^0.27.2",
+    "chalk": "4.0.0",
     "cheerio": "^1.0.0-rc.10",
     "daruk": "^2.3.13",
     "dayjs": "^1.11.7",
