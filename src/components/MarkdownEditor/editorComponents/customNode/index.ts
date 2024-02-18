@@ -9,6 +9,10 @@ import { CodeBlock } from './CodeBlock'
 import { diagramSchema } from '@milkdown/plugin-diagram'
 import { Diagram } from './Diagram'
 import { linkPlugin } from './LinkWidget'
+import { iframeSchema } from '../../plugins/iframe'
+import { Iframe } from './Iframe'
+import { alertSchema } from '../../plugins/alert'
+import { Alert } from './Alert'
 
 export const useCustomNode = () => {
   const nodeViewFactory = useNodeViewFactory()
@@ -19,6 +23,8 @@ export const useCustomNode = () => {
     $view(listItemSchema.node, () => nodeViewFactory({ component: ListItem })),
     // $view(headingSchema.node, () => nodeViewFactory({ component: HeadTitle })),
     $view(codeBlockSchema.node, () => nodeViewFactory({ component: CodeBlock })),
+    $view(iframeSchema.node, () => nodeViewFactory({ component: Iframe })),
+    $view(alertSchema.node, () => nodeViewFactory({ component: Alert })),
     $view(diagramSchema.node, () => nodeViewFactory({ component: Diagram, stopEvent: () => true })),
     linkPlugin(widgetViewFactory),
   ].flat()

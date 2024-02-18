@@ -13,20 +13,20 @@ export const Iframe: FC = () => {
 
   return (
     <Card
-      // title={
-      //   <Input
-      //     defaultValue={src}
-      //     size='small'
-      //     // onInput={e => {
-      //     //   console.log(e)
-      //     //   setAttrs({ src: e.target.value })
-      //     //   // setValue(e.target.value)
-      //     // }}
-      //     // onBlur={e => {
-      //     //   setAttrs({ src: e.target.value })
-      //     // }}
-      //   />
-      // }
+      title={
+        <Input
+          value={src}
+          size='small'
+          onInput={e => {
+            console.log(e)
+            setAttrs({ src: e.target.value })
+            // setValue(e.target.value)
+          }}
+          onBlur={e => {
+            setAttrs({ src: e.target.value })
+          }}
+        />
+      }
       size='small'
       type='inner'
       extra={<Button size='small'>确定</Button>}

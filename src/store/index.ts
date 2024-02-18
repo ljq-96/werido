@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 import { IBlog, IBookmark, ICatalog, IUser } from '../../types'
 import { request } from '../api'
 import { StatisticsType } from '../../types/enum'
@@ -17,62 +18,69 @@ type Actions = {
   updateUser: (user: Partial<IUser>) => void
 }
 
-export const useStore = create<State & Actions>((set, get) => {
-  return {
-    ...initState,
+export const useStore = create(
+  persist<State & Actions>(
+    (set, get) => {
+      return {
+        ...initState,
 
-    setIsDark: (isDark: boolean) => set({ isDark }),
-    getUser: (name?: string) => {
-      const execute = name ? request.tourist.getProfile({ params: { name } }) : request.myProfile.getMyProfile()
+        setIsDark: (isDark: boolean) => set({ isDark }),
+        getUser: (name?: string) => {
+          const execute = name ? request.tourist.getProfile({ params: { name } }) : request.myProfile.getMyProfile()
 
-      return execute.then(res => {
-        set({ user: res })
-        return res
-      })
+          return execute.then(res => {
+            set({ user: res })
+            return res
+          })
+        },
+        updateUser: (user: Partial<IUser>) => set({ user: { ...get().user, ...user } }),
+        getTags: (name?: string) => {
+          const execute = name ? request.tourist.getBlogTags({ params: { name } }) : request.statistics.getBlogTags()
+          return execute.then(res => {
+            set({ tags: res })
+            return res
+          })
+        },
+        getArchives: (name?: string) => {
+          const execute = name
+            ? request.tourist.getBlogArchives({ params: { name } })
+            : request.statistics.getBlogTime()
+          return execute.then(res => {
+            set({ archives: res })
+            return res
+          })
+        },
+        setBlog: (blog: IBlog[]) => set({ blog }),
+        getBlog: (name?: string) => {
+          const blog = get().blog
+          if (!blog.length) set({ catalogLoading: true })
+          const execute = name ? request.tourist.getBlogCatalog({ params: { name } }) : request.blog.getBlogCatalog()
+          return execute
+            .then(res => {
+              set({ blog: res })
+              return res
+            })
+            .finally(() => set({ catalogLoading: false }))
+        },
+        setBookmarks: (bookmarks: IBookmark[]) => set({ bookmarks }),
+        getBookmarks: () => {
+          const bookmarks = get().bookmarks
+          !bookmarks.length && set({ bookmarksLoading: true })
+          return request.bookmark
+            .getMyBookmarks()
+            .then(res => {
+              set({ bookmarks: res })
+              return res
+            })
+            .finally(() => {
+              set({ bookmarksLoading: false })
+            })
+        },
+      }
     },
-    updateUser: (user: Partial<IUser>) => set({ user: { ...get().user, ...user } }),
-    getTags: (name?: string) => {
-      const execute = name ? request.tourist.getBlogTags({ params: { name } }) : request.statistics.getBlogTags()
-      return execute.then(res => {
-        set({ tags: res })
-        return res
-      })
-    },
-    getArchives: (name?: string) => {
-      const execute = name ? request.tourist.getBlogArchives({ params: { name } }) : request.statistics.getBlogTime()
-      return execute.then(res => {
-        set({ archives: res })
-        return res
-      })
-    },
-    setBlog: (blog: IBlog[]) => set({ blog }),
-    getBlog: (name?: string) => {
-      const blog = get().blog
-      if (!blog.length) set({ catalogLoading: true })
-      const execute = name ? request.tourist.getBlogCatalog({ params: { name } }) : request.blog.getBlogCatalog()
-      return execute
-        .then(res => {
-          set({ blog: res })
-          return res
-        })
-        .finally(() => set({ catalogLoading: false }))
-    },
-    setBookmarks: (bookmarks: IBookmark[]) => set({ bookmarks }),
-    getBookmarks: () => {
-      const bookmarks = get().bookmarks
-      !bookmarks.length && set({ bookmarksLoading: true })
-      return request.bookmark
-        .getMyBookmarks()
-        .then(res => {
-          set({ bookmarks: res })
-          return res
-        })
-        .finally(() => {
-          set({ bookmarksLoading: false })
-        })
-    },
-  }
-})
+    { name: 'werido', storage: createJSONStorage(() => localStorage) },
+  ),
+)
 
 function formatCatalogTree(arr: IBlog[]) {
   const map = arr.reduce((a, b) => {

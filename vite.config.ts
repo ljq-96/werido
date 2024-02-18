@@ -9,18 +9,7 @@ export default defineConfig({
   resolve: {
     preserveSymlinks: true,
   },
-  plugins: [
-    million.vite({
-      auto: {
-        threshold: 0.05,
-        skip: ['useBadHook', /badVariable/g],
-      },
-    }) as any,
-    react(),
-    visualizer({
-      filename: './dist/public/stats.html',
-    }),
-  ],
+  plugins: [react(), visualizer({ filename: './dist/public/stats.html' }) as any],
   define: process.env.NODE_ENV === 'development' ? { module: undefined } : {},
   build: {
     outDir: './dist/public',

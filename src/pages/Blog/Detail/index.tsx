@@ -14,7 +14,7 @@ import { useStore } from '../../../store'
 function BlogDetail() {
   const { tags, getTags } = useStore(({ tags, getTags }) => ({ tags, getTags }))
   const { state } = useLocation()
-  const [onEdit, setOnEdit] = useState(() => !!(state as any)?.isEdit)
+  const [onEdit, setOnEdit] = useState(() => true)
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<IBlog>(null)
   const [form] = Form.useForm()

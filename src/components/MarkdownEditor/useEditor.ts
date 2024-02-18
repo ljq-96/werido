@@ -20,6 +20,7 @@ import { useTable } from './editorComponents/table'
 import { useShiki } from './editorComponents/shiki'
 import { useStore } from '../../store'
 import { useCustomNode } from './editorComponents/customNode'
+import { alert } from './plugins/alert'
 
 interface IOptions {
   type?: 'editor' | 'render'
@@ -48,10 +49,17 @@ const useEditor = (options: IOptions) => {
           ctx.set(rootCtx, root)
           ctx.set(defaultValueCtx, value || '')
           ctx.set(editorViewOptionsCtx, { editable: () => (type === 'editor' ? !readonly : false) })
-          ctx.get(listenerCtx).mounted(() => onReady?.())
+          ctx
+            .get(listenerCtx)
+            .mounted(() => onReady?.())
+            .markdownUpdated((_, e) => {
+              console.log(e)
+            })
           table.config(ctx)
         })
+
         .use(commonmark)
+        .use(alert)
         .use(listener)
         .use(clipboard)
         .use(gfm)
@@ -63,6 +71,7 @@ const useEditor = (options: IOptions) => {
         .use(diagram)
         .use(customNode)
         .use(table.plugins)
+
       if (type === 'editor') {
         editor
           .config(ctx => {

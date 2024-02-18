@@ -45,7 +45,7 @@ export const iframeSchema = $nodeSchema('iframe', () => ({
 
 const inputRule = $inputRule(
   () =>
-    new InputRule(/:iframe\{src\="(?<src>[^"]+)?"?\}/, (state, match, start, end) => {
+    new InputRule(/::iframe\{src\="(?<src>[^"]+)?"?\}/, (state, match, start, end) => {
       const [okay, src = ''] = match
       const { tr } = state
       if (okay) {
