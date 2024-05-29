@@ -40,6 +40,7 @@ import { extract, treeWalk } from '../../../utils/common'
 import CatalogIcon from '../CatalogIcon'
 import useStyle from './style'
 import { useStore } from '../../../store'
+import LineLoading from '../../../components/LineLoading'
 
 function formatCatalogTree(arr: IBlog[]) {
   const map = arr.reduce((a, b) => {
@@ -76,6 +77,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
   const [showSearchModal, setShowSearchModal] = useState(false)
   const [currentParent, setCurrentParent] = useState(null)
   const [createLoading, setCreateLoading] = useState(false)
+  const [dragLoading, setDragLoading] = useState(false)
   const { pathname } = useLocation()
   const { message } = App.useApp()
   const copytext = useCopyText()
@@ -199,7 +201,8 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
   }
 
   const onDrop = useCallback(
-    info => {
+    async info => {
+      setDragLoading(true)
       const dropKey = info.node._id
       const dragKey = info.dragNode._id
       const dropPos = info.node.pos.split('-')
@@ -217,7 +220,7 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
 
       if (drapParent && drapParent.child === dragObj._id) {
         drapParent.child = dragObj.sibling
-        request.blog.updateBlog({
+        await request.blog.updateBlog({
           params: { id: drapParent._id },
           body: { child: drapParent.child ?? null },
         })
@@ -225,14 +228,14 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
 
       if (dragPrev) {
         dragPrev.sibling = dragObj.sibling
-        request.blog.updateBlog({
+        await request.blog.updateBlog({
           params: { id: dragPrev._id },
           body: { sibling: dragPrev.sibling ?? null },
         })
       }
       if (!drapParent && !dragPrev && dragNext) {
         dragNext.parent = dragObj.parent
-        request.blog.updateBlog({
+        await request.blog.updateBlog({
           params: { id: dragNext._id },
           body: { parent: dragNext.parent ?? null },
         })
@@ -256,14 +259,16 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
       }
 
       setBlog([...blog])
-      request.blog.updateBlog({
+      await request.blog.updateBlog({
         params: { id: dragObj._id },
         body: { parent: dragObj.parent ?? null, sibling: dragObj.sibling ?? null },
       })
-      request.blog.updateBlog({
+      await request.blog.updateBlog({
         params: { id: dropObj._id },
         body: { parent: dropObj.parent ?? null, sibling: dropObj.sibling ?? null, child: dropObj.child ?? null },
       })
+      // await slee
+      setDragLoading(false)
     },
     [blog, setBlog],
   )
@@ -394,12 +399,12 @@ function Catalog(props: TreeProps & { collpased?: boolean }) {
           </Row>
           <Input
             prefix={<SearchOutlined />}
-            className='search'
             onChange={e => handleSearch(e.target.value)}
-            bordered={false}
             allowClear
             placeholder='搜索'
+            variant='filled'
           />
+          <LineLoading loading={dragLoading} top={-12} />
           <CatalogTree actions />
         </Fragment>
       )}

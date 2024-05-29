@@ -1590,6 +1590,11 @@
     methods "^1.1.2"
     path-to-regexp "^6.1.0"
 
+"@material/material-color-utilities@^0.2.7":
+  version "0.2.7"
+  resolved "https://registry.npmjs.org/@material/material-color-utilities/-/material-color-utilities-0.2.7.tgz#ff2a638d2db295a796fa02671410df4f4f97c33e"
+  integrity sha512-0FCeqG6WvK4/Cc06F/xXMd/pv4FeisI0c1tUpBbfhA2n9Y8eZEv4Karjbmf2ZqQCPUWMrGp8A571tCjizxoTiQ==
+
 "@milkdown/core@^7.1.1":
   version "7.1.1"
   resolved "https://registry.npmmirror.com/@milkdown/core/-/core-7.1.1.tgz#102d5a86f9425fb618a2d133b9c1d438a42ad713"

@@ -37,6 +37,7 @@
     "@dnd-kit/core": "^6.0.5",
     "@dnd-kit/sortable": "^7.0.1",
     "@emotion/react": "^11.10.5",
+    "@material/material-color-utilities": "^0.2.7",
     "@milkdown/core": "^7.1.1",
     "@milkdown/ctx": "^7.1.1",
     "@milkdown/plugin-block": "^7.1.1",

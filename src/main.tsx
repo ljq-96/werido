@@ -9,6 +9,7 @@ import useGlobalStyle from './globalStyle'
 import { useStore } from './store'
 import 'dayjs/locale/zh-cn'
 import EasyModal from './utils/easyModal'
+import { useMaterialYou } from './hooks/useMaterialYou'
 
 const parseRoute = (route: RouteProps, basePath = '') => {
   const path = `/${basePath}/${route.path}`.replace(/\/+/g, '/')
@@ -22,6 +23,7 @@ const parseRoute = (route: RouteProps, basePath = '') => {
 function App() {
   const isDark = useStore(state => state.isDark)
   const themeColor = useStore(state => state.user.themeColor)
+  useMaterialYou(themeColor)
   return (
     <BrowserRouter>
       <ConfigProvider
