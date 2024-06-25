@@ -5,10 +5,13 @@ import path from 'path'
 import prettier from 'prettier'
 import chalk from 'chalk'
 ;(async function () {
-  let code = ''
-  const darukServer = DarukServer()
-  if (!process.env.NODE_ENV) {
-    await darukServer.loadFile(path.join('../server/controllers'))
+  let code = ''  
+  if (process.argv.includes('-with-bind')) {
+    const darukServer = DarukServer()
+    await darukServer.loadFile('../server/services')
+    await darukServer.loadFile('../server/controllers')
+    await darukServer.loadFile('../server/middlewares')
+    await darukServer.binding()
   }
   const controllers = Reflect.getMetadata('daruk:controller_class', Reflect) || []
   controllers.sort((a, b) => a.name.localeCompare(b.name))

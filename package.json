@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "NODE_ENV=development tsnd --respawn --project ./tsconfig.server.json app.ts",
     "build": "NODE_ENV=production yarn generate && vite build && tsc --project tsconfig.server.json",
-    "commit": "git-cz",
-    "generate": "ts-node --project ./tsconfig.server.json ./scripts/generateServerApi.ts"
+    "commit": "git add . && git-cz",
+    "generate": "ts-node --project ./tsconfig.server.json ./scripts/generateServerApi.ts -with-bind"
   },
   "dependencies": {
     "@typegoose/typegoose": "^10.1.1",
