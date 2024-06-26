@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { sign } from 'jsonwebtoken'
 import { blogModel, bookmarkModel, todoModel, User, userModel } from '../models'
 import { decrypt } from '../utils/common'
+import { Ref } from '@typegoose/typegoose'
 
 @service()
 export class UserService {
@@ -55,7 +56,7 @@ export class UserService {
     return { list, total, page, size }
   }
 
-  public async updateOne(id: string, payload: User) {
+  public async updateOne(id: Ref<User>, payload: User) {
     return await this.userModel.findByIdAndUpdate(id, payload)
   }
 

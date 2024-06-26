@@ -1,12 +1,13 @@
-import { docIndexModel } from '../models'
+import { User, docIndexModel } from '../models'
 import { DocIndexType, DocType } from '../../types/enum'
+import { Ref } from '@typegoose/typegoose'
 
 type Doc = {
   _id: string
   children: Doc
 }[]
 
-export const getDocIndex: (creator: string, type: DocIndexType) => Promise<Doc> = async (creator, type) => {
+export const getDocIndex: (creator: Ref<User>, type: DocIndexType) => Promise<Doc> = async (creator, type) => {
   const docIndexString = (await docIndexModel.findOne({ creator, type }).distinct('content'))[0]
   return JSON.parse(docIndexString || '[]')
 }
