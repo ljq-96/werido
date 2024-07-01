@@ -1,4 +1,4 @@
-import { Highlighter, getHighlighter } from 'shikiji'
+import { Highlighter, createHighlighter } from 'shiki'
 import { $proseAsync } from '@milkdown/utils'
 import { Node } from '@milkdown/prose/model'
 import { Plugin, PluginKey } from '@milkdown/prose/state'
@@ -8,6 +8,8 @@ import { codeBlockSchema } from '@milkdown/preset-commonmark'
 import { Language } from '../../utils/language'
 import { useStore } from '../../../../store'
 import { useCallback } from 'react'
+import ayuLight from './themes/ayu-light.json'
+import ayuDark from './themes/ayu-dark.json'
 
 export let highlighter: Highlighter = undefined
 
@@ -22,12 +24,9 @@ export const useShiki = () => {
 
       children.forEach(block => {
         const { language } = block.node.attrs
-
-        console.log(language)
-
         let from = block.pos + 1
         const nodes = highlighter
-          .codeToThemedTokens(block.node.textContent, { lang: language, theme: isDark ? 'min-dark' : 'min-light' })
+          .codeToTokens(block.node.textContent, { lang: language, theme: isDark ? 'ayu-dark' : 'ayu-light' }).tokens
           .map(token =>
             token.map(({ content, color }) => ({
               content,
@@ -54,8 +53,8 @@ export const useShiki = () => {
 
   return $proseAsync(async () => {
     const lans = Object.keys(Language).filter(v => v)
-    const highlighter = await getHighlighter({
-      themes: ['min-light', 'min-dark'],
+     highlighter = highlighter || await createHighlighter({
+      themes: [ayuLight, ayuDark] as any,
       langs: lans,
     })
 

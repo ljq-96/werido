@@ -91,7 +91,7 @@
     "react-window": "^1.8.8",
     "remark-directive": "^2.0.1",
     "rollup-plugin-visualizer": "^5.9.0",
-    "shikiji": "^0.6.8",
+    "shiki": "^1.10.0",
     "tailwindcss": "^3.2.7",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",

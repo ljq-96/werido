@@ -53,7 +53,7 @@ const useEditor = (options: IOptions) => {
             .get(listenerCtx)
             .mounted(() => onReady?.())
             .markdownUpdated((_, e) => {
-              console.log(e)
+              // console.log(e)
             })
           table.config(ctx)
         })

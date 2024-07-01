@@ -1,4 +1,5 @@
 {
+  "name": "ayu-light",
   "type": "light",
   "colors": {
     "focusBorder": "#ffaa33b3",

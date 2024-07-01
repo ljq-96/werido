@@ -60,8 +60,6 @@ export default (props: PageProps) => {
     getMyProfile()
   }, [people])
 
-  console.log(parsedRoutes)
-
   return (
     <ProLayout
       css={style}
