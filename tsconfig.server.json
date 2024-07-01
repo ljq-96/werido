@@ -1,5 +1,4 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
@@ -7,7 +6,9 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "dist",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
   "exclude": ["src"],
   "include": ["server", "types", "scripts", "app.ts"]
