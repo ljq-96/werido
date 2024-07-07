@@ -3,8 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "dev": "NODE_ENV=development tsnd --respawn --project ./tsconfig.server.json app.ts",
-    "build": "NODE_ENV=production yarn generate && vite build && cp -f ./.env.local ./dist/.env && tsc --project tsconfig.server.json",
+    "dev": "cross-env NODE_ENV=development tsnd --respawn --project ./tsconfig.server.json app.ts",
+    "build": "cross-env NODE_ENV=production yarn generate && vite build && cp -f ./.env.local ./dist/.env && tsc --project tsconfig.server.json",
     "commit": "git add . && git-cz",
     "generate": "ts-node --project ./tsconfig.server.json ./scripts/generateServerApi.ts -with-bind"
   },
@@ -73,6 +73,7 @@
     "antd-style": "^3.6.2",
     "clsx": "^1.2.1",
     "copy-to-clipboard": "^3.3.3",
+    "cross-env": "^7.0.3",
     "echarts": "^5.4.1",
     "echarts-wordcloud": "^2.1.0",
     "jsencrypt": "^3.3.1",
