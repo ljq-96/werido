@@ -44,14 +44,13 @@ export const iframeSchema = $nodeSchema('iframe', () => ({
 }))
 
 const inputRule = $inputRule(
-  () =>
+  ctx =>
     new InputRule(/::iframe\{src\="(?<src>[^"]+)?"?\}/, (state, match, start, end) => {
       const [okay, src = ''] = match
       const { tr } = state
       if (okay) {
-        tr.replaceWith(start - 1, end, iframeSchema.type().create({ src }))
+        tr.replaceWith(start - 1, end, iframeSchema.type(ctx).create({ src }))
       }
-
       return tr
     }),
 )

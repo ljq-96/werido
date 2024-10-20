@@ -167,7 +167,7 @@ export const MenuView = () => {
         setHistory({ undo, redo })
       }
       // console.log(state)
-      const isBlock = [codeBlockSchema.type()].includes(state.selection.$from.parent.type)
+      const isBlock = [codeBlockSchema.type(ctx)].includes(state.selection.$from.parent.type)
       setIsBlock(isBlock)
     })
   }, [activeBtns, activeText, history, getEditor, loading])

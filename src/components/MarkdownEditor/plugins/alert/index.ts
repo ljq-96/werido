@@ -1,7 +1,7 @@
 import directive from 'remark-directive'
 import { Node } from '@milkdown/prose/model'
 import { InputRule } from '@milkdown/prose/inputrules'
-import { $remark, $command, $inputRule, $nodeAttr, $nodeSchema, $useKeymap } from '@milkdown/utils'
+import { $remark, $command, $inputRule, $nodeAttr, $nodeSchema, $node, $useKeymap } from '@milkdown/utils'
 import { expectDomTypeError } from '@milkdown/exception'
 
 export enum AlertType {
@@ -11,7 +11,7 @@ export enum AlertType {
   success = 'success',
 }
 
-const remarkDirective = $remark(() => directive)
+const remarkDirective = $remark('alert', () => directive)
 /// HTML attributes for code block node.
 export const alertAttr = $nodeAttr('alert', () => ({
   title: '',
@@ -19,7 +19,7 @@ export const alertAttr = $nodeAttr('alert', () => ({
 }))
 
 /// Schema for code block node.
-export const alertSchema = $nodeSchema('alert', ctx => {
+export const alertNode = $node('alert', ctx => {
   return {
     content: 'text*',
     group: 'block',
@@ -98,7 +98,7 @@ export const alertSchema = $nodeSchema('alert', ctx => {
 })
 
 const inputRule = $inputRule(
-  () =>
+  ctx =>
     new InputRule(/:::(info|warning|error|success)(\{title\="(?<title>[^"]+)?"?\})?/, (state, match, start, end) => {
       console.log(match)
 
@@ -106,11 +106,11 @@ const inputRule = $inputRule(
 
       const { tr } = state
       if (okay) {
-        tr.replaceWith(start - 1, end, alertSchema.type().create({ alertType, title }))
+        tr.replaceWith(start - 1, end, alertNode.type(ctx).create({ alertType, title }))
       }
 
       return tr
     }),
 )
 
-export const alert = [remarkDirective, alertSchema, inputRule].flat()
+export const alert = [...remarkDirective, alertNode, inputRule]

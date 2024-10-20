@@ -18,16 +18,16 @@ export const useShiki = () => {
   const { isDark } = useStore()
 
   const getDecorations = useCallback(
-    (doc: Node, highlighter: Highlighter) => {
+    (doc: Node, highlighter: Highlighter, ctx: any) => {
       const decorations: Decoration[] = []
-      const children = findChildren(node => node.type === codeBlockSchema.type())(doc)
+      const children = findChildren(node => node.type === codeBlockSchema.type(ctx))(doc)
 
       children.forEach(block => {
         const { language } = block.node.attrs
         let from = block.pos + 1
         const nodes = highlighter
-          .codeToTokens(block.node.textContent, { lang: language, theme: isDark ? 'ayu-dark' : 'ayu-light' }).tokens
-          .map(token =>
+          .codeToTokens(block.node.textContent, { lang: language, theme: isDark ? 'ayu-dark' : 'ayu-light' })
+          .tokens.map(token =>
             token.map(({ content, color }) => ({
               content,
               color,
@@ -51,19 +51,21 @@ export const useShiki = () => {
     [isDark],
   )
 
-  return $proseAsync(async () => {
+  return $proseAsync(async ctx => {
     const lans = Object.keys(Language).filter(v => v)
-     highlighter = highlighter || await createHighlighter({
-      themes: [ayuLight, ayuDark] as any,
-      langs: lans,
-    })
+    highlighter =
+      highlighter ||
+      (await createHighlighter({
+        themes: [ayuLight, ayuDark] as any,
+        langs: lans,
+      }))
 
     return new Plugin({
       key: shikiKey,
       state: {
-        init: (_, { doc }) => getDecorations(doc, highlighter),
+        init: (_, { doc }) => getDecorations(doc, highlighter, ctx),
         apply: (tr, value, oldState, newState) => {
-          const codeBlockType = codeBlockSchema.type()
+          const codeBlockType = codeBlockSchema.type(ctx)
           const isNodeName = newState.selection.$head.parent.type === codeBlockType
           const isPreviousNodeName = oldState.selection.$head.parent.type === codeBlockType
           const oldNode = findChildren(node => node.type === codeBlockType)(oldState.doc)
@@ -77,7 +79,7 @@ export const useShiki = () => {
               oldNode[0]?.node.attrs.language !== newNode[0]?.node.attrs.language)
 
           if (codeBlockChanged) {
-            return getDecorations(tr.doc, highlighter)
+            return getDecorations(tr.doc, highlighter, ctx)
           }
 
           return value.map(tr.mapping, tr.doc)

@@ -21,6 +21,8 @@ import { useShiki } from './editorComponents/shiki'
 import { useStore } from '../../store'
 import { useCustomNode } from './editorComponents/customNode'
 import { alert } from './plugins/alert'
+import { imageInlineComponent } from '@milkdown/kit/component/image-inline'
+import { imageBlockComponent } from '@milkdown/kit/component/image-block'
 
 interface IOptions {
   type?: 'editor' | 'render'
@@ -35,7 +37,7 @@ const useEditor = (options: IOptions) => {
   const shiki = useShiki()
   const slash = useSlash()
   const menu = useMenu()
-  // const block = useBlock()
+  const block = useBlock()
   const catalog = useCatalog()
   const tooltip = useTooltip()
   const imageTooltip = useImageTooltip()
@@ -66,7 +68,7 @@ const useEditor = (options: IOptions) => {
         .use(shiki)
         .use(indent)
         .use(history)
-        .use(iframe)
+        // .use(iframe)
         .use(cursor)
         .use(diagram)
         .use(customNode)
@@ -81,14 +83,16 @@ const useEditor = (options: IOptions) => {
               imageTooltip.config(ctx)
               slash.config(ctx)
               menu.config(ctx)
-              // block.config(ctx)
+              block.config(ctx)
             }
           })
-          // .use(block.plugins)
+          .use(block.plugins)
           .use(menu.plugins)
           .use(catalog.plugins)
           .use(slash.plugins)
           .use(tooltip.plugins)
+          // .use(imageInlineComponent)
+          // .use(imageBlockComponent)
           .use(imageTooltip.plugins)
       }
       return editor

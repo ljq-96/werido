@@ -25,19 +25,18 @@ export const SlashView = () => {
 
     slashProvider.current ??= new SlashProvider({
       content: ref.current,
-      tippyOptions: {
-        animation: 'perspective-subtle',
-        duration: 150,
-        onShow: () => {
-          setOpened(true)
-          root?.addEventListener('keydown', onKeydown)
-        },
-        onHide: () => {
-          setSelected(0)
-          setOpened(false)
-          root?.removeEventListener('keydown', onKeydown)
-        },
-      },
+
+      // animation: 'perspective-subtle',
+      // duration: 150,
+      // onShow: () => {
+      //   setOpened(true)
+      //   root?.addEventListener('keydown', onKeydown)
+      // },
+      // onHide: () => {
+      //   setSelected(0)
+      //   setOpened(false)
+      //   root?.removeEventListener('keydown', onKeydown)
+      // },
     })
 
     return () => {
