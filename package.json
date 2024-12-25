@@ -8,6 +8,12 @@
     "commit": "git add . && git-cz",
     "generate": "ts-node --project ./tsconfig.server.json ./scripts/generateServerApi.ts -with-bind"
   },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-git",
+      "czConfig": "commitlint.config.js"
+    }
+  },
   "dependencies": {
     "@typegoose/typegoose": "^10.1.1",
     "antd": "^5.13.1",
@@ -57,6 +63,7 @@
     "clsx": "^1.2.1",
     "copy-to-clipboard": "^3.3.3",
     "cross-env": "^7.0.3",
+    "cz-git": "^1.11.0",
     "echarts": "^5.4.1",
     "echarts-wordcloud": "^2.1.0",
     "jsencrypt": "^3.3.1",
